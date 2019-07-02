@@ -1,5 +1,5 @@
 <template>
-  <div class="full-screen">
+  <div class="top-header">
     <el-row type="flex" class="row-bg header display-flex">
       <el-col :span="12">
         <div class="logo" @click="$router.push('/')">
@@ -12,18 +12,13 @@
         <span class="logOut icontuichu iconfont"></span>
       </el-col>
     </el-row>
-    <div class="fs-container">
-      <slot name="fs-container"></slot>
-    </div>
   </div>
 </template>
 <script>
 export default {};
 </script>
-
 <style lang="scss" scoped>
-@import "../../assets/scss/helpers.scss";
-.full-screen {
+.top-header {
   .header {
     box-sizing: border-box;
     height: 75px;
@@ -36,9 +31,6 @@ export default {};
       float: left;
     }
   }
-  .fs-container {
-    padding-bottom: 50px;
-  }
   .logo {
     margin-left: 20px;
     height: 100%;
@@ -50,8 +42,8 @@ export default {};
     float: right;
     cursor: pointer;
     height: 75px;
-    font-size:25px;
-    color:#a3a3a3;
+    font-size: 25px;
+    color: #a3a3a3;
     padding-right: 30px;
   }
 }

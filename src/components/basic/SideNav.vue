@@ -1,58 +1,33 @@
 <template>
-  <div class="full-screen">
-    <el-row type="flex" class="row-bg header display-flex">
-      <el-col :span="12">
-        <div class="logo" @click="$router.push('/')">
-          <img src="../../assets/images/olading-icon.png" alt />
-          <i class="el-icon-arrow-left"></i>
-          <span>返回选择服务</span>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <span class="logOut icontuichu iconfont"></span>
-      </el-col>
-    </el-row>
-    <div class="fs-container">
-      <slot name="fs-container"></slot>
-    </div>
+  <div class="div-nav">
+    <el-menu default-active="/home" class="el-menu-vertical-demo" @select="handleSelect">
+      <el-menu-item index="/home">
+        <i class="iconshouye iconfont"></i>
+        <span slot="title">系统首页</span>
+      </el-menu-item>
+      <el-menu-item index="/cal">
+        <i class="iconshouye iconfont"></i>
+        <span slot="title">薪资核算</span>
+      </el-menu-item>
+      <el-menu-item index="/tax">
+        <i class="iconfont iconshenbao"></i>
+        <span slot="title">个税申报</span>
+      </el-menu-item>
+      <el-menu-item index="/wage">
+        <i class="iconfont iconicon-test"></i>
+        <span slot="title">工资条</span>
+      </el-menu-item>
+    </el-menu>
   </div>
 </template>
 <script>
-export default {};
-</script>
-
-<style lang="scss" scoped>
-@import "../../assets/scss/helpers.scss";
-.full-screen {
-  .header {
-    box-sizing: border-box;
-    height: 75px;
-    background: #fff;
-    line-height: 75px;
-    margin-bottom: 15px;
-    img {
-      margin: 16px 50px 0 20px;
-      height: 36px;
-      float: left;
+export default {
+  methods: {
+    handleSelect(key, keyPath) {
+      this.$router.push(key);
     }
   }
-  .fs-container {
-    padding-bottom: 50px;
-  }
-  .logo {
-    margin-left: 20px;
-    height: 100%;
-    color: #a3a3a3;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  .logOut {
-    float: right;
-    cursor: pointer;
-    height: 75px;
-    font-size:25px;
-    color:#a3a3a3;
-    padding-right: 30px;
-  }
-}
+};
+</script>
+<style>
 </style>

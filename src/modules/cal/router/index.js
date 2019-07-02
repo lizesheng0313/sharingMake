@@ -3,7 +3,7 @@
 import index from '../index'
 export default [
   {
-    path: '/accounting',
+    path: '/cal',
     component: index,
   }
 ]
