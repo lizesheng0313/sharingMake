@@ -9,7 +9,7 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <span class="logOut icontuichu iconfont"></span>
+        <span class="log-out icontuichu iconfont"></span>
       </el-col>
     </el-row>
   </div>
@@ -38,7 +38,7 @@ export default {};
     font-size: 16px;
     cursor: pointer;
   }
-  .logOut {
+  .log-out {
     float: right;
     cursor: pointer;
     height: 75px;
