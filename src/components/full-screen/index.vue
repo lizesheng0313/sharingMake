@@ -35,18 +35,11 @@ export default {
       type: String,
       default:'#fafafa'
     },
-  },
-  computed:{
-    // returnUrl(){
-    //   return
-    // }
   }
 }
 </script>
-
 <style lang="scss" scoped>
   @import "../../assets/scss/helpers.scss";
-
   .full-screen {
     .header {
       box-sizing: border-box;
