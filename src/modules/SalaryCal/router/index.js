@@ -4,7 +4,7 @@ import index from '../index'
 import salarySet from '../salarySet'
 export default [
   {
-    path: '/accounting',
+    path: '/SalaryCal',
     component: index,
   },
   {

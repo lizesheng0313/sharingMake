@@ -1,0 +1,33 @@
+<template>
+  <div class="div-nav">
+    <el-menu default-active="/home" class="el-menu-vertical-demo" @select="handleSelect">
+      <el-menu-item index="/home">
+        <i class="iconshouye iconfont"></i>
+        <span slot="title">系统首页</span>
+      </el-menu-item>
+      <el-menu-item index="/SalaryCal">
+        <i class="iconshouye iconfont"></i>
+        <span slot="title">薪资核算</span>
+      </el-menu-item>
+      <el-menu-item index="/tax">
+        <i class="iconfont iconshenbao"></i>
+        <span slot="title">个税申报</span>
+      </el-menu-item>
+      <el-menu-item index="/wage">
+        <i class="iconfont iconicon-test"></i>
+        <span slot="title">工资条</span>
+      </el-menu-item>
+    </el-menu>
+  </div>
+</template>
+<script>
+export default {
+  methods: {
+    handleSelect(key, keyPath) {
+      this.$router.push(key);
+    }
+  }
+};
+</script>
+<style>
+</style>
