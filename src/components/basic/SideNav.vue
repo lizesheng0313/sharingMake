@@ -5,7 +5,7 @@
         <i class="iconshouye iconfont"></i>
         <span slot="title">系统首页</span>
       </el-menu-item>
-      <el-menu-item index="/SalaryCal">
+      <el-menu-item index="/salary-cal">
         <i class="iconshouye iconfont"></i>
         <span slot="title">薪资核算</span>
       </el-menu-item>

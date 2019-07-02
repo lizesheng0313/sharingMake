@@ -3,7 +3,7 @@
 import index from '../index'
 export default [
   {
-    path: '/SalaryCal',
+    path: '/salary-cal',
     component: index,
   }
 ]
