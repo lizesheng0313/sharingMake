@@ -1,13 +1,9 @@
 // import store from '../../store'
 // import storage from 'storejs'
 import index from '../index'
-var metaData = {
-  title:'主页'
-}
 export default [
   {
-    path: '/home',
+    path: '/accounting',
     component: index,
-    meta:metaData
   }
 ]

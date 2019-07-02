@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import {routerConfig} from './routerConfig'
 
 //router
-import homePageRouter from 'modules/homePage/router'
+import accountingPageRouter from 'modules/accounting/router'
 
 
 Vue.use(Router)
@@ -19,7 +19,7 @@ let router = new Router({
       path: '/',
       redirect: '/home'
     },
-    ...homePageRouter,
+    ...accountingPageRouter,
   ]
 })
 routerConfig(router)
