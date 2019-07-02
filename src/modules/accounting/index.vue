@@ -8,11 +8,11 @@
         <el-col :span="12">
           <div class="add-table">
             <i class="iconxinzeng iconfont"></i>
-            <span>新增工资表</span>
+            <span @click="goSalarySet">新增工资表</span>
           </div>
         </el-col>
       </el-row>
-    </header> 
+    </header>
   </div>
 </template>
 <script>
@@ -21,6 +21,11 @@ export default {
   components: {},
   data() {
     return {};
+  },
+  methods:{
+    goSalarySet(){
+      this.$router.push("/salarySet")
+    }
   }
 };
 </script>
