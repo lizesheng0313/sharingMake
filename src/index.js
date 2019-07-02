@@ -1,8 +1,7 @@
-// import 'babel-polyfill' // https://babeljs.io/docs/plugins/preset-env/#usebuiltins
 import 'assets/scss/base.scss'
 import 'assets/scss/el-cover.scss'
 import 'assets/scss/element-variables.scss'
-
+import 'assets/font/iconfont.css';
 import Vue from 'vue'
 
 import ElementUI from 'element-ui'
