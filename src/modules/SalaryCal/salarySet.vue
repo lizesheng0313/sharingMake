@@ -113,12 +113,13 @@
           <el-table :data="tableData2" row-key="id" :show-header="showHeader" align="left">
             <el-table-column v-for="(item, index) in dropCol" :key="`dropCol${index}`" :prop="dropCol[index].prop">
               <template slot-scope="scope">
-                <span v-if="dropCol[index].prop === 'name'">{{scope.row.name}}</span>
+                <span v-if="dropCol[index].prop === 'name'"  @click="salaryItemDetailShow('应发项',scope.row)" style="cursor: pointer">{{scope.row.name}}</span>
                 <span v-if="dropCol[index].prop === 'types'">{{scope.row.types}}</span>
                 <span v-if="dropCol[index].prop === 'group'">
                      <el-button type="warning" v-if="scope.row.types.includes('SYSTEM')" plain size="mini">{{scope.row.enable === 'Y'?'禁用':'启用'}}</el-button>
                       <el-popover trigger="hover" placement="top" v-else>
-                            <el-button>删除</el-button>
+                            <el-button
+                            >删除</el-button>
                             <div slot="reference" class="name-wrapper">
                               <i class="el-icon-more"></i>
                             </div>
@@ -325,16 +326,15 @@ export default {
   },
   methods:{
     rowDrop() {
-      const personInfoTbody = document.querySelector('.person-info-con .el-table__body-wrapper tbody')
-      const needSenfTbody = document.querySelector('.need-send-item .el-table__body-wrapper tbody')
-
+      const personInfoTbody = document.querySelector('.person-info-con .el-table__body-wrapper tbody');
+      const needSenfTbody = document.querySelector('.need-send-item .el-table__body-wrapper tbody');
       const _this = this
       Sortable.create(personInfoTbody, {
         onEnd({ newIndex, oldIndex }) {
-          const currRow = _this.tableData.splice(oldIndex, 1)[0]
+          const currRow = _this.tableData.splice(oldIndex, 1)[0];
           _this.tableData.splice(newIndex, 0, currRow)
         }
-      })
+      });
       Sortable.create(needSenfTbody, {
         onEnd({ newIndex, oldIndex }) {
           const currRow = _this.tableData2.splice(oldIndex, 1)[0]
@@ -370,7 +370,7 @@ export default {
       }
     },
     SaveSalaryRule(){
-      this.basicInfoForm.enableMiltSalary = "N"
+      // this.basicInfoForm.enableMiltSalary = "N";
       this.$refs['basicInfoForm'].validate((valid) => {
         if(valid){
           apiSaveSalaryRule(this.basicInfoForm)
@@ -382,16 +382,24 @@ export default {
     },
     onTabClick(tab, event){
      if(this.activeName === "secend"){
-       apiSalaryItemInfo(5).then(res=>{
-         console.log(res)
-       }).catch(res=>{
-           console.log(res)
-         })
+       this.getSalaryItem(5)
      }
     },
-    salaryItemDetailShow(type){
+    //获取薪资项目
+    getSalaryItem(id){
+      apiSalaryItemInfo(id).then(res=>{
+        let data = res.data;
+        console.log(data)
+      }).catch(res=>{
+        console.log(res)
+      })
+    },
+    salaryItemDetailShow(type,data){
       this.salaryItemDetailVisible = true;
       this.salaryType = type;
+      if(data){
+        console.log(data)
+      }
     },
     setSalaryItemDetail(){
       this.salaryItemDetailForm.group = this.salaryType;
@@ -405,10 +413,6 @@ export default {
         }
       })
     },
-  //  应发项展示
-    issuedItemShow(){
-
-    }
   }
 };
 </script>

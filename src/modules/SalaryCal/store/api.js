@@ -1,8 +1,8 @@
 import { fetch } from 'request/fetch'
-//检索模板流程
+//保存工资表
 export function apiSaveSalaryRule(form) {
   return fetch({
-    url: '/api/salary/saveSalaryRule',
+    url: '/api/salary/rule/save',
     method: 'post',
     data: form
   })
@@ -10,11 +10,8 @@ export function apiSaveSalaryRule(form) {
 //工资表置顶信息
 export function apiSalaryItemInfo(id) {
   return fetch({
-    url: '/api/salary/salaryItems',
+    url: '/api/salary/item/list/'+id,
     method: 'get',
-    params:{
-      salaryRuleId:5
-    }
   })
 }
 //保存工资表置顶
