@@ -2,7 +2,7 @@
   <div class="top-header">
     <el-row type="flex" class="row-bg header display-flex">
       <el-col :span="12">
-        <div class="logo" @click="$router.push('/')">
+        <div class="logo" @click="$router.push('/salary-cal')">
           <img src="../../assets/images/olading-icon.png" alt />
           <i class="el-icon-arrow-left"></i>
           <span>返回选择服务</span>
