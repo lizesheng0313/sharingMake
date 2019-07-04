@@ -3,9 +3,7 @@
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
-          <span>返回</span>
-          <span class="headerLine">|</span>
-          <span>基本信息</span>
+          <span>薪资核算</span>
         </el-col>
         <el-col :span="12">
           <div class="add-table">
@@ -46,10 +44,6 @@ export default {
       position: relative;
       top: 1px;
     }
-  }
-  .headerLine{
-    display: inline-block;
-    padding:0 20px;
   }
 }
 </style>
