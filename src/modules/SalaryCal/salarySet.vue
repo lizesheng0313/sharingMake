@@ -84,51 +84,50 @@
                 <span>新增</span>
               </span>
             </div>
-            <el-table :data="tableData" row-key="id" :show-header="showHeader" align="left">
+            <el-table :data="tableData1" row-key="id" :show-header="showHeader" align="left">
               <el-table-column v-for="(item, index) in dropCol" :key="`dropCol${index}`" :prop="dropCol[index].prop">
                 <template slot-scope="scope">
                   <span v-if="dropCol[index].prop === 'name'">{{scope.row.name}}</span>
-                  <span v-if="dropCol[index].prop === 'types'">{{scope.row.types}}</span>
+                  <span v-if="dropCol[index].prop === 'types'">{{scope.row.typeDesc}}</span>
                   <span v-if="dropCol[index].prop === 'group'">
-                     <el-button type="warning" v-if="scope.row.types.includes('SYSTEM')" plain size="mini">{{scope.row.enable === 'Y'?'禁用':'启用'}}</el-button>
-                      <el-popover trigger="hover" placement="top" v-else>
-                            <el-button>删除</el-button>
+                      <el-popover trigger="hover" placement="top" v-if="scope.row.canDelete">
+                            <el-button @click="deleteItem(scope.row.id)">删除</el-button>
                             <div slot="reference" class="name-wrapper">
                               <i class="el-icon-more"></i>
                             </div>
                       </el-popover>
+                      <el-button type="warning" plain size="mini" v-else>{{scope.row.enable === 'Y'?'启用':'启用'}}</el-button>
                   </span>
                 </template>
               </el-table-column>
             </el-table>
           </div>
-          <div class="need-send-item">
-          <div class="person-info">
-            <span class="title">应发项</span>
-            <span class="person-info-fun" @click="salaryItemDetailShow('应发项')">
-              <i class="el-icon-document"></i>
-              <span>新增</span>
-            </span>
-          </div>
-          <el-table :data="tableData2" row-key="id" :show-header="showHeader" align="left">
-            <el-table-column v-for="(item, index) in dropCol" :key="`dropCol${index}`" :prop="dropCol[index].prop">
-              <template slot-scope="scope">
-                <span v-if="dropCol[index].prop === 'name'"  @click="salaryItemDetailShow('应发项',scope.row)" style="cursor: pointer">{{scope.row.name}}</span>
-                <span v-if="dropCol[index].prop === 'types'">{{scope.row.types}}</span>
-                <span v-if="dropCol[index].prop === 'group'">
-                     <el-button type="warning" v-if="scope.row.types.includes('SYSTEM')" plain size="mini">{{scope.row.enable === 'Y'?'禁用':'启用'}}</el-button>
-                      <el-popover trigger="hover" placement="top" v-else>
-                            <el-button
-                            >删除</el-button>
-                            <div slot="reference" class="name-wrapper">
-                              <i class="el-icon-more"></i>
-                            </div>
-                      </el-popover>
+          <div v-for="(item,index) in  tableData" >
+            <div class="person-info">
+              <span class="title">应发项</span>
+              <span class="person-info-fun" @click="salaryItemDetailShow('应发项')">
+                <i class="el-icon-document"></i>
+                <span>新增</span>
+              </span>
+            </div>
+            <el-table :data="item" row-key="id" :show-header="showHeader" align="left">
+              <el-table-column v-for="(item, index) in dropCol" :key="`dropCol${index}`" :prop="dropCol[index].prop">
+                <template slot-scope="scope">
+                  <span v-if="dropCol[index].prop === 'name'"  @click="salaryItemDetailShow('应发项',scope.row)" style="cursor: pointer;color:">{{scope.row.name}}</span>
+                  <span v-if="dropCol[index].prop === 'types'">{{scope.row.typeDesc}}</span>
+                  <span v-if="dropCol[index].prop === 'group'">
+                    <el-popover trigger="hover" placement="top" v-if="scope.row.canDelete">
+                        <el-button @click="deleteItem(scope.row.id)">删除</el-button>
+                        <div slot="reference" class="name-wrapper">
+                          <i class="el-icon-more"></i>
+                        </div>
+                    </el-popover>
+                    <el-button type="warning" plain size="mini" v-else @click="changeStatus(scope.row)">{{scope.row.enable?'禁用':'启用'}}</el-button>
                   </span>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -161,7 +160,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="setSalaryItemDetail">确 定</el-button>
+        <el-button type="primary" @click="setSalaryItem">确 定</el-button>
         <el-button @click="salaryItemDetailVisible = false">取 消</el-button>
       </span>
     </el-dialog>
@@ -171,7 +170,7 @@
 <script>
 import { mapState } from "vuex";
 import Sortable from 'sortablejs';
-import { apiSaveSalaryRule,apiSalaryItemInfo,saveSalaryItems } from './store/api'
+import { apiSaveSalaryRule,apiSalaryItemInfo,saveSalaryItems,deleteSalaryItems,updateSalaryItems} from './store/api'
 export default {
   components: {},
   data() {
@@ -233,50 +232,58 @@ export default {
       payDay:[],
       endTime:"",
       activeName:"first",
-      tableData: [{
-        canDelete: false,
-        content: null,
-        enable: true,
-        group: "人员信息",
-        id: 1,
-        itemDataSrc: "EXCEL",
-        name: "1",
-        orderNum: 2,
-        types: ["SYSTEM"],
-      },{
-          canDelete: false,
-          content: null,
+      tableData1: [
+        {
+          id:"1",
+          name:"哈哈",
+          group:"用户信息",
+          typeDesc:"系统项",
+          canDelete:true,
+        },
+        {
+          id:"2",
+          name:"吼吼",
+          group:"用户信息",
+          typeDesc:"系统项",
+          canDelete:false,
+        },
+      ],
+      tableData2: [
+        {
+          id:"3",
+          name:"哈哈",
+          typeDesc:"系统项",
+          group:"用户信息",
+          canDelete:true,
+          enable:true,
+        },
+        {
+          id:"4",
+          name:"吼吼",
+          typeDesc:"系统项",
+          group:"用户信息",
+          canDelete:false,
           enable:false,
-          group: "人员信息",
-          id: 2,
-          itemDataSrc: "EXCEL",
-          name: "2",
-          orderNum: 2,
-          types: ["ELA"],
-        }
+        },
       ],
-      tableData2: [{
-        canDelete: false,
-        content: null,
-        enable: "N",
-        group: "发项目",
-        id: 1,
-        itemDataSrc: "EXCEL",
-        name: "1",
-        orderNum: 2,
-        types: ["SYSTEM"],
-      },{
-        canDelete: false,
-        content: null,
-        enable: "N",
-        group: "人员信息",
-        id: 2,
-        itemDataSrc: "EXCEL",
-        name: "2",
-        orderNum: 2,
-        types: ["SYSTEM"],
-      }
-      ],
+      table:{
+        "用户信息":[
+          {
+            id:"1",
+            name:"哈哈",
+            group:"用户信息",
+            typeDesc:"系统项",
+            canDelete:true,
+          },
+          {
+            id:"2",
+            name:"吼吼",
+            group:"用户信息",
+            typeDesc:"系统项",
+            canDelete:false,
+          },
+        ]
+      },
       dropCol: [
         {
           label: '姓名',
@@ -293,11 +300,11 @@ export default {
       ],
       showHeader:false,
       salaryItemDetailVisible:false,
-      salaryItemDetailForm:{
+      salaryItemDetailForm:{//工资项编辑
         name:"",
         itemDataSrc :"EXCEL",
         content:"used",
-        type:[]
+        types:[]
       },
       salaryType:"",
       type1:"SALARY",
@@ -308,8 +315,9 @@ export default {
         ],
       },
       issuedItemVisible:false,
-      ruleId:"",
-      salaryItemDisabled:true
+      ruleId:"5",
+      salaryItemDisabled:false,
+      tableData:[]
     };
   },
   mounted(){
@@ -330,11 +338,11 @@ export default {
     rowDrop() {
       const personInfoTbody = document.querySelector('.person-info-con .el-table__body-wrapper tbody');
       const needSenfTbody = document.querySelector('.need-send-item .el-table__body-wrapper tbody');
-      const _this = this
+      const _this = this;
       Sortable.create(personInfoTbody, {
         onEnd({ newIndex, oldIndex }) {
-          const currRow = _this.tableData.splice(oldIndex, 1)[0];
-          _this.tableData.splice(newIndex, 0, currRow)
+          const currRow = _this.tableData1.splice(oldIndex, 1)[0];
+          _this.tableData1.splice(newIndex, 0, currRow)
         }
       });
       Sortable.create(needSenfTbody, {
@@ -373,14 +381,13 @@ export default {
     },
     //保存基本信息
     SaveSalaryRule(){
-      this.basicInfoForm.enableMiltSalary = "N";
       this.$refs['basicInfoForm'].validate((valid) => {
         if(valid){
           apiSaveSalaryRule(this.basicInfoForm)
             .then(res=>{
               if(res.code == "0000"){
                 this.ruleId = res.data.id;
-                this.salaryItemDisabled = false
+                this.salaryItemDisabled = false;
               }
             })
         }
@@ -394,33 +401,78 @@ export default {
     },
     //获取薪资项目
     getSalaryItem(id){
-      console.log(this.ruleId)
-      apiSalaryItemInfo(5).then(res=>{
-        let data = res.data;
-        console.log(data)
-      }).catch(res=>{
-        console.log(res)
-      })
+      this.tableData = [];
+      for(let key in this.table){
+        this.tableData.push(this.table[key])
+      }
+      console.log(this.tableData)
+      // apiSalaryItemInfo(this.ruleId).then(res=>{
+      //   let data = res.data;
+      // }).catch(res=>{
+      //   console.log(res)
+      // })
     },
+    //显示新增薪资项
     salaryItemDetailShow(type,data){
+        // name:"",
+        // itemDataSrc :"EXCEL",
+        // content:"used",
+        // types:[]
       this.salaryItemDetailVisible = true;
+      console.log(data);
+      // this.salaryItemDetailForm.id =
       this.salaryType = type;
+      //如果是编辑页面
       if(data){
-        console.log(data)
+        this.salaryItemDetailForm.name = data.name;
       }
     },
-    setSalaryItemDetail(){
+    //新增工资项
+    setSalaryItem(){
       this.salaryItemDetailForm.group = this.salaryType;
-      this.salaryItemDetailForm.type = this.salaryType === "人员管理"?[]:[this.type1,this.type2]
+      this.salaryItemDetailForm.types = this.salaryType === "人员信息"?[]:[this.type1,this.type2];
+      this.salaryItemDetailForm.salaryRuleId = this.ruleId;
       this.$refs['salaryItemDetailForm'].validate((valid) => {
         if(valid){
           saveSalaryItems(this.salaryItemDetailForm)
             .then(res=>{
               console.log(res)
+                if(res.code == "0000"){
+                  this.salaryItemDetailVisible = false;
+                  this.getSalaryItem()
+                }
             })
         }
       })
     },
+    //删除工资表项
+    deleteItem(id){
+      this.$confirm('您确定删除工资项目，如果是，请点击“确定”，如果否，请点击“取消”?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        deleteSalaryItems(id).then(res=>{
+         if(res.code == "0000"){this.$message.success('删除成功!');}
+        })
+      }).catch(() => {});
+    },
+    // 修改工资表项状态
+    changeStatus(row){
+      console.log(row)
+      updateSalaryItems(
+        {
+          id:row.id,
+          switchStatus:row.enable?"ON":"OFF"
+        }
+      )
+      .then(res=>{
+        if(res.code == "0000"){
+          this.getSalaryItem()
+        }
+      })
+    }
   }
 };
 </script>
