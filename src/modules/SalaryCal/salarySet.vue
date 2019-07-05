@@ -75,7 +75,7 @@
             </el-form>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="薪资项目" name="secend">
+        <el-tab-pane label="薪资项目" name="secend" :disabled="salaryItemDisabled">
           <div class="person-info-con">
             <div class="person-info">
               <span class="title">人员信息</span>
@@ -307,7 +307,9 @@ export default {
           { required: true, message: '请输入工资项名称', trigger: 'blur' },
         ],
       },
-      issuedItemVisible:false
+      issuedItemVisible:false,
+      ruleId:"",
+      salaryItemDisabled:true
     };
   },
   mounted(){
@@ -369,25 +371,31 @@ export default {
         }
       }
     },
+    //保存基本信息
     SaveSalaryRule(){
-      // this.basicInfoForm.enableMiltSalary = "N";
+      this.basicInfoForm.enableMiltSalary = "N";
       this.$refs['basicInfoForm'].validate((valid) => {
         if(valid){
           apiSaveSalaryRule(this.basicInfoForm)
             .then(res=>{
-              console.log(res)
+              if(res.code == "0000"){
+                this.ruleId = res.data.id;
+                this.salaryItemDisabled = false
+              }
             })
         }
       })
     },
+    //获取薪资项目
     onTabClick(tab, event){
      if(this.activeName === "secend"){
-       this.getSalaryItem(5)
+       this.getSalaryItem(this.ruleId)
      }
     },
     //获取薪资项目
     getSalaryItem(id){
-      apiSalaryItemInfo(id).then(res=>{
+      console.log(this.ruleId)
+      apiSalaryItemInfo(5).then(res=>{
         let data = res.data;
         console.log(data)
       }).catch(res=>{
