@@ -52,8 +52,6 @@
                              :value="item.value">
                   </el-option>
                 </el-select>
-<!--              </el-form-item>-->
-<!--              <el-form-item label="发薪日期" prop="payDay">-->
                 <el-select v-model="basicInfoForm.payDay">
                   <el-option
                     v-for="item in payDay"
@@ -76,57 +74,32 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="薪资项目" name="secend" :disabled="salaryItemDisabled">
-          <div class="person-info-con">
+          <div v-for="(items,indexs) in tableData" :key="indexs">
             <div class="person-info">
-              <span class="title">人员信息</span>
-              <span class="person-info-fun" @click="salaryItemDetailShow('人员信息')">
+              <span class="title">{{items[0]['group']}}</span>
+              <span class="person-info-fun" @click="salaryItemDetailShow(items[0]['group'],false)">
                 <i class="el-icon-document"></i>
                 <span>新增</span>
               </span>
-            </div>
-            <el-table :data="tableData1" row-key="id" :show-header="showHeader" align="left">
-              <el-table-column v-for="(item, index) in dropCol" :key="`dropCol${index}`" :prop="dropCol[index].prop">
-                <template slot-scope="scope">
-                  <span v-if="dropCol[index].prop === 'name'">{{scope.row.name}}</span>
-                  <span v-if="dropCol[index].prop === 'types'">{{scope.row.typeDesc}}</span>
-                  <span v-if="dropCol[index].prop === 'group'">
-                      <el-popover trigger="hover" placement="top" v-if="scope.row.canDelete">
-                            <el-button @click="deleteItem(scope.row.id)">删除</el-button>
-                            <div slot="reference" class="name-wrapper">
-                              <i class="el-icon-more"></i>
-                            </div>
-                      </el-popover>
-                      <el-button type="warning" plain size="mini" v-else>{{scope.row.enable === 'Y'?'启用':'启用'}}</el-button>
-                  </span>
-                </template>
-              </el-table-column>
-            </el-table>
           </div>
-          <div v-for="(item,index) in  tableData" >
-            <div class="person-info">
-              <span class="title">应发项</span>
-              <span class="person-info-fun" @click="salaryItemDetailShow('应发项')">
-                <i class="el-icon-document"></i>
-                <span>新增</span>
-              </span>
-            </div>
-            <el-table :data="item" row-key="id" :show-header="showHeader" align="left">
-              <el-table-column v-for="(item, index) in dropCol" :key="`dropCol${index}`" :prop="dropCol[index].prop">
-                <template slot-scope="scope">
-                  <span v-if="dropCol[index].prop === 'name'"  @click="salaryItemDetailShow('应发项',scope.row)" style="cursor: pointer;color:">{{scope.row.name}}</span>
-                  <span v-if="dropCol[index].prop === 'types'">{{scope.row.typeDesc}}</span>
-                  <span v-if="dropCol[index].prop === 'group'">
-                    <el-popover trigger="hover" placement="top" v-if="scope.row.canDelete">
-                        <el-button @click="deleteItem(scope.row.id)">删除</el-button>
-                        <div slot="reference" class="name-wrapper">
-                          <i class="el-icon-more"></i>
-                        </div>
+            <draggable animation=150 v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
+              <el-row v-for="(item,index) in items" :key="index">
+                <el-col :span="8" v-if="item.group ==='人员信息'"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
+                <el-col :span="8" v-else><div class="grid-content bg-purple" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
+                <el-col :span="8">
+                  <div class="grid-content bg-purple">
+                    <el-popover trigger="hover" placement="top" v-if="item.canDelete">
+                      <el-button @click="deleteItem(item.id)">删除</el-button>
+                      <div slot="reference" class="name-wrapper">
+                        <i class="el-icon-more"></i>
+                      </div>
                     </el-popover>
-                    <el-button type="warning" plain size="mini" v-else @click="changeStatus(scope.row)">{{scope.row.enable?'禁用':'启用'}}</el-button>
-                  </span>
-                </template>
-              </el-table-column>
-            </el-table>
+                    <el-button type="warning" plain size="mini" v-else @click="changeStatus(item)">{{item.enable === 'Y'?'启用':'启用'}}</el-button>
+                </div>
+                </el-col>
+              </el-row>
+            </draggable>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -137,39 +110,36 @@
       :visible.sync="salaryItemDetailVisible"
       width="30%"
       center>
-      <el-form :model="salaryItemDetailForm" :rules="salaryItemDetailRules" ref="salaryItemDetailForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="活动名称" prop="name">
-          <el-input v-model="salaryItemDetailForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label="" prop="" v-if="salaryType != '人员信息'">
-          <el-radio v-model="type1" label="SALARY">收入项</el-radio>
-          <el-radio v-model="type1" label="DEDUCT">扣减项</el-radio>
-          <el-radio v-model="type1" label="COMPUTE">计算项</el-radio>
-          <span class="line">|</span>
-          <el-radio v-model="type2" label="AFTER_TAX">税后</el-radio>
-          <el-radio v-model="type2" label="BEFORE_TAX">税前</el-radio>
-        </el-form-item>
-        <el-form-item label="薪资数据" prop="itemDataSrc">
-          <el-radio v-model="salaryItemDetailForm.itemDataSrc" label="EXCEL">浮动项-录入/excel导入</el-radio>
-        </el-form-item>
-        <el-form-item label="活动区域" prop="region">
-          <el-select v-model="salaryItemDetailForm.content" placeholder="请选择">
-            <el-option label="下月延用" value="used"></el-option>
-            <el-option label="下月清零" value="zero"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="setSalaryItem">确 定</el-button>
-        <el-button @click="salaryItemDetailVisible = false">取 消</el-button>
-      </span>
+        <el-form :model="salaryItemDetailForm" :rules="salaryItemDetailRules" ref="salaryItemDetailForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="活动名称" prop="name">
+            <el-input v-model="salaryItemDetailForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="" prop="" v-if="salaryType != '人员信息'">
+            <el-radio v-for="(item,index) in typeOption1" v-model="type1" :label="item.value" :key="item.value">{{item.label}}</el-radio>
+            <span class="line">|</span>
+            <el-radio v-model="type2" label="AFTER_TAX">税后</el-radio>
+            <el-radio v-model="type2" label="BEFORE_TAX">税前</el-radio>
+          </el-form-item>
+          <el-form-item label="薪资数据" prop="itemDataSrc">
+            <el-radio v-model="salaryItemDetailForm.itemDataSrc" label="EXCEL">浮动项-录入/excel导入</el-radio>
+          </el-form-item>
+          <el-form-item label="活动区域" prop="region">
+            <el-select v-model="salaryItemDetailForm.content" placeholder="请选择">
+              <el-option label="下月延用" value="used"></el-option>
+              <el-option label="下月清零" value="zero"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="setSalaryItem">确 定</el-button>
+          <el-button @click="salaryItemDetailVisible = false">取 消</el-button>
+        </span>
     </el-dialog>
-<!--应发项-->
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
-import Sortable from 'sortablejs';
+import draggable from 'vuedraggable'
 import { apiSaveSalaryRule,apiSalaryItemInfo,saveSalaryItems,deleteSalaryItems,updateSalaryItems} from './store/api'
 export default {
   components: {},
@@ -232,73 +202,40 @@ export default {
       payDay:[],
       endTime:"",
       activeName:"first",
-      tableData1: [
-        {
-          id:"1",
-          name:"哈哈",
-          group:"用户信息",
-          typeDesc:"系统项",
-          canDelete:true,
-        },
-        {
-          id:"2",
-          name:"吼吼",
-          group:"用户信息",
-          typeDesc:"系统项",
-          canDelete:false,
-        },
-      ],
-      tableData2: [
-        {
-          id:"3",
-          name:"哈哈",
-          typeDesc:"系统项",
-          group:"用户信息",
-          canDelete:true,
-          enable:true,
-        },
-        {
-          id:"4",
-          name:"吼吼",
-          typeDesc:"系统项",
-          group:"用户信息",
-          canDelete:false,
-          enable:false,
-        },
-      ],
       table:{
-        "用户信息":[
+        "人员信息":[
           {
             id:"1",
             name:"哈哈",
-            group:"用户信息",
+            group:"人员信息",
             typeDesc:"系统项",
             canDelete:true,
           },
           {
             id:"2",
             name:"吼吼",
-            group:"用户信息",
+            group:"人员信息",
+            typeDesc:"系统项",
+            canDelete:false,
+          },
+        ],
+        "项目":[
+          {
+            id:"1",
+            name:"哈哈",
+            group:"用户项",
+            typeDesc:"系统项",
+            canDelete:true,
+          },
+          {
+            id:"2",
+            name:"吼吼",
+            group:"用户项",
             typeDesc:"系统项",
             canDelete:false,
           },
         ]
       },
-      dropCol: [
-        {
-          label: '姓名',
-          prop: 'name'
-        },
-        {
-          label: '地址',
-          prop: 'types'
-        },
-        {
-          label: '地址',
-          prop: 'group'
-        },
-      ],
-      showHeader:false,
       salaryItemDetailVisible:false,
       salaryItemDetailForm:{//工资项编辑
         name:"",
@@ -309,6 +246,27 @@ export default {
       salaryType:"",
       type1:"SALARY",
       type2:"BEFORE_TAX",
+      typeOption1:[
+        {
+          value: 'SALARY',
+          label: '收入项'
+        }, {
+          value: 'DEDUCT',
+          label: '扣减项'
+        }, {
+          value: 'COMPUTE',
+          label: '计算项'
+        }
+      ],
+      typeOption2:[
+          {
+            value: 'AFTER_TAX',
+            label: '税后'
+          }, {
+            value: 'BEFORE_TAX',
+            label: '税前'
+          }
+        ],
       salaryItemDetailRules:{
         name: [
           { required: true, message: '请输入工资项名称', trigger: 'blur' },
@@ -320,6 +278,9 @@ export default {
       tableData:[]
     };
   },
+  components: {
+    draggable,
+  },
   mounted(){
   // 初始化算新周期日
     for(let i=1;i<=28;i++){this.days.push({value:i,label:i+'号'})}
@@ -327,30 +288,11 @@ export default {
   //  初始化发薪日
     this.payDay = [{value:0,label:"最后工作日"}];
     for(let i=1;i<=31;i++){this.payDay.push({value:i,label:i+'号'})}
-   this.rowDrop()
-  },
-  watch:{
-    tableData:function(){
-      console.log(this.tableData)
-    }
   },
   methods:{
-    rowDrop() {
-      const personInfoTbody = document.querySelector('.person-info-con .el-table__body-wrapper tbody');
-      const needSenfTbody = document.querySelector('.need-send-item .el-table__body-wrapper tbody');
-      const _this = this;
-      Sortable.create(personInfoTbody, {
-        onEnd({ newIndex, oldIndex }) {
-          const currRow = _this.tableData1.splice(oldIndex, 1)[0];
-          _this.tableData1.splice(newIndex, 0, currRow)
-        }
-      });
-      Sortable.create(needSenfTbody, {
-        onEnd({ newIndex, oldIndex }) {
-          const currRow = _this.tableData2.splice(oldIndex, 1)[0]
-          _this.tableData2.splice(newIndex, 0, currRow)
-        }
-      })
+    //切换draggerItem
+    changeDragger(evt){
+      console.log(evt)
     },
     //算薪周期月
     selectDay(val){
@@ -393,7 +335,7 @@ export default {
         }
       })
     },
-    //获取薪资项目
+    //切换薪资项目Tab
     onTabClick(tab, event){
      if(this.activeName === "secend"){
        this.getSalaryItem(this.ruleId)
@@ -405,7 +347,6 @@ export default {
       for(let key in this.table){
         this.tableData.push(this.table[key])
       }
-      console.log(this.tableData)
       // apiSalaryItemInfo(this.ruleId).then(res=>{
       //   let data = res.data;
       // }).catch(res=>{
@@ -419,7 +360,6 @@ export default {
         // content:"used",
         // types:[]
       this.salaryItemDetailVisible = true;
-      console.log(data);
       // this.salaryItemDetailForm.id =
       this.salaryType = type;
       //如果是编辑页面
@@ -460,9 +400,7 @@ export default {
     },
     // 修改工资表项状态
     changeStatus(row){
-      console.log(row)
-      updateSalaryItems(
-        {
+      updateSalaryItems({
           id:row.id,
           switchStatus:row.enable?"ON":"OFF"
         }
@@ -534,6 +472,11 @@ export default {
         margin-right:10px;
       }
     }
+  }
+  .el-col-8{
+    height: 46px;
+    line-height: 46px;
+    text-align: center;
   }
 }
 </style>
