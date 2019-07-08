@@ -1,11 +1,7 @@
 <template>
   <div class="div-nav">
-    <el-menu default-active="/home" class="el-menu-vertical-demo" @select="handleSelect">
-      <el-menu-item index="/home">
-        <i class="iconshouye iconfont"></i>
-        <span slot="title">系统首页</span>
-      </el-menu-item>
-      <el-menu-item index="/SalaryCal">
+    <el-menu default-active="/salary-cal" class="el-menu-vertical-demo" @select="handleSelect">
+      <el-menu-item index="/salary-cal">
         <i class="iconshouye iconfont"></i>
         <span slot="title">薪资核算</span>
       </el-menu-item>

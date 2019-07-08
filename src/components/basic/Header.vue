@@ -2,14 +2,14 @@
   <div class="top-header">
     <el-row type="flex" class="row-bg header display-flex">
       <el-col :span="12">
-        <div class="logo" @click="$router.push('/')">
+        <div class="logo" @click="$router.push('/salary-cal')">
           <img src="../../assets/images/olading-icon.png" alt />
           <i class="el-icon-arrow-left"></i>
           <span>返回选择服务</span>
         </div>
       </el-col>
       <el-col :span="12">
-        <span class="logOut icontuichu iconfont"></span>
+        <span class="log-out icontuichu iconfont"></span>
       </el-col>
     </el-row>
   </div>
@@ -38,7 +38,7 @@ export default {};
     font-size: 16px;
     cursor: pointer;
   }
-  .logOut {
+  .log-out {
     float: right;
     cursor: pointer;
     height: 75px;
