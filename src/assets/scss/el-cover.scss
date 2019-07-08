@@ -137,3 +137,9 @@ box-shadow: 0 0 56px 0 #f1f1f1;
 .el-submenu .el-menu-item{
   min-width:170px;
 }
+
+
+.el-button--primary{
+  border:1px solid $mainColor;
+  font-size:14px;
+}
