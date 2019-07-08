@@ -117,3 +117,23 @@ box-shadow: 0 0 56px 0 #f1f1f1;
     }
   }
 }
+
+
+
+.el-table th, .el-table td {
+  text-align: center !important
+}
+
+.el-radio {
+  margin: 10px !important;
+}
+
+.upload-disable .el-upload--picture-card{
+  display: none;
+}
+.el-upload-dragger{
+  width:180px!important;
+}
+.el-submenu .el-menu-item{
+  min-width:170px;
+}

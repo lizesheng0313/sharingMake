@@ -6,26 +6,7 @@ $--font-path: '../../../node_modules/element-ui/lib/theme-chalk/fonts';
 
 @import "../../../node_modules//element-ui//packages/theme-chalk/src/index";
 
-.el-table th, .el-table td {
-    text-align: center !important
-  }
-  
-  .el-radio {
-    margin: 10px !important;
-  }
-  
-  .upload-disable .el-upload--picture-card{
-    display: none;
-  }
-  .el-upload-dragger{
-    width:180px!important;
-  }
-  
   .el-button--primary{
     border:1px solid $--color-primary;
     font-size:14px;
   }
-  .el-submenu .el-menu-item{
-      min-width:170px;
-  }
-  

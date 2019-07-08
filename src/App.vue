@@ -26,7 +26,7 @@ export default {
     sideNav
   },
   created() {
-    this.$store.commit(AT.SHOWAPP, true);
+    this.$store.commit(AT.SHOWAPP, true); //如用户手动改变路由， 需将full-screeen关闭
   },
   computed: {
     ...mapState({
