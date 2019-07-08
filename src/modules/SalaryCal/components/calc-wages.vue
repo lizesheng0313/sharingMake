@@ -9,48 +9,47 @@
         class="search-input left"
       ></el-input>
       <div class="right">
-        <el-button type="primary" @click="isShowIncrease = true" class="add-import">增员导入</el-button>
+        <el-button type="primary" @click="handleCalcSalary">薪资计算</el-button>
+        <el-button type="default" @click="handleCalcSalary">薪资审核</el-button>
+      </div>
+    </div>
+    <div class="staff-situation clearfix">
+      <div class="left">
+        <span class="staff-total">
+          人员总数
+          <i class="tatal-number">10</i>人
+        </span>
+      </div>
+      <div class="right calc-table_menu">
+        <span>社会公积金导入</span>
+        <span class="have-border_right" @click="isShowIncrease = true">浮云项导入</span>
         <el-dropdown trigger="click">
-          <el-button type="default">
-            更多
+          <span class="el-dropdown-link">
+            更多功能
             <i class="iconsanjiao iconfont"></i>
-          </el-button>
+          </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>全部删除</el-dropdown-item>
-            <el-dropdown-item>导出</el-dropdown-item>
+            <el-dropdown-item>导出工资明细</el-dropdown-item>
+            <el-dropdown-item>导出部门汇总</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-    </div>
-    <div class="staff-situation">
-      <span class="staff-total">
-        人员总数
-        <i>10</i>人
-      </span>
-      <span>
-        本月：入职
-        <i>1</i>人
-      </span>
-      <span>
-        调动
-        <i>1</i>人
-      </span>
     </div>
     <div class="staff-table">
       <!-- <div class="floating-menu">
         <span>删除</span>
       </div>-->
       <el-table :data="tableData" class="check-staff_table" :style="{width:screenWidth-40+'px'}">
-        <el-table-column type="selection" width="55" fixed></el-table-column>
-        <el-table-column prop="date" label="姓名"></el-table-column>
-        <el-table-column prop="name" label="工号"></el-table-column>
-        <el-table-column prop="address" label="手机号"></el-table-column>
-        <el-table-column prop="address" label="部门"></el-table-column>
-        <el-table-column prop="address" label="员工类型"></el-table-column>
-        <el-table-column prop="address" label="状态"></el-table-column>
-        <el-table-column prop="address" label="入职日期"></el-table-column>
-        <el-table-column prop="address" label="转正日期"></el-table-column>
-        <el-table-column prop="address" label="最后工作日"></el-table-column>
+        <el-table-column width="55" label="序号" type="index"></el-table-column>
+        <el-table-column prop="date" label="姓名" width="140"></el-table-column>
+        <el-table-column prop="name" label="工号" width="140"></el-table-column>
+        <el-table-column prop="address" label="手机号" width="140"></el-table-column>
+        <el-table-column prop="address" label="部门" width="140"></el-table-column>
+        <el-table-column prop="address" label="员工类型" width="140"></el-table-column>
+        <el-table-column prop="address" label="状态" width="140"></el-table-column>
+        <el-table-column prop="address" label="入职日期" width="140"></el-table-column>
+        <el-table-column prop="address" label="转正日期" width="140"></el-table-column>
+        <el-table-column prop="address" label="最后工作日" width="140"></el-table-column>
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -66,7 +65,7 @@
       ></el-pagination>
     </div>
     <el-dialog
-      title="增员导入"
+      title="浮云项导入"
       :visible.sync="isShowIncrease"
       width="600px"
       center
@@ -77,7 +76,10 @@
         <div class="diy-el_radio">
           <el-radio-group v-model="radio">
             <div>
-              <el-radio :label="3">通过身份证号匹配人员</el-radio>
+              <el-radio :label="2">通过员工工号匹配人员</el-radio>
+            </div>
+            <div>
+              <el-radio :label="1">通过手机号匹配人员</el-radio>
             </div>
           </el-radio-group>
         </div>
@@ -113,8 +115,7 @@
 export default {
   data() {
     return {
-      radio: "",
-      fileList: [],
+      radio:"",
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       input: "",
       isShowIncrease: false,
@@ -137,26 +138,7 @@ export default {
     };
   },
   methods: {
-    handleDelete() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    },
-    handleScuess() {}
+    handleCalcSalary() {}
   }
 };
 </script>
@@ -171,25 +153,37 @@ export default {
       width: 205px;
     }
   }
-  .add-import {
-    margin-right: 10px;
-  }
   .iconiconfonticonfontsousuo1 {
     font-size: 12px;
   }
   .staff-situation {
+    border-top: 1px solid #ededed;
+    margin-top: 30px;
+    padding-top: 25px;
+    font-size: 12px;
     .staff-total {
-      border-right: 1px solid #e6e6e6;
+      color: #999;
       padding-right: 15px;
       margin-right: 15px;
     }
-    margin-top: 20px;
-    color: #999;
-    font-size: 12px;
-    i {
+    .have-border_right {
+      border-right: 1px solid #e6e6e6;
+      padding-right: 20px;
+    }
+    .tatal-number {
       color: $mainColor;
       font-style: normal;
       padding: 0 3px;
+    }
+    .calc-table_menu {
+      span {
+        cursor: pointer;
+        margin-right: 20px;
+        color: 333;
+      }
+    }
+    .el-dropdown-link {
+      font-size: 12px;
     }
   }
   .staff-table {

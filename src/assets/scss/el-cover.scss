@@ -77,3 +77,43 @@ box-shadow: 0 0 56px 0 #f1f1f1;
     cursor: pointer;
   } 
 }
+
+.diy-el_dialog{
+  border-radius:6px;
+  .el-dialog__header{
+    background:#F7F7F7;
+    padding:0;
+    height:60x;
+    line-height:60px;
+    .el-dialog__title{
+      font-size:20px;
+      font-weight:500;
+    }
+  }
+  .el-dialog__close{
+    font-size:22px;
+  }
+  .diy-el_radio{
+    margin-top:20px;
+    margin-left:70px;
+  }
+  .headings{
+    font-weight:500;
+    font-size:16px;
+  }
+  .select-file {
+    margin-top:20px;
+    p{
+      margin-left:28px;
+      margin-top:15px;
+      span{
+        cursor: pointer;
+        margin-left:20px;
+        color:#FF8F2C;
+      }
+    }
+    .instructions{
+      margin-top:40px;
+    }
+  }
+}
