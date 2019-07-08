@@ -7,7 +7,7 @@ export function apiSaveSalaryRule(form) {
     data: form
   })
 }
-//工资表置顶信息
+//工资表配置项信息
 export function apiSalaryItemInfo(id) {
   return fetch({
     url: '/api/salary/item/list/'+id,
@@ -25,16 +25,34 @@ export function saveSalaryItems(form) {
 //删除工资表配置项{
 export function deleteSalaryItems(id) {
   return fetch({
-    url: '/api/salary/rule/delete/'+id,
+    url: '/api/salary/item/delete/'+id,
     method: 'delete',
   })
 }
-//更改工资表状态
+//更改工资表配置项状态
 export function updateSalaryItems(form) {
   return fetch({
-    url: '/api/salary/rule/alterStatus',
+    url: '/api/salary/item/alterStatus',
     method: 'post',
     data:form
+  })
+}
+//工资表配置项排序
+export function apiSalaryItemsSort(form) {
+  return fetch({
+    url: '/api/salary/item/sort',
+    method: 'post',
+    data:form
+  })
+}
+//获取工资表列表
+export function apiSalaryRuleList(date) {
+  return fetch({
+    url: '/api/salary/salaryChecks/',
+    method: 'get',
+    params:{
+      date:date
+    }
   })
 }
 

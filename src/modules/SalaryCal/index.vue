@@ -23,17 +23,18 @@
           value-format="yyyy年MM月"
           :editable="false"
           :clearable="false"
+          @change="changeDate"
         ></el-date-picker>
         <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>
       </div>
       <div class="salary-payroll">
-        <div class="payroll-box">
+        <div class="payroll-box" v-for="(item,index) in salaryRuleList.used">
           <el-row type="flex">
             <el-col :span="12">
               <div>
                 <div>
-                  <strong>月度工资表</strong>
-                  <el-dropdown trigger="click" class="more-operation">
+                  <strong>{{item.salaryRuleName}}</strong>
+                  <el-dropdown trigger="click" class="more-operation" @command="setSalaryTable(item)">
                     <span class="el-dropdown-link">
                       更多操作
                       <i class="iconsanjiao iconfont"></i>
@@ -44,15 +45,15 @@
                   </el-dropdown>
                 </div>
                 <p class="cycle">
-                  算薪周期：2019-03-01 ~ 2019-03-31
-                  <span class="calc-type">未计算</span>
+                  算薪周期： <span>{{item.startDate|resetDate}}~ {{item.endDate|resetDate}}</span>
+                  <span class="calc-type">{{item.salaryCheckStatus|salaryCheckStatus}}</span>
                 </p>
-                <p>计税规则:工资薪金所得计税</p>
+                <p>计税规则： {{item.taxRule|texRule}}</p>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="start-calc">
-                <el-select v-model="value" placeholder="请选择" class="number-payday">
+                <el-select v-model="item.id" placeholder="请选择" class="number-payday">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -60,8 +61,7 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-
-                <el-button type="primary" @click="handleCalcSalary">启动算薪</el-button>
+                <el-button type="primary" @click="handleCalcSalary">{{item.salaryCheckStatus|salaryCheckBtn}}</el-button>
                 <p>启动算薪时，系统根据算薪范围生成本月计薪人员</p>
               </div>
             </el-col>
@@ -73,8 +73,21 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { apiSalaryRuleList } from './store/api'
 export default {
   components: {},
+  filters:{
+    salaryCheckBtn:function(val){
+      switch (val) {
+        case 'NONE': {
+          return '启动算薪';
+        }
+        case 'INIT': {
+          return '计算薪资';
+        }
+      }
+    }
+  },
   data() {
     return {
       value: "",
@@ -84,15 +97,47 @@ export default {
           label: "本月第一次发薪"
         }
       ],
-      currentDate: "2019年03月"
+      currentDate: "2019年7月",
+      salaryRuleList:{
+        "used":[],
+        "disabled":[]
+      }
     };
+  },
+  computed:{
+  },
+  created(){
+    //默认日期
+    let nowDate = new Date();
+    let month = nowDate.getMonth()-(-1)<10?"0"+(nowDate.getMonth()-(-1)).toString():nowDate.getMonth()-(-1);
+    this.currentDate = nowDate.getFullYear()+"年"+month+"月";
+    this.getDate(this.currentDate)
   },
   methods: {
     handleCalcSalary() {
       this.$router.push("/salary-cal/start");
     },
+    getDate(val){
+      let Date = val.split('年')[0]+'-'+val.split('年')[1].split('月')[0];
+      apiSalaryRuleList(Date).then(res=>{
+       this.salaryRuleList = res.data
+      })
+    },
+    changeDate(val){
+      this.getDate(val)
+    },
     goSalarySet(){
       this.$router.push("/salarySet")
+    },
+    setSalaryTable(val){
+      this.$store.commit("salaryCalStore/SET_ROULEID", val.salaryRuleId);
+      this.$store.commit("salaryCalStore/SET_BASICINFOFORM", val.salaryRule);
+      this.$router.push({
+        path:'/salarySet',
+        query:{
+          isEdit:true
+        }
+      })
     }
   }
 };
