@@ -41,16 +41,14 @@ const config = Object.assign(webpackConfigBase.config, {
   ],
   devServer: {
     proxy: {
-      '/api_appservice': {
-        target: 'http://172.19.60.38:18290' ,
-        // target: "http://172.19.65.90:8001",//元
-        // target: "http://172.19.65.117:8001",//乐
-
+      '/api': {
+        target: "http://172.19.60.38:8017/",
+        // target: "http://172.19.64.3:9999/",
         secure: false,
-        changeOrigin: false,
+        changeOrigin: true,
         // pathRewrite: {
         //   '^/': ''   //需要rewrite的,
-        // }  
+        // }
       },
       // koa 代码在 ./mock 目录中，启动命令为 npm run mock。
       // '/mockapi': {

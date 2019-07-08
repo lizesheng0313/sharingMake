@@ -12,7 +12,7 @@
           </div>
         </el-col>
       </el-row>
-    </header> 
+    </header>
   </div>
 </template>
 <script>

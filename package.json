@@ -17,8 +17,7 @@
     "doc:components": "node ./doc/build.doc.components.js"
   },
   "husky": {
-    "hooks": {
-    }
+    "hooks": {}
   },
   "author": "lanmaoly",
   "license": "MIT",
@@ -82,6 +81,7 @@
     "element-ui": "^2.4.11",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
+    "vuedraggable": "^2.23.0",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4"
   }

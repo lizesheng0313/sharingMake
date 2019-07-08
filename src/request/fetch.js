@@ -36,7 +36,7 @@ export function fetch(options) {
   return new Promise((resolve, reject) => {
     instance(options).then(response => {
       let data = response.data;
-      if (data.code != "0") {
+      if (data.code != "0000") {
         Message.error(data.message)
       }
 
