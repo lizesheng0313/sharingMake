@@ -114,9 +114,9 @@
           <el-form-item label="活动名称" prop="name">
             <el-input v-model="salaryItemDetailForm.name"></el-input>
           </el-form-item>
-          <el-form-item label="" prop="" v-if="salaryType != '人员信息'">
+          <el-form-item prop="" v-if="salaryType != '人员信息'">
             <el-radio v-for="(item,index) in typeOption1" v-model="type1" :label="item.value" :key="item.value">{{item.label}}</el-radio>
-            <span class="line">|</span>
+            <span class="line"></span>
             <el-radio v-model="type2" label="AFTER_TAX">税后</el-radio>
             <el-radio v-model="type2" label="BEFORE_TAX">税前</el-radio>
           </el-form-item>
@@ -273,7 +273,7 @@ export default {
         ],
       },
       issuedItemVisible:false,
-      ruleId:"5",
+      ruleId:"",
       salaryItemDisabled:false,
       tableData:[]
     };
@@ -330,28 +330,31 @@ export default {
               if(res.code == "0000"){
                 this.ruleId = res.data.id;
                 this.salaryItemDisabled = false;
+                //基本信息成功跳转到第二步
+                this.activeName = "secend"
+                this.onTabClick()
               }
             })
         }
       })
     },
     //切换薪资项目Tab
-    onTabClick(tab, event){
+    onTabClick(){
      if(this.activeName === "secend"){
        this.getSalaryItem(this.ruleId)
      }
     },
     //获取薪资项目
-    getSalaryItem(id){
+    getSalaryItem(){
       this.tableData = [];
       for(let key in this.table){
         this.tableData.push(this.table[key])
       }
-      // apiSalaryItemInfo(this.ruleId).then(res=>{
-      //   let data = res.data;
-      // }).catch(res=>{
-      //   console.log(res)
-      // })
+      apiSalaryItemInfo(this.ruleId).then(res=>{
+        let data = res.data;
+      }).catch(res=>{
+        console.log(res)
+      })
     },
     //显示新增薪资项
     salaryItemDetailShow(type,data){
