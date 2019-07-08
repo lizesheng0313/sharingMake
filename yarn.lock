@@ -7757,6 +7757,11 @@ sort-keys@^1.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
+sortablejs@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.npm.taobao.org/sortablejs/download/sortablejs-1.9.0.tgz#2d1e74ae6bac2cb4ad0622908f340848969eb88d"
+  integrity sha1-LR50rmusLLStBiKQjzQISJaeuI0=
+
 source-list-map@^2.0.0:
   version "2.0.1"
   resolved "https://nexus.lanmaoly.com/repository/npm/source-list-map/-/source-list-map-2.0.1.tgz#3993bd873bfc48479cca9ea3a547835c7c154b34"
@@ -8846,6 +8851,11 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-draggable@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.npm.taobao.org/vue-draggable/download/vue-draggable-2.0.2.tgz#301aa1707698fb764044ae22d7c6bcbb878a523f"
+  integrity sha1-MBqhcHaY+3ZARK4i18a8u4eKUj8=
+
 vue-eslint-parser@^3.2.2:
   version "3.3.0"
   resolved "https://nexus.lanmaoly.com/repository/npm/vue-eslint-parser/-/vue-eslint-parser-3.3.0.tgz#06b195d18bb66ac72c6b7f2469b549109a61d72c"
@@ -8916,6 +8926,13 @@ vue@^2.5.17:
   version "2.6.10"
   resolved "https://nexus.lanmaoly.com/repository/npm/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha1-pysaQqTYKnIepDjRtr9V5mGVxjc=
+
+vuedraggable@^2.23.0:
+  version "2.23.0"
+  resolved "https://registry.npm.taobao.org/vuedraggable/download/vuedraggable-2.23.0.tgz#1f4a5a601675a5dbf0d96ee61aebfffa43445262"
+  integrity sha1-H0paYBZ1pdvw2W7mGuv/+kNEUmI=
+  dependencies:
+    sortablejs "^1.9.0"
 
 vuex-persistedstate@^2.5.4:
   version "2.5.4"
