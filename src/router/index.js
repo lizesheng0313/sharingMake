@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import {routerConfig} from './routerConfig'
 
 //router
-import SalaryCal from 'modules/SalaryCal/router'
+import salaryCal from 'modules/salaryCal/router'
 
 
 Vue.use(Router)
@@ -17,9 +17,9 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home'
+      redirect: '/salary-cal'
     },
-    ...SalaryCal
+    ...salaryCal
   ]
 })
 routerConfig(router)
