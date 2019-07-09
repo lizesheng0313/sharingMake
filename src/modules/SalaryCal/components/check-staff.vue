@@ -3,7 +3,7 @@
     <div class="clearfix check-staff-menu">
       <el-input
         placeholder="请输入姓名\手机号"
-        v-model="input"
+        v-model="userForm.key"
         suffix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
         class="search-input left"
@@ -40,17 +40,68 @@
       <!-- <div class="floating-menu">
         <span>删除</span>
       </div>-->
-      <el-table :data="tableData" class="check-staff_table" :style="{width:screenWidth-40+'px'}">
+      <el-table :data="userList" class="check-staff_table" :style="{width:screenWidth-40+'px'}">
         <el-table-column type="selection" width="55" fixed></el-table-column>
-        <el-table-column prop="date" label="姓名"></el-table-column>
-        <el-table-column prop="name" label="工号"></el-table-column>
-        <el-table-column prop="address" label="手机号"></el-table-column>
-        <el-table-column prop="address" label="部门"></el-table-column>
-        <el-table-column prop="address" label="员工类型"></el-table-column>
-        <el-table-column prop="address" label="状态"></el-table-column>
-        <el-table-column prop="address" label="入职日期"></el-table-column>
-        <el-table-column prop="address" label="转正日期"></el-table-column>
-        <el-table-column prop="address" label="最后工作日"></el-table-column>
+        <el-table-column label="姓名">
+          <template slot-scope="scope">
+             <span>{{scope.row.name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="工号">
+          <template slot-scope="scope">
+            <span>{{scope.row.empNo}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="身份证号">
+          <template slot-scope="scope">
+            <span>{{scope.row.idCardNo}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="手机号">
+          <template slot-scope="scope">
+            <span>{{scope.row.phoneNo}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="用工性质">
+          <template slot-scope="scope">
+            <span>{{scope.row.name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="纳税主体">
+          <template slot-scope="scope">
+            <span>{{scope.row.taxSubject}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="部门">
+          <template slot-scope="scope">
+            <span>{{scope.row.departmentName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="岗位">
+          <template slot-scope="scope">
+            <span>{{scope.row.jobTitle}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="工作地点">
+          <template slot-scope="scope">
+            <span>{{scope.row.workAddress}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="入职时间">
+          <template slot-scope="scope">
+            <span>{{scope.row.empStartDate?scope.row.empStartDate.split(" ")[0]:""}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="工资卡银行">
+          <template slot-scope="scope">
+            <span>{{scope.row.bank}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="工资卡号">
+          <template slot-scope="scope">
+            <span>{{scope.row.bankNo}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -58,12 +109,14 @@
         </el-table-column>
       </el-table>
       <el-pagination
-        :page-size="20"
-        :pager-count="11"
-        layout="prev, pager, next"
-        :total="1000"
-        class="staff-page"
-      ></el-pagination>
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="userForm.currPage"
+        :page-sizes="[20, 50, 100, 200]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next"
+        :total="count">
+      </el-pagination>
     </div>
     <el-dialog
       title="增员导入"
@@ -110,6 +163,7 @@
   </div>
 </template>
 <script>
+  import { apiCheckMember} from '../store/api'
 export default {
   data() {
     return {
@@ -124,7 +178,16 @@ export default {
           name: "2",
           address: "123"
         }
-      ]
+      ],
+      userForm:{
+        "checkId":this.$route.query.id,
+        "currPage": 1,
+        "key": "",
+        "pageSize": 1,
+      },
+      userList:[],
+      count:20,
+      pageSize:20
     };
   },
   mounted() {
@@ -135,6 +198,12 @@ export default {
         that.screenWidth = window.screenWidth;
       })();
     };
+    apiCheckMember(this.userForm).then(res=>{
+      if(res.code === "0000"){
+        this.userList = res.data.data;
+        this.count = res.data.count;
+      }
+    })
   },
   methods: {
     handleDelete() {
@@ -156,7 +225,19 @@ export default {
           });
         });
     },
-    handleScuess() {}
+    //切换pageId
+    handleCurrentChange(){
+
+    },
+    //切换页码pageSize
+    handleSizeChange(){
+
+    },
+    //  提交文件成功
+    handleScuess(){
+
+    }
+
   }
 };
 </script>
@@ -217,6 +298,9 @@ export default {
       margin-top: 20px;
       text-align: right;
     }
+  }
+  .el-pagination{
+    text-align: right;
   }
 }
 </style>

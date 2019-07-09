@@ -16,11 +16,11 @@
     <div class="salary-cal-content">
       <div class="content-header">
         <i class="el-icon-arrow-left"></i>
-        <span>{{currentDate}}</span>
+        <span>{{resetDate}}</span>
         <el-date-picker
           v-model="currentDate"
           type="month"
-          value-format="yyyy年MM月"
+          value-format="yyyy-MM"
           :editable="false"
           :clearable="false"
           @change="changeDate"
@@ -53,16 +53,16 @@
             </el-col>
             <el-col :span="12">
               <div class="start-calc">
-                <el-select v-model="item.id" placeholder="请选择" class="number-payday">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                <el-select placeholder="请选择" v-model="selectUsedForm[item.salaryRuleId]" class="number-payday" v-show="item.salaryRule.enableMiltSalary" @change="changePayth(index,selectUsedForm[item.salaryRuleId],item)">
+                  <el-option v-for="(it,index) in item.payInfos" :key="index" :label="it.dec" :value="it.salaryCheckStatus"
                   ></el-option>
                 </el-select>
-                <el-button type="primary" @click="handleCalcSalary">{{item.salaryCheckStatus|salaryCheckBtn}}</el-button>
-                <p>启动算薪时，系统根据算薪范围生成本月计薪人员</p>
+                <div v-show="item.salaryCheckStatus === 'NONE'">
+                  <el-button type="primary" @click="InitCalcSalary(item)">启动算薪</el-button>
+                  <p>启动算薪时，系统根据算薪范围生成本月计薪人员</p>
+                </div>
+                <el-button type="primary" @click="calcSalary(item)" v-show="item.salaryCheckStatus === 'INIT'">计算薪资</el-button>
+                <el-button type="primary" @click="seeCalcSalary" v-show="item.salaryCheckStatus === 'COMPUTED' || item.salaryCheckStatus === 'AUDITED'">查看薪资</el-button>
               </div>
             </el-col>
           </el-row>
@@ -73,7 +73,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { apiSalaryRuleList } from './store/api'
+import { apiSalaryRuleList,apiInitSalaryCheck } from './store/api'
 export default {
   components: {},
   filters:{
@@ -84,6 +84,12 @@ export default {
         }
         case 'INIT': {
           return '计算薪资';
+        }
+        case 'COMPUTED': {
+          return '查看薪资';//已计算
+        }
+        case 'AUDITED': {
+          return '查看薪资';//已审核
         }
       }
     }
@@ -101,34 +107,53 @@ export default {
       salaryRuleList:{
         "used":[],
         "disabled":[]
-      }
+      },
+      payTh:{
+        0:"第一次发薪",
+        1:"第二次发薪",
+        2:"第三次发薪",
+        3:"第四次发薪",
+      },
+      selectUsedForm:{
+      },
     };
   },
   computed:{
+    resetDate:function(){
+      let currentDateArr = this.currentDate.split('-');
+      return currentDateArr[0]+"年"+currentDateArr[1]+"月"
+    },
   },
   created(){
     //默认日期
     let nowDate = new Date();
     let month = nowDate.getMonth()-(-1)<10?"0"+(nowDate.getMonth()-(-1)).toString():nowDate.getMonth()-(-1);
-    this.currentDate = nowDate.getFullYear()+"年"+month+"月";
-    this.getDate(this.currentDate)
+    this.currentDate = nowDate.getFullYear()+"-"+month;
+    this.getDate();
+    // console.log(this.selectUsedForm)
   },
   methods: {
-    handleCalcSalary() {
-      this.$router.push("/salary-cal/start");
-    },
-    getDate(val){
-      let Date = val.split('年')[0]+'-'+val.split('年')[1].split('月')[0];
-      apiSalaryRuleList(Date).then(res=>{
-       this.salaryRuleList = res.data
+    getDate(){
+      apiSalaryRuleList(this.currentDate).then(res=>{
+        this.salaryRuleList = res.data;
+        this.salaryRuleList.used.forEach((item,index)=>{
+          if(item.payInfos && item.payInfos.length>0){
+            item.payInfos.forEach((it,ins)=>{
+              it.dec = this.payTh[ins];
+              this.selectUsedForm[item.salaryRuleId] = item.payInfos[item.payInfos.length-1]['salaryCheckStatus']
+            })
+          }
+        });
+        console.log(this.selectUsedForm)
       })
     },
-    changeDate(val){
-      this.getDate(val)
+    changeDate(){
+      this.getDate()
     },
     goSalarySet(){
       this.$router.push("/salarySet")
     },
+    //设置薪资
     setSalaryTable(val){
       this.$store.commit("salaryCalStore/SET_ROULEID", val.salaryRuleId);
       this.$store.commit("salaryCalStore/SET_BASICINFOFORM", val.salaryRule);
@@ -138,7 +163,30 @@ export default {
           isEdit:true
         }
       })
-    }
+    },
+    //启动薪资
+    InitCalcSalary(item){
+      const that = this;
+      apiInitSalaryCheck({
+        id:item.salaryRuleId,
+        date:that.currentDate
+      }).then(res=>{
+        this.$router.push({path:"/salaryCheckPerson",query:{id:"1"}})
+      })
+    },
+    //计算薪资
+    calcSalary(item){
+      this.$router.push({path:"/salaryCheckPerson",query:{id:item.id}})
+    },
+    //查看信息
+    seeCalcSalary(){
+    },
+    changePayth(index,status,item){
+     // this.selectUsedForm[item['salaryRuleId']] = id;
+      this.salaryRuleList.used[index]['salaryCheckStatus'] = status;
+      this.$forceUpdate()
+      console.log(status)
+    },
   }
 };
 </script>

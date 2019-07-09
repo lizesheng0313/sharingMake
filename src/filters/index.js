@@ -41,10 +41,12 @@ const salaryCheckStatus = (val) => {
     case 'PAID': {
       return '薪资已发放';
     }
+    case 'COMPUTED': {
+      return '已计算';
+    }
     case 'FINISH': {
       return '结束';
     }
-
   }
 };
 

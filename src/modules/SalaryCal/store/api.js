@@ -55,4 +55,20 @@ export function apiSalaryRuleList(date) {
     }
   })
 }
+//启动薪资核算
+export function apiInitSalaryCheck(form) {
+  return fetch({
+    url: '/api/salary/initSalaryCheck',
+    method: 'post',
+    data:form
+  })
+}
+//获取核对人员列表
+export function apiCheckMember(form) {
+  return fetch({
+    url: '/api/salary/checkMember/memberList',
+    method: 'get',
+    params:form
+  })
+}
 
