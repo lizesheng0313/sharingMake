@@ -6,7 +6,8 @@ export const salaryCalStore = {
   namespaced: true,
   state: {
     rouleId:"",
-    basicInfoForm:{}
+    basicInfoForm:{},
+    IndexCurrentDate:"",//薪资核算首页选择时间
   },
   actions,
   mutations,

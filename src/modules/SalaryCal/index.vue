@@ -123,12 +123,19 @@ export default {
       let currentDateArr = this.currentDate.split('-');
       return currentDateArr[0]+"年"+currentDateArr[1]+"月"
     },
+    ...mapState("salaryCalStore", {
+      IndexCurrentDate: "IndexCurrentDate",
+    })
   },
   created(){
     //默认日期
-    let nowDate = new Date();
-    let month = nowDate.getMonth()-(-1)<10?"0"+(nowDate.getMonth()-(-1)).toString():nowDate.getMonth()-(-1);
-    this.currentDate = nowDate.getFullYear()+"-"+month;
+    if(this.IndexCurrentDate){
+      this.currentDate = this.IndexCurrentDate
+    }else{
+      let nowDate = new Date();
+      let month = nowDate.getMonth()-(-1)<10?"0"+(nowDate.getMonth()-(-1)).toString():nowDate.getMonth()-(-1);
+      this.currentDate = nowDate.getFullYear()+"-"+month;
+    }
     this.getDate();
     // console.log(this.selectUsedForm)
   },
@@ -147,7 +154,10 @@ export default {
         console.log(this.selectUsedForm)
       })
     },
+    //选择时间
     changeDate(){
+      //记录当前选择的时间
+      this.$store.commit("salaryCalStore/SET_INDEXCURRENTDATE",this.currentDate);
       this.getDate()
     },
     goSalarySet(){
@@ -184,7 +194,7 @@ export default {
     changePayth(index,status,item){
      // this.selectUsedForm[item['salaryRuleId']] = id;
       this.salaryRuleList.used[index]['salaryCheckStatus'] = status;
-      this.$forceUpdate()
+      this.$forceUpdate();
       console.log(status)
     },
   }
