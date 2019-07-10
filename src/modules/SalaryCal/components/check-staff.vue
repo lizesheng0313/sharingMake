@@ -316,7 +316,7 @@ export default {
     },
     handleDropdown(val){
       if(val === 'delete'){
-        if(this.selectUserList.length === 0){
+        if(this.selectUserIdList.length === 0){
           this.$message.warning("请选择要删除的人员");
         }else{
           this.handleDelete(this.selectUserIdList)
