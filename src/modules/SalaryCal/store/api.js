@@ -72,3 +72,31 @@ export function apiCheckMember(form) {
   })
 }
 
+//增员导入
+export function apiImportMember({uuid,id}) {
+  return fetch({
+    url: '/api/salary/salaryCheck/importMember',
+    method: 'post',
+    params: {
+      uuid:uuid,
+      id:id
+    },
+  })
+}
+
+//删除员工
+export function apiCheckMemberdelete(id) {
+  return fetch({
+    url: '/api/salary/checkMember/delete',
+    method: 'delete',
+    data: {
+      ids:id
+    },
+  })
+}
+export function apiCheckMemberSummary(checkId) {
+  return fetch({
+    url: '/api/salary/checkMember/summary/'+checkId,
+    method: 'get',
+  })
+}
