@@ -1,7 +1,7 @@
 <template>
-  <div class="check-staff">
+  <div class="calc-wages">
     <div class="clearfix check-staff-menu">
-      <el-button class="screen" size="small">筛选</el-button>
+      <el-button class="screen" size="small" @click="showScreen">筛选</el-button>
       <el-input
         placeholder="请输入姓名\手机号"
         v-model="input"
@@ -37,33 +37,22 @@
       </div>
     </div>
     <div class="staff-table">
-      <!-- <div class="floating-menu">
-        <span>删除</span>
-      </div>-->
-      <el-table :data="tableData" class="check-staff_table" :style="{width:screenWidth-40+'px'}">
-        <el-table-column width="55" label="序号" type="index"></el-table-column>
-        <el-table-column prop="date" label="姓名" width="140"></el-table-column>
-        <el-table-column prop="name" label="工号" width="140"></el-table-column>
-        <el-table-column prop="address" label="手机号" width="140"></el-table-column>
-        <el-table-column prop="address" label="部门" width="140"></el-table-column>
-        <el-table-column prop="address" label="员工类型" width="140"></el-table-column>
-        <el-table-column prop="address" label="状态" width="140"></el-table-column>
-        <el-table-column prop="address" label="入职日期" width="140"></el-table-column>
-        <el-table-column prop="address" label="转正日期" width="140"></el-table-column>
-        <el-table-column prop="address" label="最后工作日" width="140"></el-table-column>
-        <el-table-column label="操作" fixed="right">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-row type="flex" class="row-bg tableHeader">
+        <el-col :span="4" v-for="item in tableCol"><div class="grid-content bg-purple">{{item}}</div></el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" v-for="per in tableValue">
+        <el-col :span="4" v-for="it in per"><div class="grid-content bg-purple">{{ it }}</div></el-col>
+      </el-row>
       <el-pagination
-        :page-size="20"
-        :pager-count="11"
-        layout="prev, pager, next"
-        :total="1000"
-        class="staff-page"
-      ></el-pagination>
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+        :current-page="salaryForm.currentPage"
+        :page-sizes="[1, 50, 100, 200]"
+        :page-size="salaryForm.pageSize"
+        layout="total, sizes, prev, pager, next"
+        :total="count"
+        class="staff-page">
+      </el-pagination>
     </div>
     <el-dialog
       title="浮动项导入"
@@ -111,6 +100,7 @@
         <el-button @click="isShowIncrease = false">取 消</el-button>
       </span>
     </el-dialog>
+    <!-- 筛选-->
     <el-dialog
       title=""
       :visible.sync="isShowScreen"
@@ -118,11 +108,87 @@
       center
       class="diy-el_dialog"
     >
-
+      <el-form :model="screenForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
+        <div class="shortCon">
+          <el-form-item label="纳税主体">
+            <el-select v-model="screenForm.taxSubId" placeholder="请选择纳税主体">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+        <div class="shortCon">
+          <el-form-item label="部门">
+            <el-input v-model="screenForm.departmentName"></el-input>
+          </el-form-item>
+        </div>
+        <div class="shortCon">
+          <el-form-item label="岗位">
+            <el-input v-model="screenForm.departmentName"></el-input>
+          </el-form-item>
+        </div>
+        <div class="shortCon">
+          <el-form-item label="工作地点">
+            <el-input v-model="screenForm.departmentName"></el-input>
+          </el-form-item>
+        </div>
+        <el-form-item label="入职日期">
+          <el-date-picker
+            v-model="screenForm.enterStartTime"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+          至
+          <el-date-picker
+            v-model="screenForm.enterEndTime"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="离职日期">
+          <el-date-picker
+            v-model="screenForm.lastEmployStartTime"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+          至
+          <el-date-picker
+            v-model="screenForm.lastEmployEndTime"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="员工类型">
+          <el-radio-group v-model="screenForm.enumEmpType" size="mini" >
+            <el-radio-button v-for="(item,index) in screenOption" :label="item.value"  border >{{item.label}}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary">查询</el-button>
+        <el-button>重置</el-button>
+      </span>
     </el-dialog>
+    <!-- 到处工资明细  -->
+<!--    <el-dialog-->
+<!--      title=""-->
+<!--      :visible.sync="isShowScreen"-->
+<!--      width="600px"-->
+<!--      center-->
+<!--      class="diy-el_dialog"-->
+<!--    >-->
+<!--      <template>-->
+<!--        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
+<!--        <div style="margin: 15px 0;"></div>-->
+<!--        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">-->
+<!--          <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>-->
+<!--        </el-checkbox-group>-->
+<!--      </template>-->
+<!--    </el-dialog>-->
   </div>
 </template>
 <script>
+  import { apiSalaryList,apiGetTaxSubjectList} from '../store/api'
 export default {
   data() {
     return {
@@ -140,8 +206,47 @@ export default {
       fileList:[],
       isShowScreen:false,
       screenForm:{
-
-      }
+        taxSubId:"",
+        departmentName:"",//部门
+        jobTitle:"",//岗位
+        workAddress:"",//工作地点
+        enterStartTime:"",
+        enterEndTime:"",
+        lastEmployStartTime:"",
+        lastEmployEndTime:"",
+        enumEmpType:"null",//用工类型
+      },
+      screenOption:[
+        {
+          label:"不限",
+          value:"null"
+        }, {
+          label:"全职",
+          value:"FULL_TIME"
+        },{
+          label:"兼职",
+          value:"PART_TIME"
+        },{
+          label:"实习",
+          value:"PRACTICE"
+        },{
+          label:"劳务",
+          value:"LABOUR"
+        },{
+          label:"退休返聘",
+          value:"RE_EMPLOY"
+        }
+      ],
+      salaryForm:{
+        checkId:"2",
+        currentPage:2,
+        pageSize:10,
+      },
+      salaryTableData:[],
+      tableCol:[],
+      tableValue:[],
+      count:0,
+      id:this.$route.query.id
     };
   },
   mounted() {
@@ -152,9 +257,34 @@ export default {
         that.screenWidth = window.screenWidth;
       })();
     };
+    this.loading()
+
   },
   methods: {
-    handleCalcSalary() {},
+    loading(){
+      apiSalaryList(this.salaryForm).then(res=>{
+       if(res.code === "0000"){
+         let salaryData = res.data;
+         this.count = salaryData.count;
+         this.salaryTableData = salaryData.tableData;
+         this.tableCol = this.salaryTableData[0]['diyrow'].map(item=>item.col);
+         this.tableValue = [];
+         this.salaryTableData.forEach(item=>{
+           let row = item['diyrow'].map(it=>it.val);
+           this.tableValue.push(row)
+         })
+       }
+      })
+    },
+    //切换pageId
+    handleCurrentChange(val){
+      this.salaryForm.currentPage = val;
+      this.loading()
+    },
+    handleSizeChange(val){
+      this.salaryForm.pageSize = val;
+      this.loading()
+    },
     //文件上传前校验
     beforeAvatarUpload(file) {
       //限制上传文件
@@ -183,14 +313,26 @@ export default {
       this.failCount = data.failCount;
       this.uuid = data.uuid;
     },
+    showScreen(){
+      this.isShowScreen = true;
+      apiGetTaxSubjectList(this.id).then(res=>{
+        console.log(res)
+      })
+    },
+    handleCalcSalary(){
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
 @import "../../../assets/scss/helpers.scss";
-.check-staff {
+.calc-wages {
   padding: 0 20px;
   box-sizing: border-box;
+  .shortCon{width:450px;}
+  .el-select{width: 100%;}
+  .el-form-item{margin-right:50px;}
+  .el-date-editor {width: 180px;}
   .screen{
     display: inline-block;
     float: left;
@@ -202,9 +344,7 @@ export default {
       width: 205px;
     }
   }
-  .iconiconfonticonfontsousuo1 {
-    font-size: 12px;
-  }
+  .iconiconfonticonfontsousuo1 {font-size: 12px;}
   .staff-situation {
     border-top: 1px solid #ededed;
     margin-top: 30px;
@@ -260,6 +400,17 @@ export default {
       margin-top: 20px;
       text-align: right;
     }
+  }
+  .grid-content{
+    height: 60px;
+    line-height: 60px;
+    border-bottom:1px solid #EDEDED;
+    text-align: center;
+  }
+  .tableHeader{
+    background:#F1F3F6 ;
+    color:#333333;
+    font-weight: bold;
   }
 }
 </style>

@@ -100,3 +100,18 @@ export function apiCheckMemberSummary(checkId) {
     method: 'get',
   })
 }
+//薪资核算列表
+export function apiSalaryList(form) {
+  return fetch({
+    url: '/api/salary/salaryCheck/salaryList',
+    method: 'post',
+    data:form
+  })
+}
+//纳税主体列表
+export function apiGetTaxSubjectList() {
+  return fetch({
+    url: '/api/taxSubject/getTaxSubjectList',
+    method: 'get',
+  })
+}
