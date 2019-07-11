@@ -119,8 +119,8 @@
         :total="count">
       </el-pagination>
     </div>
+    <!--  增员导入  -->
     <el-dialog
-      title="增员导入"
       :visible.sync="isShowIncrease"
       width="600px"
       center
@@ -149,12 +149,12 @@
           <span class="headings">2、</span>
           <el-button size="small" type="primary">选择文件</el-button>
         </el-upload>
-        <p v-show="uuid">
-          <span v-if="failCount === 0">全部导入成功</span>
-          <span v-if="failCount !== 0 && successCount !==0">数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
+        <div v-show="uuid" style="margin:15px 0 0 28px">
+          <span v-if="failCount === 0"><i class="el-icon-success"></i>全部导入成功</span>
+          <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
           <span v-if="successCount === 0">数据全部未通过校验</span>
           <span><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></span>
-        </p>
+        </div>
         <p>
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
           <span><a href="/api/salary/checkMember/template/download">下载模板</a></span>
@@ -166,6 +166,21 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="uploadFile">导入通过数据</el-button>
         <el-button @click="isShowIncrease = false">取 消</el-button>
+      </span>
+    </el-dialog>
+    <!-- 导入完成 -->
+    <el-dialog
+      :visible.sync="isShowIncreaseFinish"
+      width="500px"
+      center
+      class="importFinishDialog"
+    >
+      <div class="title"><i class="el-icon-success"></i>导入完成</div>
+      <div>导入成功<span style="color:#06B806">{{this.importFinishForm.successCount}}</span>条数据,<span style="color:red">{{this.importFinishForm.failCount}}</span>条数据导入未通过，忽略导入</div>
+      <div><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="importMemberFinish">确定</el-button>
+        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -205,7 +220,12 @@ export default {
       selectUserIdList:[],
       summryTotal:"",
       changeEmployeeCount:"",
-      newEmployeeCount:""
+      newEmployeeCount:"",
+      isShowIncreaseFinish:false,
+      importFinishForm:{
+        failCount:"",
+        successCount:""
+      }
     };
   },
   mounted() {
@@ -306,8 +326,12 @@ export default {
          id:this.userForm.checkId
        }).then(res=>{
        if(res.code === '0000'){
+         let importData = res.data;
+         console.log(importData)
+         this.importFinishForm.failCount = importData.failCount;
+         this.importFinishForm.successCount = importData.successCount;
          this.isShowIncrease = false;
-         this.loading();
+         this.isShowIncreaseFinish = true;
        }
        })
     },
@@ -329,6 +353,10 @@ export default {
       this.isShowIncrease = true;
       this.fileList = [];
       this.uuid = ""
+    },
+    importMemberFinish(){
+      this.loading();
+      this.isShowIncreaseFinish = false
     }
   }
 };
@@ -393,6 +421,22 @@ export default {
   }
   .el-pagination{
     text-align: right;
+  }
+  .importFinishDialog{
+    .title{
+      font-size: 20px;
+    }
+    .el-icon-success{
+      color:#06B806;
+      font-size: 20px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    div{
+      width: 300px;
+      margin: 0 auto;
+      margin-top:10px;
+    }
   }
 }
 </style>

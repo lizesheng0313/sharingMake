@@ -262,8 +262,19 @@ a{
     }
   }
 }
-
-
+.el-icon-success{
+  color:#06B806;
+}
+.el-icon-warning{
+  color:#e6a23c;
+}
+.el-icon-error{
+  color:#f56c6c;
+}
+.el-icon-success,.el-icon-warning,.el-icon-error{
+  display: inline-block;
+  margin-right: 10px;
+}
 .search-wapper{
   padding-top:20px;
   border:1px solid #ddd;

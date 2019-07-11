@@ -1,6 +1,7 @@
 <template>
   <div class="check-staff">
     <div class="clearfix check-staff-menu">
+      <el-button class="screen" size="small">筛选</el-button>
       <el-input
         placeholder="请输入姓名\手机号"
         v-model="input"
@@ -65,7 +66,7 @@
       ></el-pagination>
     </div>
     <el-dialog
-      title="浮云项导入"
+      title="浮动项导入"
       :visible.sync="isShowIncrease"
       width="600px"
       center
@@ -90,7 +91,8 @@
           action="https://jsonplaceholder.typicode.com/posts/"
           :limit="1"
           :file-list="fileList"
-          :on-success="handleScuess"
+          :before-upload="beforeAvatarUpload"
+          :on-success="handleSuccess"
         >
           <span class="headings">2、</span>
           <el-button size="small" type="primary">选择文件</el-button>
@@ -109,6 +111,15 @@
         <el-button @click="isShowIncrease = false">取 消</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title=""
+      :visible.sync="isShowScreen"
+      width="600px"
+      center
+      class="diy-el_dialog"
+    >
+
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -125,7 +136,12 @@ export default {
           name: "2",
           address: "123"
         }
-      ]
+      ],
+      fileList:[],
+      isShowScreen:false,
+      screenForm:{
+
+      }
     };
   },
   mounted() {
@@ -138,7 +154,35 @@ export default {
     };
   },
   methods: {
-    handleCalcSalary() {}
+    handleCalcSalary() {},
+    //文件上传前校验
+    beforeAvatarUpload(file) {
+      //限制上传文件
+      var testmsg = file.name.substring(file.name.lastIndexOf(".") + 1);
+      const isxls = testmsg === "xls" || testmsg === "xlsx";
+      const isLt5M = file.size / 1024 / 1024 < 5;
+      if (!isxls) {
+        this.$message({
+          message: "上传文件类型只能是 xls,xlsx 格式!",
+          type: "warning"
+        });
+        this.fileList = []
+      }
+      if (!isLt5M) {
+        this.$message({
+          message: "上传文件大小不能超过 5MB!",
+          type: "warning"
+        });
+        this.fileList = []
+      }
+      return isxls && isLt5M;
+    },
+    handleSuccess(res, file) {
+      let data = res.data;
+      this.successCount = data.successCount;
+      this.failCount = data.failCount;
+      this.uuid = data.uuid;
+    },
   }
 };
 </script>
@@ -147,6 +191,11 @@ export default {
 .check-staff {
   padding: 0 20px;
   box-sizing: border-box;
+  .screen{
+    display: inline-block;
+    float: left;
+    margin-right:20px;
+  }
   .check-staff-menu {
     margin-top: 66.5px;
     .search-input {
