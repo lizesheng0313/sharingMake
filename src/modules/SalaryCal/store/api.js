@@ -1,4 +1,4 @@
-import { fetch } from 'request/fetch'
+import { fetch,fetchFile } from 'request/fetch'
 //保存j基本信息
 export function apiSaveSalaryRule(form) {
   return fetch({
@@ -117,7 +117,7 @@ export function apiGetTaxSubjectList() {
 }
 //导出工资表明细
 export function apiSalaryDetailExport(form) {
-  return fetch({
+  return fetchFile({
     url: '/api/salary/salaryCheck/salaryDetail/export',
     method: 'post',
     data:form

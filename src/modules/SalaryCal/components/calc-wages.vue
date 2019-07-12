@@ -488,7 +488,35 @@ export default {
           enumEmpType:this.screenForm.enumEmpType,//用工类型
       }
       }
+      }).then(res=>{
+        let url = window.URL.createObjectURL(res);
+        let a = document.createElement('a')
+        a.href = url;
+        a.download = decodeURI(response['headers']['content-disposition'].split(';')[1].split('=')[1]);
+        a.click();
       })
+    },
+    //base64转blob文件
+    b64toBlob(b64Data, contentType, sliceSize) {
+      contentType = contentType || "";
+      sliceSize = sliceSize || 512;
+      var byteCharacters = atob(b64Data);
+      var byteArrays = [];
+      for (
+        var offset = 0;
+        offset < byteCharacters.length;
+        offset += sliceSize
+      ) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+        var byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
+      var blob = new Blob(byteArrays, { type: contentType });
+      return blob;
     },
     handleCalcSalary(){
     }
