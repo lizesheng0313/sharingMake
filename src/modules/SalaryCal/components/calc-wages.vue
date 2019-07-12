@@ -4,10 +4,11 @@
       <el-button class="screen" size="small" @click="showScreen">筛选</el-button>
       <el-input
         placeholder="请输入姓名\手机号"
-        v-model="input"
+        v-model="salaryForm.key"
         suffix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
         class="search-input left"
+        @keyup.enter.native="searchSalary"
       ></el-input>
       <div class="right">
         <el-button type="primary" @click="handleCalcSalary">薪资计算</el-button>
@@ -30,7 +31,7 @@
             <i class="iconsanjiao iconfont"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>导出工资明细</el-dropdown-item>
+            <el-dropdown-item @click.native="exportSalaryDetail">导出工资明细</el-dropdown-item>
             <el-dropdown-item>导出部门汇总</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -112,8 +113,7 @@
         <div class="shortCon">
           <el-form-item label="纳税主体">
             <el-select v-model="screenForm.taxSubId" placeholder="请选择纳税主体">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+              <el-option v-for="item in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId"></el-option>
             </el-select>
           </el-form-item>
         </div>
@@ -124,12 +124,12 @@
         </div>
         <div class="shortCon">
           <el-form-item label="岗位">
-            <el-input v-model="screenForm.departmentName"></el-input>
+            <el-input v-model="screenForm.jobTitle"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
           <el-form-item label="工作地点">
-            <el-input v-model="screenForm.departmentName"></el-input>
+            <el-input v-model="screenForm.workAddress"></el-input>
           </el-form-item>
         </div>
         <el-form-item label="入职日期">
@@ -159,36 +159,37 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="员工类型">
-          <el-radio-group v-model="screenForm.enumEmpType" size="mini" >
+          <el-radio-group v-model="screenForm.enumEmpType" size="mini">
             <el-radio-button v-for="(item,index) in screenOption" :label="item.value"  border >{{item.label}}</el-radio-button>
           </el-radio-group>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary">查询</el-button>
-        <el-button>重置</el-button>
+        <el-button type="primary" @click ="selectScreen">查询</el-button>
+        <el-button @click="resetSreen">重置</el-button>
       </span>
     </el-dialog>
-    <!-- 到处工资明细  -->
-<!--    <el-dialog-->
-<!--      title=""-->
-<!--      :visible.sync="isShowScreen"-->
-<!--      width="600px"-->
-<!--      center-->
-<!--      class="diy-el_dialog"-->
-<!--    >-->
-<!--      <template>-->
-<!--        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>-->
-<!--        <div style="margin: 15px 0;"></div>-->
-<!--        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">-->
-<!--          <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>-->
-<!--        </el-checkbox-group>-->
-<!--      </template>-->
-<!--    </el-dialog>-->
+   <!-- 导出工资明细  -->
+    <el-dialog
+      title=""
+      :visible.sync="showExportSalaryDetail"
+      width="600px"
+      center
+      class="exportSalaryDetailDialog"
+    >
+      <template>
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">人员信息</el-checkbox>
+        <div style="margin: 15px 0;"></div>
+        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+          <el-checkbox v-for="item in personInfoOptions" :label="city" :key="city">{{city}}</el-checkbox>
+        </el-checkbox-group>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script>
-  import { apiSalaryList,apiGetTaxSubjectList} from '../store/api'
+  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemInfo} from '../store/api'
+
 export default {
   data() {
     return {
@@ -196,13 +197,6 @@ export default {
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       input: "",
       isShowIncrease: false,
-      tableData: [
-        {
-          date: "1",
-          name: "2",
-          address: "123"
-        }
-      ],
       fileList:[],
       isShowScreen:false,
       screenForm:{
@@ -237,8 +231,10 @@ export default {
           value:"RE_EMPLOY"
         }
       ],
+      screenTaxOption:[],
       salaryForm:{
         checkId:"2",
+        key:"",
         currentPage:2,
         pageSize:10,
       },
@@ -246,7 +242,12 @@ export default {
       tableCol:[],
       tableValue:[],
       count:0,
-      id:this.$route.query.id
+      salaryRuleId:this.$route.query.salaryRuleId,
+      checkAll: false,
+      checkedCities: ['上海', '北京'],
+      personOptions:['工号', '姓名', '身份证号', '部门',"岗位","工作地点","工作性质","入职日期","离职日期"];
+      isIndeterminate: true,
+      showExportSalaryDetail:false,
     };
   },
   mounted() {
@@ -258,7 +259,15 @@ export default {
       })();
     };
     this.loading()
-
+  },
+  computed:{
+    nowDate:function () {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1<10 ? "0"+(date.getMonth()+1):date.getMonth()+1;
+      let day = date.getDate();
+      return year+"-"+month+"-"+day;
+    }
   },
   methods: {
     loading(){
@@ -266,15 +275,20 @@ export default {
        if(res.code === "0000"){
          let salaryData = res.data;
          this.count = salaryData.count;
-         this.salaryTableData = salaryData.tableData;
-         this.tableCol = this.salaryTableData[0]['diyrow'].map(item=>item.col);
          this.tableValue = [];
-         this.salaryTableData.forEach(item=>{
-           let row = item['diyrow'].map(it=>it.val);
-           this.tableValue.push(row)
-         })
+         this.salaryTableData = salaryData.tableData;
+         if(this.salaryTableData.length >0 ){
+           this.tableCol = this.salaryTableData[0]['diyrow'].map(item=>item.col);
+           this.salaryTableData.forEach(item=>{
+             let row = item['diyrow'].map(it=>it.val);
+             this.tableValue.push(row)
+           })
+         }
        }
       })
+    },
+    searchSalary(){
+      this.loading()
     },
     //切换pageId
     handleCurrentChange(val){
@@ -315,9 +329,42 @@ export default {
     },
     showScreen(){
       this.isShowScreen = true;
+      this.resetSreen();
       apiGetTaxSubjectList(this.id).then(res=>{
+        if(res.code == "0000"){
+          this.screenTaxOption = res.data;
+          console.log(this.nowDate)
+        }
+      })
+    },
+    //查询筛选条件
+    selectScreen(){
+
+    },
+    //重置筛选条件
+    resetSreen(){
+      for(let key in this.screenForm){
+        this.screenForm[key] = "";
+      }
+      this.screenForm.enterEndTime = this.nowDate;
+      this.screenForm.lastEmployEndTime = this.nowDate;
+      this.screenForm.enumEmpType = null;
+    },
+    //导出工资表明细
+    exportSalaryDetail(){
+      this.showExportSalaryDetail = true;
+      apiSalaryItemInfo(this.salaryRuleId).then(res=>{
         console.log(res)
       })
+    },
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? cityOptions : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.cities.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
     },
     handleCalcSalary(){
     }
@@ -411,6 +458,11 @@ export default {
     background:#F1F3F6 ;
     color:#333333;
     font-weight: bold;
+  }
+  .exportSalaryDetailDialog{
+    .title{
+
+    }
   }
 }
 </style>

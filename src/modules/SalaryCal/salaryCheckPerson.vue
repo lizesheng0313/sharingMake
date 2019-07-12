@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      active: 0
+      active: typeof (this.$route.query.active) == "string" ? this.$route.query.active-0 : this.$route.query.active-0
     };
   },
   methods: {

@@ -75,7 +75,7 @@
         </el-table-column>
         <el-table-column  label="部门">
           <template slot-scope="scope">
-            <span>{{scope.row.departmentName}}</span>
+            <span>{{scope.row.departName}}</span>
           </template>
         </el-table-column>
         <el-table-column  label="岗位">

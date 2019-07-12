@@ -50,7 +50,6 @@ const salaryCheckStatus = (val) => {
   }
 };
 
-
 const filterType = (val) => {
   switch (val) {//仲裁类别
     case 'SYSYEM': {
