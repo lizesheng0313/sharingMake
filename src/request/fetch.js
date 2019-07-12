@@ -39,13 +39,12 @@ export function fetch(options) {
       if (data.code != "0000") {
         Message.error(data.message)
       }
-
       resolve(data)
     })
-      .catch(error => {
-        console.log(error)
-        // console.log('请求异常信息：' + error)
-        reject(error)
-      })
+      // .catch(error => {
+      //   console.log(error)
+      //   // console.log('请求异常信息：' + error)
+      //   reject(error)
+      // })
   })
 }

@@ -115,3 +115,11 @@ export function apiGetTaxSubjectList() {
     method: 'get',
   })
 }
+//导出工资表明细
+export function apiSalaryDetailExport(form) {
+  return fetch({
+    url: '/api/salary/salaryCheck/salaryDetail/export',
+    method: 'post',
+    data:form
+  })
+}
