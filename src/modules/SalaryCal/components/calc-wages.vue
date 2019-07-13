@@ -264,21 +264,10 @@ export default {
       showExportSalaryDetail:false,
       isDiyIndeterminate:[],
       diyOption:[],
-      diyCheckeds:{
-        0:[],
-        1:[],
-        2:[],
-        3:[],
-      },
+      diyCheckeds:{},
       diyChecked:[],
-      isIndeterminates:{
-      },
-      checkAlls:{
-        0:false,
-        1:false,
-        2:false,
-        3:false,
-      }
+      isIndeterminates:{},
+      checkAlls:{}
     };
   },
   created(){
@@ -351,11 +340,10 @@ export default {
           })
           //  初始化导出配置项数据、
           this.diyOption.forEach((item,index)=>{
-            this.isIndeterminates[index] = true;
-            this.diyCheckeds[index] = [];
+            this.$set(this.diyCheckeds, index, []);
+            this.isIndeterminates[index] = false;
             this.checkAlls[index] = false;
           })
-          console.log(this.diyCheckeds[0])
         }
       })
     },
@@ -457,6 +445,7 @@ export default {
       let checkedCount =this.diyCheckeds[index].length;
       this.checkAlls[index] = checkedCount === value.length;
       this.isIndeterminates[index] = checkedCount > 0 && checkedCount < value.length;
+      this.$forceUpdate();
       // console.log(this.checkedPerson)
     },
     handleDiyCheckAllChange(index,value) {
@@ -467,7 +456,7 @@ export default {
     onExportSalaryItem(){
       let selectItem = [].concat(this.checkedPerson);
       for(let key in this.diyCheckeds){
-        selectItem.concat(this.diyCheckeds[key])
+        selectItem = selectItem.concat(this.diyCheckeds[key])
       }
       apiSalaryDetailExport({
       "exportItems":selectItem,
@@ -490,33 +479,11 @@ export default {
       }
       }).then(res=>{
         let url = window.URL.createObjectURL(res);
-        let a = document.createElement('a')
+        let a = document.createElement('a');
         a.href = url;
         a.download = decodeURI(response['headers']['content-disposition'].split(';')[1].split('=')[1]);
         a.click();
       })
-    },
-    //base64转blob文件
-    b64toBlob(b64Data, contentType, sliceSize) {
-      contentType = contentType || "";
-      sliceSize = sliceSize || 512;
-      var byteCharacters = atob(b64Data);
-      var byteArrays = [];
-      for (
-        var offset = 0;
-        offset < byteCharacters.length;
-        offset += sliceSize
-      ) {
-        var slice = byteCharacters.slice(offset, offset + sliceSize);
-        var byteNumbers = new Array(slice.length);
-        for (var i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-        var byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
-      var blob = new Blob(byteArrays, { type: contentType });
-      return blob;
     },
     handleCalcSalary(){
     }
