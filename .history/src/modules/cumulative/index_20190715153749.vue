@@ -209,7 +209,7 @@ export default {
     color: #666;
   }
   .check-staff-menu {
-    margin-top: 40px;
+    margin-top: 66.5px;
     .search-input {
       width: 205px;
     }

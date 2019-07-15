@@ -1,5 +1,5 @@
 <template>
-  <div class="check-staff el-diy-month">
+  <div class="check-staff">
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
@@ -7,20 +7,7 @@
         </el-col>
       </el-row>
     </header>
-    <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p>
     <div class="clearfix check-staff-menu">
-      <div class="content-header">
-        <i class="el-icon-arrow-left"></i>
-        <span>{{currentDate}}</span>
-        <el-date-picker
-          v-model="currentDate"
-          type="month"
-          value-format="yyyy年MM月"
-          :editable="false"
-          :clearable="false"
-        ></el-date-picker>
-        <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>
-      </div>
       <el-input
         placeholder="请输入姓名\手机号"
         v-model="input"
@@ -122,8 +109,7 @@ export default {
           name: "2",
           address: "123"
         }
-      ],
-      currentDate: "2019年03月"
+      ]
     };
   },
   mounted() {
@@ -168,6 +154,7 @@ export default {
     padding: 0 20px;
     font-size: 14px;
     height: 61px;
+    border-bottom: 1px solid #ededed;
     line-height: 61px;
     .add-table {
       cursor: pointer;
@@ -181,35 +168,8 @@ export default {
       top: 1px;
     }
   }
-  .content-header {
-    position: relative;
-    font-size: 18px;
-    margin-bottom: 30px;
-    cursor: pointer;
-    i {
-      font-size: 16px;
-      color: #ccc;
-    }
-    .rotate-el-icon-arrow-left {
-      transform: rotate(180deg);
-    }
-    span {
-      position: absolute;
-      left: 32px;
-      top: 3px;
-      z-index: 0;
-    }
-  }
-  .tax-collect-tips {
-    background: #fff6e2;
-    padding-left: 20px;
-    height: 40px;
-    font-size: 12px;
-    line-height: 40px;
-    color: #666;
-  }
   .check-staff-menu {
-    margin-top: 40px;
+    margin-top: 66.5px;
     .search-input {
       width: 205px;
     }

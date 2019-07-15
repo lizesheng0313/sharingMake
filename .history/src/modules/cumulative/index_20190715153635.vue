@@ -1,5 +1,5 @@
 <template>
-  <div class="check-staff el-diy-month">
+  <div class="check-staff">
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
@@ -122,8 +122,7 @@ export default {
           name: "2",
           address: "123"
         }
-      ],
-      currentDate: "2019年03月"
+      ]
     };
   },
   mounted() {
@@ -181,25 +180,6 @@ export default {
       top: 1px;
     }
   }
-  .content-header {
-    position: relative;
-    font-size: 18px;
-    margin-bottom: 30px;
-    cursor: pointer;
-    i {
-      font-size: 16px;
-      color: #ccc;
-    }
-    .rotate-el-icon-arrow-left {
-      transform: rotate(180deg);
-    }
-    span {
-      position: absolute;
-      left: 32px;
-      top: 3px;
-      z-index: 0;
-    }
-  }
   .tax-collect-tips {
     background: #fff6e2;
     padding-left: 20px;
@@ -209,7 +189,7 @@ export default {
     color: #666;
   }
   .check-staff-menu {
-    margin-top: 40px;
+    margin-top: 66.5px;
     .search-input {
       width: 205px;
     }

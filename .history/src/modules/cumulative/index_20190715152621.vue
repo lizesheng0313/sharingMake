@@ -1,26 +1,6 @@
 <template>
-  <div class="check-staff el-diy-month">
-    <header class="header">
-      <el-row type="flex">
-        <el-col :span="12">
-          <span>累计应税所得额初始化</span>
-        </el-col>
-      </el-row>
-    </header>
-    <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p>
+  <div class="check-staff">
     <div class="clearfix check-staff-menu">
-      <div class="content-header">
-        <i class="el-icon-arrow-left"></i>
-        <span>{{currentDate}}</span>
-        <el-date-picker
-          v-model="currentDate"
-          type="month"
-          value-format="yyyy年MM月"
-          :editable="false"
-          :clearable="false"
-        ></el-date-picker>
-        <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>
-      </div>
       <el-input
         placeholder="请输入姓名\手机号"
         v-model="input"
@@ -29,7 +9,7 @@
         class="search-input left"
       ></el-input>
       <div class="right">
-        <el-button type="primary" @click="isShowIncrease = true" class="add-import">导入</el-button>
+        <el-button type="primary" @click="isShowIncrease = true" class="add-import">增员导入</el-button>
       </div>
     </div>
     <div class="staff-table">
@@ -64,7 +44,7 @@
       ></el-pagination>
     </div>
     <el-dialog
-      title="累计应纳税所得导入"
+      title="增员导入"
       :visible.sync="isShowIncrease"
       width="600px"
       center
@@ -75,10 +55,7 @@
         <div class="diy-el_radio">
           <el-radio-group v-model="radio">
             <div>
-              <el-radio :label="3">通过员工工号匹配人员</el-radio>
-            </div>
-            <div>
-              <el-radio :label="2">通过身份证匹配人员</el-radio>
+              <el-radio :label="3">通过身份证号匹配人员</el-radio>
             </div>
           </el-radio-group>
         </div>
@@ -98,7 +75,10 @@
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
           <span>下载模板</span>
         </p>
-        <p class="instructions">说明：若本年度纳税主体下员工已存在累计值，再次导入后将覆盖原数据</p>
+        <p class="instructions">
+          说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资
+          <span>查看举例</span>
+        </p>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary">导入通过数据</el-button>
@@ -122,8 +102,7 @@ export default {
           name: "2",
           address: "123"
         }
-      ],
-      currentDate: "2019年03月"
+      ]
     };
   },
   mounted() {
@@ -164,52 +143,8 @@ export default {
 .check-staff {
   padding: 0 20px;
   box-sizing: border-box;
-  .header {
-    padding: 0 20px;
-    font-size: 14px;
-    height: 61px;
-    line-height: 61px;
-    .add-table {
-      cursor: pointer;
-      float: right;
-      color: $mainColor;
-    }
-    .iconxinzeng {
-      font-size: 18px;
-      color: #9c9c9c;
-      position: relative;
-      top: 1px;
-    }
-  }
-  .content-header {
-    position: relative;
-    font-size: 18px;
-    margin-bottom: 30px;
-    cursor: pointer;
-    i {
-      font-size: 16px;
-      color: #ccc;
-    }
-    .rotate-el-icon-arrow-left {
-      transform: rotate(180deg);
-    }
-    span {
-      position: absolute;
-      left: 32px;
-      top: 3px;
-      z-index: 0;
-    }
-  }
-  .tax-collect-tips {
-    background: #fff6e2;
-    padding-left: 20px;
-    height: 40px;
-    font-size: 12px;
-    line-height: 40px;
-    color: #666;
-  }
   .check-staff-menu {
-    margin-top: 40px;
+    margin-top: 66.5px;
     .search-input {
       width: 205px;
     }

@@ -122,8 +122,7 @@ export default {
           name: "2",
           address: "123"
         }
-      ],
-      currentDate: "2019年03月"
+      ]
     };
   },
   mounted() {
@@ -209,7 +208,7 @@ export default {
     color: #666;
   }
   .check-staff-menu {
-    margin-top: 40px;
+    margin-top: 66.5px;
     .search-input {
       width: 205px;
     }
