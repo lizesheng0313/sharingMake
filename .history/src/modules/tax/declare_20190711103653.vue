@@ -35,14 +35,6 @@
                 <el-dropdown-item>北京阿拉钉科技有限公司</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <span class="staff-total">
-              申报类型：
-              <i>正常申报</i>
-            </span>
-            <span class="staff-total">
-              申报状态：
-              <i>申报处理中</i>
-            </span>
           </div>
           <div class="right">
             <el-button type="primary" class="add-import">发送申报</el-button>
@@ -57,14 +49,15 @@
             class="check-staff_table"
             :style="{width:screenWidth-285+'px'}"
           >
-            <el-table-column label="报表名称" type="index" width="140"></el-table-column>
-            <el-table-column prop="date" label="纳税人数" width="140"></el-table-column>
-            <el-table-column prop="name" label="本期人数" width="140"></el-table-column>
-            <el-table-column prop="address" label="累计收入" width="140"></el-table-column>
-            <el-table-column prop="address" label="应扣缴税额" width="140"></el-table-column>
-            <el-table-column prop="address" label="已缴税额" width="140"></el-table-column>
-            <el-table-column prop="address" label="应补(退)税额" width="140"></el-table-column>
-            <el-table-column prop="address" label="是否可申报" width="140"></el-table-column>
+            <el-table-column width="55" label="序号" type="index"></el-table-column>
+            <el-table-column prop="date" label="姓名" width="140"></el-table-column>
+            <el-table-column prop="name" label="身份证号" width="140"></el-table-column>
+            <el-table-column prop="address" label="入职日期" width="140"></el-table-column>
+            <el-table-column prop="address" label="累计子女教育" width="140"></el-table-column>
+            <el-table-column prop="address" label="累计继续教育" width="140"></el-table-column>
+            <el-table-column prop="address" label="累计住房贷款利息" width="140"></el-table-column>
+            <el-table-column prop="address" label="累计住房租金" width="140"></el-table-column>
+            <el-table-column prop="address" label="累计赡养老人" width="140"></el-table-column>
           </el-table>
           <el-pagination
             :page-size="20"
@@ -75,8 +68,8 @@
           ></el-pagination>
         </div>
         <div class="footnotes">
-          <p>局端服务器处理结果如下：</p>
-          <p>[7001]您发送的申报正在处理，请稍后获取反馈信息，谢谢！</p>
+          <strong>说明</strong>
+          <p>1、点击【重下累计值】后，先删除本月该纳税主体中全部员工的专项附加累计数据，然后重新重税务系统中下载</p>
         </div>
       </div>
     </div>
@@ -226,17 +219,8 @@ export default {
     }
   }
   .screening {
-    .staff-total {
-      margin-left: 15px;
-      color: #333;
-      i {
-        font-style: normal;
-        color: #ff8f2c;
-      }
-    }
     border-top: 1px solid #eee;
     margin-top: 18px;
-    padding-top: 10px;
     .staff-table {
       .check-staff_table {
         overflow-x: auto;

@@ -57,7 +57,7 @@
             class="check-staff_table"
             :style="{width:screenWidth-285+'px'}"
           >
-            <el-table-column label="报表名称" type="index" width="140"></el-table-column>
+            <el-table-column label="报表名称" type="index"></el-table-column>
             <el-table-column prop="date" label="纳税人数" width="140"></el-table-column>
             <el-table-column prop="name" label="本期人数" width="140"></el-table-column>
             <el-table-column prop="address" label="累计收入" width="140"></el-table-column>
