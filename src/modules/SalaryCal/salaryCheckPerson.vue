@@ -24,8 +24,8 @@
       <div slot="fs-container">
         <div class="step-box">
           <el-steps :active="active" finish-status="success" class="steps" :align-center="true">
-            <el-step title="核对人员"></el-step>
-            <el-step title="核算薪资"></el-step>
+            <el-step title="核对人员"  @click.native="active = 0" style="cursor: pointer;"></el-step>
+            <el-step title="核算薪资" @click.native="active = 1" style="cursor: pointer;"></el-step>
             <el-step title="发放薪资"></el-step>
           </el-steps>
           <el-button-group class="turn-page">
@@ -54,10 +54,13 @@ export default {
   },
   data() {
     return {
-      active: 0
+      active: typeof (this.$route.query.active) == "string" ? this.$route.query.active-0 : this.$route.query.active-0
     };
   },
   methods: {
+    handle(val){
+      console.log(val)
+    },
     handlePrve() {
       if (this.active != 0) {
         this.active--;
