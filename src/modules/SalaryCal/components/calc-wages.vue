@@ -23,7 +23,7 @@
         </span>
       </div>
       <div class="right calc-table_menu">
-        <span>社会公积金导入</span>
+        <span @click="isShowSocial = true">社会公积金导入</span>
         <span class="have-border_right" @click="isShowIncrease = true">浮云项导入</span>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
@@ -55,6 +55,7 @@
         class="staff-page">
       </el-pagination>
     </div>
+   <!-- 浮动项导入  -->
     <el-dialog
       title="浮动项导入"
       :visible.sync="isShowIncrease"
@@ -97,7 +98,55 @@
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary">导入通过数据</el-button>
+        <el-button type="primary" @click="uploadFile">导入通过数据</el-button>
+        <el-button @click="isShowIncrease = false">取 消</el-button>
+      </span>
+    </el-dialog>
+   <!-- 公积金导入  -->
+    <el-dialog
+      title="公积金导入"
+      :visible.sync="isShowSocial"
+      width="600px"
+      center
+      class="diy-el_dialog"
+    >
+      <div>
+        <p class="headings">1、选择导入匹配方式</p>
+        <div class="diy-el_radio">
+          <el-radio-group v-model="socialType">
+            <div>
+              <el-radio label="BY_EMP_NO">通过员工工号匹配人员</el-radio>
+            </div>
+            <div>
+              <el-radio label="BY_PHONE_NO">通过手机号匹配人员</el-radio>
+            </div>
+          </el-radio-group>
+        </div>
+      </div>
+      <div class="select-file">
+        <el-upload
+          class="avatar-uploader"
+          action="/api/salary/socialProvident/verify"
+          :limit="1"
+          :file-list="fileList"
+          :before-upload="beforeAvatarUpload"
+          :on-success="handleSuccess"
+          :data="{'id':salaryForm.checkId,'importType':socialType}"
+        >
+          <span class="headings">2、</span>
+          <el-button size="small" type="primary">选择文件</el-button>
+        </el-upload>
+        <p>
+          支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
+          <span><a href="/api/salary/socialProvident/template/download">下载模板</a></span>
+        </p>
+        <p class="instructions">
+          说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资
+          <span>查看举例</span>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="uploadFile">导入通过数据</el-button>
         <el-button @click="isShowIncrease = false">取 消</el-button>
       </span>
     </el-dialog>
@@ -163,7 +212,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="员工类型">
-          <el-checkbox-group v-model="salaryForm.queryFilterParam.enumEmpType" size="mini" @change="changeCheckBox">
+          <el-checkbox-group v-model="salaryForm.queryFilterParam.enumEmpType" size="mini">
             <el-checkbox-button  v-for="(item,index) in screenOption" :label="item.value" :key="item.index">{{item.label}}</el-checkbox-button>
           </el-checkbox-group>
         </el-form-item>
@@ -208,12 +257,13 @@ export default {
   data() {
     return {
       radio:"",
+      isShowSocial:false,//公积金方式
+      socialType:"BY_EMP_NO",
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       input: "",
       isShowIncrease: false,
       fileList:[],
       isShowScreen:false,
-
       screenOption:[
         {
           label:"不限",
@@ -374,6 +424,21 @@ export default {
       this.successCount = data.successCount;
       this.failCount = data.failCount;
       this.uuid = data.uuid;
+    },
+    // 导出通过数据
+    uploadFile(){
+      apiImportMember({
+        uuid:this.uuid,
+        id:this.userForm.checkId
+      }).then(res=>{
+        if(res.code === '0000'){
+          let importData = res.data;
+          this.importFinishForm.failCount = importData.failCount;
+          this.importFinishForm.successCount = importData.successCount;
+          this.isShowIncrease = false;
+          this.isShowIncreaseFinish = true;
+        }
+      })
     },
     //显示筛选dialog
     showScreen(){

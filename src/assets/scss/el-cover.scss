@@ -1,18 +1,11 @@
 @import "./helpers.scss";
 
 .el-menu-vertical-demo {
-width: 223px;
-height: auto;
-background: #4a535e;
-min-height: 87vh;
-overflow: hidden;
-.el-menu {
-  border: none;
-  background: #4a535e;
+  width: 223px;
   height: auto;
+  background: #4a535e;
   min-height: 87vh;
   overflow: hidden;
-  box-shadow: 0 0 56px 0 #f1f1f1;
   .el-menu {
     border: none;
     background: #4a535e;
@@ -49,23 +42,15 @@ overflow: hidden;
     }
   }
 }
-.salary-cal{
+.el-diy-month{
   .el-date-editor{
     width:120px;
     opacity:0;
   }
 }
-
-.el-diy-month{
-.el-date-editor{
-  width:120px;
-  opacity:0;
-}
-}
-
 .sflary-el-step{
   .el-step__main {
-   color:#999;
+    color:#999;
   }
 
   .el-step__title{
@@ -87,11 +72,8 @@ overflow: hidden;
     top:-2px;
     cursor: pointer;
   }
-  .el-upload-list{
-    display: inline-block;
-    vertical-align: middle;
-  }
 }
+
 .diy-el_dialog{
   border-radius:6px;
   .el-dialog__header{
@@ -132,6 +114,8 @@ overflow: hidden;
   }
 }
 
+
+
 .el-table th, .el-table td {
   text-align: center !important
 }
@@ -160,4 +144,15 @@ overflow: hidden;
 .el-input__icon.iconiconfonticonfontsousuo1{
   position: relative;
   top:-2px;
+}
+.salary-cal{
+  .el-date-editor{
+    width:120px;
+    opacity:0;
+    .el-menu--inline {
+      .el-menu-item {
+        padding-left: 70px !important;
+      }
+    }
+  }
 }
