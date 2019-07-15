@@ -1,5 +1,5 @@
 <template>
-  <div class="salary-cal">
+  <div class="salary-cal el-diy-month">
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">

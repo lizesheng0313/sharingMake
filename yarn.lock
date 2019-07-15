@@ -8851,11 +8851,6 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-draggable@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.npm.taobao.org/vue-draggable/download/vue-draggable-2.0.2.tgz#301aa1707698fb764044ae22d7c6bcbb878a523f"
-  integrity sha1-MBqhcHaY+3ZARK4i18a8u4eKUj8=
-
 vue-eslint-parser@^3.2.2:
   version "3.3.0"
   resolved "https://nexus.lanmaoly.com/repository/npm/vue-eslint-parser/-/vue-eslint-parser-3.3.0.tgz#06b195d18bb66ac72c6b7f2469b549109a61d72c"

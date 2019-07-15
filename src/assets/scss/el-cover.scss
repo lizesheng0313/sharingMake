@@ -1,7 +1,13 @@
 @import "./helpers.scss";
 
 .el-menu-vertical-demo {
-  width: 223px;
+width: 223px;
+height: auto;
+background: #4a535e;
+min-height: 87vh;
+overflow: hidden;
+.el-menu {
+  border: none;
   background: #4a535e;
   height: auto;
   min-height: 87vh;
@@ -48,6 +54,13 @@
     width:120px;
     opacity:0;
   }
+}
+
+.el-diy-month{
+.el-date-editor{
+  width:120px;
+  opacity:0;
+}
 }
 
 .sflary-el-step{
@@ -140,4 +153,11 @@
 .el-button--primary{
   border:1px solid $mainColor;
   font-size:14px;
+}
+.el-button{
+  padding:9px 20px;
+}
+.el-input__icon.iconiconfonticonfontsousuo1{
+  position: relative;
+  top:-2px;
 }

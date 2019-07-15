@@ -5,7 +5,7 @@
         <top-header></top-header>
       </div>
       <div class="display-flex">
-        <div class="side-nav" v-if="isShowApp">
+        <div class="side-nav flex1" v-if="isShowApp">
           <side-nav></side-nav>
         </div>
         <div class="flex1 div-content" :class="{'no-margin':!isShowApp}">
@@ -43,9 +43,15 @@ export default {
     margin-right: 24px;
     border-radius: 7px;
   }
-  .no-margin{
-    margin:0;
+  .no-margin {
+    margin: 0;
   }
+}
+.side-nav {
+  width: 223px;
+  flex-grow: 0;
+  background: #4a535e;
+  box-shadow: 0 0 56px 0 #f1f1f1;
 }
 </style>
 
