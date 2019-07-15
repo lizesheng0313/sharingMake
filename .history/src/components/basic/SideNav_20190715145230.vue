@@ -21,7 +21,7 @@
       </el-menu-item>
       <el-menu-item index="/cumulative">
         <i class="iconfont iconicon-test"></i>
-        <span slot="title">累计所得额初始化</span>
+        <span slot="title">累计应税所得额初始化</span>
       </el-menu-item>
     </el-menu>
   </div>

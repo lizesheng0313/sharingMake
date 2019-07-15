@@ -53,7 +53,7 @@
           </div>
         </div>
       </div>
-      <el-dialog title="新增" :visible.sync="isShowScreen" width="550px" center class="diy-el_dialog">
+      <el-dialog title="新增" :visible.sync="isShowScreen" width="600px" center class="diy-el_dialog">
         <el-form ref="screenForm" label-width="100px" class="demo-ruleForm">
           <div class="shortCon">
             <el-form-item label="纳税主体名称">
@@ -294,7 +294,6 @@ export default {
     }
   }
 }
-.shortCon{width:450px;}
 .screen-dialog {
   .screening-box {
     margin-bottom: 20px;
