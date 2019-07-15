@@ -113,7 +113,7 @@
         <div class="shortCon">
           <el-form-item label="纳税主体">
             <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择纳税主体">
-              <el-option v-for="item in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId"></el-option>
+              <el-option v-for="item in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId" ></el-option>
             </el-select>
           </el-form-item>
         </div>
@@ -163,9 +163,9 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="员工类型">
-          <el-radio-group v-model="salaryForm.queryFilterParam.enumEmpType" size="mini">
-            <el-radio-button v-for="(item,index) in screenOption" :label="item.value"  border >{{item.label}}</el-radio-button>
-          </el-radio-group>
+          <el-checkbox-group v-model="salaryForm.queryFilterParam.enumEmpType" size="mini" @change="changeCheckBox">
+            <el-checkbox-button  v-for="(item,index) in screenOption" :label="item.value" :key="item.index">{{item.label}}</el-checkbox-button>
+          </el-checkbox-group>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -213,17 +213,7 @@ export default {
       isShowIncrease: false,
       fileList:[],
       isShowScreen:false,
-      screenForm:{
-        taxSubId:"",
-        departmentName:"",//部门
-        jobTitle:"",//岗位
-        workAddress:"",//工作地点
-        enterStartTime:"",
-        enterEndTime:"",
-        lastEmployStartTime:"",
-        lastEmployEndTime:"",
-        enumEmpType:"null",//用工类型
-      },
+
       screenOption:[
         {
           label:"不限",
@@ -247,7 +237,7 @@ export default {
       ],
       screenTaxOption:[],
       salaryForm:{
-        checkId:"2",
+        checkId:this.$route.query.id,
         key:"",
         currPage:1,
         pageSize:10,
@@ -260,9 +250,10 @@ export default {
           enterEndTime:"",
           lastEmployStartTime:"",
           lastEmployEndTime:"",
-          enumEmpType:"null",//用工类型
+          enumEmpType:["null"],//用工类型
         },
       },
+      enumEmpType:["null"],//用工类型
       salaryTableData:[],
       tableCol:[],
       tableValue:[],
@@ -304,6 +295,9 @@ export default {
     }
   },
   methods: {
+    changeCheckBox(val){
+      console.log(this.salaryForm.queryFilterParam.enumEmpType)
+    },
     loading(){
       apiSalaryList(this.salaryForm).then(res=>{
        if(res.code === "0000"){
@@ -408,7 +402,7 @@ export default {
       }
       this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
       this.salaryForm.queryFilterParam.lastEmployEndTime = this.nowDate;
-      this.salaryForm.queryFilterParam.enumEmpType = null;
+      this.salaryForm.queryFilterParam.enumEmpType = ["null"];
     },
     //导出工资表明细  dalog 显示
     exportSalaryDetail(){
