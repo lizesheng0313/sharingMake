@@ -123,3 +123,11 @@ export function apiSalaryDetailExport(form) {
     data:form
   })
 }
+//获取工资表配置项中已启动的项目
+export function apiSalaryItemEnableInfo(id) {
+  return fetch({
+    url: '/api/salary/item/list/enable/'+id,
+    method: 'get',
+  })
+}
+

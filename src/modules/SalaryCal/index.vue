@@ -151,7 +151,6 @@ export default {
             })
           }
         });
-        console.log(this.selectUsedForm)
       })
     },
     //选择时间
@@ -191,11 +190,10 @@ export default {
     //查看信息
     seeCalcSalary(){
     },
+    //切换查看第几次发薪
     changePayth(index,status,item){
-     // this.selectUsedForm[item['salaryRuleId']] = id;
       this.salaryRuleList.used[index]['salaryCheckStatus'] = status;
       this.$forceUpdate();
-      console.log(status)
     },
   }
 };

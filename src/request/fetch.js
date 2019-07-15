@@ -45,25 +45,20 @@ export function fetch(options) {
       })
   })
 }
+//导出excel
 export function fetchFile(options) {
   return new Promise((resolve, reject) => {
     options.responseType = "blob";
     instance(options).then(response => {
+      resolve(response)
       let data = response.data;
-      // if (data.code != "0000") {
-      //   Message.error(data.message)
-      // }
-      resolve(data)
       let url = window.URL.createObjectURL(data);
-      let a = document.createElement('a')
+      let a = document.createElement('a');
       a.href = url;
       a.download = decodeURI(response['headers']['content-disposition'].split(';')[1].split('=')[1]);
       a.click();
-      resolve(response)
     })
       .catch(error => {
-        console.log(error)
-        // console.log('请求异常信息：' + error)
         reject(error)
       })
   })

@@ -32,7 +32,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="exportSalaryDetail">导出工资明细</el-dropdown-item>
-            <el-dropdown-item>导出部门汇总</el-dropdown-item>
+            <el-dropdown-item @click.native="exportDepartTotal">导出部门汇总</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -109,61 +109,61 @@
       center
       class="diy-el_dialog"
     >
-      <el-form :model="screenForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="salaryForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
           <el-form-item label="纳税主体">
-            <el-select v-model="screenForm.taxSubId" placeholder="请选择纳税主体">
+            <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择纳税主体">
               <el-option v-for="item in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId"></el-option>
             </el-select>
           </el-form-item>
         </div>
         <div class="shortCon">
           <el-form-item label="部门">
-            <el-input v-model="screenForm.departmentName"></el-input>
+            <el-input v-model="salaryForm.queryFilterParam.departmentName"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
           <el-form-item label="岗位">
-            <el-input v-model="screenForm.jobTitle"></el-input>
+            <el-input v-model="salaryForm.queryFilterParam.jobTitle"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
           <el-form-item label="工作地点">
-            <el-input v-model="screenForm.workAddress"></el-input>
+            <el-input v-model="salaryForm.queryFilterParam.workAddress"></el-input>
           </el-form-item>
         </div>
         <el-form-item label="入职日期">
           <el-date-picker
-            v-model="screenForm.enterStartTime"
+            v-model="salaryForm.queryFilterParam.enterStartTime"
             type="date"
-            value-format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择日期">
           </el-date-picker>
           至
           <el-date-picker
-            v-model="screenForm.enterEndTime"
+            v-model="salaryForm.queryFilterParam.enterEndTime"
             type="date"
-            value-format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="离职日期">
           <el-date-picker
-            v-model="screenForm.lastEmployStartTime"
-            value-format="yyyy-MM-dd"
+            v-model="salaryForm.queryFilterParam.lastEmployStartTime"
+            value-format="yyyy-MM-dd HH:mm:ss"
             type="date"
             placeholder="选择日期">
           </el-date-picker>
           至
           <el-date-picker
-            v-model="screenForm.lastEmployEndTime"
-            value-format="yyyy-MM-dd"
+            v-model="salaryForm.queryFilterParam.lastEmployEndTime"
+            value-format="yyyy-MM-dd HH:mm:ss"
             type="date"
             placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="员工类型">
-          <el-radio-group v-model="screenForm.enumEmpType" size="mini">
+          <el-radio-group v-model="salaryForm.queryFilterParam.enumEmpType" size="mini">
             <el-radio-button v-for="(item,index) in screenOption" :label="item.value"  border >{{item.label}}</el-radio-button>
           </el-radio-group>
         </el-form-item>
@@ -181,16 +181,16 @@
       center
       class="exportSalaryDetailDialog"
     >
-      <template>
+      <div v-show="isShowUserInfo">
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="checkedPersonAllChange">人员信息</el-checkbox>
-        <div style="margin: 15px 0;"></div>
+        <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
         <el-checkbox-group v-model="checkedPerson" @change="checkedPersonChange">
           <el-checkbox v-for="item in personOptions" :label="item" :key="item">{{item}}</el-checkbox>
         </el-checkbox-group>
-      </template>
+      </div>
       <div v-for="(item,index) in diyOption" :key="index" class="diyOptionItem">
         <el-checkbox :indeterminate="isIndeterminates[index]" v-model="checkAlls[index]" @change="handleDiyCheckAllChange(index,item.value)">{{item.title}}</el-checkbox>
-        <div style="margin: 15px 0;"></div>
+        <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
         <el-checkbox-group v-model="diyCheckeds[index]" @change="handleDiyCheckedChange(index,item.value)">
           <el-checkbox v-for="it in item.value" :label="it" :key="it">{{it}}</el-checkbox>
         </el-checkbox-group>
@@ -203,7 +203,7 @@
   </div>
 </template>
 <script>
-  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemInfo,apiSalaryDetailExport} from '../store/api'
+  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport} from '../store/api'
 export default {
   data() {
     return {
@@ -251,6 +251,17 @@ export default {
         key:"",
         currPage:1,
         pageSize:10,
+        queryFilterParam:{
+          taxSubId:"",
+          departmentName:"",//部门
+          jobTitle:"",//岗位
+          workAddress:"",//工作地点
+          enterStartTime:"",
+          enterEndTime:"",
+          lastEmployStartTime:"",
+          lastEmployEndTime:"",
+          enumEmpType:"null",//用工类型
+        },
       },
       salaryTableData:[],
       tableCol:[],
@@ -260,19 +271,19 @@ export default {
       checkAll: false,
       checkedPerson: [],
       personOptions:['工号', '姓名', '身份证号', '部门',"岗位","工作地点","工作性质","入职日期","离职日期"],
-      isIndeterminate: true,
+      isIndeterminate: false,
       showExportSalaryDetail:false,
       isDiyIndeterminate:[],
       diyOption:[],
       diyCheckeds:{},
       diyChecked:[],
       isIndeterminates:{},
-      checkAlls:{}
+      checkAlls:{},
+      isShowUserInfo:true,
     };
   },
   created(){
     this.loading();
-    this.getSalaryItem();
   },
   mounted() {
     const that = this;
@@ -289,28 +300,12 @@ export default {
       let year = date.getFullYear();
       let month = date.getMonth()+1<10 ? "0"+(date.getMonth()+1):date.getMonth()+1;
       let day = date.getDate();
-      return year+"-"+month+"-"+day;
+      return year+"-"+month+"-"+day+ "00:00:00";
     }
   },
   methods: {
     loading(){
-      apiSalaryList({
-        checkId:this.salaryForm.checkId,
-        key:this.salaryForm.key,
-        currPage:this.salaryForm.currPage,
-        pageSize:this.salaryForm.pageSize,
-        queryFilterParam:{
-          taxSubId:this.screenForm.taxSubId,
-          departmentName:this.screenForm.departmentName,//部门
-          jobTitle:this.screenForm.jobTitle,//岗位
-          workAddress:this.screenForm.workAddress,//工作地点
-          enterStartTime:this.screenForm.lastEmployStartTime?this.screenForm.enterStartTime+" 00:00:00":"",
-          enterEndTime:this.screenForm.enterEndTime?this.screenForm.enterEndTime+" 00:00:00":"",
-          lastEmployStartTime:this.screenForm.lastEmployStartTime?this.screenForm.lastEmployStartTime+" 00:00:00":"",
-          lastEmployEndTime:this.screenForm.lastEmployEndTime?this.screenForm.lastEmployEndTime+" 00:00:00":"",
-          enumEmpType:this.screenForm.enumEmpType,//用工类型
-        }
-      }).then(res=>{
+      apiSalaryList(this.salaryForm).then(res=>{
        if(res.code === "0000"){
          let salaryData = res.data;
          this.count = salaryData.count;
@@ -326,8 +321,9 @@ export default {
        }
       })
     },
+    //获取工资表配置中启动的信息项
     getSalaryItem(){
-      apiSalaryItemInfo(this.salaryRuleId).then(res=>{
+      apiSalaryItemEnableInfo(this.salaryRuleId).then(res=>{
         if(res.code === "0000"){
           let salaryItemData = res.data;
           this.diyOption=[];
@@ -347,6 +343,7 @@ export default {
         }
       })
     },
+    //搜索
     searchSalary(){
       this.loading()
     },
@@ -387,55 +384,44 @@ export default {
       this.failCount = data.failCount;
       this.uuid = data.uuid;
     },
+    //显示筛选dialog
     showScreen(){
       this.isShowScreen = true;
+      //重置筛选条件
       this.resetSreen();
+      //获取个税列表
       apiGetTaxSubjectList(this.id).then(res=>{
         if(res.code == "0000"){
           this.screenTaxOption = res.data;
-          console.log(this.nowDate)
         }
       })
     },
     //查询筛选条件
     selectScreen(){
-      apiSalaryList({
-        checkId:this.salaryForm.checkId,
-        key:this.salaryForm.key,
-        currPage:this.salaryForm.currPage,
-        pageSize:this.salaryForm.pageSize,
-        queryFilterParam:{
-          taxSubId:this.screenForm.taxSubId,
-          departmentName:this.screenForm.departmentName,//部门
-          jobTitle:this.screenForm.jobTitle,//岗位
-          workAddress:this.screenForm.workAddress,//工作地点
-          enterStartTime:this.screenForm.lastEmployStartTime?this.screenForm.enterStartTime+" 00:00:00":"",
-          enterEndTime:this.screenForm.enterEndTime?this.screenForm.enterEndTime+" 00:00:00":"",
-          lastEmployStartTime:this.screenForm.lastEmployStartTime?this.screenForm.lastEmployStartTime+" 00:00:00":"",
-          lastEmployEndTime:this.screenForm.lastEmployEndTime?this.screenForm.lastEmployEndTime+" 00:00:00":"",
-          enumEmpType:this.screenForm.enumEmpType,//用工类型
-        }
-      }).then(res=>{
-        console.log(res)
-      })
+     this.loading();
+     this.isShowScreen = false;
     },
     //重置筛选条件
     resetSreen(){
-      for(let key in this.screenForm){
-        this.screenForm[key] = "";
+      for(let key in this.salaryForm.queryFilterParam){
+        this.salaryForm["queryFilterParam"][key] = "";
       }
-      this.screenForm.enterEndTime = this.nowDate;
-      this.screenForm.lastEmployEndTime = this.nowDate;
-      this.screenForm.enumEmpType = null;
+      this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
+      this.salaryForm.queryFilterParam.lastEmployEndTime = this.nowDate;
+      this.salaryForm.queryFilterParam.enumEmpType = null;
     },
-    //导出工资表明细
+    //导出工资表明细  dalog 显示
     exportSalaryDetail(){
+      this.isShowUserInfo = true;
       this.showExportSalaryDetail = true;
+      this.getSalaryItem();
     },
+    //导出工资表明细  人员信息（全选）
     checkedPersonAllChange(val) {
       this.checkedPerson = val ? this.personOptions : [];
       this.isIndeterminate = false;
     },
+    //导出工资表明细  人员信息（单个选择）
     checkedPersonChange(value) {
       let checkedCount = value.length;
       this.checkAll = checkedCount === this.personOptions.length;
@@ -446,44 +432,31 @@ export default {
       this.checkAlls[index] = checkedCount === value.length;
       this.isIndeterminates[index] = checkedCount > 0 && checkedCount < value.length;
       this.$forceUpdate();
-      // console.log(this.checkedPerson)
     },
     handleDiyCheckAllChange(index,value) {
-      console.log(this.checkAlls[index]);
       this.diyCheckeds[index] = this.checkAlls[index] ? value : [];
       this.isIndeterminates[index] = false;
     },
+    //导出工资表明细（提交）
     onExportSalaryItem(){
-      let selectItem = [].concat(this.checkedPerson);
+      let selectItem = this.isShowUserInfo? [].concat(this.checkedPerson):[];
       for(let key in this.diyCheckeds){
         selectItem = selectItem.concat(this.diyCheckeds[key])
       }
       apiSalaryDetailExport({
       "exportItems":selectItem,
-      "queryParam":{
-        checkId:this.salaryForm.checkId,
-          key:this.salaryForm.key,
-        currPage:this.salaryForm.currPage,
-        pageSize:this.salaryForm.pageSize,
-        queryFilterParam:{
-        taxSubId:this.screenForm.taxSubId,
-          departmentName:this.screenForm.departmentName,//部门
-          jobTitle:this.screenForm.jobTitle,//岗位
-          workAddress:this.screenForm.workAddress,//工作地点
-          enterStartTime:this.screenForm.lastEmployStartTime?this.screenForm.enterStartTime+" 00:00:00":"",
-          enterEndTime:this.screenForm.enterEndTime?this.screenForm.enterEndTime+" 00:00:00":"",
-          lastEmployStartTime:this.screenForm.lastEmployStartTime?this.screenForm.lastEmployStartTime+" 00:00:00":"",
-          lastEmployEndTime:this.screenForm.lastEmployEndTime?this.screenForm.lastEmployEndTime+" 00:00:00":"",
-          enumEmpType:this.screenForm.enumEmpType,//用工类型
-      }
-      }
+      "queryParam":this.salaryForm
       }).then(res=>{
-        let url = window.URL.createObjectURL(res);
-        let a = document.createElement('a');
-        a.href = url;
-        a.download = decodeURI(response['headers']['content-disposition'].split(';')[1].split('=')[1]);
-        a.click();
+        if(res.status == "200"){
+          this.showExportSalaryDetail = false;
+        }
       })
+    },
+    //导出部门汇总
+    exportDepartTotal(){
+      this.isShowUserInfo = false;
+      this.showExportSalaryDetail = true;
+      this.getSalaryItem();
     },
     handleCalcSalary(){
     }
@@ -582,7 +555,6 @@ export default {
     .diyOptionItem{
       margin-top:10px;
       padding-top:10px;
-      border-top: 1px solid #E5E5E5;
     }
     .el-checkbox{
       height: 30px;
