@@ -295,9 +295,6 @@ export default {
     }
   },
   methods: {
-    changeCheckBox(val){
-      console.log(this.salaryForm.queryFilterParam.enumEmpType)
-    },
     loading(){
       apiSalaryList(this.salaryForm).then(res=>{
        if(res.code === "0000"){
