@@ -130,4 +130,16 @@ export function apiSalaryItemEnableInfo(id) {
     method: 'get',
   })
 }
+//公积金导入
+export function socialProvident({uuid,id,importType}) {
+  return fetch({
+    url: '/api/salary/socialProvident/import',
+    method: 'post',
+    params: {
+      uuid:uuid,
+      checkId:id,
+      importType:importType
+    },
+  })
+}
 

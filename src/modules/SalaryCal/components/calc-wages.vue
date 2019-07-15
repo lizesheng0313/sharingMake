@@ -23,8 +23,8 @@
         </span>
       </div>
       <div class="right calc-table_menu">
-        <span @click="isShowSocial = true">社会公积金导入</span>
-        <span class="have-border_right" @click="isShowIncrease = true">浮云项导入</span>
+        <span @click="showImport('social')">社会公积金导入</span>
+        <span class="have-border_right" @click="showImport('floatItem')">浮云项导入</span>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             更多功能
@@ -55,10 +55,10 @@
         class="staff-page">
       </el-pagination>
     </div>
-   <!-- 浮动项导入  -->
+   <!-- 公积金导入  -->
     <el-dialog
-      title="浮动项导入"
-      :visible.sync="isShowIncrease"
+      title="公积金导入"
+      :visible.sync="isShowImport"
       width="600px"
       center
       class="diy-el_dialog"
@@ -66,12 +66,13 @@
       <div>
         <p class="headings">1、选择导入匹配方式</p>
         <div class="diy-el_radio">
-          <el-radio-group v-model="radio">
+          <el-radio-group v-model="importType">
             <div>
-              <el-radio :label="2">通过员工工号匹配人员</el-radio>
+              <el-radio label="BY_EMP_NO">通过员工工号匹配人员</el-radio>
             </div>
             <div>
-              <el-radio :label="1">通过手机号匹配人员</el-radio>
+              <el-radio label="BY_ID_NO" v-if="importT === 'social'">通过手机号匹配人员</el-radio>
+              <el-radio label="BY_PHONE_NO" v-else>通过身份证号匹配人员</el-radio>
             </div>
           </el-radio-group>
         </div>
@@ -79,18 +80,30 @@
       <div class="select-file">
         <el-upload
           class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :action="actionUrl"
           :limit="1"
           :file-list="fileList"
           :before-upload="beforeAvatarUpload"
           :on-success="handleSuccess"
+          :data="{'checkId':salaryForm.checkId,'importType':importType}"
         >
           <span class="headings">2、</span>
           <el-button size="small" type="primary">选择文件</el-button>
         </el-upload>
+        <div v-show="uuid" style="margin:15px 0 0 28px">
+          <span v-if="failCount === 0"><i class="el-icon-success"></i>全部导入成功</span>
+          <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
+          <span v-if="successCount === 0"><i class="el-icon-error"></i>数据全部未通过校验</span>
+          <span>
+            <a :href="'/api/salary/socialProvident/errorRecord/download/'+uuid" v-if="importT === 'social'">下载日志</a>
+            <a :href="' /api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
+          </span>
+        </div>
         <p>
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
-          <span>下载模板</span>
+          <span>
+            <a :href="downLoadTemplate">下载模板</a>
+          </span>
         </p>
         <p class="instructions">
           说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资
@@ -102,52 +115,22 @@
         <el-button @click="isShowIncrease = false">取 消</el-button>
       </span>
     </el-dialog>
-   <!-- 公积金导入  -->
+    <!-- 导入完成 -->
     <el-dialog
-      title="公积金导入"
-      :visible.sync="isShowSocial"
-      width="600px"
+      :visible.sync="isShowFinish"
+      width="500px"
       center
-      class="diy-el_dialog"
+      class="importFinishDialog"
     >
+      <div class="title"><i class="el-icon-success"></i>导入完成</div>
+      <div>导入成功<span style="color:#06B806">{{this.importFinishForm.successCount}}</span>条数据,<span style="color:red">{{this.importFinishForm.failCount}}</span>条数据导入未通过，忽略导入</div>
       <div>
-        <p class="headings">1、选择导入匹配方式</p>
-        <div class="diy-el_radio">
-          <el-radio-group v-model="socialType">
-            <div>
-              <el-radio label="BY_EMP_NO">通过员工工号匹配人员</el-radio>
-            </div>
-            <div>
-              <el-radio label="BY_PHONE_NO">通过手机号匹配人员</el-radio>
-            </div>
-          </el-radio-group>
-        </div>
-      </div>
-      <div class="select-file">
-        <el-upload
-          class="avatar-uploader"
-          action="/api/salary/socialProvident/verify"
-          :limit="1"
-          :file-list="fileList"
-          :before-upload="beforeAvatarUpload"
-          :on-success="handleSuccess"
-          :data="{'id':salaryForm.checkId,'importType':socialType}"
-        >
-          <span class="headings">2、</span>
-          <el-button size="small" type="primary">选择文件</el-button>
-        </el-upload>
-        <p>
-          支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
-          <span><a href="/api/salary/socialProvident/template/download">下载模板</a></span>
-        </p>
-        <p class="instructions">
-          说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资
-          <span>查看举例</span>
-        </p>
+        <a :href="'/api/salary/socialProvident/errorRecord/download/'+uuid" v-if="importT === 'social'">下载日志</a>
+        <a :href="' /api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="uploadFile">导入通过数据</el-button>
-        <el-button @click="isShowIncrease = false">取 消</el-button>
+        <el-button type="primary" @click="importFinish">确定</el-button>
+        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>
       </span>
     </el-dialog>
     <!-- 筛选-->
@@ -252,16 +235,25 @@
   </div>
 </template>
 <script>
-  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport} from '../store/api'
+  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident} from '../store/api'
 export default {
   data() {
     return {
-      radio:"",
-      isShowSocial:false,//公积金方式
-      socialType:"BY_EMP_NO",
+      actionUrl:"",
+      downloadLog:"",
+      downLoadTemplate:"",
+      isShowImport:false,//公积金方式
+      importType:"BY_EMP_NO",
+      failCount:0,
+      successCount:0,
+      uuid:"",
+      isShowFinish:false,
+      importT:"",
+      importFinishForm:{
+        failCount:"",
+        successCount:""
+      },
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      input: "",
-      isShowIncrease: false,
       fileList:[],
       isShowScreen:false,
       screenOption:[
@@ -397,6 +389,18 @@ export default {
       this.salaryForm.pageSize = val;
       this.loading()
     },
+    //导入页面展示
+    showImport(type){
+      this.successCount = 0;
+      this.failCount = 0;
+      this.uuid = "";
+      this.fileList=[];
+      this.importT = type;
+      this.actionUrl = type == "social"?"/api/salary/socialProvident/verify":"/api/salary/floatItem/verify";
+      this.downLoadTemplate = type == "social"?"/api/salary/socialProvident/template/download":"/api/salary/floatTemplate/download/"+this.salaryForm.checkId;
+      this.isShowImport = true;
+      // console.log(this.action)
+    },
     //文件上传前校验
     beforeAvatarUpload(file) {
       //限制上传文件
@@ -427,18 +431,23 @@ export default {
     },
     // 导出通过数据
     uploadFile(){
-      apiImportMember({
+      socialProvident({
         uuid:this.uuid,
-        id:this.userForm.checkId
+        id:this.salaryForm.checkId,
+        importType:this.importType,
       }).then(res=>{
         if(res.code === '0000'){
           let importData = res.data;
           this.importFinishForm.failCount = importData.failCount;
           this.importFinishForm.successCount = importData.successCount;
-          this.isShowIncrease = false;
-          this.isShowIncreaseFinish = true;
+          this.isShowImport = false;
+          this.isShowFinish = true;
         }
       })
+    },
+    importFinish(){
+      this.loading();
+      this.isShowFinish = false
     },
     //显示筛选dialog
     showScreen(){
@@ -614,6 +623,22 @@ export default {
     }
     .el-checkbox{
       height: 30px;
+    }
+  }
+  .importFinishDialog{
+    .title{
+      font-size: 20px;
+    }
+    .el-icon-success{
+      color:#06B806;
+      font-size: 20px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    div{
+      width: 300px;
+      margin: 0 auto;
+      margin-top:10px;
     }
   }
 }
