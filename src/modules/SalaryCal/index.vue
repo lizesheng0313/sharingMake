@@ -15,7 +15,7 @@
     </header>
     <div class="salary-cal-content">
       <div class="content-header">
-<!--        <i class="el-icon-arrow-left"></i>-->
+        <i class="el-icon-arrow-left"></i>
         <span>{{resetDate}}</span>
         <el-date-picker
           v-model="currentDate"
@@ -25,7 +25,7 @@
           :clearable="false"
           @change="changeDate"
         ></el-date-picker>
-<!--        <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>-->
+        <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>
       </div>
       <div class="salary-payroll">
         <div class="payroll-box" v-for="(item,index) in salaryRuleList.used">
@@ -180,12 +180,12 @@ export default {
         id:item.salaryRuleId,
         date:that.currentDate
       }).then(res=>{
-        this.$router.push({path:"/salaryCheckPerson",query:{id:item.id,active:0,salaryRuleId:item.salaryRuleId}})
+        this.$router.push({path:"/salaryCheck",query:{id:item.id,active:0,salaryRuleId:item.salaryRuleId}})
       })
     },
     //计算薪资
     calcSalary(item){
-      this.$router.push({path:"/salaryCheckPerson",query:{id:item.id,active:1,salaryRuleId:item.salaryRuleId}})
+      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:1,salaryRuleId:item.salaryRuleId}})
     },
     //查看信息
     seeCalcSalary(){

@@ -31,18 +31,18 @@
             <i class="iconsanjiao iconfont"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="exportSalaryDetail">导出工资明细</el-dropdown-item>
-            <el-dropdown-item @click.native="exportDepartTotal">导出部门汇总</el-dropdown-item>
+            <el-dropdown-item @click.native="exportSalaryDetail('salaryDetail')">导出工资明细</el-dropdown-item>
+            <el-dropdown-item @click.native="exportDepartTotal('summy')">导出部门汇总</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
     <div class="staff-table">
       <el-row type="flex" class="row-bg tableHeader">
-        <el-col :span="2" v-for="item in tableCol"><div class="grid-content bg-purple">{{item}}</div></el-col>
+        <el-col v-for="(item,index) in tableCol"  :span="index === 0 ?1:3"><div class="grid-content bg-purple">{{item}}</div></el-col>
       </el-row>
       <el-row type="flex" class="row-bg" v-for="per in tableValue">
-        <el-col :span="2" v-for="(it,index) in per" :style="{background:(index!=0 && index<6?'#F1F3F6':'')}"><div class="grid-content bg-purple">{{ it }}</div></el-col>
+        <el-col v-for="(it,index) in per" :span="index === 0 ?1:3" :style="{background:(it.floatItem?'#F1F3F6':'')}"><div class="grid-content bg-purple">{{ it.val }}</div></el-col>
       </el-row>
       <el-pagination
         @current-change="handleCurrentChange"
@@ -349,7 +349,8 @@ export default {
          if(this.salaryTableData.length >0 ){
            this.tableCol = this.salaryTableData[0]['diyrow'].map(item=>item.col);
            this.salaryTableData.forEach(item=>{
-             let row = item['diyrow'].map(it=>it.val);
+             // let row = item['diyrow'].map(it=>it.val);
+             let row = item['diyrow'];
              this.tableValue.push(row)
            })
          }
@@ -497,9 +498,10 @@ export default {
       this.salaryForm.queryFilterParam.enumEmpType = ["null"];
     },
     //导出工资表明细  dalog 显示
-    exportSalaryDetail(){
+    exportSalaryDetail(type){
       this.isShowUserInfo = true;
       this.showExportSalaryDetail = true;
+      this.exportType = type;
       this.getSalaryItem();
     },
     //导出工资表明细  人员信息（全选）
@@ -529,7 +531,8 @@ export default {
       for(let key in this.diyCheckeds){
         selectItem = selectItem.concat(this.diyCheckeds[key])
       }
-      apiSalaryDetailExport({
+      let methods = this.exportType === 'salaryDetail'?apiSalaryDetailExport :apiSalaryDetailExport
+      methods({
       "exportItems":selectItem,
       "queryParam":this.salaryForm
       }).then(res=>{
