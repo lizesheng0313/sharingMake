@@ -142,4 +142,16 @@ export function socialProvident({uuid,id,importType}) {
     },
   })
 }
+//浮动项导入
+export function floatItem({uuid,id,importType}) {
+  return fetch({
+    url: '/api/salary/floatItem/import',
+    method: 'post',
+    params: {
+      uuid:uuid,
+      checkId:id,
+      importType:importType
+    },
+  })
+}
 

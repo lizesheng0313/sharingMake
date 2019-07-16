@@ -39,10 +39,10 @@
     </div>
     <div class="staff-table">
       <el-row type="flex" class="row-bg tableHeader">
-        <el-col :span="4" v-for="item in tableCol"><div class="grid-content bg-purple">{{item}}</div></el-col>
+        <el-col :span="2" v-for="item in tableCol"><div class="grid-content bg-purple">{{item}}</div></el-col>
       </el-row>
       <el-row type="flex" class="row-bg" v-for="per in tableValue">
-        <el-col :span="4" v-for="it in per"><div class="grid-content bg-purple">{{ it }}</div></el-col>
+        <el-col :span="2" v-for="(it,index) in per" :style="{background:(index!=0 && index<6?'#F1F3F6':'')}"><div class="grid-content bg-purple">{{ it }}</div></el-col>
       </el-row>
       <el-pagination
         @current-change="handleCurrentChange"
@@ -57,7 +57,7 @@
     </div>
    <!-- 公积金导入  -->
     <el-dialog
-      title="公积金导入"
+      :title="this.importT === 'social'?'公积金导入':'浮动项导入'"
       :visible.sync="isShowImport"
       width="600px"
       center
@@ -71,8 +71,8 @@
               <el-radio label="BY_EMP_NO">通过员工工号匹配人员</el-radio>
             </div>
             <div>
-              <el-radio label="BY_ID_NO" v-if="importT === 'social'">通过手机号匹配人员</el-radio>
-              <el-radio label="BY_PHONE_NO" v-else>通过身份证号匹配人员</el-radio>
+              <el-radio label="BY_PHONE_NO" v-if="importT === 'social'">通过身份证号匹配人员</el-radio>
+              <el-radio label="BY_ID_NO" v-else>通过手机号匹配人员</el-radio>
             </div>
           </el-radio-group>
         </div>
@@ -96,13 +96,14 @@
           <span v-if="successCount === 0"><i class="el-icon-error"></i>数据全部未通过校验</span>
           <span>
             <a :href="'/api/salary/socialProvident/errorRecord/download/'+uuid" v-if="importT === 'social'">下载日志</a>
-            <a :href="' /api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
+            <a :href="'/api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
           </span>
         </div>
         <p>
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
           <span>
-            <a :href="downLoadTemplate">下载模板</a>
+             <a href="/api/salary/socialProvident/template/download" v-if="importT === 'social'">下载模板</a>
+             <a :href="'/api/salary/floatTemplate/download/'+salaryForm.checkId" v-else>下载模板</a>
           </span>
         </p>
         <p class="instructions">
@@ -145,7 +146,7 @@
         <div class="shortCon">
           <el-form-item label="纳税主体">
             <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择纳税主体">
-              <el-option v-for="item in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId" ></el-option>
+              <el-option v-for="item in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId"></el-option>
             </el-select>
           </el-form-item>
         </div>
@@ -195,7 +196,10 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="员工类型">
-          <el-checkbox-group v-model="salaryForm.queryFilterParam.enumEmpType" size="mini">
+          <el-radio-group v-model="noEnumEmpType" size="mini" @change="changeNoEmployType">
+            <el-radio-button  label="null">不限</el-radio-button>
+          </el-radio-group>
+          <el-checkbox-group v-model="enumEmpType" size="mini" @change="changeEmployType">
             <el-checkbox-button  v-for="(item,index) in screenOption" :label="item.value" :key="item.index">{{item.label}}</el-checkbox-button>
           </el-checkbox-group>
         </el-form-item>
@@ -235,7 +239,7 @@
   </div>
 </template>
 <script>
-  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident} from '../store/api'
+  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem} from '../store/api'
 export default {
   data() {
     return {
@@ -258,9 +262,6 @@ export default {
       isShowScreen:false,
       screenOption:[
         {
-          label:"不限",
-          value:"null"
-        }, {
           label:"全职",
           value:"FULL_TIME"
         },{
@@ -292,10 +293,11 @@ export default {
           enterEndTime:"",
           lastEmployStartTime:"",
           lastEmployEndTime:"",
-          enumEmpType:["null"],//用工类型
+          enumEmpType:[],//用工类型
         },
       },
-      enumEmpType:["null"],//用工类型
+      enumEmpType:[],//用工类型
+      noEnumEmpType:null,
       salaryTableData:[],
       tableCol:[],
       tableValue:[],
@@ -333,7 +335,7 @@ export default {
       let year = date.getFullYear();
       let month = date.getMonth()+1<10 ? "0"+(date.getMonth()+1):date.getMonth()+1;
       let day = date.getDate();
-      return year+"-"+month+"-"+day+ "00:00:00";
+      return year+"-"+month+"-"+day+ " 00:00:00";
     }
   },
   methods: {
@@ -353,6 +355,23 @@ export default {
          }
        }
       })
+    },
+    //选择用工类型
+    changeEmployType(val){
+      console.log(val)
+      if(val.length>0){
+        this.noEnumEmpType = "";
+        this.salaryForm.queryFilterParam.enumEmpType= val;
+      }else{
+        this.noEnumEmpType = null;
+        this.salaryForm.queryFilterParam.enumEmpTyp = [null];
+      }
+    },
+    //不限制用工类型
+    changeNoEmployType(val){
+      this.noEnumEmpType = null;
+      this.enumEmpType = "";
+      this.salaryForm.queryFilterParam.enumEmpType=[null];
     },
     //获取工资表配置中启动的信息项
     getSalaryItem(){
@@ -397,7 +416,6 @@ export default {
       this.fileList=[];
       this.importT = type;
       this.actionUrl = type == "social"?"/api/salary/socialProvident/verify":"/api/salary/floatItem/verify";
-      this.downLoadTemplate = type == "social"?"/api/salary/socialProvident/template/download":"/api/salary/floatTemplate/download/"+this.salaryForm.checkId;
       this.isShowImport = true;
       // console.log(this.action)
     },
@@ -431,7 +449,8 @@ export default {
     },
     // 导出通过数据
     uploadFile(){
-      socialProvident({
+      let methods = this.importT == "social"?socialProvident:floatItem
+        methods({
         uuid:this.uuid,
         id:this.salaryForm.checkId,
         importType:this.importType,
@@ -473,6 +492,8 @@ export default {
       }
       this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
       this.salaryForm.queryFilterParam.lastEmployEndTime = this.nowDate;
+      this.noEnumEmpType = null;
+      this.enumEmpType = [];
       this.salaryForm.queryFilterParam.enumEmpType = ["null"];
     },
     //导出工资表明细  dalog 显示
@@ -640,6 +661,10 @@ export default {
       margin: 0 auto;
       margin-top:10px;
     }
+  }
+  .el-checkbox-group{
+    display: inline-block;
+    vertical-align: middle;
   }
 }
 </style>
