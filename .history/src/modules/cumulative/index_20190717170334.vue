@@ -58,8 +58,8 @@
       ></el-pagination>
     </div>
     <import-data
-      ref="import"
       :radioList="radioList"
+      :isShowIncrease.sync="isShowIncrease"
       :title="'累计应纳税所得导入'"
       :apiCheck="'/api/taxTotalBase/importTaxTotalBaseCheck'"
       :apiDownloadLog="'/api/taxTotalBase/exportErrorRecord/'"
@@ -107,7 +107,7 @@ export default {
       fileList: [],
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       isShowIncrease: false,
-      list: []
+      list: [],
     };
   },
   mounted() {
@@ -126,7 +126,7 @@ export default {
     },
     handleImport() {
       this.parameterData.year = this.selectYear;
-      this.$refs.import.show();
+      this.isShowIncrease = true;
     },
     loading() {
       this.ruleForm.nameOrEmpNo = "";

@@ -58,7 +58,7 @@
       ></el-pagination>
     </div>
     <import-data
-      ref="import"
+      v-if="isShowIncrease"
       :radioList="radioList"
       :title="'累计应纳税所得导入'"
       :apiCheck="'/api/taxTotalBase/importTaxTotalBaseCheck'"
@@ -126,7 +126,7 @@ export default {
     },
     handleImport() {
       this.parameterData.year = this.selectYear;
-      this.$refs.import.show();
+      this.isShowIncrease = true;
     },
     loading() {
       this.ruleForm.nameOrEmpNo = "";

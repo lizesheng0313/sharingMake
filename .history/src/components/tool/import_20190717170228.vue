@@ -89,7 +89,7 @@ export default {
   },
   data() {
     return {
-      isShowIncrease: false,
+      isShowIncrease:false,
       radio: 1,
       importFinishForm: {
         failCount: "",
@@ -104,9 +104,6 @@ export default {
   },
   methods: {
     //改变radio
-    show() {
-      this.isShowIncrease = true;
-    },
     handleRadioValue(value) {
       this.$emit("changeRadioValue", value);
     },
@@ -154,6 +151,7 @@ export default {
       this.isShowIncrease = false;
       this.isShowIncreaseFinish = false;
       this.$emit("loading");
+      
     }
   }
 };

@@ -79,6 +79,7 @@
 export default {
   props: {
     radioList: Array,
+    isShowIncrease: Boolean, //显示or隐藏
     apiCheck: String, //校验接口
     apiDownloadLog: String, //下载日志接口
     apiDownloadTemplate: String, //下载模板
@@ -89,7 +90,6 @@ export default {
   },
   data() {
     return {
-      isShowIncrease: false,
       radio: 1,
       importFinishForm: {
         failCount: "",
@@ -104,9 +104,6 @@ export default {
   },
   methods: {
     //改变radio
-    show() {
-      this.isShowIncrease = true;
-    },
     handleRadioValue(value) {
       this.$emit("changeRadioValue", value);
     },
@@ -154,6 +151,7 @@ export default {
       this.isShowIncrease = false;
       this.isShowIncreaseFinish = false;
       this.$emit("loading");
+      
     }
   }
 };
