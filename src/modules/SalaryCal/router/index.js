@@ -2,7 +2,7 @@
 // import storage from 'storejs'
 import index from '../index'
 import salarySet from '../salarySet'
-import salaryCheckPerson from '../salaryCheckPerson'
+import salaryCheck from '../salaryCheck'
 
 export default [
   {
@@ -12,7 +12,7 @@ export default [
     path: '/salarySet',
     component: salarySet,
   },{
-    path: '/salaryCheckPerson',
-    component: salaryCheckPerson
+    path: '/salaryCheck',
+    component: salaryCheck
   }
 ]

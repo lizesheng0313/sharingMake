@@ -327,7 +327,6 @@ export default {
        }).then(res=>{
        if(res.code === '0000'){
          let importData = res.data;
-         console.log(importData)
          this.importFinishForm.failCount = importData.failCount;
          this.importFinishForm.successCount = importData.successCount;
          this.isShowIncrease = false;

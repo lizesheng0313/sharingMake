@@ -130,4 +130,47 @@ export function apiSalaryItemEnableInfo(id) {
     method: 'get',
   })
 }
+//公积金导入
+export function socialProvident({uuid,id,importType}) {
+  return fetch({
+    url: '/api/salary/socialProvident/import',
+    method: 'post',
+    params: {
+      uuid:uuid,
+      checkId:id,
+      importType:importType
+    },
+  })
+}
+//浮动项导入
+export function floatItem({uuid,id,importType}) {
+  return fetch({
+    url: '/api/salary/floatItem/import',
+    method: 'post',
+    params: {
+      uuid:uuid,
+      checkId:id,
+      importType:importType
+    },
+  })
+}
+//工资表设置list
+export function apiGetStubs(id) {
+  return fetch({
+    url: '/api/salary/stubs/getStubs/'+id,
+    method: 'get',
+  })
+}
+//工资表设置
+export function apiEditStubs({salaryId,stubsMsg,itemIds}) {
+  return fetch({
+    url: '/api/salary/stubs/editStubs',
+    method: 'post',
+    data: {
+      salaryId:salaryId,
+      stubsMsg:stubsMsg,
+      itemIds:itemIds
+    },
+  })
+}
 
