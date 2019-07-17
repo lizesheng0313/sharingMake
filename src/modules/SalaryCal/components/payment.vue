@@ -2,7 +2,7 @@
   <div class="payment">
     <div class="box">
       <div class="box-con">
-        <img src="" alt="" width="49px" height="50px">
+        <img src="../../../assets/images/item1.png" alt="" width="49px" height="50px">
         <div class="box-fun">
           <p class="box-title">银行报盘</p>
           <p class="tip">导出姓名、银行卡号、实发工资</p>
@@ -13,7 +13,7 @@
     </div>
     <div class="box">
       <div class="box-con">
-        <img src="" alt="" width="49px" height="50px">
+        <img src="../../../assets/images/item2.png" alt="" width="49px" height="50px">
         <div class="box-fun">
           <p class="box-title">发放工资条</p>
           <p class="tip">员工可在微信小程序中查看工资条<span class="seeExample">预览实例</span></p>
@@ -22,9 +22,9 @@
       </div>
       <i class="el-icon-setting" @click="showSalarySet"></i>
     </div>
-    <right-pop :pop-show="popShow" :has-footer="false" popTitle="工资条设置" :popWidth="400">
+    <right-pop :pop-show="popShow" :has-footer="false" popTitle="工资条设置" :popWidth="440">
       <div slot="pop-content">
-        <paymentSalarySet></paymentSalarySet>
+        <paymentSalarySet @changeSatus="changeSatus"></paymentSalarySet>
       </div>
     </right-pop>
   </div>
@@ -66,6 +66,9 @@ export default {
   methods: {
     showSalarySet(){
       this.popShow.isshow = true;
+    },
+    changeSatus(data){
+     this.popShow.isshow = data;
     }
   }
 };
@@ -75,22 +78,26 @@ export default {
 .payment {
   margin-top:50px;
   .box{
-    width:586px;
+    width:546px;
     margin:0 auto;
-    height: 150px;
-    border:1px solid #eee;
+    height: 188px;
+    background: url("../../../assets/images/bg.png");
+    background-size:100%;
+    background-position:center;
     position: relative;
-    margin-top:20px;
+    margin-top:30px;
     .box-con{
-      margin-left:240px;
+      margin-left:160px;
       /*border:1px solid red;*/
       margin-top: 10px;
+      padding-top: 40px;
       img{
         width:50px;
         height:50px;
-        border:1px solid red;
+        margin-right: 30px;
       }
       .box-fun{
+        display: inline-block;
         .box-title{
           color:#333333;
           font-size: 18px;
