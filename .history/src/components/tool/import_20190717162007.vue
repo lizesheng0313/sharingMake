@@ -85,8 +85,7 @@ export default {
     apiDownloadTemplate: String, //下载模板
     parameterData: Object, //校验参数
     impoartAction: String, //导入通过数据接口  需为action
-    title: String, //标题,
-    uploadFileData: Object //导入通过数据参数
+    title: String //标题
   },
   data() {
     return {
@@ -105,14 +104,15 @@ export default {
   methods: {
     //改变radio
     handleRadioValue(value) {
+      console.log(value);
       this.$emit("changeRadioValue", value);
     },
     uploadFile() {
-      console.log(this.uploadFileData);
-      console.log(this.uuid);
-      this.uploadFileData.uuid = this.uuid;
       this.$store
-        .dispatch(this.impoartAction, this.uploadFileData)
+        .dispatch(this.impoartAction, {
+          uuid: this.uuid
+          //   id: this.userForm.checkId
+        })
         .then(res => {
           if (res.code === "0000") {
             let importData = res.data;
@@ -144,6 +144,7 @@ export default {
       return isxls && isLt5M;
     },
     handleSuccess(res, file) {
+      console.log(res);
       let data = res.data;
       this.successCount = data.successCount;
       this.failCount = data.failCount;
@@ -151,7 +152,6 @@ export default {
     },
     importMemberFinish() {
       this.$emit("loading");
-      this.isShowIncreaseFinish = false;
     }
   }
 };

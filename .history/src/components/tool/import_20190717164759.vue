@@ -108,8 +108,6 @@ export default {
       this.$emit("changeRadioValue", value);
     },
     uploadFile() {
-      console.log(this.uploadFileData);
-      console.log(this.uuid);
       this.uploadFileData.uuid = this.uuid;
       this.$store
         .dispatch(this.impoartAction, this.uploadFileData)
@@ -151,7 +149,6 @@ export default {
     },
     importMemberFinish() {
       this.$emit("loading");
-      this.isShowIncreaseFinish = false;
     }
   }
 };

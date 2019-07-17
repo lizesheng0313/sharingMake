@@ -10,9 +10,9 @@
       <div>
         <p class="headings">1、选择导入匹配方式</p>
         <div class="diy-el_radio">
-          <el-radio-group v-model="radio">
+          <el-radio-group v-model="radio" @change="handleRadioValue">
             <div v-for="(item,index) in radioList" :key="index">
-              <el-radio :label="index+1" @change="handleRadioValue">{{item.title}}</el-radio>
+              <el-radio :label="index+1">{{item.title}}</el-radio>
             </div>
           </el-radio-group>
         </div>
@@ -34,13 +34,13 @@
           <span v-if="failCount === 0">
             <i class="el-icon-success"></i>全部导入成功
           </span>
-          <span v-else-if="failCount !== 0 && successCount !==0">
+          <span v-if="failCount !== 0 && successCount !==0">
             <i class="el-icon-warning"></i>数据部分校验通过，有
             <strong style="color:red">{{failCount}}</strong>条数据错误
           </span>
-          <span v-else-if="successCount === 0">数据全部未通过校验</span>
+          <span v-if="successCount === 0">数据全部未通过校验</span>
           <span>
-            <a :href="apiDownloadLog+uuid" v-if="failCount !== 0">>下载日志</a>
+            <a :href="apiDownloadLog+uuid">下载日志</a>
           </span>
         </div>
         <p>
@@ -66,7 +66,7 @@
         <span style="color:red">{{importFinishForm.failCount}}</span>条数据导入未通过，忽略导入
       </div>
       <div>
-        <a :href="apiDownloadLog+uuid" v-if="failCount !== 0">下载日志</a>
+        <a :href="apiDownloadLog+uuid">下载日志</a>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="importMemberFinish">确定</el-button>
@@ -85,8 +85,7 @@ export default {
     apiDownloadTemplate: String, //下载模板
     parameterData: Object, //校验参数
     impoartAction: String, //导入通过数据接口  需为action
-    title: String, //标题,
-    uploadFileData: Object //导入通过数据参数
+    title: String //标题
   },
   data() {
     return {
@@ -105,14 +104,14 @@ export default {
   methods: {
     //改变radio
     handleRadioValue(value) {
-      this.$emit("changeRadioValue", value);
+      this.$emit("changeRadioValue",value)
     },
     uploadFile() {
-      console.log(this.uploadFileData);
-      console.log(this.uuid);
-      this.uploadFileData.uuid = this.uuid;
       this.$store
-        .dispatch(this.impoartAction, this.uploadFileData)
+        .dispatch(this.impoartAction, {
+          uuid: this.uuid
+          //   id: this.userForm.checkId
+        })
         .then(res => {
           if (res.code === "0000") {
             let importData = res.data;
@@ -151,7 +150,6 @@ export default {
     },
     importMemberFinish() {
       this.$emit("loading");
-      this.isShowIncreaseFinish = false;
     }
   }
 };

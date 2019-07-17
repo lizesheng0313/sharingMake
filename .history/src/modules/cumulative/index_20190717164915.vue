@@ -68,7 +68,7 @@
       @changeRadioValue="changeRadioValue"
       :impoartAction="'cumulativePageStore/actionImportTaxTotalBaseSuccess'"
       @loading="loading"
-      :uploadFileData="uploadFileData"
+      @uploadFileData="uploadFileData"
     ></import-data>
   </div>
 </template>
@@ -85,8 +85,8 @@ export default {
   },
   data() {
     return {
-      uploadFileData: {
-        uuid: ""
+      uploadFileData:{
+        uuid:"",
       },
       selectYear: year,
       radioList: [
@@ -104,10 +104,12 @@ export default {
         queryYear: year[0]
       },
       total: 0,
+      radio: "",
       fileList: [],
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       isShowIncrease: false,
       list: [],
+      currentDate: "2019"
     };
   },
   mounted() {
@@ -128,11 +130,7 @@ export default {
       this.parameterData.year = this.selectYear;
       this.isShowIncrease = true;
     },
-    loading() {
-      this.ruleForm.nameOrEmpNo = "";
-      this.ruleForm.currPage = 1;
-      this.getList();
-    },
+    loading() {},
     //通过姓名或工号搜索
     blurSearch() {
       if (this.ruleForm.nameOrEmpNo) {

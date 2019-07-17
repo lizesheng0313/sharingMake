@@ -151,7 +151,6 @@ export default {
     },
     importMemberFinish() {
       this.$emit("loading");
-      this.isShowIncreaseFinish = false;
     }
   }
 };
