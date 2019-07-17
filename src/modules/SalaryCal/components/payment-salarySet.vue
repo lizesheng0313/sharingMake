@@ -75,7 +75,9 @@ export default {
           this.checkAll = true;//默认全选
         }else{
           if(checkedId.length !=0){
-            this.indeterminate
+            this.isIndeterminateAll = true
+          }else{
+            
           }
         }
 
@@ -132,6 +134,8 @@ export default {
         }).then(res=>{
           console.log(res)
         })
+      }else{
+        this.$message.warning("未选择工资条项目");
       }
 
     },
