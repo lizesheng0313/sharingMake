@@ -173,4 +173,20 @@ export function apiEditStubs({salaryId,stubsMsg,itemIds}) {
     },
   })
 }
+//获取核算状态
+export function apiGetSalaryStatus(id) {
+  return fetch({
+    url: '/api/salary/getSalaryStatus/'+id,
+    method: 'get',
+  })
+}
+
+//删除发放
+export function apiDeleteStubs(id) {
+  return fetch({
+    url: '/api/salary/stubs/deleteStubs/'+id,
+    method: 'DELETE',
+  })
+}
+
 

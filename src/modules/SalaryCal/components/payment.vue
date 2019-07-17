@@ -6,7 +6,7 @@
         <div class="box-fun">
           <p class="box-title">银行报盘</p>
           <p class="tip">导出姓名、银行卡号、实发工资</p>
-          <el-button type="primary">导出</el-button>
+          <a :href="'/api/salary/stubs/exportReport/'+checkId" style="color:#fff;"><el-button type="primary">导出</el-button></a>
         </div>
       </div>
 <!--      <i class="el-icon-setting"></i>-->
@@ -17,7 +17,11 @@
         <div class="box-fun">
           <p class="box-title">发放工资条</p>
           <p class="tip">员工可在微信小程序中查看工资条<span class="seeExample">预览实例</span></p>
-          <el-button type="warning">发放</el-button>
+          <el-button type="warning" >发放</el-button>
+<!--          <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH'">-->
+            <el-button type="warning">查看发放记录</el-button>
+            <el-button type="info" @click="deleteSalary">删除发放</el-button>
+<!--          </div>-->
         </div>
       </div>
       <i class="el-icon-setting" @click="showSalarySet"></i>
@@ -30,7 +34,7 @@
   </div>
 </template>
 <script>
-  import { apiSalaryList} from '../store/api'
+  import { apiDeleteStubs} from '../store/api'
   import rightPop from '../../../components/basic/rightPop'
   import paymentSalarySet from './payment-salarySet'
 export default {
@@ -41,9 +45,12 @@ export default {
   data() {
     return {
       popShow: { isshow: false },
+      checkId:this.$route.query.id,
+      checkStatus:""
     };
   },
   created(){
+   this._loading();
   },
   mounted() {
     const that = this;
@@ -64,11 +71,28 @@ export default {
     }
   },
   methods: {
+    _loading(){
+      this.$store
+        .dispatch("salaryCalStore/actionGetSalaryStatus",this.checkId)
+        .then(res=>{
+          if(res.code ==="0000"){
+            this.checkStatus = res.data.checkStatus;
+          }
+        })
+    },
     showSalarySet(){
       this.popShow.isshow = true;
     },
     changeSatus(data){
      this.popShow.isshow = data;
+    },
+    //删除发放
+    deleteSalary(){
+      apiDeleteStubs(this.checkId).then(res=>{
+        if(res.code === "0000"){
+          this._loading()
+        }
+      })
     }
   }
 };
