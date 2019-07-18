@@ -253,31 +253,7 @@
 export default {
   data() {
     return {
-      salaryTableDataAll:[
-      [
-        {col: "序号", val: 1, floatItem: false},
-        {col: "工号", val: null, floatItem: false},
-        {col: "姓名", val: "不告诉你", floatItem: false},
-        {col: "岗位", val: "你再猜", floatItem: false},
-        {col: "本期收入", val: 0, floatItem: false},
-        {col: "养老个人", val: null, floatItem: true},
-        {col: "测试", val: null, floatItem: true},
-        {col: "失业个人", val: null, floatItem: true},
-        {col: "个税", val: null, floatItem: false}
-      ],
-      [
-        {col: "序号", val: 1, floatItem: false},
-        {col: "工号", val: null, floatItem: false},
-        {col: "姓名", val: "不告诉你", floatItem: false},
-        {col: "岗位", val: "你再猜", floatItem: false},
-        {col: "本期收入", val: 0, floatItem: false},
-        {col: "养老个人", val: null, floatItem: true},
-        {col: "测试", val: null, floatItem: true},
-        {col: "失业个人", val: null, floatItem: true},
-        {col: "个税", val: null, floatItem: false}
-      ],
-
-    ],
+      salaryTableDataAll:[],
       actionUrl:"",
       downloadLog:"",
       downLoadTemplate:"",

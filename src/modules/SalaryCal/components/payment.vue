@@ -34,7 +34,7 @@
   </div>
 </template>
 <script>
-  import { apiDeleteStubs} from '../store/api'
+  import { apiDeleteStubs,apiProvideStubs} from '../store/api'
   import rightPop from '../../../components/basic/rightPop'
   import paymentSalarySet from './payment-salarySet'
 export default {
@@ -87,13 +87,23 @@ export default {
      this.popShow.isshow = data;
     },
     sendSalary(){
-      this.$emit("changeActive",3)
+      apiProvideStubs(this.checkId).then(res=>{
+        if(res.code === "0000"){
+          this.$emit("changeActive",3)
+        }else{
+          this.$message.error(res.message)
+        }
+      })
+
     },
     //删除发放
     deleteSalary(){
       apiDeleteStubs(this.checkId).then(res=>{
         if(res.code === "0000"){
+          this.$message.success('删除成功');
           this._loading()
+        }else{
+          this.$message.error(res.message);
         }
       })
     }

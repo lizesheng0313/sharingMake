@@ -189,4 +189,43 @@ export function apiDeleteStubs(id) {
   })
 }
 
+//发放工资表
+export function apiProvideStubs(checkId) {
+  return fetch({
+    url: '/api/salary/stubs/provideStubs/'+checkId,
+    method: 'post',
+  })
+}
+//工资表发放列表
+export function apiSalaryStubsList(form) {
+  return fetch({
+    url: '/api/salary/stubs/list',
+    method: 'post',
+    data:form
+  })
+}
+//工资表每一项修改状态
+export function apiSalaryStubsStatusAlter(form) {
+  return fetch({
+    url: '/api/salary/stubs/status/alter',
+    method: 'post',
+    data:form
+  })
+}
+//工资表全部数据修改状态
+export function apiSalaryStubsStatusBatchAlter(form) {
+  return fetch({
+    url: '/api/salary/stubs/status/batchAlter',
+    method: 'post',
+    data:form
+  })
+}
+//更新工资条
+export function apiRefreshStubs(id) {
+  return fetch({
+    url: '/api/salary/stubs/refreshStubs/'+id,
+    method: 'post',
+  })
+}
+
 

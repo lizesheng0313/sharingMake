@@ -13,31 +13,31 @@
         @keyup.enter.native="searchUser"
       ></el-input>
       <div class="right">
-        <el-button type="primary" @click="showIncrease" class="add-import">全部发放</el-button>
-        <el-dropdown trigger="click" @command="handleDropdown">
+        <el-button type="primary" @click="changeAllStatus('PROVIDED')" class="add-import">全部发放</el-button>
+        <el-dropdown trigger="click">
           <el-button type="default">
             更多
             <i class="iconsanjiao iconfont"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="cancelAll">全部撤回</el-dropdown-item>
-            <el-dropdown-item command="update">更新数据</el-dropdown-item>
+            <el-dropdown-item command="cancelAll" @click.native="changeAllStatus('NO_PROVIDE')">全部撤回</el-dropdown-item>
+            <el-dropdown-item command="update" @click.native="updateData">更新数据</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </div>
     <div class="staff-situation">
       <span class="staff-total">
-        人员总数
-        <i>{{this.summryTotal}}</i>人
+        总人数
+        <i>{{this.total?this.total:"--"}}</i>人
       </span>
       <span>
-        本月：入职
-        <i>{{this.newEmployeeCount}}</i>人
+        未发放
+        <i>{{this.un_send ? this.un_send:"--" }}</i>人
       </span>
       <span>
-        调动
-        <i>{{this.changeEmployeeCount}}</i>人
+        已发放
+        <i>{{this.send ? this.send:"--"}}</i>人
       </span>
     </div>
     <div class="staff-table">
@@ -53,7 +53,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-button size="mini" @click="cancelDo(scope.row)">撤回</el-button>
+            <el-button size="mini" @click="setSalaryItem(scope.row)">{{getSendStatus(scope.row)?"发放":"撤销"}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -70,36 +70,11 @@
   </div>
 </template>
 <script>
-  import { apiCheckMember,apiImportMember,apiCheckMemberdelete,apiCheckMemberSummary} from '../store/api'
+  import {apiCheckMemberSummary,apiSalaryStubsStatusAlter,apiSalaryStubsStatusBatchAlter,apiRefreshStubs} from '../store/api'
   export default {
-
     data() {
       return {
-        salaryList:[
-          [
-            {col: "序号", val: 1, floatItem: false},
-            {col: "工号", val: null, floatItem: false},
-            {col: "姓名", val: "不告诉你", floatItem: false},
-            {col: "岗位", val: "你再猜", floatItem: false},
-            {col: "本期收入", val: 0, floatItem: false},
-            {col: "养老个人", val: null, floatItem: true},
-            {col: "测试", val: null, floatItem: true},
-            {col: "失业个人", val: null, floatItem: true},
-            {col: "个税", val: null, floatItem: false}
-          ],
-          [
-            {col: "序号", val: 1, floatItem: false},
-            {col: "工号", val: null, floatItem: false},
-            {col: "姓名", val: "不告诉你", floatItem: false},
-            {col: "岗位", val: "你再猜", floatItem: false},
-            {col: "本期收入", val: 0, floatItem: false},
-            {col: "养老个人", val: null, floatItem: true},
-            {col: "测试", val: null, floatItem: true},
-            {col: "失业个人", val: null, floatItem: true},
-            {col: "个税", val: null, floatItem: false}
-          ],
-
-        ],
+        salaryList:[],
         salaryLoading:false,
         salaryForm:{
           "checkId":this.$route.query.id,
@@ -110,12 +85,10 @@
         screenWidth: document.body.clientWidth, // 屏幕尺寸
         isShowIncrease: false,
         count:0,
-        percent:0,
-        failCount: "",
-        successCount:"",
-        uuid: "",
         selectUserIdList:[],
-        summryTotal:"",
+        total:"",
+        send:"",
+        un_send:"",
         changeEmployeeCount:"",
         newEmployeeCount:"",
       };
@@ -128,26 +101,68 @@
           that.screenWidth = window.screenWidth;
         })();
       };
+      this.loading();
     },
     methods: {
       loading(){
+        this.salaryLoading = true;
+        this.$store.dispatch('salaryCalStore/actionGetSalaryStubsList',this.salaryForm).then(res=>{
+          if(res.code === "0000"){
+            this.count = res.data.tableData.count;
+            this.total = res.data.tableData.count;
+            this.send = res.data.SEND;
+            this.un_send = res.data.un_send;
+            this.salaryList = res.data.tableData.tableData.map(item=>item.diyrow)
+            this.salaryLoading = false;
+          }
+        })
       },
-      summary(){
-        apiCheckMemberSummary(this.salaryForm.checkId)
-          .then(res=>{
-            if(res.code === "0000") {
-              let data = res.data;
-              this.summryTotal = data.total;
-              this.newEmployeeCount = data.newEmployeeCount;
-              this.changeEmployeeCount = data.changeEmployeeCount;
-            }
-          })
+      getSendStatus(data){
+        let status = "";
+       data.forEach(item=>{
+         if(item.col === "发放状态"){
+           status = item.val
+         }
+       })
+       return status == "未发放" ||status == "已撤销"
       },
-      //全部撤回
-      cancelAll(){
+      //全部发放
+     changeAllStatus(status){
+        console.log(this.salaryForm.checkId)
+        apiSalaryStubsStatusBatchAlter({
+          "checkId": this.salaryForm.checkId,
+          "payStubsStatus": status,
+        }).then(res=>{
+          if(res.code === "0000"){
+            this.loading()
+          }else{
+            this.$message.error(res.message);
 
+          }
+        })
       },
-      cancelDo(data){
+      //更新数据
+      updateData(){
+        apiRefreshStubs(this.salaryForm.checkId).then(res=>{
+          if(res.code === "0000"){
+            this.$message.success('数据更新成功')
+          }
+        })
+      },
+      setSalaryItem(data){
+        let stubId = data[0]['val'];
+        let payStubsStatus = this.getSendStatus(data)?"PROVIDED":"NO_PROVIDE";
+        apiSalaryStubsStatusAlter({
+          "payStubsStatus":payStubsStatus,
+          "stubId":stubId
+        }).then(res=>{
+          if(res.code === "0000"){
+            this.loading()
+          }else{
+            this.$message.error(res.message)
+          }
+        })
+
       },
       //切换pageId
       handleCurrentChange(val){
@@ -163,23 +178,6 @@
       },
       handleSelectionChange(val){
         console.log(val)
-        // this.selectUserIdList = val.map((item,index)=>item.id);
-      },
-      handleDropdown(val){
-        if(val === 'delete'){
-          if(this.selectUserIdList.length === 0){
-            this.$message.warning("请选择要删除的人员");
-          }else{
-            this.handleDelete(this.selectUserIdList)
-          }
-        }else{
-          window.location.href = "/api/salary/checkMember/export?checkId="+this.usersalaryFormForm.checkId+"&"+"key="+this.salaryForm.key
-        }
-      },
-      showIncrease(){
-        this.isShowIncrease = true;
-        this.fileList = [];
-        this.uuid = ""
       },
     }
   };

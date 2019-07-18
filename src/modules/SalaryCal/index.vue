@@ -62,7 +62,7 @@
                   <p>启动算薪时，系统根据算薪范围生成本月计薪人员</p>
                 </div>
                 <el-button type="primary" @click="calcSalary(item)" v-show="item.salaryCheckStatus === 'INIT'">计算薪资</el-button>
-                <el-button type="primary" @click="seeCalcSalary" v-show="item.salaryCheckStatus === 'COMPUTED' || item.salaryCheckStatus === 'AUDITED'">查看薪资</el-button>
+                <el-button type="primary" @click="seeCalcSalary(item)" v-show="item.salaryCheckStatus === 'COMPUTED' || item.salaryCheckStatus === 'AUDITED' || item.salaryCheckStatus === 'FINISH' || item.salaryCheckStatus === 'PAID'">查看薪资</el-button>
               </div>
             </el-col>
           </el-row>
@@ -188,7 +188,8 @@ export default {
       this.$router.push({path:"/salaryCheck",query:{id:item.id,active:1,salaryRuleId:item.salaryRuleId}})
     },
     //查看信息
-    seeCalcSalary(){
+    seeCalcSalary(item){
+      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:1,salaryRuleId:item.salaryRuleId}})
     },
     //切换查看第几次发薪
     changePayth(index,status,item){

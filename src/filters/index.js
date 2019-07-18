@@ -96,6 +96,19 @@ const getDay = (val) => {
       }
   }
 };
+const filtersSalaryType = (val) => {
+  switch (val) {
+    case 'NO_PROVIDE': {
+      return '未发放';
+    }
+    case 'PROVIDED': {
+      return '已发放';
+    }
+    case 'BACK': {
+      return '已撤销';
+    }
+  }
+};
 export default {
   resetDate,
   texRule,

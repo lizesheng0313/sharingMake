@@ -53,7 +53,6 @@ export default {
           { max: 60, message: '', trigger: 'blur' }
         ],
       }
-
     };
   },
   created(){
