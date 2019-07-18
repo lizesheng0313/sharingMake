@@ -46,9 +46,9 @@
 <!--      </el-row>-->
       <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}">
         <el-table-column
-          min-width="180"
           v-for="(col,index) in salaryTableDataAll[0]"
-          :label="col.col" :key="index" :fixed="!col.floatItem">
+          min-width="120px"
+          :label="col.col" :key="index">
           <template slot-scope="scope">
             <span>{{scope['row'][index]["val"]}}</span>
           </template>
@@ -81,8 +81,8 @@
               <el-radio label="BY_EMP_NO">通过员工工号匹配人员</el-radio>
             </div>
             <div>
-              <el-radio label="BY_PHONE_NO" v-if="importT === 'social'">通过身份证号匹配人员</el-radio>
-              <el-radio label="BY_ID_NO" v-else>通过手机号匹配人员</el-radio>
+              <el-radio label="BY_ID_NO" v-if="importT === 'social'">通过身份证号匹配人员</el-radio>
+              <el-radio label="BY_PHONE_NO" v-else>通过手机号匹配人员</el-radio>
             </div>
           </el-radio-group>
         </div>
