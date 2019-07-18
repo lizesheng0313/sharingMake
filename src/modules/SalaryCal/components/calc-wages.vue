@@ -38,12 +38,22 @@
       </div>
     </div>
     <div class="staff-table">
-      <el-row type="flex" class="row-bg tableHeader">
-        <el-col v-for="(item,index) in tableCol"  :span="index === 0 ?1:3"><div class="grid-content bg-purple">{{item}}</div></el-col>
-      </el-row>
-      <el-row type="flex" class="row-bg" v-for="per in tableValue">
-        <el-col v-for="(it,index) in per" :span="index === 0 ?1:3" :style="{background:(it.floatItem?'#F1F3F6':'')}"><div class="grid-content bg-purple">{{ it.val }}</div></el-col>
-      </el-row>
+<!--      <el-row type="flex" class="row-bg tableHeader">-->
+<!--        <el-col v-for="(item,index) in tableCol"  :span="index === 0 ?1:3"><div class="grid-content bg-purple">{{item}}</div></el-col>-->
+<!--      </el-row>-->
+<!--      <el-row type="flex" class="row-bg" v-for="per in tableValue">-->
+<!--        <el-col v-for="(it,index) in per" :span="index === 0 ?1:3" :style="{background:(it.floatItem?'#F1F3F6':'')}"><div class="grid-content bg-purple">{{ it.val }}</div></el-col>-->
+<!--      </el-row>-->
+      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}">
+        <el-table-column
+          min-width="180"
+          v-for="(col,index) in salaryTableDataAll[0]"
+          :label="col.col" :key="index" :fixed="!col.floatItem">
+          <template slot-scope="scope">
+            <span>{{scope['row'][index]["val"]}}</span>
+          </template>
+        </el-table-column>
+      </el-table>
       <el-pagination
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
@@ -243,6 +253,31 @@
 export default {
   data() {
     return {
+      salaryTableDataAll:[
+      [
+        {col: "序号", val: 1, floatItem: false},
+        {col: "工号", val: null, floatItem: false},
+        {col: "姓名", val: "不告诉你", floatItem: false},
+        {col: "岗位", val: "你再猜", floatItem: false},
+        {col: "本期收入", val: 0, floatItem: false},
+        {col: "养老个人", val: null, floatItem: true},
+        {col: "测试", val: null, floatItem: true},
+        {col: "失业个人", val: null, floatItem: true},
+        {col: "个税", val: null, floatItem: false}
+      ],
+      [
+        {col: "序号", val: 1, floatItem: false},
+        {col: "工号", val: null, floatItem: false},
+        {col: "姓名", val: "不告诉你", floatItem: false},
+        {col: "岗位", val: "你再猜", floatItem: false},
+        {col: "本期收入", val: 0, floatItem: false},
+        {col: "养老个人", val: null, floatItem: true},
+        {col: "测试", val: null, floatItem: true},
+        {col: "失业个人", val: null, floatItem: true},
+        {col: "个税", val: null, floatItem: false}
+      ],
+
+    ],
       actionUrl:"",
       downloadLog:"",
       downLoadTemplate:"",
@@ -346,16 +381,22 @@ export default {
          this.count = salaryData.count;
          this.tableValue = [];
          this.salaryTableData = salaryData.tableData;
-         if(this.salaryTableData.length >0 ){
-           this.tableCol = this.salaryTableData[0]['diyrow'].map(item=>item.col);
-           this.salaryTableData.forEach(item=>{
-             // let row = item['diyrow'].map(it=>it.val);
-             let row = item['diyrow'];
-             this.tableValue.push(row)
-           })
-         }
+         this.salaryTableDataAll = this.salaryTableData.map(item=>item.diyrow)
+         // if(this.salaryTableData.length >0 ){
+         //   this.tableCol = this.salaryTableData[0]['diyrow'].map(item=>item.col);
+         //   this.salaryTableData.forEach(item=>{
+         //     // let row = item['diyrow'].map(it=>it.val);
+         //     let row = item['diyrow'];
+         //     this.tableValue.push(row)
+         //   })
+         // }
        }
       })
+    },
+    cellStyle(data){
+      if(data.column.fixed){
+        return "background:#F7F7F7"
+      }
     },
     //选择用工类型
     changeEmployType(val){
@@ -548,7 +589,7 @@ export default {
       this.getSalaryItem();
     },
     handleCalcSalary(){
-    }
+    },
   }
 };
 </script>

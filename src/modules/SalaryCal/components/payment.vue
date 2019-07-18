@@ -17,7 +17,7 @@
         <div class="box-fun">
           <p class="box-title">发放工资条</p>
           <p class="tip">员工可在微信小程序中查看工资条<span class="seeExample">预览实例</span></p>
-          <el-button type="warning" >发放</el-button>
+          <el-button type="warning" @click="sendSalary">发放</el-button>
 <!--          <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH'">-->
             <el-button type="warning">查看发放记录</el-button>
             <el-button type="info" @click="deleteSalary">删除发放</el-button>
@@ -85,6 +85,9 @@ export default {
     },
     changeSatus(data){
      this.popShow.isshow = data;
+    },
+    sendSalary(){
+      this.$emit("changeActive",3)
     },
     //删除发放
     deleteSalary(){

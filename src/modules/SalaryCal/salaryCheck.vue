@@ -22,7 +22,7 @@
         </span>
       </div>
       <div slot="fs-container">
-        <div class="step-box">
+        <div class="step-box" v-if="active!==3">
           <el-steps :active="active" finish-status="success" class="steps" :align-center="true">
             <el-step title="核对人员"  @click.native="active = 0" style="cursor: pointer;"></el-step>
             <el-step title="核算薪资" @click.native="active = 1" style="cursor: pointer;"></el-step>
@@ -38,7 +38,8 @@
         </div>
         <check-staff v-if="active==0"></check-staff>
         <calc-wages v-if="active==1"></calc-wages>
-        <payment v-if="active==2"></payment>
+        <payment v-if="active==2" @changeActive="changeActive"></payment>
+        <salarySend v-if="active==3"></salarySend>
       </div>
     </full-screen>
   </div>
@@ -48,13 +49,14 @@ import fullScreen from "@/components/full-screen/index";
 import checkStaff from "./components/check-staff";
 import calcWages from "./components/calc-wages";
 import payment from "./components/payment";
-
+import salarySend from "./components/salarySend"
 export default {
   components: {
     fullScreen,
     checkStaff,
     calcWages,
-    payment
+    payment,
+    salarySend
   },
   data() {
     return {
@@ -64,6 +66,9 @@ export default {
   methods: {
     handle(val){
       console.log(val)
+    },
+    changeActive(data){
+      this.active = data;
     },
     handlePrve() {
       if (this.active != 0) {
