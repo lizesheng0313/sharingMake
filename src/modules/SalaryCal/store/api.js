@@ -227,5 +227,26 @@ export function apiRefreshStubs(id) {
     method: 'post',
   })
 }
+//薪资计算
+export function apiSalaryComputes(id) {
+  return fetch({
+    url: '/api/salary/salaryCompute',
+    method: 'post',
+    params:{
+      checkId:id
+    }
+  })
+}
+//薪资审核
+export function apiAuditSalaryCheck(form) {
+  return fetch({
+    url: '/api/salary/salaryAudit',
+    method: 'post',
+    data:form
+  })
+}
+
+
+
 
 

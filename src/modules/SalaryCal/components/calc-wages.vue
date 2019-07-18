@@ -12,7 +12,7 @@
       ></el-input>
       <div class="right">
         <el-button type="primary" @click="handleCalcSalary">薪资计算</el-button>
-        <el-button type="default" @click="handleCalcSalary">薪资审核</el-button>
+        <el-button type="default" @click="handleCheckSalary" :disabled="checkDisabled">{{this.checkStatus === "AUDITED"?"取消审核":"薪资审核"}}</el-button>
       </div>
     </div>
     <div class="staff-situation clearfix">
@@ -249,7 +249,7 @@
   </div>
 </template>
 <script>
-  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem} from '../store/api'
+  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck} from '../store/api'
 export default {
   data() {
     return {
@@ -326,6 +326,8 @@ export default {
       isIndeterminates:{},
       checkAlls:{},
       isShowUserInfo:true,
+      checkStatus:"",
+      checkDisabled:false,//审核禁用
     };
   },
   created(){
@@ -357,7 +359,15 @@ export default {
          this.count = salaryData.count;
          this.tableValue = [];
          this.salaryTableData = salaryData.tableData;
-         this.salaryTableDataAll = this.salaryTableData.map(item=>item.diyrow)
+         this.salaryTableDataAll = this.salaryTableData.map(item=>item.diyrow);
+         //查看工资表状态
+         this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.salaryForm.checkId).then(res=>{
+           if(res.code === "0000"){
+             this.checkStatus = res.data.checkStatus;
+             console.log(this.checkStatus)
+             this.checkDisabled = this.checkStatus ==='INIT';
+           }
+         })
          // if(this.salaryTableData.length >0 ){
          //   this.tableCol = this.salaryTableData[0]['diyrow'].map(item=>item.col);
          //   this.salaryTableData.forEach(item=>{
@@ -564,8 +574,31 @@ export default {
       this.showExportSalaryDetail = true;
       this.getSalaryItem();
     },
+    //薪资计算
     handleCalcSalary(){
+      apiSalaryComputes(this.salaryForm.checkId)
+        .then(res=>{
+          if(res.code === "0000"){
+            this.$message.success('薪资计算成功');
+            this.loading()
+          }
+        })
     },
+  //  薪资审核
+    handleCheckSalary(){
+      let status = this.checkStatus ==='AUDITED'?"UN_AUDIT":"AUDIT";
+      apiAuditSalaryCheck({
+        "checkAuditStatus":status,
+        "checkId": this.salaryForm.checkId
+      })
+        .then(res=>{
+          if(res.code === "0000"){
+            this.$message.success(this.checkStatus ==='AUDITED'?'取消审核成功':"审核成功");
+            this.loading()
+          }
+        })
+    }
+
   }
 };
 </script>
