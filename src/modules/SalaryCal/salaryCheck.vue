@@ -39,7 +39,7 @@
         <check-staff v-if="active==0"></check-staff>
         <calc-wages v-if="active==1"></calc-wages>
         <payment v-if="active==2" @changeActive="changeActive"></payment>
-        <salarySend v-if="active==3"></salarySend>
+        <salarySend v-if="active==3" @changeActive="changeActive"></salarySend>
       </div>
     </full-screen>
   </div>
@@ -69,6 +69,7 @@ export default {
     },
     changeActive(data){
       this.active = data;
+
     },
     handlePrve() {
       if (this.active != 0) {

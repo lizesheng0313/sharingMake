@@ -1,7 +1,7 @@
 <template>
   <div class="salary-send">
     <div class="head-fun">
-      <span class="goBack" @click="$router.go(-1)">返回</span><span class="fun-line">|</span><span class="title">工资表发放</span><span class="tip">发放后，员工可在移动端查询工资条，已发放的工资条支持撤销发放</span>
+      <span class="goBack" @click="goBack">返回</span><span class="fun-line">|</span><span class="title">工资表发放</span><span class="tip">发放后，员工可在移动端查询工资条，已发放的工资条支持撤销发放</span>
     </div>
     <div class="clearfix check-staff-menu">
       <el-input
@@ -128,16 +128,15 @@
       },
       //全部发放
      changeAllStatus(status){
-        console.log(this.salaryForm.checkId)
         apiSalaryStubsStatusBatchAlter({
           "checkId": this.salaryForm.checkId,
           "payStubsStatus": status,
         }).then(res=>{
           if(res.code === "0000"){
+            this.$message.success(status === 'PROVIDED'?'全部发放成功':'全部撤销成功');
             this.loading()
           }else{
             this.$message.error(res.message);
-
           }
         })
       },
@@ -179,6 +178,10 @@
       handleSelectionChange(val){
         console.log(val)
       },
+      //返回
+      goBack(){
+        this.$emit("changeActive",2);
+      }
     }
   };
 </script>

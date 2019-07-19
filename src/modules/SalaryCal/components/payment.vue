@@ -17,11 +17,11 @@
         <div class="box-fun">
           <p class="box-title">发放工资条</p>
           <p class="tip">员工可在微信小程序中查看工资条<span class="seeExample">预览实例</span></p>
-          <el-button type="warning" @click="sendSalary">发放</el-button>
-<!--          <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH'">-->
-            <el-button type="warning">查看发放记录</el-button>
+          <el-button type="warning" @click="sendSalary" v-if="checkStatus === 'AUDITED'">发放</el-button>
+          <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH'">
+            <el-button type="warning" @click="seeRecord">查看发放记录</el-button>
             <el-button type="info" @click="deleteSalary">删除发放</el-button>
-<!--          </div>-->
+          </div>
         </div>
       </div>
       <i class="el-icon-setting" @click="showSalarySet"></i>
@@ -77,6 +77,7 @@ export default {
         .then(res=>{
           if(res.code ==="0000"){
             this.checkStatus = res.data.checkStatus;
+            console.log(this.checkStatus)
           }
         })
     },
@@ -94,7 +95,10 @@ export default {
           this.$message.error(res.message)
         }
       })
-
+    },
+    //查看记录
+    seeRecord(){
+      this.$emit("changeActive",3)
     },
     //删除发放
     deleteSalary(){
