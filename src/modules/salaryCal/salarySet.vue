@@ -82,7 +82,7 @@
                 <span>新增</span>
               </span>
             </div>
-            <draggable animation=150 v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
+            <draggable animation=150  v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
               <el-row v-for="(item,index) in items" :key="index">
                 <el-col :span="8" v-if="item.group ==='人员信息' || item.types.sys"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
                 <el-col :span="8" v-else><div class="grid-content bg-purple" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
@@ -343,7 +343,8 @@ export default {
       this.salaryItemLoding = true;
       this.tableData = [];
       apiSalaryItemInfo(this.ruleId).then(res=>{
-        this.tableData = res.data;
+        let tableData = res.data;
+        this.tableData = tableData.filter(it=>it)
         this.salaryItemLoding = false;
       }).catch(res=>{})
     },

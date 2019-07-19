@@ -46,7 +46,7 @@
                 </div>
                 <p class="cycle">
                   算薪周期： <span>{{item.startDate|resetDate}}~ {{item.endDate|resetDate}}</span>
-                  <span class="calc-type">{{item.salaryCheckStatus}}</span>
+                  <span class="calc-type">{{item.salaryCheckStatus|salaryCheckStatus}}</span>
                 </p>
                 <p>计税规则： {{item.taxRule|texRule}}</p>
               </div>
