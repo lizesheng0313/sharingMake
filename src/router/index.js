@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {routerConfig} from './routerConfig'
+import { routerConfig } from './routerConfig'
 
 //router
 import salaryCal from 'modules/salaryCal/router'
+import tax from 'modules/tax/router'
+import cumulative from 'modules/cumulative/router'
 
 
 Vue.use(Router)
@@ -19,7 +21,9 @@ let router = new Router({
       path: '/',
       redirect: '/salary-cal'
     },
-    ...salaryCal
+    ...salaryCal,
+    ...tax,
+    ...cumulative
   ]
 })
 routerConfig(router)

@@ -2,16 +2,54 @@ import Vue from 'vue'
 import filterSample from './sample'
 
 Vue.filter('filterSample', filterSample)
-const participantsType = (val) => {
-  switch (val) {//仲裁类别
-    case 1: {
-      return '个人';
+//data时间转化
+const resetDate = (val) => {
+ return val?val.split(" ")[0]:""
+};
+//计税规则
+const texRule = (val) => {
+  switch (val) {
+    case 'SALARY_PAY_RULE': {
+      return '按工资薪资所得计算个税';
     }
-    case 2: {
-      return '企业';
+    case 'PERSON_PAY_RULE': {
+      return '按劳务报酬所得计算个税';
     }
   }
 };
+//薪资核算状态
+const salaryCheckStatus = (val) => {
+  switch (val) {
+    case 'NONE': {
+      return '未启动';
+    }
+    case 'INIT': {
+      return '未计算';
+    }
+    case 'CHECKED_MEMBER': {
+      return '人员已核对';
+    }
+    case 'CHECKED_SALARY': {
+      return '薪资已核对';
+    }
+    case 'AUDIT_REJECT': {
+      return '审核拒绝';
+    }
+    case 'AUDITED': {
+      return '审核通过';
+    }
+    case 'PAID': {
+      return '薪资已发放';
+    }
+    case 'COMPUTED': {
+      return '已计算';
+    }
+    case 'FINISH': {
+      return '结束';
+    }
+  }
+};
+
 const filterType = (val) => {
   switch (val) {//仲裁类别
     case 'SYSYEM': {
@@ -57,10 +95,24 @@ const getDay = (val) => {
         this.fullDay = 28; //闰年平年28天
       }
   }
-  console.log(this.fullDay)
+};
+const filtersSalaryType = (val) => {
+  switch (val) {
+    case 'NO_PROVIDE': {
+      return '未发放';
+    }
+    case 'PROVIDED': {
+      return '已发放';
+    }
+    case 'BACK': {
+      return '已撤销';
+    }
+  }
 };
 export default {
-  participantsType,
+  resetDate,
+  texRule,
+  salaryCheckStatus,
   getDay,
   filterType,
 }

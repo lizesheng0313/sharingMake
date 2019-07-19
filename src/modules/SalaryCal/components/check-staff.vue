@@ -3,21 +3,22 @@
     <div class="clearfix check-staff-menu">
       <el-input
         placeholder="请输入姓名\手机号"
-        v-model="input"
+        v-model="userForm.key"
         suffix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
         class="search-input left"
+        @keyup.enter.native="searchUser"
       ></el-input>
       <div class="right">
-        <el-button type="primary" @click="isShowIncrease = true" class="add-import">增员导入</el-button>
-        <el-dropdown trigger="click">
+        <el-button type="primary" @click="showIncrease" class="add-import">增员导入</el-button>
+        <el-dropdown trigger="click" @command="handleDropdown">
           <el-button type="default">
             更多
             <i class="iconsanjiao iconfont"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>全部删除</el-dropdown-item>
-            <el-dropdown-item>导出</el-dropdown-item>
+            <el-dropdown-item command="delete">全部删除</el-dropdown-item>
+            <el-dropdown-item command="export">导出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -25,48 +26,101 @@
     <div class="staff-situation">
       <span class="staff-total">
         人员总数
-        <i>10</i>人
+        <i>{{this.summryTotal}}</i>人
       </span>
       <span>
         本月：入职
-        <i>1</i>人
+        <i>{{this.newEmployeeCount}}</i>人
       </span>
       <span>
         调动
-        <i>1</i>人
+        <i>{{this.changeEmployeeCount}}</i>人
       </span>
     </div>
     <div class="staff-table">
       <!-- <div class="floating-menu">
         <span>删除</span>
       </div>-->
-      <el-table :data="tableData" class="check-staff_table" :style="{width:screenWidth-40+'px'}">
+      <el-table :data="userList" class="check-staff_table" :style="{width:screenWidth-40+'px'}" v-loading="userLoading"  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" fixed></el-table-column>
-        <el-table-column prop="date" label="姓名"></el-table-column>
-        <el-table-column prop="name" label="工号"></el-table-column>
-        <el-table-column prop="address" label="手机号"></el-table-column>
-        <el-table-column prop="address" label="部门"></el-table-column>
-        <el-table-column prop="address" label="员工类型"></el-table-column>
-        <el-table-column prop="address" label="状态"></el-table-column>
-        <el-table-column prop="address" label="入职日期"></el-table-column>
-        <el-table-column prop="address" label="转正日期"></el-table-column>
-        <el-table-column prop="address" label="最后工作日"></el-table-column>
+        <el-table-column label="姓名">
+          <template slot-scope="scope">
+             <span>{{scope.row.name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="工号">
+          <template slot-scope="scope">
+            <span>{{scope.row.empNo}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="身份证号">
+          <template slot-scope="scope">
+            <span>{{scope.row.idCardNo}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="手机号">
+          <template slot-scope="scope">
+            <span>{{scope.row.phoneNo}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="用工性质">
+          <template slot-scope="scope">
+            <span>{{scope.row.name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="纳税主体">
+          <template slot-scope="scope">
+            <span>{{scope.row.taxSubject}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="部门">
+          <template slot-scope="scope">
+            <span>{{scope.row.departName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="岗位">
+          <template slot-scope="scope">
+            <span>{{scope.row.jobTitle}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="工作地点">
+          <template slot-scope="scope">
+            <span>{{scope.row.workAddress}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="入职时间">
+          <template slot-scope="scope">
+            <span>{{scope.row.empStartDate?scope.row.empStartDate.split(" ")[0]:""}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="工资卡银行">
+          <template slot-scope="scope">
+            <span>{{scope.row.bank}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="工资卡号">
+          <template slot-scope="scope">
+            <span>{{scope.row.bankNo}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button size="mini" @click="handleDelete([scope.row.id])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
-        :page-size="20"
-        :pager-count="11"
-        layout="prev, pager, next"
-        :total="1000"
-        class="staff-page"
-      ></el-pagination>
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+        :current-page="userForm.currPage"
+        :page-sizes="[1, 50, 100, 200]"
+        :page-size="userForm.pageSize"
+        layout="total, sizes, prev, pager, next"
+        :total="count">
+      </el-pagination>
     </div>
+    <!--  增员导入  -->
     <el-dialog
-      title="增员导入"
       :visible.sync="isShowIncrease"
       width="600px"
       center
@@ -85,35 +139,59 @@
       <div class="select-file">
         <el-upload
           class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="/api/salary/salaryCheck/verify"
           :limit="1"
           :file-list="fileList"
-          :on-success="handleScuess"
+          :before-upload="beforeAvatarUpload"
+          :on-success="handleSuccess"
+          :data="{'id':userForm.checkId}"
         >
           <span class="headings">2、</span>
           <el-button size="small" type="primary">选择文件</el-button>
         </el-upload>
+        <div v-show="uuid" style="margin:15px 0 0 28px">
+          <span v-if="failCount === 0"><i class="el-icon-success"></i>全部导入成功</span>
+          <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
+          <span v-if="successCount === 0">数据全部未通过校验</span>
+          <span><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></span>
+        </div>
         <p>
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
-          <span>下载模板</span>
+          <span><a href="/api/salary/checkMember/template/download">下载模板</a></span>
         </p>
         <p class="instructions">
           说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资
-          <span>查看举例</span>
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary">导入通过数据</el-button>
+        <el-button type="primary" @click="uploadFile">导入通过数据</el-button>
         <el-button @click="isShowIncrease = false">取 消</el-button>
+      </span>
+    </el-dialog>
+    <!-- 导入完成 -->
+    <el-dialog
+      :visible.sync="isShowIncreaseFinish"
+      width="500px"
+      center
+      class="importFinishDialog"
+    >
+      <div class="title"><i class="el-icon-success"></i>导入完成</div>
+      <div>导入成功<span style="color:#06B806">{{this.importFinishForm.successCount}}</span>条数据,<span style="color:red">{{this.importFinishForm.failCount}}</span>条数据导入未通过，忽略导入</div>
+      <div><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="importMemberFinish">确定</el-button>
+        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
+  import { apiCheckMember,apiImportMember,apiCheckMemberdelete,apiCheckMemberSummary} from '../store/api'
 export default {
+
   data() {
     return {
-      radio: "",
+      radio: 3,
       fileList: [],
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       input: "",
@@ -124,7 +202,31 @@ export default {
           name: "2",
           address: "123"
         }
-      ]
+      ],
+      userForm:{
+        "checkId":this.$route.query.id,
+        "currPage": 1,
+        "key": "",
+        "pageSize":1 ,
+      },
+      userList:[],
+      count:0,
+      fileList:[],
+      userLoading:false,
+      imgFlag:false,
+      percent:0,
+      failCount: "",
+      successCount:"",
+      uuid: "",
+      selectUserIdList:[],
+      summryTotal:"",
+      changeEmployeeCount:"",
+      newEmployeeCount:"",
+      isShowIncreaseFinish:false,
+      importFinishForm:{
+        failCount:"",
+        successCount:""
+      }
     };
   },
   mounted() {
@@ -135,28 +237,127 @@ export default {
         that.screenWidth = window.screenWidth;
       })();
     };
+    this.loading();
+    this.summary();
   },
   methods: {
-    handleDelete() {
+    loading(){
+      this.userLoading = true;
+      apiCheckMember(this.userForm).then(res=>{
+        if(res.code === "0000"){
+          this.userLoading = false;
+          this.userList = res.data.data;
+          this.count = res.data.count;
+        }
+      })
+    },
+    summary(){
+      apiCheckMemberSummary(this.userForm.checkId)
+        .then(res=>{
+          if(res.code === "0000") {
+            let data = res.data;
+            this.summryTotal = data.total;
+            this.newEmployeeCount = data.newEmployeeCount;
+            this.changeEmployeeCount = data.changeEmployeeCount;
+          }
+        })
+    },
+    handleDelete(id) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+          apiCheckMemberdelete(id).then(res=>{
+            if(res.code === "0000"){
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+              this.loading()
+            }
+          })
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
     },
-    handleScuess() {}
+    //切换pageId
+    handleCurrentChange(val){
+      this.userForm.currPage = val;
+      this.loading()
+    },
+    handleSizeChange(val){
+      this.userForm.pageSize = val;
+      this.loading()
+    },
+    searchUser(){
+      this.loading()
+    },
+    //文件上传前校验
+    beforeAvatarUpload(file) {
+      //限制上传文件
+      var testmsg = file.name.substring(file.name.lastIndexOf(".") + 1);
+      const isxls = testmsg === "xls" || testmsg === "xlsx";
+      const isLt5M = file.size / 1024 / 1024 < 5;
+      if (!isxls) {
+        this.$message({
+          message: "上传文件类型只能是 xls,xlsx 格式!",
+          type: "warning"
+        });
+        this.fileList = []
+      }
+      if (!isLt5M) {
+        this.$message({
+          message: "上传文件大小不能超过 5MB!",
+          type: "warning"
+        });
+        this.fileList = []
+      }
+      return isxls && isLt5M;
+    },
+    handleSuccess(res, file) {
+      let data = res.data;
+      this.successCount = data.successCount;
+      this.failCount = data.failCount;
+      this.uuid = data.uuid;
+    },
+  // 导出通过数据
+    uploadFile(){
+       apiImportMember({
+         uuid:this.uuid,
+         id:this.userForm.checkId
+       }).then(res=>{
+       if(res.code === '0000'){
+         let importData = res.data;
+         this.importFinishForm.failCount = importData.failCount;
+         this.importFinishForm.successCount = importData.successCount;
+         this.isShowIncrease = false;
+         this.isShowIncreaseFinish = true;
+       }
+       })
+    },
+    handleSelectionChange(val){
+      this.selectUserIdList = val.map((item,index)=>item.id);
+    },
+    handleDropdown(val){
+      if(val === 'delete'){
+        if(this.selectUserIdList.length === 0){
+          this.$message.warning("请选择要删除的人员");
+        }else{
+          this.handleDelete(this.selectUserIdList)
+        }
+      }else{
+        window.location.href = "/api/salary/checkMember/export?checkId="+this.userForm.checkId+"&"+"key="+this.userForm.key
+      }
+    },
+    showIncrease(){
+      this.isShowIncrease = true;
+      this.fileList = [];
+      this.uuid = ""
+    },
+    importMemberFinish(){
+      this.loading();
+      this.isShowIncreaseFinish = false
+    }
   }
 };
 </script>
@@ -216,6 +417,25 @@ export default {
     .staff-page {
       margin-top: 20px;
       text-align: right;
+    }
+  }
+  .el-pagination{
+    text-align: right;
+  }
+  .importFinishDialog{
+    .title{
+      font-size: 20px;
+    }
+    .el-icon-success{
+      color:#06B806;
+      font-size: 20px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    div{
+      width: 300px;
+      margin: 0 auto;
+      margin-top:10px;
     }
   }
 }

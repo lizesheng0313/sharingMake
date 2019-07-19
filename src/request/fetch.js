@@ -6,15 +6,12 @@ const defaultHeader = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
 }
-
 const instance = axios.create({
   timeout: 60000,
   headers: defaultHeader,
   withCredentials: true,
 })
-
 // axios.defaults.baseURL = 'http://172.19.60.38:18290';
-
 //请求拦截
 instance.interceptors.request.use(function (config) {
   return config
@@ -39,12 +36,29 @@ export function fetch(options) {
       if (data.code != "0000") {
         Message.error(data.message)
       }
-
       resolve(data)
     })
       .catch(error => {
         console.log(error)
         // console.log('请求异常信息：' + error)
+        reject(error)
+      })
+  })
+}
+//导出excel
+export function fetchFile(options) {
+  return new Promise((resolve, reject) => {
+    options.responseType = "blob";
+    instance(options).then(response => {
+      resolve(response)
+      let data = response.data;
+      let url = window.URL.createObjectURL(data);
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = decodeURI(response['headers']['content-disposition'].split(';')[1].split('=')[1]);
+      a.click();
+    })
+      .catch(error => {
         reject(error)
       })
   })

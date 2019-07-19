@@ -22,22 +22,24 @@
         </span>
       </div>
       <div slot="fs-container">
-        <div class="step-box">
+        <div class="step-box" v-if="active!==3">
           <el-steps :active="active" finish-status="success" class="steps" :align-center="true">
-            <el-step title="核对人员"></el-step>
-            <el-step title="核算薪资"></el-step>
-            <el-step title="发放薪资"></el-step>
+            <el-step title="核对人员"  @click.native="active = 0" style="cursor: pointer;"></el-step>
+            <el-step title="核算薪资" @click.native="active = 1" style="cursor: pointer;"></el-step>
+            <el-step title="发放薪资" @click.native="active = 2" style="cursor: pointer;"></el-step>
           </el-steps>
           <el-button-group class="turn-page">
-            <el-button icon="el-icon-arrow-left" @click="handlePrve">上一页</el-button>
+            <el-button icon="el-icon-arrow-left" @click="handlePrve">上一步</el-button>
             <el-button @click="handleNext">
-              下一页
+              下一步
               <i class="el-icon-arrow-right el-icon--right"></i>
             </el-button>
           </el-button-group>
         </div>
         <check-staff v-if="active==0"></check-staff>
         <calc-wages v-if="active==1"></calc-wages>
+        <payment v-if="active==2" @changeActive="changeActive"></payment>
+        <salarySend v-if="active==3" @changeActive="changeActive"></salarySend>
       </div>
     </full-screen>
   </div>
@@ -46,18 +48,28 @@
 import fullScreen from "@/components/full-screen/index";
 import checkStaff from "./components/check-staff";
 import calcWages from "./components/calc-wages";
+import payment from "./components/payment";
+import salarySend from "./components/salarySend"
 export default {
   components: {
     fullScreen,
     checkStaff,
-    calcWages
+    calcWages,
+    payment,
+    salarySend
   },
   data() {
     return {
-      active: 0
+      active: typeof (this.$route.query.active) == "string" ? this.$route.query.active-0 : this.$route.query.active-0
     };
   },
   methods: {
+    handle(val){
+      console.log(val)
+    },
+    changeActive(data){
+      this.active = data;
+    },
     handlePrve() {
       if (this.active != 0) {
         this.active--;

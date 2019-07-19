@@ -262,8 +262,19 @@ a{
     }
   }
 }
-
-
+.el-icon-success{
+  color:#06B806;
+}
+.el-icon-warning{
+  color:#e6a23c;
+}
+.el-icon-error{
+  color:#f56c6c;
+}
+.el-icon-success,.el-icon-warning,.el-icon-error{
+  display: inline-block;
+  margin-right: 10px;
+}
 .search-wapper{
   padding-top:20px;
   border:1px solid #ddd;
@@ -297,4 +308,24 @@ a{
   cursor: pointer;
   width:80px;
   height:40px;
+}
+.main-title{
+  padding: 0 20px;
+  font-size: 17px;
+  height: 61px;
+  line-height: 61px;
+}
+.tax-collect-tips {
+  background: #fff6e2;
+  padding-left: 40px;
+  margin-left:-20px;
+  height: 40px;
+  font-size: 12px;
+  line-height: 40px;
+  color: #666;
+}
+.collection{
+  .el-select,.el-date-editor.el-input, .el-date-editor.el-input__inner{
+    width:280px;
+  }
 }
