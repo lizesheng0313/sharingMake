@@ -12,19 +12,19 @@
       ></el-input>
       <div class="right">
         <el-button type="primary" @click="handleCalcSalary">薪资计算</el-button>
-        <el-button type="default" @click="handleCalcSalary">薪资审核</el-button>
+        <el-button type="default" @click="handleCheckSalary" :disabled="checkDisabled">{{this.checkStatus === "AUDITED"?"取消审核":"薪资审核"}}</el-button>
       </div>
     </div>
     <div class="staff-situation clearfix">
       <div class="left">
         <span class="staff-total">
           人员总数
-          <i class="tatal-number">10</i>人
+          <i class="tatal-number">{{count}}</i>人
         </span>
       </div>
       <div class="right calc-table_menu">
         <span @click="showImport('social')">社会公积金导入</span>
-        <span class="have-border_right" @click="showImport('floatItem')">浮云项导入</span>
+        <span class="have-border_right" @click="showImport('floatItem')">浮动项导入</span>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             更多功能
@@ -38,12 +38,22 @@
       </div>
     </div>
     <div class="staff-table">
-      <el-row type="flex" class="row-bg tableHeader">
-        <el-col v-for="(item,index) in tableCol"  :span="index === 0 ?1:3"><div class="grid-content bg-purple">{{item}}</div></el-col>
-      </el-row>
-      <el-row type="flex" class="row-bg" v-for="per in tableValue">
-        <el-col v-for="(it,index) in per" :span="index === 0 ?1:3" :style="{background:(it.floatItem?'#F1F3F6':'')}"><div class="grid-content bg-purple">{{ it.val }}</div></el-col>
-      </el-row>
+<!--      <el-row type="flex" class="row-bg tableHeader">-->
+<!--        <el-col v-for="(item,index) in tableCol"  :span="index === 0 ?1:3"><div class="grid-content bg-purple">{{item}}</div></el-col>-->
+<!--      </el-row>-->
+<!--      <el-row type="flex" class="row-bg" v-for="per in tableValue">-->
+<!--        <el-col v-for="(it,index) in per" :span="index === 0 ?1:3" :style="{background:(it.floatItem?'#F1F3F6':'')}"><div class="grid-content bg-purple">{{ it.val }}</div></el-col>-->
+<!--      </el-row>-->
+      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}">
+        <el-table-column
+          v-for="(col,index) in salaryTableDataAll[0]"
+          min-width="120px"
+          :label="col.col" :key="index">
+          <template slot-scope="scope">
+            <span>{{scope['row'][index]["val"]}}</span>
+          </template>
+        </el-table-column>
+      </el-table>
       <el-pagination
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
@@ -71,8 +81,8 @@
               <el-radio label="BY_EMP_NO">通过员工工号匹配人员</el-radio>
             </div>
             <div>
-              <el-radio label="BY_PHONE_NO" v-if="importT === 'social'">通过身份证号匹配人员</el-radio>
-              <el-radio label="BY_ID_NO" v-else>通过手机号匹配人员</el-radio>
+              <el-radio label="BY_ID_NO" v-if="importT === 'social'">通过身份证号匹配人员</el-radio>
+              <el-radio label="BY_PHONE_NO" v-else>通过手机号匹配人员</el-radio>
             </div>
           </el-radio-group>
         </div>
@@ -217,18 +227,11 @@
       center
       class="exportSalaryDetailDialog"
     >
-      <div v-show="isShowUserInfo">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="checkedPersonAllChange">人员信息</el-checkbox>
-        <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
-        <el-checkbox-group v-model="checkedPerson" @change="checkedPersonChange">
-          <el-checkbox v-for="item in personOptions" :label="item" :key="item">{{item}}</el-checkbox>
-        </el-checkbox-group>
-      </div>
       <div v-for="(item,index) in diyOption" :key="index" class="diyOptionItem">
         <el-checkbox :indeterminate="isIndeterminates[index]" v-model="checkAlls[index]" @change="handleDiyCheckAllChange(index,item.value)">{{item.title}}</el-checkbox>
         <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
         <el-checkbox-group v-model="diyCheckeds[index]" @change="handleDiyCheckedChange(index,item.value)">
-          <el-checkbox v-for="it in item.value" :label="it" :key="it">{{it}}</el-checkbox>
+          <el-checkbox v-for="(it,index) in item.value" :label="it.id" :key="index">{{it.name}}</el-checkbox>
         </el-checkbox-group>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -239,10 +242,11 @@
   </div>
 </template>
 <script>
-  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem} from '../store/api'
+  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck} from '../store/api'
 export default {
   data() {
     return {
+      salaryTableDataAll:[],
       actionUrl:"",
       downloadLog:"",
       downLoadTemplate:"",
@@ -315,10 +319,13 @@ export default {
       isIndeterminates:{},
       checkAlls:{},
       isShowUserInfo:true,
+      checkStatus:"",
+      checkDisabled:false,//审核禁用
     };
   },
   created(){
     this.loading();
+    this.resetSreen();
   },
   mounted() {
     const that = this;
@@ -346,16 +353,22 @@ export default {
          this.count = salaryData.count;
          this.tableValue = [];
          this.salaryTableData = salaryData.tableData;
-         if(this.salaryTableData.length >0 ){
-           this.tableCol = this.salaryTableData[0]['diyrow'].map(item=>item.col);
-           this.salaryTableData.forEach(item=>{
-             // let row = item['diyrow'].map(it=>it.val);
-             let row = item['diyrow'];
-             this.tableValue.push(row)
-           })
-         }
+         this.salaryTableDataAll = this.salaryTableData.map(item=>item.diyrow);
+         //查看工资表状态
+         this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.salaryForm.checkId).then(res=>{
+           if(res.code === "0000"){
+             this.checkStatus = res.data.checkStatus;
+             console.log(this.checkStatus)
+             this.checkDisabled = this.checkStatus ==='INIT';
+           }
+         })
        }
       })
+    },
+    cellStyle(data){
+      if(data.column.fixed){
+        return "background:#F7F7F7"
+      }
     },
     //选择用工类型
     changeEmployType(val){
@@ -381,9 +394,12 @@ export default {
           let salaryItemData = res.data;
           this.diyOption=[];
           salaryItemData.forEach((item,index)=>{
-            if(item[0].group != "人员信息")
+            if(item)
             {
-              let value = item.map(it =>it.name);
+              console.log(item)
+              let value = item.map(it =>{
+                 return {'name':it.name,'id':it.id}
+              });
               this.diyOption.push({"title":item[0].group, "value":value})
             }
           })
@@ -450,7 +466,7 @@ export default {
     },
     // 导出通过数据
     uploadFile(){
-      let methods = this.importT == "social"?socialProvident:floatItem
+      let methods = this.importT == "social"?socialProvident:floatItem;
         methods({
         uuid:this.uuid,
         id:this.salaryForm.checkId,
@@ -473,7 +489,7 @@ export default {
     showScreen(){
       this.isShowScreen = true;
       //重置筛选条件
-      this.resetSreen();
+      // this.resetSreen();
       //获取个税列表
       apiGetTaxSubjectList(this.id).then(res=>{
         if(res.code == "0000"){
@@ -547,8 +563,31 @@ export default {
       this.showExportSalaryDetail = true;
       this.getSalaryItem();
     },
+    //薪资计算
     handleCalcSalary(){
+      apiSalaryComputes(this.salaryForm.checkId)
+        .then(res=>{
+          if(res.code === "0000"){
+            this.$message.success('薪资计算成功');
+            this.loading()
+          }
+        })
+    },
+  //  薪资审核
+    handleCheckSalary(){
+      let status = this.checkStatus ==='AUDITED'?"UN_AUDIT":"AUDIT";
+      apiAuditSalaryCheck({
+        "checkAuditStatus":status,
+        "checkId": this.salaryForm.checkId
+      })
+        .then(res=>{
+          if(res.code === "0000"){
+            this.$message.success(this.checkStatus ==='AUDITED'?'取消审核成功':"审核成功");
+            this.loading()
+          }
+        })
     }
+
   }
 };
 </script>

@@ -53,13 +53,13 @@ export default {
           { max: 60, message: '', trigger: 'blur' }
         ],
       }
-
     };
   },
   created(){
     apiGetStubs(this.salaryRuleId).then(res=>{
       if(res.code === "0000"){
-        this.stubsItems = res.data.stubsItems
+        this.stubsItems = res.data.stubsItems;
+        this.stubsMsgForm.stubsMsg = res.data.stubsMsg;
         //  初始化导出配置项数据、
         let allId = [];
         let checkedId = [];
@@ -75,7 +75,10 @@ export default {
           this.checkAll = true;//默认全选
         }else{
           if(checkedId.length !=0){
-            this.indeterminate
+            this.isIndeterminateAll = true;
+          }else{
+            this.isIndeterminateAll = false;
+            this.checkAll = false
           }
         }
 
@@ -95,7 +98,9 @@ export default {
           this.$set(this.diyCheckeds, index, itemId);
           this.isIndeterminates[index] = false;
           this.checkAlls[index] = true;
+          this.isIndeterminateAll = false
         })
+
       }else{
         this.stubsItems.forEach((item,index)=>{
           this.$set(this.diyCheckeds, index, []);
@@ -130,10 +135,14 @@ export default {
           stubsMsg:this.stubsMsgForm.stubsMsg,
           itemIds:itemIds
         }).then(res=>{
-          console.log(res)
+         if(res.code === "0000"){
+           this.$emit('changeSatus',false);
+           this.$message.success("设置成功");
+         }
         })
+      }else{
+        this.$message.warning("未选择工资条项目");
       }
-
     },
     cancelSave(){
       this.$emit('changeSatus',false)
