@@ -69,7 +69,6 @@ export default {
     },
     changeActive(data){
       this.active = data;
-
     },
     handlePrve() {
       if (this.active != 0) {

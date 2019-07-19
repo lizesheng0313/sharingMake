@@ -19,12 +19,12 @@
       <div class="left">
         <span class="staff-total">
           人员总数
-          <i class="tatal-number">10</i>人
+          <i class="tatal-number">{{count}}</i>人
         </span>
       </div>
       <div class="right calc-table_menu">
         <span @click="showImport('social')">社会公积金导入</span>
-        <span class="have-border_right" @click="showImport('floatItem')">浮云项导入</span>
+        <span class="have-border_right" @click="showImport('floatItem')">浮动项导入</span>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             更多功能
@@ -227,18 +227,11 @@
       center
       class="exportSalaryDetailDialog"
     >
-      <div v-show="isShowUserInfo">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="checkedPersonAllChange">人员信息</el-checkbox>
-        <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
-        <el-checkbox-group v-model="checkedPerson" @change="checkedPersonChange">
-          <el-checkbox v-for="item in personOptions" :label="item" :key="item">{{item}}</el-checkbox>
-        </el-checkbox-group>
-      </div>
       <div v-for="(item,index) in diyOption" :key="index" class="diyOptionItem">
         <el-checkbox :indeterminate="isIndeterminates[index]" v-model="checkAlls[index]" @change="handleDiyCheckAllChange(index,item.value)">{{item.title}}</el-checkbox>
         <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
         <el-checkbox-group v-model="diyCheckeds[index]" @change="handleDiyCheckedChange(index,item.value)">
-          <el-checkbox v-for="it in item.value" :label="it" :key="it">{{it}}</el-checkbox>
+          <el-checkbox v-for="(it,index) in item.value" :label="it.id" :key="index">{{it.name}}</el-checkbox>
         </el-checkbox-group>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -332,6 +325,7 @@ export default {
   },
   created(){
     this.loading();
+    this.resetSreen();
   },
   mounted() {
     const that = this;
@@ -368,14 +362,6 @@ export default {
              this.checkDisabled = this.checkStatus ==='INIT';
            }
          })
-         // if(this.salaryTableData.length >0 ){
-         //   this.tableCol = this.salaryTableData[0]['diyrow'].map(item=>item.col);
-         //   this.salaryTableData.forEach(item=>{
-         //     // let row = item['diyrow'].map(it=>it.val);
-         //     let row = item['diyrow'];
-         //     this.tableValue.push(row)
-         //   })
-         // }
        }
       })
     },
@@ -408,9 +394,12 @@ export default {
           let salaryItemData = res.data;
           this.diyOption=[];
           salaryItemData.forEach((item,index)=>{
-            if(item[0].group != "人员信息")
+            if(item)
             {
-              let value = item.map(it =>it.name);
+              console.log(item)
+              let value = item.map(it =>{
+                 return {'name':it.name,'id':it.id}
+              });
               this.diyOption.push({"title":item[0].group, "value":value})
             }
           })
@@ -477,7 +466,7 @@ export default {
     },
     // 导出通过数据
     uploadFile(){
-      let methods = this.importT == "social"?socialProvident:floatItem
+      let methods = this.importT == "social"?socialProvident:floatItem;
         methods({
         uuid:this.uuid,
         id:this.salaryForm.checkId,
@@ -500,7 +489,7 @@ export default {
     showScreen(){
       this.isShowScreen = true;
       //重置筛选条件
-      this.resetSreen();
+      // this.resetSreen();
       //获取个税列表
       apiGetTaxSubjectList(this.id).then(res=>{
         if(res.code == "0000"){

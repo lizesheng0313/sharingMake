@@ -46,21 +46,19 @@
                 </div>
                 <p class="cycle">
                   算薪周期： <span>{{item.startDate|resetDate}}~ {{item.endDate|resetDate}}</span>
-                  <span class="calc-type">{{item.salaryCheckStatus|salaryCheckStatus}}</span>
+                  <span class="calc-type">{{item.salaryCheckStatus}}</span>
                 </p>
                 <p>计税规则： {{item.taxRule|texRule}}</p>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="start-calc">
-                <el-select placeholder="请选择" v-model="selectUsedForm[item.salaryRuleId]" class="number-payday" v-show="item.salaryRule.enableMiltSalary" @change="changePayth(index,selectUsedForm[item.salaryRuleId],item)">
+                <el-select placeholder="请选择" v-model="selectUsedForm[item.salaryRuleId]" class="number-payday" v-show="showSelect(item)" @change="changePayth(index,selectUsedForm[item.salaryRuleId],item)">
                   <el-option v-for="(it,index) in item.payInfos" :key="index" :label="it.dec" :value="it.salaryCheckStatus"
                   ></el-option>
                 </el-select>
-                <div v-show="item.salaryCheckStatus === 'NONE'">
-                  <el-button type="primary" @click="InitCalcSalary(item)">启动算薪</el-button>
-                  <p>启动算薪时，系统根据算薪范围生成本月计薪人员</p>
-                </div>
+                <el-button type="primary" @click="InitCalcSalary(item)" v-show="item.salaryCheckStatus === 'NONE'">启动算薪</el-button>
+                <p v-show="item.salaryCheckStatus === 'NONE'">启动算薪时，系统根据算薪范围生成本月计薪人员</p>
                 <el-button type="primary" @click="calcSalary(item)" v-show="item.salaryCheckStatus === 'INIT'">计算薪资</el-button>
                 <el-button type="primary" @click="seeCalcSalary(item)" v-show="item.salaryCheckStatus === 'COMPUTED' || item.salaryCheckStatus === 'AUDITED' || item.salaryCheckStatus === 'FINISH' || item.salaryCheckStatus === 'PAID'">查看薪资</el-button>
               </div>
@@ -125,7 +123,7 @@ export default {
     },
     ...mapState("salaryCalStore", {
       IndexCurrentDate: "IndexCurrentDate",
-    })
+    }),
   },
   created(){
     //默认日期
@@ -153,6 +151,9 @@ export default {
         });
       })
     },
+    showSelect:function(item){
+      return item.salaryRule.enableMiltSalary || item.payInfos?item.payInfos.length>0:false
+    },
     //选择时间
     changeDate(){
       //记录当前选择的时间
@@ -160,6 +161,7 @@ export default {
       this.getDate()
     },
     goSalarySet(){
+      this.$store.commit("salaryCalStore/SET_ROULEID",null);
       this.$router.push("/salarySet")
     },
     //设置薪资

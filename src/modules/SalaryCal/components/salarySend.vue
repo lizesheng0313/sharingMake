@@ -133,7 +133,7 @@
           "payStubsStatus": status,
         }).then(res=>{
           if(res.code === "0000"){
-            this.$message.success(status === 'PROVIDED'?'全部发放成功':'全部撤销成功');
+            this.$message.success((status === 'PROVIDED'?'发放成功':'撤销成功')+res.data.successCount+'条');
             this.loading()
           }else{
             this.$message.error(res.message);
@@ -181,6 +181,7 @@
       //返回
       goBack(){
         this.$emit("changeActive",2);
+        this.$router.push({path:"/salaryCheck",query:{id:this.salaryForm.checkId,active:2,salaryRuleId:this.$route.query.salaryRuleId}})
       }
     }
   };

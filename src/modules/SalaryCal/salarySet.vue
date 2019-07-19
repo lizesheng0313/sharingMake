@@ -322,6 +322,8 @@ export default {
                 this.ruleId = res.data.id;
                 this.$store.commit("salaryCalStore/SET_ROULEID", res.data.id);
                 this.salaryItemDisabled = false;
+                this.$store.commit("salaryCalStore/SET_BASICINFOFORM",this.basicInfoForm);
+                this.$message.success('设置成功');
                 //基本信息成功跳转到第二步
                 // this.activeName = "secend";
                 this.onTabClick()

@@ -91,6 +91,7 @@ export default {
       apiProvideStubs(this.checkId).then(res=>{
         if(res.code === "0000"){
           this.$emit("changeActive",3)
+          this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:3,salaryRuleId:this.$route.query.salaryRuleId}})
         }else{
           this.$message.error(res.message)
         }
@@ -99,6 +100,7 @@ export default {
     //查看记录
     seeRecord(){
       this.$emit("changeActive",3)
+      this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:3,salaryRuleId:this.$route.query.salaryRuleId}})
     },
     //删除发放
     deleteSalary(){
