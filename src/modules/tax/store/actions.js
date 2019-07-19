@@ -1,4 +1,4 @@
-import { apiEmpCollectList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport } from './api'
+import { apiEmpCollectList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxSubjectInfoList} from './api'
 
 /*个税-人员采集*/
 
@@ -13,6 +13,10 @@ export const actionSaveEmpCollectInfo = ({ dispatch }, employeeFormData) => {
 //人员采集-报送
 export const actionReport = ({ dispatch }, reportForm) => {
     return apiReport(reportForm)
+}
+//纳税主体集合
+export const actionTaxSubjectInfoList = ({ dispatch }) => {
+    return apiTaxSubjectInfoList()
 }
 
 

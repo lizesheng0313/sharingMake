@@ -30,6 +30,16 @@ export function apiReport(reportForm) {
 }
 
 
+//纳税主体集合
+export function apiTaxSubjectInfoList() {
+  return fetch({
+    url: '/api/taxReport/getTaxSubjectInfoList',
+    method: 'get',
+  })
+}
+
+
+
 
 
 

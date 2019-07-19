@@ -24,8 +24,8 @@ export const empStatus = {
 export const iscgl =
 {
   "": '不限',
-  'Y': '是',
-  'N': '否'
+  "Y": '是',
+  "N": '否'
 }
 //雇员状态
 export const workerType = {

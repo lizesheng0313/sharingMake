@@ -48,26 +48,33 @@
               纳税主体：
               <el-dropdown trigger="click">
                 <el-button type="text">
-                  <em>懒猫联银科技有限公司</em>
+                  <em>{{currentTaxSubName}}</em>
                   <em class="iconsanjiao iconfont"></em>
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>懒猫联银科技有限公司</el-dropdown-item>
-                  <el-dropdown-item>北京阿拉钉科技有限公司</el-dropdown-item>
+                  <el-dropdown-item
+                    v-for="(item,index) in taxSubjectInfolist"
+                    :key="index"
+                    @click.native="handleCheckTaxSubject(item)"
+                  >{{item.taxSubName}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </span>
             <span class="staff-total">
-              人员总数
-              <i>{{total}}</i>人
+              正常
+              <i>{{normalCount}}</i>人
             </span>
             <span>
-              本月：入职
+              本月：新增
               <i>{{increaseCount}}</i>人
             </span>
-            <span>
-              调动
+            <span class="staff-total">
+              减少
               <i>{{decreaseCount}}</i>人
+            </span>
+            <span>
+              待报送
+              <i>{{awaitReportCount}}</i>人
             </span>
           </div>
           <div class="staff-table">
@@ -158,7 +165,7 @@
             </el-col>
           </el-row>
           <el-row type="flex" class="screening-box" align="middle">
-            <el-col :span="6">是否孤烈</el-col>
+            <el-col :span="6">是否残孤烈</el-col>
             <el-col>
               <span
                 v-for="(value,key,index) in screening.iscgl"
@@ -236,10 +243,15 @@ export default {
         reportFinishTimeEnd: "",
         reportFinishTimeStart: "",
         reportStatus: [],
-        workerType: []
+        workerType: [],
+        taxSubjectId: ""
       },
+      taxSubjectInfolist: [],
+      currentTaxSubName: "",
       increaseCount: 0,
       decreaseCount: 0,
+      awaitReportCount: 0,
+      normalCount: 0,
       total: 0,
       idValidStatus: true,
       reportStatus: true,
@@ -255,8 +267,8 @@ export default {
     };
   },
   mounted() {
+    this.getTaxSubjectInfoList();
     this.formatQuerymonth(this.selectMonth);
-    this.getList();
     const that = this;
     window.onresize = () => {
       return (() => {
@@ -266,6 +278,23 @@ export default {
     };
   },
   methods: {
+    //纳税主体集合
+    getTaxSubjectInfoList() {
+      this.$store
+        .dispatch("taxPageStore/actionTaxSubjectInfoList")
+        .then(res => {
+          if (res.success) {
+            this.taxSubjectInfolist = res.data;
+            this.ruleForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
+            this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
+            this.getList();
+          }
+        });
+    },
+    handleCheckTaxSubject(item) {
+      this.ruleForm.taxSubjectId = item.taxSubId;
+      this.currentTaxSubName = item.taxSubName;
+    },
     formatQuerymonth(defaultDate) {
       let currentDate = defaultDate.replace("年", "-");
       this.ruleForm.queryMonth = currentDate.replace("月", "");
@@ -343,10 +372,13 @@ export default {
         .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
         .then(res => {
           if (res.success) {
+            
             this.total = res.data.count;
             this.list = res.data.data;
             this.increaseCount = res.data.increaseCount;
             this.decreaseCount = res.data.decreaseCount;
+            this.awaitReportCount = res.data.awaitReportCount;
+            this.normalCount = res.data.normalCount;
           }
         });
     },
