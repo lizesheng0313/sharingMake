@@ -108,6 +108,14 @@ export function apiSalaryList(form) {
     data:form
   })
 }
+//薪资核算合计
+export function apiSalarySum(form) {
+  return fetch({
+    url: '/api/salary/salaryCheck/salarySum',
+    method: 'post',
+    data:form
+  })
+}
 //纳税主体列表
 export function apiGetTaxSubjectList() {
   return fetch({

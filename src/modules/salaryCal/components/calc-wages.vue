@@ -38,13 +38,14 @@
       </div>
     </div>
     <div class="staff-table">
-      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}" :summary-method="getSummaries" show-summary>
+      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}" width="100%">
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
           min-width="120px"
           :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="col.col == '序号' || col.col == '姓名' || col.col == '工号' || col.col == '部门'">
           <template slot-scope="scope">
-            <span>{{scope['row'][index]["val"]}}</span>
+            <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>
+            <span v-else> <el-switch v-model="showCount"></el-switch> </span>
           </template>
         </el-table-column>
       </el-table>
@@ -321,13 +322,19 @@ export default {
       isShowUserInfo:true,
       checkStatus:"",
       checkDisabled:false,//审核禁用
+      tableAllData:[],
+      showCount:false
     };
   },
   created(){
     this.loading();
     this.resetSreen();
     this.salaryForm.queryFilterParam.lastEmployEndTime = ""
-
+  },
+  watch:{
+    showCount:function(){
+     this.salaryTableDataAll[this.salaryTableDataAll.length-1]=(this.showCount?this.countData:this.noCountData)
+    }
   },
   mounted() {
     const that = this;
@@ -356,15 +363,33 @@ export default {
          this.tableValue = [];
          this.salaryTableData = salaryData.tableData;
          this.salaryTableDataAll = this.salaryTableData.map(item=>item.diyrow);
-         //查看工资表状态
-         this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.salaryForm.checkId).then(res=>{
+         // 查看合计
+         this.$store.dispatch('salaryCalStore/actionPostSalarySum',this.salaryForm).then(res=>{
            if(res.code === "0000"){
-             this.checkStatus = res.data.checkStatus;
-             console.log(this.checkStatus)
-             this.checkDisabled = this.checkStatus ==='INIT';
+             this.countData = res.data.tableData[0]['diyrow']
+             this.noCountData = [];
+             this.countData.forEach(item=>{
+               let obj={}
+               if(item.col =="序号" || item.col == "姓名"){
+                  obj = {"col":item.col,"val":item.val,"floatItem":item.floatItem}
+               }else{
+                 obj = {"col":item.col,"val":"--","floatItem":item.floatItem}
+               }
+               this.noCountData.push(obj)
+             });
+             this.salaryTableDataAll.push(this.noCountData);
+           }else{
+             this.$message.error(res.message)
            }
          })
        }
+      })
+      //查看工资表状态
+      this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.salaryForm.checkId).then(res=>{
+        if(res.code === "0000"){
+          this.checkStatus = res.data.checkStatus;
+          this.checkDisabled = this.checkStatus ==='INIT';
+        }
       })
     },
     cellStyle(data){
@@ -372,31 +397,6 @@ export default {
       ){
         return "background:#F7F7F7"
       }
-    },
-    getSummaries(param) {
-      const { columns, data } = param;
-      const sums = [];
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = ` `;
-          return;
-        }
-        if (index === 1) {
-          sums[index] = '总计';
-          return;
-        }
-        let reData = []
-        data.forEach((item)=>{
-          if(item){reData.push(item.map(it=>it.val))}
-        })
-        const values = reData.map(item => Number(item));
-        if (values.every(value => isNaN(value))) {
-          sums[index] = index;
-        } else {
-          sums[index] = '--';
-        }
-      });
-      return sums;
     },
     //选择用工类型
     changeEmployType(val){
