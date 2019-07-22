@@ -140,8 +140,7 @@
         <a :href="' /api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="importFinish">确定</el-button>
-        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>
+        <el-button type="primary" @click="importFinish">我知道了12312</el-button>
       </span>
     </el-dialog>
     <!-- 筛选-->

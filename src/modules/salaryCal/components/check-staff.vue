@@ -113,7 +113,7 @@
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
         :current-page="userForm.currPage"
-        :page-sizes="[1, 50, 100, 200]"
+        :page-sizes="[20, 50, 100, 200]"
         :page-size="userForm.pageSize"
         layout="total, sizes, prev, pager, next"
         :total="count">
@@ -179,8 +179,8 @@
       <div>导入成功<span style="color:#06B806">{{this.importFinishForm.successCount}}</span>条数据,<span style="color:red">{{this.importFinishForm.failCount}}</span>条数据导入未通过，忽略导入</div>
       <div><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="importMemberFinish">确定</el-button>
-        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>
+        <el-button type="primary" @click="importMemberFinish">我知道了</el-button>
+<!--        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>-->
       </span>
     </el-dialog>
   </div>
@@ -207,7 +207,7 @@ export default {
         "checkId":this.$route.query.id,
         "currPage": 1,
         "key": "",
-        "pageSize":1 ,
+        "pageSize":20 ,
       },
       userList:[],
       count:0,
@@ -263,7 +263,7 @@ export default {
         })
     },
     handleDelete(id) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+      this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -278,7 +278,7 @@ export default {
               this.loading()
             }
           })
-        })
+        }).catch(() => {});
     },
     //切换pageId
     handleCurrentChange(val){
