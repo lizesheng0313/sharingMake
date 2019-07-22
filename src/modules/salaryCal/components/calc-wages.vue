@@ -227,6 +227,13 @@
       center
       class="exportSalaryDetailDialog"
     >
+      <div v-show="isShowUserInfo">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="checkedPersonAllChange">人员信息</el-checkbox>
+        <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
+        <el-checkbox-group v-model="checkedPerson" @change="checkedPersonChange">
+          <el-checkbox v-for="item in personOptions" :label="item" :key="item">{{item}}</el-checkbox>
+        </el-checkbox-group>
+      </div>
       <div v-for="(item,index) in diyOption" :key="index" class="diyOptionItem">
         <el-checkbox :indeterminate="isIndeterminates[index]" v-model="checkAlls[index]" @change="handleDiyCheckAllChange(index,item.value)">{{item.title}}</el-checkbox>
         <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
@@ -396,11 +403,12 @@ export default {
           salaryItemData.forEach((item,index)=>{
             if(item)
             {
-              console.log(item)
-              let value = item.map(it =>{
-                 return {'name':it.name,'id':it.id}
-              });
-              this.diyOption.push({"title":item[0].group, "value":value})
+              if(item[0]['group'] != "人员信息"){
+                let value = item.map(it =>{
+                  return {'name':it.name,'id':it.id}
+                });
+                this.diyOption.push({"title":item[0].group, "value":value})
+              }
             }
           })
           //  初始化导出配置项数据、
@@ -543,13 +551,13 @@ export default {
     },
     //导出工资表明细（提交）
     onExportSalaryItem(){
-      let selectItem = this.isShowUserInfo? [].concat(this.checkedPerson):[];
+      let exportItems = []
       for(let key in this.diyCheckeds){
-        selectItem = selectItem.concat(this.diyCheckeds[key])
+        exportItems = exportItems.concat(this.diyCheckeds[key])
       }
-      let methods = this.exportType === 'salaryDetail'?apiSalaryDetailExport :apiSalaryDetailExport
-      methods({
-      "exportItems":selectItem,
+      apiSalaryDetailExport({
+      "exportPersonItems":this.checkedPerson,
+      "exportItems":exportItems,
       "queryParam":this.salaryForm
       }).then(res=>{
         if(res.status == "200"){
