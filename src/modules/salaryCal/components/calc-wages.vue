@@ -48,7 +48,7 @@
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
           min-width="120px"
-          :label="col.col" :key="index">
+          :label="col.col" :key="index" :resizable = "!col.floatItem">
           <template slot-scope="scope">
             <span>{{scope['row'][index]["val"]}}</span>
           </template>
@@ -333,6 +333,8 @@ export default {
   created(){
     this.loading();
     this.resetSreen();
+    this.salaryForm.queryFilterParam.lastEmployEndTime = ""
+
   },
   mounted() {
     const that = this;
@@ -373,13 +375,13 @@ export default {
       })
     },
     cellStyle(data){
-      if(data.column.fixed){
+      if(data.column.resizable
+      ){
         return "background:#F7F7F7"
       }
     },
     //选择用工类型
     changeEmployType(val){
-      console.log(val)
       if(val.length>0){
         this.noEnumEmpType = "";
         this.salaryForm.queryFilterParam.enumEmpType= val;
@@ -446,7 +448,6 @@ export default {
       this.importT = type;
       this.actionUrl = type == "social"?"/api/salary/socialProvident/verify":"/api/salary/floatItem/verify";
       this.isShowImport = true;
-      // console.log(this.action)
     },
     //文件上传前校验
     beforeAvatarUpload(file) {
@@ -506,6 +507,8 @@ export default {
       apiGetTaxSubjectList(this.id).then(res=>{
         if(res.code == "0000"){
           this.screenTaxOption = res.data;
+        }else{
+          this.$message.error(res.message)
         }
       })
     },
@@ -520,7 +523,6 @@ export default {
         this.salaryForm["queryFilterParam"][key] = "";
       }
       this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
-      this.salaryForm.queryFilterParam.lastEmployEndTime = this.nowDate;
       this.noEnumEmpType = null;
       this.enumEmpType = [];
       this.salaryForm.queryFilterParam.enumEmpType = ["null"];
@@ -596,6 +598,8 @@ export default {
           if(res.code === "0000"){
             this.$message.success(this.checkStatus ==='AUDITED'?'取消审核成功':"审核成功");
             this.loading()
+          }else{
+            this.$message.error(res.message)
           }
         })
     }

@@ -152,7 +152,7 @@
         <div v-show="uuid" style="margin:15px 0 0 28px">
           <span v-if="failCount === 0"><i class="el-icon-success"></i>全部导入成功</span>
           <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
-          <span v-if="successCount === 0">数据全部未通过校验</span>
+          <span v-if="successCount === 0"><i class="el-icon-error">数据全部未通过校验</i></span>
           <span><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></span>
         </div>
         <p>
@@ -426,12 +426,7 @@ export default {
     .title{
       font-size: 20px;
     }
-    .el-icon-success{
-      color:#06B806;
-      font-size: 20px;
-      display: inline-block;
-      margin-right: 10px;
-    }
+    .el-icon-success{color:#06B806;}
     div{
       width: 300px;
       margin: 0 auto;
