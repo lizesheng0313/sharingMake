@@ -412,6 +412,10 @@ export default {
             }
           })
           //  初始化导出配置项数据、
+            //人员信息
+          this.checkedPerson = [];
+          this.isIndeterminate = false;
+           // 配置项
           this.diyOption.forEach((item,index)=>{
             this.$set(this.diyCheckeds, index, []);
             this.isIndeterminates[index] = false;
