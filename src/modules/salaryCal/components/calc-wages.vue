@@ -38,17 +38,11 @@
       </div>
     </div>
     <div class="staff-table">
-<!--      <el-row type="flex" class="row-bg tableHeader">-->
-<!--        <el-col v-for="(item,index) in tableCol"  :span="index === 0 ?1:3"><div class="grid-content bg-purple">{{item}}</div></el-col>-->
-<!--      </el-row>-->
-<!--      <el-row type="flex" class="row-bg" v-for="per in tableValue">-->
-<!--        <el-col v-for="(it,index) in per" :span="index === 0 ?1:3" :style="{background:(it.floatItem?'#F1F3F6':'')}"><div class="grid-content bg-purple">{{ it.val }}</div></el-col>-->
-<!--      </el-row>-->
-      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}">
+      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}" :summary-method="getSummaries" show-summary>
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
           min-width="120px"
-          :label="col.col" :key="index" :resizable = "!col.floatItem">
+          :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="col.col == '序号' || col.col == '姓名' || col.col == '工号' || col.col == '部门'">
           <template slot-scope="scope">
             <span>{{scope['row'][index]["val"]}}</span>
           </template>
@@ -140,7 +134,7 @@
         <a :href="' /api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="importFinish">我知道了12312</el-button>
+        <el-button type="primary" @click="importFinish">我知道了</el-button>
       </span>
     </el-dialog>
     <!-- 筛选-->
@@ -379,6 +373,31 @@ export default {
         return "background:#F7F7F7"
       }
     },
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = ` `;
+          return;
+        }
+        if (index === 1) {
+          sums[index] = '总计';
+          return;
+        }
+        let reData = []
+        data.forEach((item)=>{
+          if(item){reData.push(item.map(it=>it.val))}
+        })
+        const values = reData.map(item => Number(item));
+        if (values.every(value => isNaN(value))) {
+          sums[index] = index;
+        } else {
+          sums[index] = '--';
+        }
+      });
+      return sums;
+    },
     //选择用工类型
     changeEmployType(val){
       if(val.length>0){
@@ -551,7 +570,7 @@ export default {
       this.$forceUpdate();
     },
     handleDiyCheckAllChange(index,value) {
-      this.diyCheckeds[index] = this.checkAlls[index] ? value : [];
+      this.diyCheckeds[index] = this.checkAlls[index] ? value.map(item=>item.id) : [];
       this.isIndeterminates[index] = false;
     },
     //导出工资表明细（提交）
