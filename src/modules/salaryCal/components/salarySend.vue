@@ -29,15 +29,15 @@
     <div class="staff-situation">
       <span class="staff-total">
         总人数
-        <i>{{this.total?this.total:"--"}}</i>人
+        <i>{{this.total || this.total === 0?this.total:"--"}}</i>人
       </span>
       <span>
         未发放
-        <i>{{this.un_send ? this.un_send:"--" }}</i>人
+        <i>{{this.un_send || this.un_send === 0?this.un_send:'--'}}</i>人
       </span>
       <span>
         已发放
-        <i>{{this.send ? this.send:"--"}}</i>人
+        <i>{{this.send || this.send===0 ? this.send:"--"}}</i>人
       </span>
     </div>
     <div class="staff-table">
@@ -111,7 +111,7 @@
             this.count = res.data.tableData.count;
             this.total = res.data.tableData.count;
             this.send = res.data.SEND;
-            this.un_send = res.data.un_send;
+            this.un_send = res.data.UN_SEND;
             this.salaryList = res.data.tableData.tableData.map(item=>item.diyrow)
             this.salaryLoading = false;
           }

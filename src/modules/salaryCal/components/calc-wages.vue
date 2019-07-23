@@ -322,6 +322,7 @@ export default {
       isShowUserInfo:true,
       checkStatus:"",
       checkDisabled:false,//审核禁用
+      salaryDisabled:false,//计算薪资禁用
       tableAllData:[],
       showCount:true,
       tableLoading:false
