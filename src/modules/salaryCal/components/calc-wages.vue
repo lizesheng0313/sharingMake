@@ -346,6 +346,7 @@ export default {
         that.screenWidth = window.screenWidth;
       })();
     };
+    this.$store.commit("salaryCalStore/SET_ROULEID", this.salaryRuleId);
   },
   computed:{
     nowDate:function () {
@@ -608,7 +609,8 @@ export default {
       })
     },
     //导出部门汇总
-    exportDepartTotal(){
+    exportDepartTotal(type){
+      this.exportType = type;
       this.isShowUserInfo = false;
       this.showExportSalaryDetail = true;
       this.getSalaryItem();

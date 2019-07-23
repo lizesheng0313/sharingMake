@@ -274,9 +274,8 @@ export default {
     }
   //  薪资项目
     if(this.selectStep === 2){
-      this.activeName = "seconed";
-      this.getSalaryItem(this.ruleId)
-
+      this.activeName = "secend";
+      this.onTabClick()
     }
   },
   methods:{
