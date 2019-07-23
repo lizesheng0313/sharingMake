@@ -53,7 +53,7 @@
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
         :current-page="salaryForm.currPage"
-        :page-sizes="[10, 50, 100, 200]"
+        :page-sizes="[20, 50, 100, 200]"
         :page-size="salaryForm.pageSize"
         layout="total, sizes, prev, pager, next"
         :total="count"
@@ -243,7 +243,7 @@
   </div>
 </template>
 <script>
-  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck} from '../store/api'
+  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
 export default {
   data() {
     return {
@@ -288,7 +288,7 @@ export default {
         checkId:this.$route.query.id,
         key:"",
         currPage:1,
-        pageSize:10,
+        pageSize:20,
         queryFilterParam:{
           taxSubId:"",
           departmentName:"",//部门
@@ -590,8 +590,8 @@ export default {
     onExportSalaryItem(){
       console.log()
       let exportItems = []
-      let methed = this.exportType === "salaryDetail" ? apiSalaryDetailExport:apiSalaryDetailExport;
-      let form = this.exportType === "salaryDetail"?{"exportPersonItems":this.checkedPerson, "exportItems":exportItems, "queryParam":this.salaryForm}:{};
+      let methed = this.exportType === "salaryDetail" ? apiSalaryDetailExport:apiExportDepartSum;
+      // let form = this.exportType === "salaryDetail"?{"exportPersonItems":this.checkedPerson, "exportItems":exportItems, "queryParam":this.salaryForm}:{};
       for(let key in this.diyCheckeds){
         exportItems = exportItems.concat(this.diyCheckeds[key])
       }

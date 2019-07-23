@@ -131,6 +131,14 @@ export function apiSalaryDetailExport(form) {
     data:form
   })
 }
+//导出部门明细
+export function apiExportDepartSum(form) {
+  return fetchFile({
+    url: '/api/salary/salaryCheck/exportDepartSum',
+    method: 'post',
+    data:form
+  })
+}
 //获取工资表配置项中已启动的项目
 export function apiSalaryItemEnableInfo(id) {
   return fetch({

@@ -243,7 +243,8 @@ export default {
       salaryItemDisabled:true,
       tableData:[],
       salaryItemLoding:false,
-      isEdit: this.$route.query.isEdit
+      isEdit: this.$route.query.isEdit,
+      selectStep: this.$route.query.selectStep,
     };
   },
   components: {
@@ -254,6 +255,8 @@ export default {
       rouleId: "rouleId",
       sendBasicInfoForm:"basicInfoForm"
     })
+  },
+  watch:{
   },
   mounted(){
    // 初始化算新周期日
@@ -268,6 +271,12 @@ export default {
       for(let key in this.basicInfoForm){
         this.basicInfoForm[key] = this.sendBasicInfoForm[key];
       }
+    }
+  //  薪资项目
+    if(this.selectStep === 2){
+      this.activeName = "seconed";
+      this.getSalaryItem(this.ruleId)
+
     }
   },
   methods:{

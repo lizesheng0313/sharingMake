@@ -13,7 +13,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>累计专项附加扣除</el-dropdown-item>
               <el-dropdown-item>累计应税所得初始化</el-dropdown-item>
-              <el-dropdown-item>设置工资表</el-dropdown-item>
+              <el-dropdown-item @click.native="salarySet">设置工资表</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -79,7 +79,14 @@ export default {
       if (this.active != 2) {
         this.active++;
       }
+    },
+  //  设置工资表
+    salarySet(){
+      this.$router.push({path:'/salarySet',query:{'selectStep':2}});
+      // console.log(this.$route.query)
+      // // this.$store.commit("salaryCalStore/SET_ROULEID", this.$router.query.id);
     }
+
   }
 };
 </script>
