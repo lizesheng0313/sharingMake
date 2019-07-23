@@ -20,7 +20,7 @@
       </div>
       <div class="line"></div>
       <div class="salary-tip">工资条说明<span class="title-tip">(将显示在员工的工资条最后)</span></div>
-      <el-form :model="stubsMsgForm" :rules="rules" ref="stubsMsgForm"  class="demo-ruleForm">
+      <el-form :model="stubsMsgForm" ref="stubsMsgForm" :rules="rules"   class="demo-ruleForm">
         <el-form-item  prop="stubsMsg">
           <el-input  type="textarea" v-model="stubsMsgForm.stubsMsg" placeholder="温馨提示：工资条属于敏感信息，请保密"></el-input>
         </el-form-item>
@@ -50,7 +50,7 @@ export default {
       },
       rules:{
         stubsMsg: [
-          { max: 60, message: '', trigger: 'blur' }
+          { max: 60, message: '内容过长', trigger: 'blur' }
         ],
       }
     };
@@ -122,7 +122,7 @@ export default {
       this.$forceUpdate();
     },
     handleSave(){
-      this.refs["stubsMsgForm"].validate(val=>{
+      this.$refs['stubsMsgForm'].validate((val)=>{
         if(val){
           let itemIds = "";
           for(let key in this.diyCheckeds){
@@ -147,7 +147,7 @@ export default {
           }
         }
       })
-
+      console.log(this.$refs['stubsMsgForm'].validate)
     },
     cancelSave(){
       this.$emit('changeSatus',false)

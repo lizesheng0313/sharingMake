@@ -90,7 +90,7 @@ export default {
     sendSalary(){
       apiProvideStubs(this.checkId).then(res=>{
         if(res.code === "0000"){
-          this.$emit("changeActive",3)
+          this.$emit("changeActive",3);
           this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:3,salaryRuleId:this.$route.query.salaryRuleId}})
         }else{
           this.$message.error(res.message)
