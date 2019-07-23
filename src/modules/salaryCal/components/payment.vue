@@ -104,14 +104,21 @@ export default {
     },
     //删除发放
     deleteSalary(){
-      apiDeleteStubs(this.checkId).then(res=>{
-        if(res.code === "0000"){
-          this.$message.success('删除成功');
-          this._loading()
-        }else{
-          this.$message.error(res.message);
-        }
-      })
+      this.$confirm('您确定要删除已发放工资条,删除后，需重新发放后员工才可查看工资条', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        apiDeleteStubs(this.checkId).then(res=>{
+          if(res.code === "0000"){
+            this.$message.success('删除成功');
+            this._loading()
+          }else{
+            this.$message.error(res.message);
+          }
+        })
+      }).catch(() => {});
     }
   }
 };

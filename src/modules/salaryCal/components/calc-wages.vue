@@ -11,7 +11,7 @@
         @keyup.enter.native="searchSalary"
       ></el-input>
       <div class="right">
-        <el-button type="primary" @click="handleCalcSalary">薪资计算</el-button>
+        <el-button type="primary" @click="handleCalcSalary" :disabled="salaryDisabled">薪资计算</el-button>
         <el-button type="default" @click="handleCheckSalary" :disabled="checkDisabled">{{this.checkStatus === "AUDITED"?"取消审核":"薪资审核"}}</el-button>
       </div>
     </div>
@@ -38,14 +38,14 @@
       </div>
     </div>
     <div class="staff-table">
-      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}" width="100%">
+      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}" width="100%" v-loading="tableLoading">
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
           min-width="120px"
           :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="col.col == '序号' || col.col == '姓名' || col.col == '工号' || col.col == '部门'">
           <template slot-scope="scope">
             <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>
-            <span v-else> <el-switch v-model="showCount"></el-switch> </span>
+<!--            <span v-else> <el-switch v-model="showCount"></el-switch> </span>-->
           </template>
         </el-table-column>
       </el-table>
@@ -323,7 +323,8 @@ export default {
       checkStatus:"",
       checkDisabled:false,//审核禁用
       tableAllData:[],
-      showCount:false
+      showCount:true,
+      tableLoading:false
     };
   },
   created(){
@@ -356,6 +357,7 @@ export default {
   },
   methods: {
     loading(){
+      this.tableLoading = true;
       apiSalaryList(this.salaryForm).then(res=>{
        if(res.code === "0000"){
          let salaryData = res.data;
@@ -367,17 +369,22 @@ export default {
          this.$store.dispatch('salaryCalStore/actionPostSalarySum',this.salaryForm).then(res=>{
            if(res.code === "0000"){
              this.countData = res.data.tableData[0]['diyrow']
-             this.noCountData = [];
              this.countData.forEach(item=>{
-               let obj={}
-               if(item.col =="序号" || item.col == "姓名"){
-                  obj = {"col":item.col,"val":item.val,"floatItem":item.floatItem}
-               }else{
-                 obj = {"col":item.col,"val":"--","floatItem":item.floatItem}
-               }
-               this.noCountData.push(obj)
-             });
-             this.salaryTableDataAll.push(this.noCountData);
+               if(item.col==="序号"){item.val="合计"}
+               if(item.col == '姓名'){item.val = null}
+             })
+             // this.noCountData = [];
+             // this.countData.forEach(item=>{
+             //   let obj={}
+             //   if(item.col =="序号" || item.col == "姓名"){
+             //      obj = {"col":item.col,"val":item.val,"floatItem":item.floatItem}
+             //   }else{
+             //     obj = {"col":item.col,"val":"--","floatItem":item.floatItem}
+             //   }
+             //   this.noCountData.push(obj)
+             // });
+             this.salaryTableDataAll.push(this.countData);
+             this.tableLoading = false
            }else{
              this.$message.error(res.message)
            }
@@ -385,10 +392,15 @@ export default {
        }
       })
       //查看工资表状态
+     this.getSalaryStatus()
+    },
+    //查看工资表状态
+    getSalaryStatus(){
       this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.salaryForm.checkId).then(res=>{
         if(res.code === "0000"){
           this.checkStatus = res.data.checkStatus;
           this.checkDisabled = this.checkStatus ==='INIT';
+          this.salaryDisabled = this.checkStatus ==='AUDITED'
         }
       })
     },
@@ -575,17 +587,22 @@ export default {
     },
     //导出工资表明细（提交）
     onExportSalaryItem(){
+      console.log()
       let exportItems = []
+      let methed = this.exportType === "salaryDetail" ? apiSalaryDetailExport:apiSalaryDetailExport;
+      let form = this.exportType === "salaryDetail"?{"exportPersonItems":this.checkedPerson, "exportItems":exportItems, "queryParam":this.salaryForm}:{};
       for(let key in this.diyCheckeds){
         exportItems = exportItems.concat(this.diyCheckeds[key])
       }
-      apiSalaryDetailExport({
+      methed({
       "exportPersonItems":this.checkedPerson,
       "exportItems":exportItems,
       "queryParam":this.salaryForm
       }).then(res=>{
         if(res.status == "200"){
           this.showExportSalaryDetail = false;
+        }else{
+          this.$message.error(res.message)
         }
       })
     },
@@ -600,6 +617,8 @@ export default {
       apiSalaryComputes(this.salaryForm.checkId)
         .then(res=>{
           if(res.code === "0000"){
+            //查看状态
+            // this.getSalaryStatus();
             this.$message.success('薪资计算成功');
             this.loading()
           }
@@ -607,21 +626,28 @@ export default {
     },
   //  薪资审核
     handleCheckSalary(){
-      let status = this.checkStatus ==='AUDITED'?"UN_AUDIT":"AUDIT";
-      apiAuditSalaryCheck({
-        "checkAuditStatus":status,
-        "checkId": this.salaryForm.checkId
-      })
-        .then(res=>{
-          if(res.code === "0000"){
-            this.$message.success(this.checkStatus ==='AUDITED'?'取消审核成功':"审核成功");
-            this.loading()
-          }else{
-            this.$message.error(res.message)
-          }
+      let status = this.checkStatus ==='AUDITED'?"UN_AUDIT":"AUDIT"
+      let message =  this.checkStatus ==='AUDITED'?'已发放本期工资条，如取消审核，将撤回本期工资条，确定要继续取消审核吗？':"薪资审核后，将锁定工资表数据，您可以发送工资条、银行报盘等操作"
+      this.$confirm(message, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        apiAuditSalaryCheck({
+          "checkAuditStatus":status,
+          "checkId": this.salaryForm.checkId
         })
+          .then(res=>{
+            if(res.code === "0000"){
+              this.$message.success(this.checkStatus ==='AUDITED'?'取消审核成功':"审核成功");
+              this.loading()
+            }else{
+              this.$message.error(res.message)
+            }
+          })
+      }).catch(() => {});
     }
-
   }
 };
 </script>

@@ -122,27 +122,32 @@ export default {
       this.$forceUpdate();
     },
     handleSave(){
-      let itemIds = "";
-      for(let key in this.diyCheckeds){
-        this.diyCheckeds[key].forEach(item=>{
-          itemIds+=item+","
-        })
-      }
-      itemIds = itemIds.substr(0,itemIds.length-1);
-      if(itemIds){
-        apiEditStubs({
-          salaryId:this.salaryRuleId,
-          stubsMsg:this.stubsMsgForm.stubsMsg,
-          itemIds:itemIds
-        }).then(res=>{
-         if(res.code === "0000"){
-           this.$emit('changeSatus',false);
-           this.$message.success("设置成功");
-         }
-        })
-      }else{
-        this.$message.warning("未选择工资条项目");
-      }
+      this.refs["stubsMsgForm"].validate(val=>{
+        if(val){
+          let itemIds = "";
+          for(let key in this.diyCheckeds){
+            this.diyCheckeds[key].forEach(item=>{
+              itemIds+=item+","
+            })
+          }
+          itemIds = itemIds.substr(0,itemIds.length-1);
+          if(itemIds){
+            apiEditStubs({
+              salaryId:this.salaryRuleId,
+              stubsMsg:this.stubsMsgForm.stubsMsg,
+              itemIds:itemIds
+            }).then(res=>{
+              if(res.code === "0000"){
+                this.$emit('changeSatus',false);
+                this.$message.success("设置成功");
+              }
+            })
+          }else{
+            this.$message.warning("未选择工资条项目");
+          }
+        }
+      })
+
     },
     cancelSave(){
       this.$emit('changeSatus',false)
