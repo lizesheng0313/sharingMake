@@ -182,7 +182,11 @@ export default {
         id:item.salaryRuleId,
         date:that.currentDate
       }).then(res=>{
-        this.$router.push({path:"/salaryCheck",query:{id:item.id,active:0,salaryRuleId:item.salaryRuleId}})
+        if(res.code == "0000"){
+          this.$router.push({path:"/salaryCheck",query:{id:res.data.checkId,active:0,salaryRuleId:item.salaryRuleId}})
+        }else{
+          this.$message.error(res.message);
+        }
       })
     },
     //计算薪资

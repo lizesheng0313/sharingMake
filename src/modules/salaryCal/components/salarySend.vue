@@ -61,7 +61,7 @@
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
         :current-page="salaryForm.currPage"
-        :page-sizes="[1, 50, 100, 200]"
+        :page-sizes="[20, 50, 100, 200]"
         :page-size="salaryForm.pageSize"
         layout="total, sizes, prev, pager, next"
         :total="count">
@@ -80,7 +80,7 @@
           "checkId":this.$route.query.id,
           "currPage": 1,
           "key": "",
-          "pageSize":1 ,
+          "pageSize":20 ,
         },
         screenWidth: document.body.clientWidth, // 屏幕尺寸
         isShowIncrease: false,

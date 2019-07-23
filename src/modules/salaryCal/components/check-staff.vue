@@ -65,7 +65,7 @@
         </el-table-column>
         <el-table-column  label="用工性质">
           <template slot-scope="scope">
-            <span>{{scope.row.name}}</span>
+            <span>{{scope.row.empType|filterEmpType}}</span>
           </template>
         </el-table-column>
         <el-table-column label="纳税主体">

@@ -407,10 +407,7 @@ export default {
       })
     },
     cellStyle(data){
-      if(data.column.resizable
-      ){
-        return "background:#F7F7F7"
-      }
+      if(data.column.resizable){return "background:#F7F7F7"}
     },
     //选择用工类型
     changeEmployType(val){
@@ -592,7 +589,6 @@ export default {
       console.log()
       let exportItems = []
       let methed = this.exportType === "salaryDetail" ? apiSalaryDetailExport:apiExportDepartSum;
-      // let form = this.exportType === "salaryDetail"?{"exportPersonItems":this.checkedPerson, "exportItems":exportItems, "queryParam":this.salaryForm}:{};
       for(let key in this.diyCheckeds){
         exportItems = exportItems.concat(this.diyCheckeds[key])
       }
