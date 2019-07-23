@@ -135,7 +135,7 @@ export default {
     background-size:100%;
     background-position:center;
     position: relative;
-    margin-top:30px;
+    margin-bottom:30px;
     .box-con{
       margin-left:160px;
       /*border:1px solid red;*/

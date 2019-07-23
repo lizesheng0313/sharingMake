@@ -119,7 +119,7 @@ export default {
     position: relative;
     .steps {
       width: 690px;
-      margin: 100px auto 0;
+      margin: 30px auto 0;
     }
     .turn-page {
       position: absolute;
