@@ -5,11 +5,12 @@
       <el-input
         placeholder="请输入姓名\手机号"
         v-model="salaryForm.key"
-        suffix-icon="iconiconfonticonfontsousuo1 iconfont"
+        prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
         class="search-input left"
         @keyup.enter.native="searchSalary"
       ></el-input>
+      <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
         <el-button type="primary" @click="handleCalcSalary" :disabled="salaryDisabled">薪资计算</el-button>
         <el-button type="default" @click="handleCheckSalary" :disabled="checkDisabled">{{this.checkStatus === "AUDITED"?"取消审核":"薪资审核"}}</el-button>
@@ -668,6 +669,10 @@ export default {
 .calc-wages {
   padding: 0 20px;
   box-sizing: border-box;
+  .search{
+    display: inline-block;
+    margin-left: 20px;
+  }
   .shortCon{width:450px;}
   .el-select{width: 100%;}
   .el-form-item{margin-right:50px;}

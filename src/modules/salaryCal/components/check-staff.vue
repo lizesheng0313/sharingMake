@@ -4,11 +4,12 @@
       <el-input
         placeholder="请输入姓名\手机号"
         v-model="userForm.key"
-        suffix-icon="iconiconfonticonfontsousuo1 iconfont"
+        prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
         class="search-input left"
         @keyup.enter.native="searchUser"
       ></el-input>
+      <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
         <el-button type="primary" @click="showIncrease" class="add-import">增员导入</el-button>
         <el-dropdown trigger="click" @command="handleDropdown">
@@ -432,6 +433,10 @@ export default {
       margin: 0 auto;
       margin-top:10px;
     }
+  }
+  .search{
+    display: inline-block;
+    margin-left: 20px;
   }
 }
 </style>
