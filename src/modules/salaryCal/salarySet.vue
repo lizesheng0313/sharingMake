@@ -244,7 +244,6 @@ export default {
       tableData:[],
       salaryItemLoding:false,
       isEdit: this.$route.query.isEdit,
-      selectStep: this.$route.query.selectStep,
     };
   },
   components: {
@@ -267,6 +266,7 @@ export default {
     for(let i=1;i<=31;i++){this.payDay.push({value:i,label:i+'号'})}
    // 第二步骤刷新
     if(this.rouleId){ this.ruleId = this.rouleId; this.salaryItemDisabled = false; }
+    //编辑工资表
     if(this.isEdit && this.sendBasicInfoForm){
       for(let key in this.basicInfoForm){
         this.basicInfoForm[key] = this.sendBasicInfoForm[key];
