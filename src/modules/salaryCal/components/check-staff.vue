@@ -18,7 +18,7 @@
             <i class="iconsanjiao iconfont"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="delete">全部删除</el-dropdown-item>
+            <el-dropdown-item command="delete" :disabled="deleteDisabled">全部删除</el-dropdown-item>
             <el-dropdown-item command="export">导出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -74,12 +74,12 @@
             <span>{{scope.row.taxSubject}}</span>
           </template>
         </el-table-column>
-        <el-table-column  label="部门">
+        <el-table-column label="部门">
           <template slot-scope="scope">
             <span>{{scope.row.departName}}</span>
           </template>
         </el-table-column>
-        <el-table-column  label="岗位">
+        <el-table-column label="岗位">
           <template slot-scope="scope">
             <span>{{scope.row.jobTitle}}</span>
           </template>
@@ -106,7 +106,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleDelete([scope.row.id])">删除</el-button>
+            <el-button size="mini" @click="handleDelete([scope.row.id])" :disabled="deleteDisabled">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -165,7 +165,7 @@
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="uploadFile">导入通过数据</el-button>
+        <el-button type="primary" @click="uploadFile" :disabled="successCount===0">导入通过数据</el-button>
         <el-button @click="isShowIncrease = false">取 消</el-button>
       </span>
     </el-dialog>
@@ -216,8 +216,8 @@ export default {
       userLoading:false,
       imgFlag:false,
       percent:0,
-      failCount: "",
-      successCount:"",
+      failCount:0,
+      successCount:0,
       uuid: "",
       selectUserIdList:[],
       summryTotal:"",
@@ -227,7 +227,8 @@ export default {
       importFinishForm:{
         failCount:"",
         successCount:""
-      }
+      },
+      deleteDisabled:false,
     };
   },
   mounted() {
@@ -240,6 +241,8 @@ export default {
     };
     this.loading();
     this.summary();
+    //获取当前状态
+    this.getSalaryStatus();
   },
   methods: {
     loading(){
@@ -262,6 +265,15 @@ export default {
             this.changeEmployeeCount = data.changeEmployeeCount;
           }
         })
+    },
+    getSalaryStatus(){
+      this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.userForm.checkId).then(res=>{
+        if(res.code === "0000"){
+          this.checkStatus = res.data.checkStatus;
+          this.deleteDisabled = !(this.checkStatus ==='INIT' || this.checkStatus ==='COMPURED');
+          console.log(this.checkStatus)
+        }
+      })
     },
     handleDelete(id) {
       this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
@@ -317,9 +329,15 @@ export default {
     },
     handleSuccess(res, file) {
       let data = res.data;
-      this.successCount = data.successCount;
-      this.failCount = data.failCount;
-      this.uuid = data.uuid;
+      if(res.code === "0000"){
+        this.successCount = data.successCount;
+        this.failCount = data.failCount;
+        this.uuid = data.uuid;
+      }else{
+        this.$message.error(res.message);
+        this.fileList = []
+      }
+
     },
   // 导出通过数据
     uploadFile(){

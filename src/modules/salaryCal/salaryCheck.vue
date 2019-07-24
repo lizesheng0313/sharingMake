@@ -1,6 +1,6 @@
 <template>
   <div class="check-staff sflary-el-step">
-    <full-screen :fsTitle="'月度工资表'" :bgColor="'#fff'">
+    <full-screen :fsTitle="'月度工资表'" :bgColor="'#fff'" ref="full">
       <div slot="fs-buttons" class="header-button">
         <span class="collect" v-if="active==0">
           <i class="iconqiyexinxicaiji iconfont"></i>个税系统人员人信息采集
@@ -17,14 +17,14 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-        <span class="refresh">
-          <i class="iconshuaxin iconfont"></i>刷新
+        <span class="refresh" @click="refresh">
+          <i class="iconshuaxin iconfont" ></i>刷新
         </span>
       </div>
       <div slot="fs-container">
         <div class="step-box" v-if="active!==3">
           <el-steps :active="active" finish-status="success" class="steps" :align-center="true">
-            <el-step title="核对人员"  @click.native="active = 0" style="cursor: pointer;"></el-step>
+            <el-step title="核对人员" @click.native="active = 0" style="cursor: pointer;"></el-step>
             <el-step title="核算薪资" @click.native="active = 1" style="cursor: pointer;"></el-step>
             <el-step title="发放薪资" @click.native="active = 2" style="cursor: pointer;"></el-step>
           </el-steps>
@@ -80,18 +80,9 @@ export default {
         this.active++;
       }
     },
-  //  设置工资表
-    salarySet(){
-      this.$router.push({
-        path:'/salarySet',
-        query:{
-          isEdit:true
-        }
-      })
-      // console.log(this.$route.query)
-      // // this.$store.commit("salaryCalStore/SET_ROULEID", this.$router.query.id);
-    }
-
+    refresh(){
+      this.$router.go(0)
+    },
   }
 };
 </script>

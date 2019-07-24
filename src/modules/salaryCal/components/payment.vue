@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       popShow: { isshow: false },
+
       checkId:this.$route.query.id,
       checkStatus:""
     };
@@ -172,6 +173,7 @@ export default {
       font-size: 16px;
       cursor: pointer;
     }
+
   }
 }
 </style>

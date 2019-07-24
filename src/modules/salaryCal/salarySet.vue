@@ -89,10 +89,10 @@
                 <el-col :span="8"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
                 <el-col :span="8">
                   <div class="grid-content bg-purple">
-                    <el-popover trigger="hover" placement="top" v-if="item.canDelete">
+                    <el-popover trigger="hover" placement="right" v-if="item.canDelete">
                       <el-button @click="deleteItem(item.id)">删除</el-button>
-                      <div slot="reference" class="name-wrapper">
-                        <i class="el-icon-more"></i>
+                      <div slot="reference" class="deletedStyle" >
+                        <i class="el-icon-more" style="cursor: pointer"></i>
                       </div>
                     </el-popover>
                     <el-button type="warning" plain size="mini" v-else @click="changeStatus(item)">{{item.enable?'禁用':'启用'}}</el-button>
@@ -481,6 +481,12 @@ export default {
     height: 46px;
     line-height: 46px;
     text-align: center;
+  }
+  .deletedStyle{
+    width:20px;
+    height:10px;
+    line-height:10px;
+    margin: 10px auto;
   }
 }
 </style>
