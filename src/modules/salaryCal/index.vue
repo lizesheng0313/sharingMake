@@ -191,10 +191,12 @@ export default {
     },
     //计算薪资
     calcSalary(item){
-      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:1,salaryRuleId:item.salaryRuleId}})
+      this.$store.commit("salaryCalStore/SET_BASICINFOFORM",item.salaryRule);
+      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:1,salaryRuleId:item.salaryRuleId}});
     },
     //查看信息
     seeCalcSalary(item){
+      this.$store.commit("salaryCalStore/SET_BASICINFOFORM",item.salaryRule);
       this.$router.push({path:"/salaryCheck",query:{id:item.id,active:1,salaryRuleId:item.salaryRuleId}})
     },
     //切换查看第几次发薪

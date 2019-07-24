@@ -271,9 +271,6 @@ export default {
       for(let key in this.basicInfoForm){
         this.basicInfoForm[key] = this.sendBasicInfoForm[key];
       }
-    }
-  //  薪资项目
-    if(this.selectStep === 2){
       this.activeName = "secend";
       this.onTabClick()
     }

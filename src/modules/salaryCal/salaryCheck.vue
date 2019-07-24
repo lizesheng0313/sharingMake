@@ -13,7 +13,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item><router-link :to="{ path: '/tax/attach' }">累计专项附加扣除</router-link></el-dropdown-item>
               <el-dropdown-item><router-link :to="{ path: '/cumulative' }">累计应税所得初始化</router-link></el-dropdown-item>
-              <el-dropdown-item><router-link :to="{path:'/salarySet',query:{'selectStep':2}}">设置工资表</router-link></el-dropdown-item>
+              <el-dropdown-item><router-link :to="{path:'/salarySet',query:{'isEdit':true}}">设置工资表</router-link></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -82,7 +82,12 @@ export default {
     },
   //  设置工资表
     salarySet(){
-      this.$router.push({path:'/salarySet',query:{'selectStep':2}});
+      this.$router.push({
+        path:'/salarySet',
+        query:{
+          isEdit:true
+        }
+      })
       // console.log(this.$route.query)
       // // this.$store.commit("salaryCalStore/SET_ROULEID", this.$router.query.id);
     }
