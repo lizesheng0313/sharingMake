@@ -117,8 +117,8 @@
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="uploadFile">导入通过数据</el-button>
-        <el-button @click="isShowIncrease = false">取 消</el-button>
+        <el-button type="primary" :disabled="successCount===0" @click="uploadFile">导入通过数据</el-button>
+        <el-button @click="isShowImport = false">取 消</el-button>
       </span>
     </el-dialog>
     <!-- 导入完成 -->
@@ -323,6 +323,7 @@ export default {
       checkStatus:"",
       checkDisabled:false,//审核禁用
       salaryDisabled:false,//计算薪资禁用
+      uploadFileDisabled:true,//导入通过数据禁用
       tableAllData:[],
       showCount:true,
       tableLoading:false
@@ -470,13 +471,20 @@ export default {
     },
     //导入页面展示
     showImport(type){
-      this.successCount = 0;
-      this.failCount = 0;
-      this.uuid = "";
-      this.fileList=[];
-      this.importT = type;
-      this.actionUrl = type == "social"?"/api/salary/socialProvident/verify":"/api/salary/floatItem/verify";
-      this.isShowImport = true;
+      //未计算、已计算状态可导入
+      if(this.checkStatus ==="INIT" || this.checkStatus ==="COMPUTED"){
+        this.successCount = 0;
+        this.failCount = 0;
+        this.uuid = "";
+        this.fileList=[];
+        this.importType="BY_EMP_NO";
+        this.importT = type;
+        this.actionUrl = type == "social"?"/api/salary/socialProvident/verify":"/api/salary/floatItem/verify";
+        this.isShowImport = true;
+      }else{
+        this.$message.warning('本期工资数据已审核');
+      }
+
     },
     //文件上传前校验
     beforeAvatarUpload(file) {
@@ -501,10 +509,15 @@ export default {
       return isxls && isLt5M;
     },
     handleSuccess(res, file) {
-      let data = res.data;
-      this.successCount = data.successCount;
-      this.failCount = data.failCount;
-      this.uuid = data.uuid;
+      if(res.code == "0000"){
+        let data = res.data;
+        this.successCount = data.successCount;
+        // this.uploadFileDisabled = this.;
+        this.failCount = data.failCount;
+        this.uuid = data.uuid;
+      }else{
+        this.$message.error(res.message);
+      }
     },
     // 导出通过数据
     uploadFile(){

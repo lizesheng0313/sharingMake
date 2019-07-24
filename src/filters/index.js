@@ -35,14 +35,14 @@ const salaryCheckStatus = (val) => {
     case 'AUDIT_REJECT': {
       return '审核拒绝';
     }
+    case 'COMPUTED': {
+      return '已计算';
+    }
     case 'AUDITED': {
       return '审核通过';
     }
     case 'PAID': {
       return '薪资已发放';
-    }
-    case 'COMPUTED': {
-      return '已计算';
     }
     case 'FINISH': {
       return '结束';
