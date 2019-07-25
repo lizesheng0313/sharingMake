@@ -18,7 +18,7 @@
           </el-dropdown>
         </div>
         <span class="refresh" @click="refresh">
-          <i class="iconshuaxin iconfont" ></i>刷新
+          <i class="iconshuaxin iconfont"></i>刷新
         </span>
       </div>
       <div slot="fs-container">

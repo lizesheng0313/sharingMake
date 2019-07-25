@@ -12,7 +12,7 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="handleCalcSalary" :disabled="salaryDisabled" v-show="salaryShow">薪资计算</el-button>
+        <el-button type="primary" @click="handleCalcSalary" :disabled="salaryDisabled">薪资计算</el-button>
         <el-button type="default" @click="handleCheckSalary" :disabled="checkDisabled">{{this.checkStatus === "AUDITED" ?"取消审核":"薪资审核"}}</el-button>
       </div>
     </div>
@@ -338,9 +338,12 @@ export default {
       let day = date.getDate();
       return year+"-"+month+"-"+day+ " 00:00:00";
     },
-    salaryShow:function () {
-      return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED"
-    }
+    // salaryShow:function () {
+    //   return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED"
+    // },
+    // checkShow:function(){
+    //   return this.checkStatus === "FINISH" || this.checkStatus === "PAID" || this.checkStatus === "PAID"
+    // }
   },
   created(){
     this.loading();
