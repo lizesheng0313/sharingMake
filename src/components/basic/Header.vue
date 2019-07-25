@@ -2,20 +2,39 @@
   <div class="top-header">
     <el-row type="flex" class="row-bg header display-flex">
       <el-col :span="12">
-        <div class="logo" @click="$router.push('/salary-cal')">
+        <div class="logo" @click="goOladingServer">
           <img src="../../assets/images/olading-icon.png" alt />
           <i class="el-icon-arrow-left"></i>
           <span>返回选择服务</span>
         </div>
       </el-col>
       <el-col :span="12">
-        <span class="log-out icontuichu iconfont"></span>
+        <span class="log-out icontuichu iconfont" @click="logOut"></span>
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
-export default {};
+  import * as AT from "@/store/actionTypes";
+export default {
+  data() {
+    return {
+      originUrl:location.host === "http://172.19.60.38:18490"?"http://172.19.60.38/main.html#/":"http://172.19.60.38/main.html#/"
+    };
+  },
+  created(){
+    this.token = location.href.split('?')[1].split('=')[1];
+    this.$store.commit(AT.SET_TOKEN,this.token);
+  },
+  methods: {
+    goOladingServer(){
+      window.open(this.originUrl+'login'+'?token='+ this.token, "_self");
+    },
+    logOut(){
+     window.open(this.originUrl+'login')
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
 .top-header {
