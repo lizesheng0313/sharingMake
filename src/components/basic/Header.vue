@@ -31,7 +31,7 @@ export default {
       window.open(this.originUrl+'login'+'?token='+ this.token, "_self");
     },
     logOut(){
-     window.open(this.originUrl+'login')
+     window.open(this.originUrl+'login', "_self")
     }
   }
 };
