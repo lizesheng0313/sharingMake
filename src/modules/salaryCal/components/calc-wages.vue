@@ -7,7 +7,7 @@
         v-model="salaryForm.key"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
-        class="search-input left"
+        class="search-input"
         @keyup.enter.native="searchSalary"
       ></el-input>
       <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
