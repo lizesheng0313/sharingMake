@@ -53,8 +53,8 @@
             </el-col>
             <el-col :span="12">
               <div class="start-calc">
-                <el-select placeholder="请选择" v-model="selectUsedForm[item.salaryRuleId]" class="number-payday" v-show="showSelect(item)" @change="changePayth(index,selectUsedForm[item.salaryRuleId],item)">
-                  <el-option v-for="(it,index) in item.payInfos" :key="index" :label="it.dec" :value="it.salaryCheckStatus"
+                <el-select placeholder="请选择" v-model="selectUsedForm[item.salaryRuleId]" class="number-payday" v-show="showSelect(item)" @change="changePayth(index,selectUsedForm[item.salaryRuleId])">
+                  <el-option v-for="(it,index) in item.payInfos" :key="index" :label="it.dec" :value="it.salaryCheckStatus+','+it.id"
                   ></el-option>
                 </el-select>
                 <el-button type="primary" @click="InitCalcSalary(item)" v-show="item.salaryCheckStatus === 'NONE'">启动算薪</el-button>
@@ -134,18 +134,18 @@ export default {
       let month = nowDate.getMonth()-(-1)<10?"0"+(nowDate.getMonth()-(-1)).toString():nowDate.getMonth()-(-1);
       this.currentDate = nowDate.getFullYear()+"-"+month;
     }
-    this.getDate();
+    this.loading();
     // console.log(this.selectUsedForm)
   },
   methods: {
-    getDate(){
+    loading(){
       apiSalaryRuleList(this.currentDate).then(res=>{
         this.salaryRuleList = res.data;
         this.salaryRuleList.used.forEach((item,index)=>{
           if(item.payInfos && item.payInfos.length>0){
             item.payInfos.forEach((it,ins)=>{
               it.dec = this.payTh[ins];
-              this.selectUsedForm[item.salaryRuleId] = item.payInfos[item.payInfos.length-1]['salaryCheckStatus']
+              this.selectUsedForm[item.salaryRuleId] = item.payInfos[item.payInfos.length-1]['salaryCheckStatus']+','+item.payInfos[item.payInfos.length-1]['id']
             })
           }
         });
@@ -158,7 +158,7 @@ export default {
     changeDate(){
       //记录当前选择的时间
       this.$store.commit("salaryCalStore/SET_INDEXCURRENTDATE",this.currentDate);
-      this.getDate()
+      this.loading()
     },
     goSalarySet(){
       this.$store.commit("salaryCalStore/SET_ROULEID",null);
@@ -200,8 +200,9 @@ export default {
       this.$router.push({path:"/salaryCheck",query:{id:item.id,active:1,salaryRuleId:item.salaryRuleId}})
     },
     //切换查看第几次发薪
-    changePayth(index,status,item){
-      this.salaryRuleList.used[index]['salaryCheckStatus'] = status;
+    changePayth(index,status){
+      this.salaryRuleList.used[index]['salaryCheckStatus'] = status.split(',')[0];
+      this.salaryRuleList.used[index]['id'] = status.split(',')[1];
       this.$forceUpdate();
     },
   }

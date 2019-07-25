@@ -12,8 +12,8 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="handleCalcSalary" :disabled="salaryDisabled">薪资计算</el-button>
-        <el-button type="default" @click="handleCheckSalary" :disabled="checkDisabled">{{this.checkStatus === "AUDITED"?"取消审核":"薪资审核"}}</el-button>
+        <el-button type="primary" @click="handleCalcSalary" :disabled="salaryDisabled" v-show="salaryShow">薪资计算</el-button>
+        <el-button type="default" @click="handleCheckSalary" :disabled="checkDisabled">{{this.checkStatus === "AUDITED" ?"取消审核":"薪资审核"}}</el-button>
       </div>
     </div>
     <div class="staff-situation clearfix">
@@ -330,6 +330,18 @@ export default {
       tableLoading:false
     };
   },
+  computed:{
+    nowDate:function () {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1<10 ? "0"+(date.getMonth()+1):date.getMonth()+1;
+      let day = date.getDate();
+      return year+"-"+month+"-"+day+ " 00:00:00";
+    },
+    salaryShow:function () {
+      return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED"
+    }
+  },
   created(){
     this.loading();
     this.resetSreen();
@@ -349,15 +361,6 @@ export default {
       })();
     };
     this.$store.commit("salaryCalStore/SET_ROULEID", this.salaryRuleId);
-  },
-  computed:{
-    nowDate:function () {
-      let date = new Date();
-      let year = date.getFullYear();
-      let month = date.getMonth()+1<10 ? "0"+(date.getMonth()+1):date.getMonth()+1;
-      let day = date.getDate();
-      return year+"-"+month+"-"+day+ " 00:00:00";
-    }
   },
   methods: {
     loading(){

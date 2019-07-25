@@ -354,6 +354,7 @@ export default {
        }
        })
     },
+    //选择某一行
     handleSelectionChange(val){
       this.selectUserIdList = val.map((item,index)=>item.id);
     },
