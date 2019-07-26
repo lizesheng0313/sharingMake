@@ -19,7 +19,7 @@
 export default {
   data() {
     return {
-      originUrl:location.host === "http://172.19.60.38:18490"?"http://172.19.60.38/main.html#/":"http://172.19.60.38/main.html#/"
+      originUrl:window.__CURRENT_ENV__//跳转路径
     };
   },
   created(){

@@ -12,6 +12,7 @@
   <div id="app"></div>
   <script>
     //todo initStore赋值 第三方对接、注入脚本、前期验证（登录、权限等）
+    window.__CURRENT_ENV__ = location.hostname.indexOf('olading') !== -1 ?'https://www.olading.com/main.html#/':'http://172.19.60.38/main.html#/'
   </script>
 </body>
 </html>

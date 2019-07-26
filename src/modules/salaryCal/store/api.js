@@ -1,5 +1,5 @@
 import { fetch,fetchFile } from 'request/fetch'
-//保存j基本信息
+//保存基本信息
 export function apiSaveSalaryRule(form) {
   return fetch({
     url: '/api/salary/rule/save',
@@ -71,6 +71,13 @@ export function apiCheckMember(form) {
     params:form
   })
 }
+//人员模板
+export function apiCheckMemberDownload() {
+  return fetch({
+    url: '/api/salary/checkMember/template/download',
+    method: 'post',
+  })
+}
 
 //增员导入
 export function apiImportMember({uuid,id}) {
@@ -83,14 +90,14 @@ export function apiImportMember({uuid,id}) {
     },
   })
 }
-
 //删除员工
-export function apiCheckMemberdelete(id) {
+export function apiCheckMemberdelete(ids,checkId) {
   return fetch({
     url: '/api/salary/checkMember/delete',
     method: 'delete',
     data: {
-      ids:id
+      ids:ids,
+      checkId:checkId
     },
   })
 }

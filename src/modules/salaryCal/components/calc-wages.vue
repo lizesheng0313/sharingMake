@@ -90,6 +90,7 @@
           :action="actionUrl"
           :limit="1"
           :file-list="fileList"
+          :headers="myHeaders"
           :before-upload="beforeAvatarUpload"
           :on-success="handleSuccess"
           :data="{'checkId':salaryForm.checkId,'importType':importType}"
@@ -250,6 +251,7 @@ export default {
   data() {
     return {
       salaryTableDataAll:[],
+      myHeaders:{Authorization:this.$store.state.token},
       actionUrl:"",
       downloadLog:"",
       downLoadTemplate:"",

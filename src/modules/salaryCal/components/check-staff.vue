@@ -145,6 +145,7 @@
           :file-list="fileList"
           :before-upload="beforeAvatarUpload"
           :on-success="handleSuccess"
+          :headers="myHeaders"
           :data="{'id':userForm.checkId}"
         >
           <span class="headings">2、</span>
@@ -158,7 +159,7 @@
         </div>
         <p>
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
-          <span><a href="/api/salary/checkMember/template/download">下载模板</a></span>
+          <span><a @click="downloadMember">下载模板</a></span>
         </p>
         <p class="instructions">
           说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资
@@ -194,6 +195,7 @@ export default {
     return {
       radio: 3,
       fileList: [],
+      myHeaders:{Authorization:this.$store.state.token},
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       input: "",
       isShowIncrease: false,
@@ -233,6 +235,7 @@ export default {
   },
   mounted() {
     const that = this;
+    console.log(this.$store.state.token)
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
@@ -275,6 +278,13 @@ export default {
         }
       })
     },
+    //人员模板下载
+    downloadMember(){
+      this.$store.dispatch('salaryCalStore/postCheckMemberDownload').then(res=>{
+        if(res.code === "0000"){
+        }
+      })
+    },
     handleDelete(id) {
       this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
         confirmButtonText: "确定",
@@ -282,7 +292,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          apiCheckMemberdelete(id).then(res=>{
+          apiCheckMemberdelete(id,this.userForm.checkId).then(res=>{
             if(res.code === "0000"){
               this.$message({
                 type: "success",
