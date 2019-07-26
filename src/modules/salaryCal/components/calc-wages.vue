@@ -12,8 +12,9 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="handleCalcSalary" :disabled="salaryDisabled">薪资计算</el-button>
-        <el-button type="default" @click="handleCheckSalary" :disabled="checkDisabled">{{this.checkStatus === "AUDITED" ?"取消审核":"薪资审核"}}</el-button>
+        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary">薪资计算</el-button>
+        <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')">薪资审核</el-button>
+        <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')">取消审核</el-button>
       </div>
     </div>
     <div class="staff-situation clearfix">
@@ -338,9 +339,15 @@ export default {
       let day = date.getDate();
       return year+"-"+month+"-"+day+ " 00:00:00";
     },
-    // salaryShow:function () {
-    //   return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED"
-    // },
+    salaryShow:function () {
+      return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED" || this.checkStatus==="AUDITED"
+    },
+    auditedShow:function(){
+      return this.checkStatus === "COMPUTED"
+    },
+    cancelAuditeShow:function(){
+      return this.checkStatus === "AUDITED" || this.checkStatus === "PAID" || this.checkStatus === "FINISH"
+    },
     // checkShow:function(){
     //   return this.checkStatus === "FINISH" || this.checkStatus === "PAID" || this.checkStatus === "PAID"
     // }
@@ -409,7 +416,6 @@ export default {
       this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.salaryForm.checkId).then(res=>{
         if(res.code === "0000"){
           this.checkStatus = res.data.checkStatus;
-          this.checkDisabled = this.checkStatus ==='INIT';
           this.salaryDisabled = this.checkStatus ==='AUDITED'
         }
       })
@@ -637,16 +643,15 @@ export default {
         .then(res=>{
           if(res.code === "0000"){
             //查看状态
-            // this.getSalaryStatus();
             this.$message.success('薪资计算成功');
             this.loading()
           }
         })
     },
   //  薪资审核
-    handleCheckSalary(){
-      let status = this.checkStatus ==='AUDITED'?"UN_AUDIT":"AUDIT"
-      let message =  this.checkStatus ==='AUDITED'?'已发放本期工资条，如取消审核，将撤回本期工资条，确定要继续取消审核吗？':"薪资审核后，将锁定工资表数据，您可以发送工资条、银行报盘等操作"
+    handleCheckSalary(type){
+      let status = this.checkStatus ==='AUDITED'?"":"AUDIT";
+      let message = type ==='UN_AUDIT'?'已发放本期工资条，如取消审核，将撤回本期工资条，确定要继续取消审核吗？':"薪资审核后，将锁定工资表数据，您可以发送工资条、银行报盘等操作"
       this.$confirm(message, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -654,7 +659,7 @@ export default {
         center: true
       }).then(() => {
         apiAuditSalaryCheck({
-          "checkAuditStatus":status,
+          "checkAuditStatus":type,
           "checkId": this.salaryForm.checkId
         })
           .then(res=>{

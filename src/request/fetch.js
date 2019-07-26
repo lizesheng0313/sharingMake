@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message } from "element-ui";
+import store from '../store'
 // import {Message} from 'element-ui'
 
 const defaultHeader = {
@@ -21,6 +22,10 @@ instance.interceptors.request.use(function (config) {
 
 //响应拦截
 instance.interceptors.response.use(function (config) {
+  //每次发送请求之前检测vuex存有token,那么都要放在请求头发送给服务器
+  if (store.state.token) {
+    config.headers.Authorization = store.state.token
+  }
   return config
 }, function (error) {
   if (error && error.response) {

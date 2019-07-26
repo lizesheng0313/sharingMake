@@ -23,7 +23,7 @@ export default {
     };
   },
   created(){
-    this.token = location.href.split('?')[1].split('=')[1];
+    this.token =location.href.includes('?')? location.href.split('?')[1].split('=')[1]:"";
     this.$store.commit(AT.SET_TOKEN,this.token);
   },
   methods: {
