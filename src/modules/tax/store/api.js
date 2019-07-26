@@ -38,14 +38,6 @@ export function apiGetFeedback(feedbackForm) {
   })
 }
 
-/*个税-综合所得申报*/
-export function apiTaxReportTotalList(reportForm) {
-  return fetch({
-    url: '/api/taxReport/getTaxReportTotalList',
-    method: 'get',
-    params: reportForm
-  })
-}
 
 /*个税-专项附加扣除累计*/
 
@@ -86,6 +78,72 @@ export function apiDownloadOtherTotal(exportForm) {
     params: exportForm
   })
 }
+
+/*个税-综合所得申报*/
+/*综合所得-申报集合列表*/
+export function apiTaxReportTotalList(reportForm) {
+  return fetch({
+    url: '/api/taxReport/getTaxReportTotalList',
+    method: 'get',
+    params: reportForm
+  })
+}
+
+/*综合所得-生成申报数据*/
+export function apiGenerateTaxReportData(generateForm) {
+  return fetch({
+    url: '/api/taxReport/generateTaxReportData',
+    method: 'post',
+    params: generateForm
+  })
+}
+
+/*综合所得-作废申报*/
+export function apiCancelSubTaxReport(invalidForm) {
+  return fetch({
+    url: '/api/taxReport/cancelSubTaxReport',
+    method: 'post',
+    params: invalidForm
+  })
+}
+
+/*综合所得-获取反馈结果*/
+export function apiGetReportBack(reportForm) {
+  return fetch({
+    url: '/api/taxReport/getReportBack',
+    method: 'post',
+    params: reportForm
+  })
+}
+
+/*综合所得-发送申报*/
+export function apiSendReport(sendReportForm) {
+  return fetch({
+    url: '/api/taxReport/sendReport',
+    method: 'post',
+    params: sendReportForm
+  })
+}
+
+/*综合所得-获取人员状态为非正常*/
+export function apiCheckReportData(reportForm) {
+  return fetch({
+    url: '/api/taxReport/checkReportData',
+    method: 'post',
+    params: reportForm
+  })
+}
+
+/*综合所得-申报表导出*/
+export function apiSubTaxReportExport(reportForm) {
+  return fetchFile({
+    url: '/api/taxReport/subTaxReportExport',
+    method: 'get',
+    params: reportForm
+  })
+}
+
+
 
 
 /*个税-纳税主体*/

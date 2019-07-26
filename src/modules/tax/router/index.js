@@ -1,6 +1,6 @@
 import attach from '../attach'
 import collect from '../collect'
-import declare from '../declare'
+import report from '../report'
 import paid from '../paid'
 import infoCollection from '../info-collection'
 
@@ -12,8 +12,8 @@ export default [
     path: '/tax/collect',
     component: collect,
   }, {
-    path: '/tax/declare',
-    component: declare
+    path: '/tax/report',
+    component: report
   },
   {
     path: '/tax/info-collection',
