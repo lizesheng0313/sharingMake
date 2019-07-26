@@ -30,7 +30,7 @@
                 <el-form-item label="证件类型" prop="idType">
                   <el-select v-model="employeeFormData.idType" placeholder="请选择">
                     <el-option
-                      v-for="(value,key) in baseInfo.documentType"
+                      v-for="(value,key) in baseInfo.idType"
                       :key="key"
                       :label="value"
                       :value="key"
@@ -58,12 +58,12 @@
                 </el-form-item>
                 <el-form-item
                   label="残疾证号"
-                  :hide-required-asterisk="employeeFormData.disabilityYn"
+                  :class="{'is-required':employeeFormData.disabilityYn && employeeFormData.lonelyOldYn == false}"
                   prop="disabilityNo"
                 >
                   <el-input
                     v-model="employeeFormData.disabilityNo"
-                    :disabled="!employeeFormData.disabilityYn"
+                    :disabled="!employeeFormData.disabilityYn || employeeFormData.lonelyOldYn"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -84,12 +84,12 @@
                 </el-form-item>
                 <el-form-item
                   label="烈属证号"
-                  :hide-required-asterisk="employeeFormData.martyrFamilyYn"
+                  :class="{'is-required':employeeFormData.martyrFamilyYn && employeeFormData.lonelyOldYn == false}"
                   prop="martyrFamilyNo"
                 >
                   <el-input
                     v-model="employeeFormData.martyrFamilyNo"
-                    :disabled="!employeeFormData.martyrFamilyYn"
+                    :disabled="!employeeFormData.martyrFamilyYn || employeeFormData.lonelyOldYn"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -99,8 +99,8 @@
             <span class="title">任职受雇从业信息</span>
             <el-row type="flex" justify="center">
               <el-col :span="7">
-                <el-form-item label="任职受雇从业信息" prop="workType">
-                  <el-select v-model="employeeFormData.workType" placeholder="请选择">
+                <el-form-item label="任职受雇从业信息" prop="workerType">
+                  <el-select v-model="employeeFormData.workerType" placeholder="请选择">
                     <el-option
                       v-for="(value,key) in baseInfo.workerType"
                       :key="key"
@@ -122,7 +122,11 @@
                 <el-form-item label="工号">
                   <el-input v-model="employeeFormData.empNo"></el-input>
                 </el-form-item>
-                <el-form-item label="离职日期">
+                <el-form-item
+                  prop="leaveDay"
+                  label="离职日期"
+                  :class="{'is-required':employeeFormData.workerStatus=='NO_NORMAL'}"
+                >
                   <el-date-picker
                     value-format="yyyy-MM-dd"
                     v-model="employeeFormData.leaveDay"
@@ -180,8 +184,10 @@ export default {
     if (this.employeeFormData.idValidStatus == "CHECK_SUCCESS") {
       this.checkSuccess = true;
     }
+
   },
   data() {
+    const t = this;
     return {
       rules: {
         idNo: [{ required: true, message: "请输入证件号码", trigger: "blur" }],
@@ -193,25 +199,55 @@ export default {
           { required: true, message: "请选择出生日期", trigger: "blur" }
         ],
         idType: [
-          { required: true, message: "请选择证件类型", trigger: "change" }
+          { required: true, message: "请选择证件类型", trigger: "blur" }
         ],
-        workType: [
-          { required: true, message: "请选择受雇从业信息", trigger: "change" }
+        workerType: [
+          { required: true, message: "请选择受雇从业信息", trigger: "blur" }
         ],
         empDay: [
           { required: true, message: "请选择受雇从业信息", trigger: "blur" }
         ],
         martyrFamilyNo: [
           {
-            required: true,
-            message: "请输入烈属证号",
+            validator: (rule, value, callback) => {
+              if (
+                t.employeeFormData.martyrFamilyYn &&
+                !value &&
+                t.employeeFormData.lonelyOldYn == false
+              ) {
+                callback(new Error("请输入烈属证号"));
+              } else {
+                callback();
+              }
+            },
             trigger: "blur"
           }
         ],
         disabilityNo: [
           {
-            required: true,
-            message: "请输入残疾证号",
+            validator: (rule, value, callback) => {
+              if (
+                t.employeeFormData.disabilityYn &&
+                !value &&
+                t.employeeFormData.lonelyOldYn == false
+              ) {
+                callback(new Error("请输入残疾证号"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur"
+          }
+        ],
+        leaveDay: [
+          {
+            validator: (rule, value, callback) => {
+              if (t.employeeFormData.workerStatus == "NO_NORMAL" && !value) {
+                callback(new Error("请输入离职日期"));
+              } else {
+                callback();
+              }
+            },
             trigger: "blur"
           }
         ],
@@ -225,18 +261,20 @@ export default {
                 callback();
               }
             },
+            required: true,
             trigger: "blur"
           }
         ]
       },
       checkSuccess: false,
       baseInfo: SCR,
-      employeeFormData: {}
+      employeeFormData: {
+        martyrFamilyYn: ""
+      }
     };
   },
   methods: {
     handleSave() {
-      console.log(this.employeeFormData.disabilityYn);
       //如果取消选中 将对应的证号清空
       if (!this.employeeFormData.disabilityYn) {
         this.employeeFormData.dsability = "";
@@ -252,7 +290,11 @@ export default {
               "taxPageStore/actionSaveEmpCollectInfo",
               this.employeeFormData
             )
-            .then(res => {});
+            .then(res => {
+              if (res.success) {
+                this.$router.back(-1);
+              }
+            });
         }
       });
     }

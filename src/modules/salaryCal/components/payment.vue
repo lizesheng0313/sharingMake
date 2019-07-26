@@ -78,7 +78,6 @@ export default {
         .then(res=>{
           if(res.code ==="0000"){
             this.checkStatus = res.data.checkStatus;
-            console.log(this.checkStatus)
           }
         })
     },

@@ -33,7 +33,12 @@
       <!-- <div class="floating-menu">
         <span>删除</span>
       </div>-->
-      <el-table :data="list" class="check-staff_table" :style="{width:screenWidth-285+'px'}">
+      <el-table
+        :data="list"
+        class="check-staff_table"
+        :style="{width:screenWidth-285+'px'}"
+        v-loading="loading"
+      >
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column prop="taxSubName" label="纳税主体" width="140"></el-table-column>
         <el-table-column prop="empName" label="姓名" width="140"></el-table-column>
@@ -154,11 +159,15 @@ export default {
     },
     //搜索接口
     getList() {
+      this.loading = true;
       this.$store
         .dispatch("cumulativePageStore/actionTaxTotalBaseList", this.ruleForm)
         .then(res => {
-          this.list = res.data.data;
-          this.total = res.data.count;
+          if (res.success) {
+            this.loading = false;
+            this.list = res.data.data;
+            this.total = res.data.count;
+          }
         });
     },
     //删除

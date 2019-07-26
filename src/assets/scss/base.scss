@@ -317,12 +317,16 @@ a{
 }
 .tax-collect-tips {
   background: #fff6e2;
-  padding-left: 40px;
-  margin-left:-20px;
+  padding-left: 20px;
   height: 40px;
   font-size: 12px;
   line-height: 40px;
   color: #666;
+}
+.cumulative{
+  .tax-collect-tips {
+    margin-left:-20px;
+  }
 }
 .collection{
   .el-select,.el-date-editor.el-input, .el-date-editor.el-input__inner{

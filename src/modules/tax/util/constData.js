@@ -24,8 +24,8 @@ export const empStatus = {
 export const iscgl =
 {
   "": '不限',
-  'Y': '是',
-  'N': '否'
+  "Y": '是',
+  "N": '否'
 }
 //雇员状态
 export const workerType = {
@@ -38,7 +38,7 @@ export const empSex = {
   'FEMALE': '女'
 }
 //证件类型
-export const documentType = {
+export const idType = {
   'PRC_ID': "居民身份证",
   'COMPATRIOTS_CARD': "港澳居民来往内地通行证",
   'FORMOSA_CARD': "台湾居民来往大陆通行证",
@@ -50,3 +50,18 @@ export const documentType = {
   "OTHER": "其他"
 }
 
+//申报类型
+export const declareType = {
+  "NORMAL": "正常申报",
+  "CORRECT": "更正申报"
+}
+
+//申报状态
+export const declareStatus = {
+  'AWAIT_REPORT': "未申报",
+  'REPORTING': "申报处理中",
+  'REPORT_ERROR': "申报失败",
+  'REPORT_SUCCESS': "申报成功",
+  'CANCEL_REPORTING': "作废处理中",
+  'CORRECT_REPORTING': "更正处理中"
+}

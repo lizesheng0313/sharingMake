@@ -12,26 +12,35 @@
         <div class="screening">
           <div class="clearfix check-staff-menu">
             <el-input
-              placeholder="请输入姓名\手机号"
-              v-model="search_words"
-              suffix-icon="iconiconfonticonfontsousuo1 iconfont"
+              placeholder="请输入名称"
+              v-model="taxListFormData.name"
+              @keyup.enter.native="handleSearch"
+              prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               clearable
               class="search-input left"
             ></el-input>
+            <div class="left">
+              <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
+            </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="isShowScreen=true">新增</el-button>
+              <el-button type="primary" class="add-import" @click="handleShowBox">新增</el-button>
             </div>
           </div>
           <div class="staff-table">
             <!-- <div class="floating-menu">
         <span>删除</span>
             </div>-->
-            <el-table :data="list" class="check-staff_table" :style="{width:screenWidth-285+'px'}">
+            <el-table
+              :data="list"
+              class="check-staff_table"
+              :style="{width:screenWidth-285+'px'}"
+              v-loading="loading"
+            >
               <el-table-column label="序号" type="index"></el-table-column>
               <el-table-column prop="taxSubName" label="纳税主体名称"></el-table-column>
               <el-table-column prop="taxPayerNo" label="纳税人识别号"></el-table-column>
+              <el-table-column prop="remark" label="办税人员姓名"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
-              <el-table-column prop="remark" label="备注"></el-table-column>
               <el-table-column label="操作" fixed="right">
                 <template slot-scope="scope">
                   <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
@@ -42,37 +51,35 @@
           </div>
         </div>
       </div>
-      <el-dialog title="新增" :visible.sync="isShowScreen" width="550px" center class="diy-el_dialog">
+      <el-dialog
+        :title="currentTypeName"
+        :visible.sync="isShowScreen"
+        width="480px"
+        center
+        class="diy-el_dialog"
+      >
         <el-form
-          :rules="rules"
-          label-width="100px"
-          ref="ruleForm"
-          class="demo-ruleForm"
-          :model="ruleForm"
+          :rules="taxListRules"
+          label-width="110px"
+          ref="taxListForm"
+          class="addForm"
+          :model="newBodyFormData"
         >
-          <div class="shortCon">
-            <el-form-item label="纳税主体名称" prop="taxSubName">
-              <el-input></el-input>
-            </el-form-item>
-          </div>
-          <div class="shortCon">
-            <el-form-item label="纳税人识别号" prop="taxPayerNo">
-              <el-input></el-input>
-            </el-form-item>
-          </div>
-          <div class="shortCon">
-            <el-form-item label="法定代表人" prop="taxSubName">
-              <el-input></el-input>
-            </el-form-item>
-          </div>
-          <div class="shortCon">
-            <el-form-item label="备注" prop="remark">
-              <el-input></el-input>
-            </el-form-item>
-          </div>
+          <el-form-item label="纳税主体名称" prop="taxSubName">
+            <el-input v-model="newBodyFormData.taxSubName"></el-input>
+          </el-form-item>
+          <el-form-item label="纳税人识别号" prop="taxPayerNo">
+            <el-input v-model="newBodyFormData.taxPayerNo"></el-input>
+          </el-form-item>
+          <el-form-item label="办税人员姓名" prop="remark">
+            <el-input v-model="newBodyFormData.remark"></el-input>
+          </el-form-item>
+          <el-form-item label="法定代表人" prop="legalName">
+            <el-input v-model="newBodyFormData.legalName"></el-input>
+          </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handleDeal">确定</el-button>
+          <el-button type="primary" @click="handleNewBody">确定</el-button>
           <el-button @click="isShowScreen=false">取消</el-button>
         </span>
       </el-dialog>
@@ -84,41 +91,100 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      ruleForm: {
-        taxSubName: "",
+      loading: false,
+      taxListFormData: {
+        name: ""
+      },
+      newBodyFormData: {
+        legalName: "",
         remark: "",
         taxPayerNo: "",
+        taxSubId: "",
         taxSubName: ""
       },
+      taxListRules: {
+        taxSubName: [
+          {
+            required: true,
+            message: "请输入纳税主体名称",
+            trigger: "blur"
+          }
+        ],
+        taxPayerNo: [
+          {
+            required: true,
+            message: "请输入纳税人识别号",
+            trigger: "blur"
+          }
+        ],
+        remark: [
+          {
+            required: true,
+            message: "请输入办税人员姓名",
+            trigger: "blur"
+          }
+        ]
+      },
+      currentTypeName: "",
       list: [],
-      search_words: "",
       isShowScreen: false,
       screenWidth: document.body.clientWidth // 屏幕尺寸
     };
   },
   mounted() {
-    const that = this;
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
-        that.screenWidth = window.screenWidth;
+        this.screenWidth = window.screenWidth;
       })();
     };
     this.getList();
   },
   methods: {
-    handleDeal() {
-      this.$store
-        .dispatch("taxPageStore/actionDealTaxSubject", this.ruleForm)
-        .then(res => {});
+    //新增
+    handleShowBox() {
+      this.newBodyFormData.taxSubId = "";
+      this.currentTypeName = "新增";
+      this.isShowScreen = true;
+      this.$nextTick(() => {
+        this.$refs.taxListForm.resetFields();
+      });
     },
-    getList() {
-      console.log("list");
-      this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
-        if (res.success) {
-          this.list = res.data;
+    //编辑
+    handleEditor(row) {
+      this.isShowScreen = true;
+      this.currentTypeName = "修改";
+      this.$nextTick(() => {
+        this.newBodyFormData = { ...row };
+      });
+    },
+    handleNewBody() {
+      this.$refs.taxListForm.validate(valid => {
+        if (valid) {
+          this.$store
+            .dispatch("taxPageStore/actionDealTaxSubject", this.newBodyFormData)
+            .then(res => {
+              if (res.success) {
+                this.getList();
+                this.isShowScreen = false;
+              }
+            });
         }
       });
+    },
+    handleSearch() {
+      this.getList();
+    },
+    getList() {
+      this.loading = true;
+      this.$store
+        .dispatch("taxPageStore/actionTaxSubjectList", this.taxListFormData)
+        .then(res => {
+          if (res.success) {
+            this.loading = false;
+            this.list = res.data;
+          }
+        });
     },
     handleDelete(id) {
       this.$confirm(
@@ -156,6 +222,9 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
 .tax {
+  .tax-search {
+    margin-left: 20px;
+  }
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
@@ -249,9 +318,6 @@ export default {
       }
     }
   }
-}
-.shortCon {
-  width: 450px;
 }
 .screen-dialog {
   .screening-box {

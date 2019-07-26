@@ -55,6 +55,7 @@ export function fetchFile(options) {
       let url = window.URL.createObjectURL(data);
       let a = document.createElement('a');
       a.href = url;
+      console.log(response);
       a.download = decodeURI(response['headers']['content-disposition'].split(';')[1].split('=')[1]);
       a.click();
     })
