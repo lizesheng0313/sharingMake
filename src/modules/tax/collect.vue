@@ -40,7 +40,7 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
+              <el-button type="primary" class="add-import" @click="handleReport" v-if="reportForm.ids.length>0">报送</el-button>
               <el-button type="primary" class="add-import" @click="handleGetFeedback">获取反馈</el-button>
             </div>
           </div>
@@ -79,9 +79,6 @@
             </span>
           </div>
           <div class="staff-table">
-            <!-- <div class="floating-menu">
-        <span>删除</span>
-            </div>-->
             <el-table
               v-loading="loading"
               :data="list"
@@ -437,7 +434,9 @@ export default {
     handleSelectItem(row) {
       this.reportForm.ids = [];
       row.forEach(element => {
-        this.reportForm.ids.push(element.id);
+        if (element.reportStatus == "AWAIT_REPORT") {
+          this.reportForm.ids.push(element.id);
+        }
       });
     },
     //纳税主体集合
@@ -675,21 +674,6 @@ export default {
       }
       position: relative;
       margin-top: 27px;
-      .floating-menu {
-        position: absolute;
-        left: 100px;
-        width: 500px;
-        z-index: 99;
-        top: 0;
-        line-height: 40px;
-        height: 40px;
-        background: rgba(0, 0, 0, 0.8);
-        border-radius: 3px;
-        color: #fff;
-        span {
-          margin: 0 10px;
-        }
-      }
       .staff-page {
         margin-top: 20px;
         text-align: right;

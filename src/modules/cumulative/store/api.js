@@ -10,13 +10,11 @@ export function apiTaxTotalBaseList(ruleForm) {
 }
 
 //累计应税所得额初始化--删除
-export function apiDelTaxTotalBase(id) {
+export function apiDelTaxTotalBase(idsForm) {
   return fetch({
     url: '/api/taxTotalBase/delTaxTotalBase',
     method: 'delete',
-    params: {
-      id
-    }
+    data:idsForm
   })
 }
 

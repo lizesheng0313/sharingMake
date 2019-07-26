@@ -7,8 +7,8 @@ export const actionTaxTotalBaseList = ({ dispatch },ruleForm) => {
 }
 
 //累计应税所得额初始化--删除
-export const actionDelTaxTotalBase = ({ dispatch },id) => {
-    return apiDelTaxTotalBase(id)
+export const actionDelTaxTotalBase = ({ dispatch },idsForm) => {
+    return apiDelTaxTotalBase(idsForm)
 }
 
 //累计应税所得额初始化-下载模版
