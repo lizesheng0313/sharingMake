@@ -19,11 +19,11 @@
 export default {
   data() {
     return {
-      originUrl:location.host === "http://172.19.60.38:18490"?"http://172.19.60.38/main.html#/":"http://172.19.60.38/main.html#/"
+      originUrl:window.__CURRENT_ENV__//跳转路径
     };
   },
   created(){
-    this.token = location.href.split('?')[1].split('=')[1];
+    this.token =location.href.includes('?')? location.href.split('?')[1].split('=')[1]:"";
     this.$store.commit(AT.SET_TOKEN,this.token);
   },
   methods: {
