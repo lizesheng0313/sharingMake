@@ -73,7 +73,7 @@ export function apiCheckMember(form) {
 }
 //人员模板
 export function apiCheckMemberDownload() {
-  return fetch({
+  return fetchFile({
     url: '/api/salary/checkMember/template/download',
     method: 'post',
   })
