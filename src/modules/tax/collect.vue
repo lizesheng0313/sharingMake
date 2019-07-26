@@ -15,6 +15,7 @@
           <span>{{selectMonth}}</span>
           <el-date-picker
             v-model="selectMonth"
+            @input="changeMonth"
             type="month"
             value-format="yyyy年MM月"
             :editable="false"
@@ -39,8 +40,8 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import">报送</el-button>
-              <el-button type="primary" class="add-import">获取反馈</el-button>
+              <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
+              <el-button type="primary" class="add-import" @click="handleGetFeedback">获取反馈</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -81,7 +82,13 @@
             <!-- <div class="floating-menu">
         <span>删除</span>
             </div>-->
-            <el-table :data="list" class="check-staff_table" :style="{width:screenWidth-285+'px'}">
+            <el-table
+              v-loading="loading"
+              :data="list"
+              class="check-staff_table"
+              @selection-change="handleSelectItem"
+              :style="{width:screenWidth-285+'px'}"
+            >
               <el-table-column type="selection" width="55" fixed></el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
               <el-table-column prop="empName" label="姓名" width="140">
@@ -94,6 +101,9 @@
               </el-table-column>
               <el-table-column prop="idType" label="证件类型" width="140"></el-table-column>
               <el-table-column prop="idNo" label="证件号码" width="140"></el-table-column>
+              <el-table-column prop="empSex" label="性别" width="140">
+                <template slot-scope="scope">{{returnStatus('empSex',scope.row.empSex)}}</template>
+              </el-table-column>
               <el-table-column prop="workerStatus" label="人员状态" width="140">
                 <template slot-scope="scope">{{returnStatus('empStatus',scope.row.workerStatus)}}</template>
               </el-table-column>
@@ -105,22 +115,28 @@
                   slot-scope="scope"
                 >{{returnStatus('idValidStatus',scope.row.idValidStatus)}}</template>
               </el-table-column>
-              <el-table-column prop="workerType" label="是否雇员" width="140">
+              <el-table-column prop="mobile" label="手机号码" width="140"></el-table-column>
+              <el-table-column prop="iscgl" label="是否残疾" width="140">
+                <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>
+              </el-table-column>
+              <el-table-column prop="martyrFamilyYn" label="是否烈属" width="140">
+                <template slot-scope="scope">{{returnYesOrNo(scope.row.martyrFamilyYn)}}</template>
+              </el-table-column>
+              <el-table-column prop="lonelyOldYn" label="是否孤老" width="140">
+                <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>
+              </el-table-column>
+              <el-table-column prop="workerType" label="任职受雇从业类型" width="140">
                 <template slot-scope="scope">{{returnStatus('workerType',scope.row.workerType)}}</template>
               </el-table-column>
-              <el-table-column prop="iscgl" label="是否残疾" width="140">
-                <template slot-scope="scope">{{returnStatus('iscgl',scope.row.iscgl)}}</template>
-              </el-table-column>
-              <el-table-column prop="mobile" label="手机号码" width="140"></el-table-column>
               <el-table-column prop="country" label="国籍" width="140"></el-table-column>
-              <el-table-column prop="empDay" label="任职受雇日期" width="140"></el-table-column>
-              <el-table-column prop="leaveDay" label="离职日期" width="140"></el-table-column>
               <el-table-column prop="reportFinishTime" label="更新时间" width="140"></el-table-column>
+              <el-table-column prop="updateTime" label="最近操作时间" width="140"></el-table-column>
             </el-table>
             <el-pagination
               @current-change="handleSelectionChange"
-              :page-size="ruleForm.pageSize"
-              layout="prev, pager, next"
+              @size-change="handleSizeChange"
+              layout="total, sizes, prev, pager, next, jumper"
+              :page-sizes="[20, 50, 100, 200]"
               :total="total"
               class="staff-page"
             ></el-pagination>
@@ -217,6 +233,50 @@
           <el-button type="primary" @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
+      <el-dialog
+        title="人员信息反馈结果"
+        :visible.sync="isShowFeedback"
+        width="550px"
+        center
+        class="diy-el_dialog"
+      >
+        <el-table :data="feedbackList">
+          <el-table-column prop="empName" label="姓名" width="120"></el-table-column>
+          <el-table-column prop="idType" label="证件类型" width="120">
+            <template slot-scope="scope">{{returnStatus('idType',scope.row.idType)}}</template>
+          </el-table-column>
+          <el-table-column prop="idNo" label="证件号码" width="140"></el-table-column>
+          <el-table-column prop="reportStatus" label="报送状态" width="90">
+            <template slot-scope="scope">{{returnStatus('reportStatus',scope.row.reportStatus)}}</template>
+          </el-table-column>
+        </el-table>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="isShowFeedback=false">关闭</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        title="输入密码"
+        :visible.sync="isShowPassword"
+        width="450px"
+        center
+        class="diy-el_dialog"
+      >
+        <el-form
+          :rules="feekbackRules"
+          label-width="110px"
+          ref="feekbackForm"
+          class
+          :model="feedbackForm"
+        >
+          <el-form-item label="请输入密码：" prop="password">
+            <el-input type="password" v-model="feedbackForm.password"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handleSubmitPassword">确定</el-button>
+          <el-button @click="isShowPassword=false">取消</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -230,6 +290,7 @@ let defaultDate =
 export default {
   data() {
     return {
+      reportOrFeedback: false,
       ruleForm: {
         currPage: 1,
         empStatus: "NORMAL",
@@ -246,6 +307,41 @@ export default {
         workerType: [],
         taxSubjectId: ""
       },
+      loading: false,
+      feekbackRules: {
+        password: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "blur"
+          }
+        ]
+      },
+      reportForm: {
+        taxSubId: "",
+        ids: [],
+        password: ""
+      },
+      feedbackForm: {
+        taxSubjectId: "",
+        password: ""
+      },
+      feedbackList: [
+        {
+          empName: "李泽胜",
+          idNo: "1307221994010567145",
+          idType: "COMPATRIOTS_CARD",
+          reportStatus: "AWAIT_REPORT"
+        },
+        {
+          empName: "李2",
+          idNo: "1307221994010567145",
+          idType: "COMPATRIOTS_CARD",
+          reportStatus: "AWAIT_REPORT"
+        }
+      ],
+      isShowPassword: false,
+      isShowFeedback: false,
       taxSubjectInfolist: [],
       currentTaxSubName: "",
       increaseCount: 0,
@@ -278,28 +374,95 @@ export default {
     };
   },
   methods: {
+    handleGetFeedback() {
+      this.reportOrFeedback = false;
+      this.isShowPassword = true;
+      this.feedbackForm.password = "";
+    },
+    handleReport() {
+      this.reportOrFeedback = true;
+      if (this.reportForm.ids.length > 0) {
+        this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
+        this.$confirm(
+          "系统共检测到有" +
+            this.reportForm.ids.length +
+            "位人员需要进行信息提交，请确认是否现在提交",
+          "删除确认",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }
+        ).then(() => {
+          this.feedbackForm.password = "";
+          this.isShowPassword = true;
+        });
+      }
+    },
+    handleSubmitPassword() {
+      this.$refs.feekbackForm.validate(valid => {
+        if (this.reportOrFeedback) {
+          this.reportForm.password = this.feedbackForm.password;
+          this.$store
+            .dispatch("taxPageStore/actionReport", this.reportForm)
+            .then(res => {
+              if (res.success) {
+                this.isShowPassword = false;
+                this.$alert("人员信息报送成功，请稍后获取反馈", "提示信息", {
+                  confirmButtonText: "确定",
+                  callback: action => {
+                    this.$message({
+                      type: "info",
+                      message: `action: ${action}`
+                    });
+                  }
+                });
+              }
+            });
+        } else {
+          this.feedbackForm.taxSubjectId = this.taxSubjectId;
+          this.$store
+            .dispatch("taxPageStore/actionGetFeedback", this.feedbackForm)
+            .then(res => {
+              if (res.success) {
+                this.isShowPassword = false;
+                this.isShowFeedback = true;
+                this.feedbackList = res.data;
+              }
+            });
+        }
+      });
+    },
+    //表格选中事件
+    handleSelectItem(row) {
+      this.reportForm.ids = [];
+      row.forEach(element => {
+        this.reportForm.ids.push(element.id);
+      });
+    },
     //纳税主体集合
     getTaxSubjectInfoList() {
-      this.$store
-        .dispatch("taxPageStore/actionTaxSubjectInfoList")
-        .then(res => {
-          if (res.success) {
-            this.taxSubjectInfolist = res.data;
-            this.ruleForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
-            this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
-            this.getList();
-          }
-        });
+      this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
+        if (res.success) {
+          this.taxSubjectInfolist = res.data;
+          this.ruleForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
+          this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
+          this.getList();
+        }
+      });
+    },
+    handleSizeChange(val) {
+      this.totalListForm.pageSize = val;
+      this.totalListForm.currPage = 1;
+      this.getList();
     },
     handleCheckTaxSubject(item) {
       this.ruleForm.taxSubjectId = item.taxSubId;
       this.currentTaxSubName = item.taxSubName;
+      this.ruleForm.currPage = 1;
+      this.getList();
     },
-    formatQuerymonth(defaultDate) {
-      let currentDate = defaultDate.replace("年", "-");
-      this.ruleForm.queryMonth = currentDate.replace("月", "");
-    },
-    format(fmt, date) {
+    format() {
       var o = {
         "M+": date.getMonth() + 1, //月份
         "d+": date.getDate(), //日
@@ -324,8 +487,22 @@ export default {
           );
       return fmt;
     },
+    changeMonth(month) {
+      this.formatQuerymonth(month);
+      this.getList();
+    },
+    formatQuerymonth(defaultDate) {
+      let currentDate = defaultDate.replace("年", "-");
+      this.ruleForm.queryMonth = currentDate.replace("月", "");
+    },
     returnStatus(obj, key) {
       return this.screening[obj][key];
+    },
+    returnYesOrNo(flag) {
+      if (flag) {
+        return "是";
+      }
+      return "否";
     },
     handleDontLimit(obj) {
       if (this.ruleForm[obj].length > 0) {
@@ -362,17 +539,17 @@ export default {
         this.ruleForm.updateTimeStart = "";
         this.ruleForm.updateTimeEnd = "";
       }
-
       this.ruleForm.currPage = 1;
       this.isShowScreening = false;
       this.getList();
     },
     getList() {
+      this.loading = true;
       this.$store
         .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
         .then(res => {
           if (res.success) {
-            
+            this.loading = false;
             this.total = res.data.count;
             this.list = res.data.data;
             this.increaseCount = res.data.increaseCount;

@@ -1,4 +1,4 @@
-import { fetch } from 'request/fetch'
+import { fetch, fetchFile } from 'request/fetch'
 
 /*个税-人员采集*/
 
@@ -29,32 +29,72 @@ export function apiReport(reportForm) {
   })
 }
 
+//人员信息采集--获取反馈
+export function apiGetFeedback(feedbackForm) {
+  return fetch({
+    url: '/api/taxReport/getFeedback',
+    method: 'get',
+    params: feedbackForm
+  })
+}
 
-//纳税主体集合
-export function apiTaxSubjectInfoList() {
+/*个税-综合所得申报*/
+export function apiTaxReportTotalList(reportForm) {
+  return fetch({
+    url: '/api/taxReport/getTaxReportTotalList',
+    method: 'get',
+    params: reportForm
+  })
+}
+
+/*个税-专项附加扣除累计*/
+
+//专项附加扣除-集合列表
+export function apiOtherTotalList(totalListForm) {
+  return fetch({
+    url: '/api/taxReport/getOtherTotalList',
+    method: 'get',
+    params: totalListForm
+  })
+}
+
+//专项附加扣除-纳税主体集合
+export function apiTaxSubjectInfoList(date) {
   return fetch({
     url: '/api/taxReport/getTaxSubjectInfoList',
     method: 'get',
+    params: {
+      date
+    }
+  })
+}
+
+//专项附加扣除-导出
+export function apiOtherTotalExport(exportForm) {
+  return fetchFile({
+    url: '/api/taxReport/otherTotalExport',
+    method: 'get',
+    params: exportForm
+  })
+}
+
+//专项附加扣除-更新累计值
+export function apiDownloadOtherTotal(exportForm) {
+  return fetchFile({
+    url: '/api/taxReport/downloadOtherTotal',
+    method: 'post',
+    params: exportForm
   })
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
+/*个税-纳税主体*/
 //纳税主体-集合列表
-export function apiTaxSubjectList() {
+export function apiTaxSubjectList(taxListFormData) {
   return fetch({
     url: '/api/taxSubject/getTaxSubjectList',
     method: 'get',
+    params:taxListFormData
   })
 }
 

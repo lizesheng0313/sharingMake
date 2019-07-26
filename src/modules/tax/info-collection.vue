@@ -30,7 +30,7 @@
                 <el-form-item label="证件类型" prop="idType">
                   <el-select v-model="employeeFormData.idType" placeholder="请选择">
                     <el-option
-                      v-for="(value,key) in baseInfo.documentType"
+                      v-for="(value,key) in baseInfo.idType"
                       :key="key"
                       :label="value"
                       :value="key"
@@ -184,7 +184,6 @@ export default {
     if (this.employeeFormData.idValidStatus == "CHECK_SUCCESS") {
       this.checkSuccess = true;
     }
-    console.log(this.employeeFormData)
 
   },
   data() {
@@ -200,7 +199,7 @@ export default {
           { required: true, message: "请选择出生日期", trigger: "blur" }
         ],
         idType: [
-          { required: true, message: "请选择证件类型", trigger: "change" }
+          { required: true, message: "请选择证件类型", trigger: "blur" }
         ],
         workerType: [
           { required: true, message: "请选择受雇从业信息", trigger: "blur" }

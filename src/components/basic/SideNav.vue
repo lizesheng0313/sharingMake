@@ -5,8 +5,8 @@
         <i class="iconshouye iconfont"></i>
         <span slot="title">薪资核算</span>
       </el-menu-item>
-      <el-submenu>
-        <template slot="title">
+      <el-submenu index="">
+        <template slot="title" >
           <i class="iconfont iconshenbao"></i>
           <span>个税申报</span>
         </template>
