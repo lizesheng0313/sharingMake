@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       popShow: { isshow: false },
+
       checkId:this.$route.query.id,
       checkStatus:""
     };
@@ -90,7 +91,7 @@ export default {
     sendSalary(){
       apiProvideStubs(this.checkId).then(res=>{
         if(res.code === "0000"){
-          this.$emit("changeActive",3)
+          this.$emit("changeActive",3);
           this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:3,salaryRuleId:this.$route.query.salaryRuleId}})
         }else{
           this.$message.error(res.message)
@@ -104,14 +105,21 @@ export default {
     },
     //删除发放
     deleteSalary(){
-      apiDeleteStubs(this.checkId).then(res=>{
-        if(res.code === "0000"){
-          this.$message.success('删除成功');
-          this._loading()
-        }else{
-          this.$message.error(res.message);
-        }
-      })
+      this.$confirm('您确定要删除已发放工资条,删除后，需重新发放后员工才可查看工资条', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        apiDeleteStubs(this.checkId).then(res=>{
+          if(res.code === "0000"){
+            this.$message.success('删除成功');
+            this._loading()
+          }else{
+            this.$message.error(res.message);
+          }
+        })
+      }).catch(() => {});
     }
   }
 };
@@ -128,7 +136,7 @@ export default {
     background-size:100%;
     background-position:center;
     position: relative;
-    margin-top:30px;
+    margin-bottom:30px;
     .box-con{
       margin-left:160px;
       /*border:1px solid red;*/
@@ -165,6 +173,7 @@ export default {
       font-size: 16px;
       cursor: pointer;
     }
+
   }
 }
 </style>

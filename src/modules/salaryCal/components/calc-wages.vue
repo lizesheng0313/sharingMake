@@ -5,14 +5,15 @@
       <el-input
         placeholder="请输入姓名\手机号"
         v-model="salaryForm.key"
-        suffix-icon="iconiconfonticonfontsousuo1 iconfont"
+        prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
-        class="search-input left"
+        class="search-input"
         @keyup.enter.native="searchSalary"
       ></el-input>
+      <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="handleCalcSalary">薪资计算</el-button>
-        <el-button type="default" @click="handleCheckSalary" :disabled="checkDisabled">{{this.checkStatus === "AUDITED"?"取消审核":"薪资审核"}}</el-button>
+        <el-button type="primary" @click="handleCalcSalary" :disabled="salaryDisabled">薪资计算</el-button>
+        <el-button type="default" @click="handleCheckSalary" :disabled="checkDisabled">{{this.checkStatus === "AUDITED" ?"取消审核":"薪资审核"}}</el-button>
       </div>
     </div>
     <div class="staff-situation clearfix">
@@ -38,19 +39,14 @@
       </div>
     </div>
     <div class="staff-table">
-<!--      <el-row type="flex" class="row-bg tableHeader">-->
-<!--        <el-col v-for="(item,index) in tableCol"  :span="index === 0 ?1:3"><div class="grid-content bg-purple">{{item}}</div></el-col>-->
-<!--      </el-row>-->
-<!--      <el-row type="flex" class="row-bg" v-for="per in tableValue">-->
-<!--        <el-col v-for="(it,index) in per" :span="index === 0 ?1:3" :style="{background:(it.floatItem?'#F1F3F6':'')}"><div class="grid-content bg-purple">{{ it.val }}</div></el-col>-->
-<!--      </el-row>-->
-      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}">
+      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}" width="100%" v-loading="tableLoading">
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
           min-width="120px"
-          :label="col.col" :key="index">
+          :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="col.col == '序号' || col.col == '姓名' || col.col == '工号' || col.col == '部门'">
           <template slot-scope="scope">
-            <span>{{scope['row'][index]["val"]}}</span>
+            <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>
+<!--            <span v-else> <el-switch v-model="showCount"></el-switch> </span>-->
           </template>
         </el-table-column>
       </el-table>
@@ -58,7 +54,7 @@
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
         :current-page="salaryForm.currPage"
-        :page-sizes="[10, 50, 100, 200]"
+        :page-sizes="[20, 50, 100, 200]"
         :page-size="salaryForm.pageSize"
         layout="total, sizes, prev, pager, next"
         :total="count"
@@ -122,8 +118,8 @@
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="uploadFile">导入通过数据</el-button>
-        <el-button @click="isShowIncrease = false">取 消</el-button>
+        <el-button type="primary" :disabled="successCount===0" @click="uploadFile">导入通过数据</el-button>
+        <el-button @click="isShowImport = false">取 消</el-button>
       </span>
     </el-dialog>
     <!-- 导入完成 -->
@@ -140,8 +136,7 @@
         <a :href="' /api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="importFinish">确定</el-button>
-        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>
+        <el-button type="primary" @click="importFinish">我知道了</el-button>
       </span>
     </el-dialog>
     <!-- 筛选-->
@@ -227,6 +222,13 @@
       center
       class="exportSalaryDetailDialog"
     >
+      <div v-show="isShowUserInfo">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="checkedPersonAllChange">人员信息</el-checkbox>
+        <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
+        <el-checkbox-group v-model="checkedPerson" @change="checkedPersonChange">
+          <el-checkbox v-for="item in personOptions" :label="item" :key="item">{{item}}</el-checkbox>
+        </el-checkbox-group>
+      </div>
       <div v-for="(item,index) in diyOption" :key="index" class="diyOptionItem">
         <el-checkbox :indeterminate="isIndeterminates[index]" v-model="checkAlls[index]" @change="handleDiyCheckAllChange(index,item.value)">{{item.title}}</el-checkbox>
         <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
@@ -242,7 +244,7 @@
   </div>
 </template>
 <script>
-  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck} from '../store/api'
+  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
 export default {
   data() {
     return {
@@ -287,7 +289,7 @@ export default {
         checkId:this.$route.query.id,
         key:"",
         currPage:1,
-        pageSize:10,
+        pageSize:20,
         queryFilterParam:{
           taxSubId:"",
           departmentName:"",//部门
@@ -321,19 +323,11 @@ export default {
       isShowUserInfo:true,
       checkStatus:"",
       checkDisabled:false,//审核禁用
-    };
-  },
-  created(){
-    this.loading();
-    this.resetSreen();
-  },
-  mounted() {
-    const that = this;
-    window.onresize = () => {
-      return (() => {
-        window.screenWidth = document.body.clientWidth;
-        that.screenWidth = window.screenWidth;
-      })();
+      salaryDisabled:false,//计算薪资禁用
+      uploadFileDisabled:true,//导入通过数据禁用
+      tableAllData:[],
+      showCount:true,
+      tableLoading:false
     };
   },
   computed:{
@@ -343,10 +337,37 @@ export default {
       let month = date.getMonth()+1<10 ? "0"+(date.getMonth()+1):date.getMonth()+1;
       let day = date.getDate();
       return year+"-"+month+"-"+day+ " 00:00:00";
+    },
+    // salaryShow:function () {
+    //   return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED"
+    // },
+    // checkShow:function(){
+    //   return this.checkStatus === "FINISH" || this.checkStatus === "PAID" || this.checkStatus === "PAID"
+    // }
+  },
+  created(){
+    this.loading();
+    this.resetSreen();
+    this.salaryForm.queryFilterParam.lastEmployEndTime = ""
+  },
+  watch:{
+    showCount:function(){
+     this.salaryTableDataAll[this.salaryTableDataAll.length-1]=(this.showCount?this.countData:this.noCountData)
     }
+  },
+  mounted() {
+    const that = this;
+    window.onresize = () => {
+      return (() => {
+        window.screenWidth = document.body.clientWidth;
+        that.screenWidth = window.screenWidth;
+      })();
+    };
+    this.$store.commit("salaryCalStore/SET_ROULEID", this.salaryRuleId);
   },
   methods: {
     loading(){
+      this.tableLoading = true;
       apiSalaryList(this.salaryForm).then(res=>{
        if(res.code === "0000"){
          let salaryData = res.data;
@@ -354,25 +375,50 @@ export default {
          this.tableValue = [];
          this.salaryTableData = salaryData.tableData;
          this.salaryTableDataAll = this.salaryTableData.map(item=>item.diyrow);
-         //查看工资表状态
-         this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.salaryForm.checkId).then(res=>{
+         // 查看合计
+         this.$store.dispatch('salaryCalStore/actionPostSalarySum',this.salaryForm).then(res=>{
            if(res.code === "0000"){
-             this.checkStatus = res.data.checkStatus;
-             console.log(this.checkStatus)
-             this.checkDisabled = this.checkStatus ==='INIT';
+             this.countData = res.data.tableData[0]['diyrow']
+             this.countData.forEach(item=>{
+               if(item.col==="序号"){item.val="合计"}
+               if(item.col == '姓名'){item.val = null}
+             })
+             // this.noCountData = [];
+             // this.countData.forEach(item=>{
+             //   let obj={}
+             //   if(item.col =="序号" || item.col == "姓名"){
+             //      obj = {"col":item.col,"val":item.val,"floatItem":item.floatItem}
+             //   }else{
+             //     obj = {"col":item.col,"val":"--","floatItem":item.floatItem}
+             //   }
+             //   this.noCountData.push(obj)
+             // });
+             this.salaryTableDataAll.push(this.countData);
+             this.tableLoading = false
+           }else{
+             this.$message.error(res.message)
            }
          })
        }
       })
+      //查看工资表状态
+     this.getSalaryStatus()
+    },
+    //查看工资表状态
+    getSalaryStatus(){
+      this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.salaryForm.checkId).then(res=>{
+        if(res.code === "0000"){
+          this.checkStatus = res.data.checkStatus;
+          this.checkDisabled = this.checkStatus ==='INIT';
+          this.salaryDisabled = this.checkStatus ==='AUDITED'
+        }
+      })
     },
     cellStyle(data){
-      if(data.column.fixed){
-        return "background:#F7F7F7"
-      }
+      if(data.column.resizable){return "background:#F7F7F7"}
     },
     //选择用工类型
     changeEmployType(val){
-      console.log(val)
       if(val.length>0){
         this.noEnumEmpType = "";
         this.salaryForm.queryFilterParam.enumEmpType= val;
@@ -396,14 +442,19 @@ export default {
           salaryItemData.forEach((item,index)=>{
             if(item)
             {
-              console.log(item)
-              let value = item.map(it =>{
-                 return {'name':it.name,'id':it.id}
-              });
-              this.diyOption.push({"title":item[0].group, "value":value})
+              if(item[0]['group'] != "人员信息"){
+                let value = item.map(it =>{
+                  return {'name':it.name,'id':it.id}
+                });
+                this.diyOption.push({"title":item[0].group, "value":value})
+              }
             }
           })
           //  初始化导出配置项数据、
+            //人员信息
+          this.checkedPerson = [];
+          this.isIndeterminate = false;
+           // 配置项
           this.diyOption.forEach((item,index)=>{
             this.$set(this.diyCheckeds, index, []);
             this.isIndeterminates[index] = false;
@@ -427,14 +478,20 @@ export default {
     },
     //导入页面展示
     showImport(type){
-      this.successCount = 0;
-      this.failCount = 0;
-      this.uuid = "";
-      this.fileList=[];
-      this.importT = type;
-      this.actionUrl = type == "social"?"/api/salary/socialProvident/verify":"/api/salary/floatItem/verify";
-      this.isShowImport = true;
-      // console.log(this.action)
+      //未计算、已计算状态可导入
+      if(this.checkStatus ==="INIT" || this.checkStatus ==="COMPUTED"){
+        this.successCount = 0;
+        this.failCount = 0;
+        this.uuid = "";
+        this.fileList=[];
+        this.importType="BY_EMP_NO";
+        this.importT = type;
+        this.actionUrl = type == "social"?"/api/salary/socialProvident/verify":"/api/salary/floatItem/verify";
+        this.isShowImport = true;
+      }else{
+        this.$message.warning('本期工资数据已审核');
+      }
+
     },
     //文件上传前校验
     beforeAvatarUpload(file) {
@@ -459,10 +516,15 @@ export default {
       return isxls && isLt5M;
     },
     handleSuccess(res, file) {
-      let data = res.data;
-      this.successCount = data.successCount;
-      this.failCount = data.failCount;
-      this.uuid = data.uuid;
+      if(res.code == "0000"){
+        let data = res.data;
+        this.successCount = data.successCount;
+        // this.uploadFileDisabled = this.;
+        this.failCount = data.failCount;
+        this.uuid = data.uuid;
+      }else{
+        this.$message.error(res.message);
+      }
     },
     // 导出通过数据
     uploadFile(){
@@ -494,6 +556,8 @@ export default {
       apiGetTaxSubjectList(this.id).then(res=>{
         if(res.code == "0000"){
           this.screenTaxOption = res.data;
+        }else{
+          this.$message.error(res.message)
         }
       })
     },
@@ -508,7 +572,6 @@ export default {
         this.salaryForm["queryFilterParam"][key] = "";
       }
       this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
-      this.salaryForm.queryFilterParam.lastEmployEndTime = this.nowDate;
       this.noEnumEmpType = null;
       this.enumEmpType = [];
       this.salaryForm.queryFilterParam.enumEmpType = ["null"];
@@ -538,27 +601,32 @@ export default {
       this.$forceUpdate();
     },
     handleDiyCheckAllChange(index,value) {
-      this.diyCheckeds[index] = this.checkAlls[index] ? value : [];
+      this.diyCheckeds[index] = this.checkAlls[index] ? value.map(item=>item.id) : [];
       this.isIndeterminates[index] = false;
     },
     //导出工资表明细（提交）
     onExportSalaryItem(){
-      let selectItem = this.isShowUserInfo? [].concat(this.checkedPerson):[];
+      console.log()
+      let exportItems = []
+      let methed = this.exportType === "salaryDetail" ? apiSalaryDetailExport:apiExportDepartSum;
       for(let key in this.diyCheckeds){
-        selectItem = selectItem.concat(this.diyCheckeds[key])
+        exportItems = exportItems.concat(this.diyCheckeds[key])
       }
-      let methods = this.exportType === 'salaryDetail'?apiSalaryDetailExport :apiSalaryDetailExport
-      methods({
-      "exportItems":selectItem,
+      methed({
+      "exportPersonItems":this.checkedPerson,
+      "exportItems":exportItems,
       "queryParam":this.salaryForm
       }).then(res=>{
         if(res.status == "200"){
           this.showExportSalaryDetail = false;
+        }else{
+          this.$message.error(res.message)
         }
       })
     },
     //导出部门汇总
-    exportDepartTotal(){
+    exportDepartTotal(type){
+      this.exportType = type;
       this.isShowUserInfo = false;
       this.showExportSalaryDetail = true;
       this.getSalaryItem();
@@ -568,6 +636,8 @@ export default {
       apiSalaryComputes(this.salaryForm.checkId)
         .then(res=>{
           if(res.code === "0000"){
+            //查看状态
+            // this.getSalaryStatus();
             this.$message.success('薪资计算成功');
             this.loading()
           }
@@ -575,19 +645,28 @@ export default {
     },
   //  薪资审核
     handleCheckSalary(){
-      let status = this.checkStatus ==='AUDITED'?"UN_AUDIT":"AUDIT";
-      apiAuditSalaryCheck({
-        "checkAuditStatus":status,
-        "checkId": this.salaryForm.checkId
-      })
-        .then(res=>{
-          if(res.code === "0000"){
-            this.$message.success(this.checkStatus ==='AUDITED'?'取消审核成功':"审核成功");
-            this.loading()
-          }
+      let status = this.checkStatus ==='AUDITED'?"UN_AUDIT":"AUDIT"
+      let message =  this.checkStatus ==='AUDITED'?'已发放本期工资条，如取消审核，将撤回本期工资条，确定要继续取消审核吗？':"薪资审核后，将锁定工资表数据，您可以发送工资条、银行报盘等操作"
+      this.$confirm(message, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        apiAuditSalaryCheck({
+          "checkAuditStatus":status,
+          "checkId": this.salaryForm.checkId
         })
+          .then(res=>{
+            if(res.code === "0000"){
+              this.$message.success(this.checkStatus ==='AUDITED'?'取消审核成功':"审核成功");
+              this.loading()
+            }else{
+              this.$message.error(res.message)
+            }
+          })
+      }).catch(() => {});
     }
-
   }
 };
 </script>
@@ -596,6 +675,10 @@ export default {
 .calc-wages {
   padding: 0 20px;
   box-sizing: border-box;
+  .search{
+    display: inline-block;
+    margin-left: 20px;
+  }
   .shortCon{width:450px;}
   .el-select{width: 100%;}
   .el-form-item{margin-right:50px;}

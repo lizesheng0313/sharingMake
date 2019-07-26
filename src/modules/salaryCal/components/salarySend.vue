@@ -7,11 +7,12 @@
       <el-input
         placeholder="请输入姓名\手机号"
         v-model="salaryForm.key"
-        suffix-icon="iconiconfonticonfontsousuo1 iconfont"
+        prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
         class="search-input left"
         @keyup.enter.native="searchUser"
       ></el-input>
+      <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
         <el-button type="primary" @click="changeAllStatus('PROVIDED')" class="add-import">全部发放</el-button>
         <el-dropdown trigger="click">
@@ -29,15 +30,15 @@
     <div class="staff-situation">
       <span class="staff-total">
         总人数
-        <i>{{this.total?this.total:"--"}}</i>人
+        <i>{{this.total || this.total === 0?this.total:"--"}}</i>人
       </span>
       <span>
         未发放
-        <i>{{this.un_send ? this.un_send:"--" }}</i>人
+        <i>{{this.un_send || this.un_send === 0?this.un_send:'--'}}</i>人
       </span>
       <span>
         已发放
-        <i>{{this.send ? this.send:"--"}}</i>人
+        <i>{{this.send || this.send===0 ? this.send:"--"}}</i>人
       </span>
     </div>
     <div class="staff-table">
@@ -61,7 +62,7 @@
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
         :current-page="salaryForm.currPage"
-        :page-sizes="[1, 50, 100, 200]"
+        :page-sizes="[20, 50, 100, 200]"
         :page-size="salaryForm.pageSize"
         layout="total, sizes, prev, pager, next"
         :total="count">
@@ -80,7 +81,7 @@
           "checkId":this.$route.query.id,
           "currPage": 1,
           "key": "",
-          "pageSize":1 ,
+          "pageSize":20 ,
         },
         screenWidth: document.body.clientWidth, // 屏幕尺寸
         isShowIncrease: false,
@@ -111,7 +112,7 @@
             this.count = res.data.tableData.count;
             this.total = res.data.tableData.count;
             this.send = res.data.SEND;
-            this.un_send = res.data.un_send;
+            this.un_send = res.data.UN_SEND;
             this.salaryList = res.data.tableData.tableData.map(item=>item.diyrow)
             this.salaryLoading = false;
           }
@@ -238,6 +239,10 @@
     }
     .el-pagination{
       text-align: right;
+    }
+    .search{
+      display: inline-block;
+      margin-left: 20px;
     }
   }
 </style>

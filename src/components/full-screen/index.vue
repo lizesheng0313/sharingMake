@@ -2,7 +2,7 @@
   <div class="full-screen">
     <div v-if="hasHeader" class="header display-flex">
       <div class="return flex1">
-        <i v-if="hasReturnBtn" class="el-icon-arrow-left" @click="$router.go(-1)"></i>
+        <i v-if="hasReturnBtn" class="el-icon-arrow-left" @click="goBack"></i>
         <span class="fs-title">{{fsTitle}}</span>
       </div>
       <div class="buttons-warp flex1">
@@ -48,6 +48,11 @@ export default {
   },
   destroyed() {
     this.$store.commit(AT.SHOWAPP, true);
+  },
+  methods:{
+    goBack(){
+      this.$router.push("/salary-cal");
+    }
   }
 };
 </script>
