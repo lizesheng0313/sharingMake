@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     goOladingServer(){
-      window.open(this.originUrl+'login'+'?token='+ this.token, "_self");
+      window.open(this.originUrl+'login'+'?token='+ this.token+'from=salaryFont', "_self");
     },
     logOut(){
      window.open(this.originUrl+'login', "_self")
