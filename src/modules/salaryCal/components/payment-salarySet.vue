@@ -20,7 +20,7 @@
       </div>
       <div class="line"></div>
       <div class="salary-tip">工资条说明<span class="title-tip">(将显示在员工的工资条最后)</span></div>
-      <el-form :model="stubsMsgForm" :rules="rules" ref="stubsMsgForm"  class="demo-ruleForm">
+      <el-form :model="stubsMsgForm" ref="stubsMsgForm" :rules="rules" class="demo-ruleForm">
         <el-form-item  prop="stubsMsg">
           <el-input  type="textarea" v-model="stubsMsgForm.stubsMsg" placeholder="温馨提示：工资条属于敏感信息，请保密"></el-input>
         </el-form-item>
@@ -50,7 +50,7 @@ export default {
       },
       rules:{
         stubsMsg: [
-          { max: 60, message: '', trigger: 'blur' }
+          { max: 60, message: '内容过长', trigger: 'blur' }
         ],
       }
     };
@@ -100,7 +100,6 @@ export default {
           this.checkAlls[index] = true;
           this.isIndeterminateAll = false
         })
-
       }else{
         this.stubsItems.forEach((item,index)=>{
           this.$set(this.diyCheckeds, index, []);
@@ -122,27 +121,32 @@ export default {
       this.$forceUpdate();
     },
     handleSave(){
-      let itemIds = "";
-      for(let key in this.diyCheckeds){
-        this.diyCheckeds[key].forEach(item=>{
-          itemIds+=item+","
-        })
-      }
-      itemIds = itemIds.substr(0,itemIds.length-1);
-      if(itemIds){
-        apiEditStubs({
-          salaryId:this.salaryRuleId,
-          stubsMsg:this.stubsMsgForm.stubsMsg,
-          itemIds:itemIds
-        }).then(res=>{
-         if(res.code === "0000"){
-           this.$emit('changeSatus',false);
-           this.$message.success("设置成功");
-         }
-        })
-      }else{
-        this.$message.warning("未选择工资条项目");
-      }
+      this.$refs['stubsMsgForm'].validate((val)=>{
+        if(val){
+          let itemIds = "";
+          for(let key in this.diyCheckeds){
+            this.diyCheckeds[key].forEach(item=>{
+              itemIds+=item+","
+            })
+          }
+          itemIds = itemIds.substr(0,itemIds.length-1);
+          if(itemIds){
+            apiEditStubs({
+              salaryId:this.salaryRuleId,
+              stubsMsg:this.stubsMsgForm.stubsMsg,
+              itemIds:itemIds
+            }).then(res=>{
+              if(res.code === "0000"){
+                this.$emit('changeSatus',false);
+                this.$message.success("设置成功");
+              }
+            })
+          }else{
+            this.$message.warning("未选择工资条项目");
+          }
+        }
+      })
+      console.log(this.$refs['stubsMsgForm'].validate)
     },
     cancelSave(){
       this.$emit('changeSatus',false)

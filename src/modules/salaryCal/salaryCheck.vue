@@ -1,6 +1,6 @@
 <template>
   <div class="check-staff sflary-el-step">
-    <full-screen :fsTitle="'月度工资表'" :bgColor="'#fff'">
+    <full-screen :fsTitle="'月度工资表'" :bgColor="'#fff'" ref="full">
       <div slot="fs-buttons" class="header-button">
         <span class="collect" v-if="active==0">
           <i class="iconqiyexinxicaiji iconfont"></i>个税系统人员人信息采集
@@ -11,20 +11,20 @@
               <i>...</i>更多
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>累计专项附加扣除</el-dropdown-item>
-              <el-dropdown-item>累计应税所得初始化</el-dropdown-item>
-              <el-dropdown-item>设置工资表</el-dropdown-item>
+              <el-dropdown-item><router-link :to="{ path: '/tax/attach' }">累计专项附加扣除</router-link></el-dropdown-item>
+              <el-dropdown-item><router-link :to="{ path: '/cumulative' }">累计应税所得初始化</router-link></el-dropdown-item>
+              <el-dropdown-item><router-link :to="{path:'/salarySet',query:{'isEdit':true}}">设置工资表</router-link></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-        <span class="refresh">
+        <span class="refresh" @click="refresh">
           <i class="iconshuaxin iconfont"></i>刷新
         </span>
       </div>
       <div slot="fs-container">
         <div class="step-box" v-if="active!==3">
           <el-steps :active="active" finish-status="success" class="steps" :align-center="true">
-            <el-step title="核对人员"  @click.native="active = 0" style="cursor: pointer;"></el-step>
+            <el-step title="核对人员" @click.native="active = 0" style="cursor: pointer;"></el-step>
             <el-step title="核算薪资" @click.native="active = 1" style="cursor: pointer;"></el-step>
             <el-step title="发放薪资" @click.native="active = 2" style="cursor: pointer;"></el-step>
           </el-steps>
@@ -79,7 +79,10 @@ export default {
       if (this.active != 2) {
         this.active++;
       }
-    }
+    },
+    refresh(){
+      this.$router.go(0)
+    },
   }
 };
 </script>
@@ -112,7 +115,7 @@ export default {
     position: relative;
     .steps {
       width: 690px;
-      margin: 100px auto 0;
+      margin: 30px auto 0;
     }
     .turn-page {
       position: absolute;

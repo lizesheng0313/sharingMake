@@ -82,17 +82,17 @@
                 <span>新增</span>
               </span>
             </div>
-            <draggable animation=150 v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
+            <draggable animation=150  v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
               <el-row v-for="(item,index) in items" :key="index">
                 <el-col :span="8" v-if="item.group ==='人员信息' || item.types.sys"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
                 <el-col :span="8" v-else><div class="grid-content bg-purple" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
                 <el-col :span="8"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
                 <el-col :span="8">
                   <div class="grid-content bg-purple">
-                    <el-popover trigger="hover" placement="top" v-if="item.canDelete">
+                    <el-popover trigger="hover" placement="right" v-if="item.canDelete">
                       <el-button @click="deleteItem(item.id)">删除</el-button>
-                      <div slot="reference" class="name-wrapper">
-                        <i class="el-icon-more"></i>
+                      <div slot="reference" class="deletedStyle" >
+                        <i class="el-icon-more" style="cursor: pointer"></i>
                       </div>
                     </el-popover>
                     <el-button type="warning" plain size="mini" v-else @click="changeStatus(item)">{{item.enable?'禁用':'启用'}}</el-button>
@@ -243,7 +243,7 @@ export default {
       salaryItemDisabled:true,
       tableData:[],
       salaryItemLoding:false,
-      isEdit: this.$route.query.isEdit
+      isEdit: this.$route.query.isEdit,
     };
   },
   components: {
@@ -255,6 +255,8 @@ export default {
       sendBasicInfoForm:"basicInfoForm"
     })
   },
+  watch:{
+  },
   mounted(){
    // 初始化算新周期日
     for(let i=1;i<=28;i++){this.days.push({value:i,label:i+'号'})}
@@ -264,10 +266,13 @@ export default {
     for(let i=1;i<=31;i++){this.payDay.push({value:i,label:i+'号'})}
    // 第二步骤刷新
     if(this.rouleId){ this.ruleId = this.rouleId; this.salaryItemDisabled = false; }
+    //编辑工资表
     if(this.isEdit && this.sendBasicInfoForm){
       for(let key in this.basicInfoForm){
         this.basicInfoForm[key] = this.sendBasicInfoForm[key];
       }
+      this.activeName = "secend";
+      this.onTabClick()
     }
   },
   methods:{
@@ -343,7 +348,8 @@ export default {
       this.salaryItemLoding = true;
       this.tableData = [];
       apiSalaryItemInfo(this.ruleId).then(res=>{
-        this.tableData = res.data;
+        let tableData = res.data;
+        this.tableData = tableData.filter(it=>it)
         this.salaryItemLoding = false;
       }).catch(res=>{})
     },
@@ -475,6 +481,12 @@ export default {
     height: 46px;
     line-height: 46px;
     text-align: center;
+  }
+  .deletedStyle{
+    width:20px;
+    height:10px;
+    line-height:10px;
+    margin: 10px auto;
   }
 }
 </style>

@@ -35,17 +35,37 @@ const salaryCheckStatus = (val) => {
     case 'AUDIT_REJECT': {
       return '审核拒绝';
     }
+    case 'COMPUTED': {
+      return '已计算';
+    }
     case 'AUDITED': {
       return '审核通过';
     }
     case 'PAID': {
       return '薪资已发放';
     }
-    case 'COMPUTED': {
-      return '已计算';
-    }
     case 'FINISH': {
       return '结束';
+    }
+  }
+};
+//用工性质
+const filterEmpType = (val) => {
+  switch (val) {
+    case 'FULL_TIME': {
+      return '全职';
+    }
+    case 'PART_TIME': {
+      return '兼职';
+    }
+    case 'PRACTICE': {
+      return '实习';
+    }
+    case 'LABOUR': {
+      return '劳务';
+    }
+    case 'AUDIT_REJECT': {
+      return '退休返聘';
     }
   }
 };
@@ -113,6 +133,7 @@ export default {
   resetDate,
   texRule,
   salaryCheckStatus,
+  filterEmpType,
   getDay,
   filterType,
 }

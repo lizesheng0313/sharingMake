@@ -68,15 +68,14 @@
 }
 
 .check-staff{
-  // .el-input__suffix{
-  //   top:-2px;
-  //   cursor: pointer;
-  // } 
-  // .el-input__suffix-inner{
-  //   display: block;
-  // }
+  .el-input__suffix{
+    top:5px;
+    cursor: pointer;
+  }
+  .el-input__suffix-inner{
+    display: block;
+  }
 }
-
 .diy-el_dialog{
   border-radius:6px;
   .el-form-item__content{

@@ -4,11 +4,12 @@
       <el-input
         placeholder="请输入姓名\手机号"
         v-model="userForm.key"
-        suffix-icon="iconiconfonticonfontsousuo1 iconfont"
+        prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
         class="search-input left"
         @keyup.enter.native="searchUser"
       ></el-input>
+      <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
         <el-button type="primary" @click="showIncrease" class="add-import">增员导入</el-button>
         <el-dropdown trigger="click" @command="handleDropdown">
@@ -17,7 +18,7 @@
             <i class="iconsanjiao iconfont"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="delete">全部删除</el-dropdown-item>
+            <el-dropdown-item command="delete" :disabled="deleteDisabled">全部删除</el-dropdown-item>
             <el-dropdown-item command="export">导出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -65,7 +66,7 @@
         </el-table-column>
         <el-table-column  label="用工性质">
           <template slot-scope="scope">
-            <span>{{scope.row.name}}</span>
+            <span>{{scope.row.empType|filterEmpType}}</span>
           </template>
         </el-table-column>
         <el-table-column label="纳税主体">
@@ -73,12 +74,12 @@
             <span>{{scope.row.taxSubject}}</span>
           </template>
         </el-table-column>
-        <el-table-column  label="部门">
+        <el-table-column label="部门">
           <template slot-scope="scope">
             <span>{{scope.row.departName}}</span>
           </template>
         </el-table-column>
-        <el-table-column  label="岗位">
+        <el-table-column label="岗位">
           <template slot-scope="scope">
             <span>{{scope.row.jobTitle}}</span>
           </template>
@@ -105,7 +106,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleDelete([scope.row.id])">删除</el-button>
+            <el-button size="mini" @click="handleDelete([scope.row.id])" :disabled="deleteDisabled">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -113,7 +114,7 @@
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
         :current-page="userForm.currPage"
-        :page-sizes="[1, 50, 100, 200]"
+        :page-sizes="[20, 50, 100, 200]"
         :page-size="userForm.pageSize"
         layout="total, sizes, prev, pager, next"
         :total="count">
@@ -152,7 +153,7 @@
         <div v-show="uuid" style="margin:15px 0 0 28px">
           <span v-if="failCount === 0"><i class="el-icon-success"></i>全部导入成功</span>
           <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
-          <span v-if="successCount === 0">数据全部未通过校验</span>
+          <span v-if="successCount === 0"><i class="el-icon-error">数据全部未通过校验</i></span>
           <span><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></span>
         </div>
         <p>
@@ -164,7 +165,7 @@
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="uploadFile">导入通过数据</el-button>
+        <el-button type="primary" @click="uploadFile" :disabled="successCount===0">导入通过数据</el-button>
         <el-button @click="isShowIncrease = false">取 消</el-button>
       </span>
     </el-dialog>
@@ -179,8 +180,8 @@
       <div>导入成功<span style="color:#06B806">{{this.importFinishForm.successCount}}</span>条数据,<span style="color:red">{{this.importFinishForm.failCount}}</span>条数据导入未通过，忽略导入</div>
       <div><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="importMemberFinish">确定</el-button>
-        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>
+        <el-button type="primary" @click="importMemberFinish">我知道了</el-button>
+<!--        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>-->
       </span>
     </el-dialog>
   </div>
@@ -207,7 +208,7 @@ export default {
         "checkId":this.$route.query.id,
         "currPage": 1,
         "key": "",
-        "pageSize":1 ,
+        "pageSize":20 ,
       },
       userList:[],
       count:0,
@@ -215,8 +216,8 @@ export default {
       userLoading:false,
       imgFlag:false,
       percent:0,
-      failCount: "",
-      successCount:"",
+      failCount:0,
+      successCount:0,
       uuid: "",
       selectUserIdList:[],
       summryTotal:"",
@@ -226,7 +227,8 @@ export default {
       importFinishForm:{
         failCount:"",
         successCount:""
-      }
+      },
+      deleteDisabled:false,
     };
   },
   mounted() {
@@ -239,6 +241,8 @@ export default {
     };
     this.loading();
     this.summary();
+    //获取当前状态
+    this.getSalaryStatus();
   },
   methods: {
     loading(){
@@ -262,8 +266,17 @@ export default {
           }
         })
     },
+    getSalaryStatus(){
+      this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.userForm.checkId).then(res=>{
+        if(res.code === "0000"){
+          this.checkStatus = res.data.checkStatus;
+          this.deleteDisabled = !(this.checkStatus ==='INIT' || this.checkStatus ==='COMPURED');
+          console.log(this.checkStatus)
+        }
+      })
+    },
     handleDelete(id) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+      this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -278,7 +291,7 @@ export default {
               this.loading()
             }
           })
-        })
+        }).catch(() => {});
     },
     //切换pageId
     handleCurrentChange(val){
@@ -316,9 +329,15 @@ export default {
     },
     handleSuccess(res, file) {
       let data = res.data;
-      this.successCount = data.successCount;
-      this.failCount = data.failCount;
-      this.uuid = data.uuid;
+      if(res.code === "0000"){
+        this.successCount = data.successCount;
+        this.failCount = data.failCount;
+        this.uuid = data.uuid;
+      }else{
+        this.$message.error(res.message);
+        this.fileList = []
+      }
+
     },
   // 导出通过数据
     uploadFile(){
@@ -335,6 +354,7 @@ export default {
        }
        })
     },
+    //选择某一行
     handleSelectionChange(val){
       this.selectUserIdList = val.map((item,index)=>item.id);
     },
@@ -426,17 +446,16 @@ export default {
     .title{
       font-size: 20px;
     }
-    .el-icon-success{
-      color:#06B806;
-      font-size: 20px;
-      display: inline-block;
-      margin-right: 10px;
-    }
+    .el-icon-success{color:#06B806;}
     div{
       width: 300px;
       margin: 0 auto;
       margin-top:10px;
     }
+  }
+  .search{
+    display: inline-block;
+    margin-left: 20px;
   }
 }
 </style>
