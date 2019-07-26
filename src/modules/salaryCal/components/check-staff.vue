@@ -30,12 +30,12 @@
         <i>{{this.summryTotal}}</i>人
       </span>
       <span>
-        本月：入职
-        <i>{{this.newEmployeeCount}}</i>人
+        本月：新增
+        <i>{{incNum || incNum==0?this.incNum:"--"}}</i>人
       </span>
       <span>
-        调动
-        <i>{{this.changeEmployeeCount}}</i>人
+        减少：
+        <i>{{decNum || decNum ==0?this.decNum:"--"}}</i>人
       </span>
     </div>
     <div class="staff-table">
@@ -223,7 +223,8 @@ export default {
       uuid: "",
       selectUserIdList:[],
       summryTotal:"",
-      changeEmployeeCount:"",
+      decNum:"",
+      incNum:"",
       newEmployeeCount:"",
       isShowIncreaseFinish:false,
       importFinishForm:{
@@ -235,7 +236,6 @@ export default {
   },
   mounted() {
     const that = this;
-    console.log(this.$store.state.token)
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
@@ -257,6 +257,8 @@ export default {
           this.count = res.data.count;
         }
       })
+      //总计
+      this.summary()
     },
     summary(){
       apiCheckMemberSummary(this.userForm.checkId)
@@ -264,8 +266,8 @@ export default {
           if(res.code === "0000") {
             let data = res.data;
             this.summryTotal = data.total;
-            this.newEmployeeCount = data.newEmployeeCount;
-            this.changeEmployeeCount = data.changeEmployeeCount;
+            this.decNum = data.decNum;
+            this.incNum = data.incNum;
           }
         })
     },
