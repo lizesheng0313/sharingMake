@@ -49,12 +49,20 @@
             </span>
           </div>
           <div class="right declare-buttton-groups">
-            <el-button type="primary" v-if="showGenerate">生成申报数据</el-button>
-            <el-button type="primary" v-if="showUpdate">更新申报数据</el-button>
-            <el-button type="primary" v-if="showExport">导出申请表</el-button>
-            <el-button type="primary" v-if="showButton(['未申报','申报失败'])">发送申报</el-button>
-            <el-button type="primary" v-if="showButton(['申报处理中',['作废处理中']])">获取反馈</el-button>
-            <el-button type="primary" v-if="showButton(['申报成功'])">作废申报</el-button>
+            <el-button type="primary" v-if="showGenerate" @click="handleGenerateData">生成申报数据</el-button>
+            <el-button type="primary" v-if="showUpdate" @click="handleGenerateData">更新申报数据</el-button>
+            <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
+            <el-button
+              type="primary"
+              @click="handleSendReport"
+              v-if="showButton(['未申报','申报失败'])"
+            >发送申报</el-button>
+            <el-button
+              type="primary"
+              v-if="showButton(['申报处理中',['作废处理中']])"
+              @click="handleGetFeedback"
+            >获取反馈</el-button>
+            <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>
           </div>
         </div>
         <div class="staff-table">
@@ -92,6 +100,47 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      title="提示信息"
+      :visible.sync="isShowAbnormal"
+      width="550px"
+      center
+      class="diy-el_dialog"
+    >
+      <el-table :data="abnormalList">
+        <el-table-column prop="empName" label="姓名" width="120"></el-table-column>
+        <el-table-column prop="idNo" label="证件号码" width="140"></el-table-column>
+        <el-table-column label="备注">
+          <template>请在采集表中调整为正常并报关</template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="isShowAbnormal=false">关闭</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="输入密码"
+      :visible.sync="isShowPassword"
+      width="450px"
+      center
+      class="diy-el_dialog"
+    >
+      <el-form
+        :rules="passwordRules"
+        label-width="110px"
+        ref="refPassword"
+        class
+        :model="buttonForm"
+      >
+        <el-form-item label="请输入密码：" prop="password">
+          <el-input type="password" v-model="buttonForm.password"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleSubmitPassword">确定</el-button>
+        <el-button @click="isShowPassword=false">取消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -252,13 +301,40 @@ export default {
   },
   data() {
     return {
-      loading:false,
+      abnormalList: [
+        {
+          empName: "李泽胜",
+          idNo: "1307221994010567145"
+        },
+        {
+          empName: "李2",
+          idNo: "1307221994010567145"
+        }
+      ],
+      isShowAbnormal: false,
+      currentPasItem: "",
+      passwordRules: {
+        password: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "blur"
+          }
+        ]
+      },
+      loading: false,
       currentYear: new Date().getFullYear(),
       currentDay: new Date().getDate(),
       currentMonth: month,
       selectYear: "",
       selectMonth: "",
       statusType: SCR,
+      buttonForm: {
+        date: "",
+        password: "",
+        taxSubjectId: "",
+        queryMonth: ""
+      },
       reportForm: {
         currPage: 1,
         pageSize: 20,
@@ -272,6 +348,7 @@ export default {
         reportStatus: "",
         reportType: ""
       },
+      isShowPassword: false,
       taxSubjectInfolist: [],
       currentTaxSubName: "",
       selectDate: defaultDate,
@@ -290,6 +367,89 @@ export default {
     };
   },
   methods: {
+    handleInvalid() {
+      this.buttonForm.date = this.reportForm.queryMonth;
+      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      this.currentPasItem = "invalid";
+      this.isShowPassword = true;
+    },
+    handleGetFeedback() {
+      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      this.buttonForm.date = this.reportForm.queryMonth;
+      this.$store
+        .dispatch("taxPageStore/postGetReportBack", this.buttonForm)
+        .then(res => {
+          if (res.success) {
+            this.getList(true);
+          }
+        });
+    },
+    //生成申报数据
+    handleGenerateData() {
+      this.buttonForm.queryMonth = this.reportForm.queryMonth;
+      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      this.$store
+        .dispatch("taxPageStore/postGenerateTaxReportData", this.buttonForm)
+        .then(res => {
+          if (res.success) {
+            this.getList(true);
+          }
+        });
+    },
+    //发送申报
+    handleSendReport() {
+      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      this.buttonForm.date = this.reportForm.queryMonth;
+      this.buttonForm.queryMonth = this.reportForm.queryMonth;
+      this.currentPasItem = "send";
+      this.$store
+        .dispatch("taxPageStore/postCheckReportData", this.buttonForm)
+        .then(res => {
+          if (res.success) {
+            if (res.data.length == 0) {
+              this.isShowPassword = true;
+            } else {
+              this.abnormalList = res.data;
+              this.isShowAbnormal = true;
+            }
+          }
+        });
+    },
+    //密码提交
+    handleSubmitPassword() {
+      this.$refs.refPassword.validate(valid => {
+        if (this.currentPasItem == "send") {
+          this.$store
+            .dispatch("taxPageStore/postSendReport", this.buttonForm)
+            .then(res => {
+              if (res.success) {
+                this.$message({
+                  message:
+                    "当前" +
+                    this.selectDate +
+                    "申请表已发送申报，请在申请表中获取反馈",
+                  type: "success"
+                });
+                this.getList();
+              }
+            });
+        } else if (this.currentPasItem == "invalid") {
+          this.$store
+            .dispatch("taxPageStore/postCancelSubTaxReport", this.buttonForm)
+            .then(res => {
+              if (res.success) {
+                this.getList(true);
+              }
+            });
+        }
+      });
+    },
+    //导出申请报
+    handleExportApplyTable() {
+      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      this.buttonForm.date = this.reportForm.queryMonth;
+      this.$store.dispatch("taxPageStore/getSubTaxReportExport",this.buttonForm)
+    },
     showButton(arr) {
       if (this.currentDay < 16) {
         //所选为上月且不是1月份
@@ -351,7 +511,6 @@ export default {
       this.getList();
     },
     changeMonth(month) {
-      console.log;
       this.formatQuerymonth(month);
       this.reportForm.currPage = 1;
       this.getList();
@@ -367,7 +526,7 @@ export default {
       this.reportForm.currPage = 1;
       this.getList();
     },
-    getList() {
+    getList(flag) {
       this.loading = true;
       this.$store
         .dispatch("taxPageStore/actionTaxReportTotalList", this.reportForm)
@@ -384,6 +543,12 @@ export default {
             ];
             this.total = res.data.count;
             this.list = res.data.data;
+            if (flag) {
+              this.$message({
+                message: "操作完成",
+                type: "success"
+              });
+            }
           }
         });
     }

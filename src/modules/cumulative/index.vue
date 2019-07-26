@@ -30,15 +30,11 @@
       </div>
     </div>
     <div class="staff-table">
-      <!-- <div class="floating-menu">
-        <span>删除</span>
-      </div>-->
-      <el-table
-        :data="list"
-        class="check-staff_table"
-        :style="{width:screenWidth-285+'px'}"
-        v-loading="loading"
-      >
+      <div class="floating-menu">
+        <span>已选中{{}}人</span>
+        <el-button size="mini" class="button-mini">批量删除</el-button>
+      </div>
+      <el-table :data="list" class="check-staff_table" :style="{width:screenWidth-285+'px'}">
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column prop="taxSubName" label="纳税主体" width="140"></el-table-column>
         <el-table-column prop="empName" label="姓名" width="140"></el-table-column>
@@ -200,8 +196,7 @@ export default {
             message: "已取消删除"
           });
         });
-    },
-    handleScuess() {}
+    }
   }
 };
 </script>
@@ -283,21 +278,7 @@ export default {
     }
     position: relative;
     margin-top: 27px;
-    .floating-menu {
-      position: absolute;
-      left: 100px;
-      width: 500px;
-      z-index: 99;
-      top: 0;
-      line-height: 40px;
-      height: 40px;
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 3px;
-      color: #fff;
-      span {
-        margin: 0 10px;
-      }
-    }
+
     .staff-page {
       margin-top: 20px;
       text-align: right;

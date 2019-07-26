@@ -390,21 +390,6 @@ export default {
       }
       position: relative;
       margin-top: 27px;
-      .floating-menu {
-        position: absolute;
-        left: 100px;
-        width: 500px;
-        z-index: 99;
-        top: 0;
-        line-height: 40px;
-        height: 40px;
-        background: rgba(0, 0, 0, 0.8);
-        border-radius: 3px;
-        color: #fff;
-        span {
-          margin: 0 10px;
-        }
-      }
       .staff-page {
         margin-top: 20px;
         text-align: right;

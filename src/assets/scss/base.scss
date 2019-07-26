@@ -333,3 +333,22 @@ a{
     width:280px;
   }
 }
+
+.floating-menu {
+  z-index: 120;
+  padding: 6px 0;
+  position: absolute;
+  top: 0;
+  left: 46px;
+  line-height: 36px;
+  background: #fafafa;
+  width: 95.5%;
+  text-indent: 20px;
+  span {
+    margin: 0 10px;
+  }
+  .button-mini{
+    padding:7px 3px;
+    border-radius:3px;
+  }
+}

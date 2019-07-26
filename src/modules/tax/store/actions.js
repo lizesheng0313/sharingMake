@@ -1,4 +1,4 @@
-import { apiEmpCollectList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList} from './api'
+import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData} from './api'
 
 /*个税-人员采集*/
 
@@ -44,14 +44,45 @@ export const actionDownloadOtherTotal = ({ dispatch }, tatalForm) => {
 
 /*个税-综合申报*/
 
-//综合申报列表
+//综合申报-列表
 export const actionTaxReportTotalList = ({ dispatch }, reportForm) => {
     return apiTaxReportTotalList(reportForm)
 }
 
+//综合申报-生成申报数据
+export const postGenerateTaxReportData = ({ dispatch }, generateForm) => {
+    return apiGenerateTaxReportData(generateForm)
+}
+
+//综合申报-作废申报
+export const postCancelSubTaxReport = ({ dispatch }, invalidForm) => {
+    return apiCancelSubTaxReport(invalidForm)
+}
+
+//综合申报-获取反馈结果
+export const postGetReportBack = ({ dispatch }, invalidForm) => {
+    return apiGetReportBack(invalidForm)
+}
+
+//综合申报-发送申报
+export const postSendReport = ({ dispatch }, sendReportForm) => {
+    return apiSendReport(sendReportForm)
+}
+
+//综合申报-获取人员状态为非正常
+export const postCheckReportData = ({ dispatch }, reportForm) => {
+    return apiCheckReportData(reportForm)
+}
+
+//综合申报-申报表导出
+export const getSubTaxReportExport = ({ dispatch }, reportForm) => {
+    return apiSubTaxReportExport(reportForm)
+}
+
+
+
 
 /*个税-纳税主体*/
-
 //纳税主体-集合列表
 export const actionTaxSubjectList = ({ dispatch },taxListFormData) => {
     return apiTaxSubjectList(taxListFormData)
