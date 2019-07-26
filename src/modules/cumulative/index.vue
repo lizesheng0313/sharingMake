@@ -30,11 +30,16 @@
       </div>
     </div>
     <div class="staff-table">
-      <div class="floating-menu">
-        <span>已选中{{}}人</span>
-        <el-button size="mini" class="button-mini">批量删除</el-button>
+      <div class="floating-menu" v-if="deleteIdsForm.ids.length>0">
+        <span>已选中{{deleteIdsForm.ids.length}}人</span>
+        <el-button size="mini" class="button-mini" @click="handleDeleteItem">批量删除</el-button>
       </div>
-      <el-table :data="list" class="check-staff_table" :style="{width:screenWidth-285+'px'}">
+      <el-table
+        :data="list"
+        class="check-staff_table"
+        :style="{width:screenWidth-285+'px'}"
+        @selection-change="handleSelectItem"
+      >
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column prop="taxSubName" label="纳税主体" width="140"></el-table-column>
         <el-table-column prop="empName" label="姓名" width="140"></el-table-column>
@@ -89,6 +94,9 @@ export default {
   },
   data() {
     return {
+      deleteIdsForm: {
+        ids: []
+      },
       uploadFileData: {
         uuid: ""
       },
@@ -125,6 +133,13 @@ export default {
     this.getList();
   },
   methods: {
+    //表格选中事件
+    handleSelectItem(row) {
+      this.deleteIdsForm.ids = [];
+      row.forEach(element => {
+        this.deleteIdsForm.ids.push(element.id);
+      });
+    },
     changeRadioValue(val) {
       this.parameterData.type = val;
     },
@@ -166,8 +181,8 @@ export default {
           }
         });
     },
-    //删除
-    handleDelete(id) {
+    //删除接口
+    handleDeleteItem() {
       this.$confirm(
         "您确定删除员工本年的累计数据，如果是，请点击“确定”，如果否，请点击“取消”",
         "删除确认",
@@ -179,7 +194,10 @@ export default {
       )
         .then(() => {
           this.$store
-            .dispatch("cumulativePageStore/actionDelTaxTotalBase", id)
+            .dispatch(
+              "cumulativePageStore/actionDelTaxTotalBase",
+              this.deleteIdsForm
+            )
             .then(res => {
               if (res.success) {
                 this.getList();
@@ -196,6 +214,11 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    //删除
+    handleDelete(id) {
+      this.deleteIdsForm.ids = [id];
+      this.handleDeleteItem();
     }
   }
 };
