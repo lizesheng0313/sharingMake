@@ -42,20 +42,14 @@
       <!-- <div class="floating-menu">
         <span>删除</span>
       </div>-->
-      <el-table
-        :data="userList"
-        class="check-staff_table"
-        :style="{width:screenWidth-40+'px'}"
-        v-loading="userLoading"
-        @selection-change="handleSelectionChange"
-      >
+      <el-table :data="userList" class="check-staff_table" :style="{width:screenWidth-40+'px'}" v-loading="userLoading"  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column label="姓名">
           <template slot-scope="scope">
-            <span>{{scope.row.name}}</span>
+             <span>{{scope.row.name}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="工号">
+        <el-table-column  label="工号">
           <template slot-scope="scope">
             <span>{{scope.row.empNo}}</span>
           </template>
@@ -65,12 +59,12 @@
             <span>{{scope.row.idCardNo}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="手机号">
+        <el-table-column  label="手机号">
           <template slot-scope="scope">
             <span>{{scope.row.phoneNo}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="用工性质">
+        <el-table-column  label="用工性质">
           <template slot-scope="scope">
             <span>{{scope.row.empType|filterEmpType}}</span>
           </template>
@@ -90,33 +84,29 @@
             <span>{{scope.row.jobTitle}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="工作地点">
+        <el-table-column  label="工作地点">
           <template slot-scope="scope">
             <span>{{scope.row.workAddress}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="入职时间">
+        <el-table-column  label="入职时间">
           <template slot-scope="scope">
             <span>{{scope.row.empStartDate?scope.row.empStartDate.split(" ")[0]:""}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="工资卡银行">
+        <el-table-column  label="工资卡银行">
           <template slot-scope="scope">
             <span>{{scope.row.bank}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="工资卡号">
+        <el-table-column  label="工资卡号">
           <template slot-scope="scope">
             <span>{{scope.row.bankNo}}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="handleDelete([scope.row.id])"
-              :disabled="deleteDisabled"
-            >删除</el-button>
+            <el-button size="mini" @click="handleDelete([scope.row.id])" :disabled="deleteDisabled">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -127,11 +117,16 @@
         :page-sizes="[20, 50, 100, 200]"
         :page-size="userForm.pageSize"
         layout="total, sizes, prev, pager, next"
-        :total="count"
-      ></el-pagination>
+        :total="count">
+      </el-pagination>
     </div>
     <!--  增员导入  -->
-    <el-dialog :visible.sync="isShowIncrease" width="600px" center class="diy-el_dialog">
+    <el-dialog
+      :visible.sync="isShowIncrease"
+      width="600px"
+      center
+      class="diy-el_dialog"
+    >
       <div>
         <p class="headings">1、选择导入匹配方式</p>
         <div class="diy-el_radio">
@@ -150,33 +145,25 @@
           :file-list="fileList"
           :before-upload="beforeAvatarUpload"
           :on-success="handleSuccess"
+          :headers="myHeaders"
           :data="{'id':userForm.checkId}"
         >
           <span class="headings">2、</span>
           <el-button size="small" type="primary">选择文件</el-button>
         </el-upload>
         <div v-show="uuid" style="margin:15px 0 0 28px">
-          <span v-if="failCount === 0">
-            <i class="el-icon-success"></i>全部导入成功
-          </span>
-          <span v-if="failCount !== 0 && successCount !==0">
-            <i class="el-icon-warning"></i>数据部分校验通过，有
-            <strong style="color:red">{{this.failCount}}</strong>条数据错误
-          </span>
-          <span v-if="successCount === 0">
-            <i class="el-icon-error">数据全部未通过校验</i>
-          </span>
-          <span>
-            <a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a>
-          </span>
+          <span v-if="failCount === 0"><i class="el-icon-success"></i>全部导入成功</span>
+          <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
+          <span v-if="successCount === 0"><i class="el-icon-error">数据全部未通过校验</i></span>
+          <span><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></span>
         </div>
         <p>
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
-          <span>
-            <a href="/api/salary/checkMember/template/download">下载模板</a>
-          </span>
+          <span><a @click="downloadMember">下载模板</a></span>
         </p>
-        <p class="instructions">说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资</p>
+        <p class="instructions">
+          说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资
+        </p>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="uploadFile" :disabled="successCount===0">导入通过数据</el-button>
@@ -184,37 +171,31 @@
       </span>
     </el-dialog>
     <!-- 导入完成 -->
-    <el-dialog :visible.sync="isShowIncreaseFinish" width="500px" center class="importFinishDialog">
-      <div class="title">
-        <i class="el-icon-success"></i>导入完成
-      </div>
-      <div>
-        导入成功
-        <span style="color:#06B806">{{this.importFinishForm.successCount}}</span>条数据,
-        <span style="color:red">{{this.importFinishForm.failCount}}</span>条数据导入未通过，忽略导入
-      </div>
-      <div>
-        <a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a>
-      </div>
+    <el-dialog
+      :visible.sync="isShowIncreaseFinish"
+      width="500px"
+      center
+      class="importFinishDialog"
+    >
+      <div class="title"><i class="el-icon-success"></i>导入完成</div>
+      <div>导入成功<span style="color:#06B806">{{this.importFinishForm.successCount}}</span>条数据,<span style="color:red">{{this.importFinishForm.failCount}}</span>条数据导入未通过，忽略导入</div>
+      <div><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="importMemberFinish">我知道了</el-button>
-        <!--        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>-->
+<!--        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>-->
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import {
-  apiCheckMember,
-  apiImportMember,
-  apiCheckMemberdelete,
-  apiCheckMemberSummary
-} from "../store/api";
+  import { apiCheckMember,apiImportMember,apiCheckMemberdelete,apiCheckMemberSummary} from '../store/api'
 export default {
+
   data() {
     return {
       radio: 3,
       fileList: [],
+      myHeaders:{Authorization:this.$store.state.token},
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       input: "",
       isShowIncrease: false,
@@ -225,35 +206,36 @@ export default {
           address: "123"
         }
       ],
-      userForm: {
-        checkId: this.$route.query.id,
-        currPage: 1,
-        key: "",
-        pageSize: 20
+      userForm:{
+        "checkId":this.$route.query.id,
+        "currPage": 1,
+        "key": "",
+        "pageSize":20 ,
       },
-      userList: [],
-      count: 0,
-      fileList: [],
-      userLoading: false,
-      imgFlag: false,
-      percent: 0,
-      failCount: 0,
-      successCount: 0,
+      userList:[],
+      count:0,
+      fileList:[],
+      userLoading:false,
+      imgFlag:false,
+      percent:0,
+      failCount:0,
+      successCount:0,
       uuid: "",
-      selectUserIdList: [],
-      summryTotal: "",
-      changeEmployeeCount: "",
-      newEmployeeCount: "",
-      isShowIncreaseFinish: false,
-      importFinishForm: {
-        failCount: "",
-        successCount: ""
+      selectUserIdList:[],
+      summryTotal:"",
+      changeEmployeeCount:"",
+      newEmployeeCount:"",
+      isShowIncreaseFinish:false,
+      importFinishForm:{
+        failCount:"",
+        successCount:""
       },
-      deleteDisabled: false
+      deleteDisabled:false,
     };
   },
   mounted() {
     const that = this;
+    console.log(this.$store.state.token)
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
@@ -266,73 +248,72 @@ export default {
     this.getSalaryStatus();
   },
   methods: {
-    loading() {
+    loading(){
       this.userLoading = true;
-      apiCheckMember(this.userForm).then(res => {
-        if (res.code === "0000") {
+      apiCheckMember(this.userForm).then(res=>{
+        if(res.code === "0000"){
           this.userLoading = false;
           this.userList = res.data.data;
           this.count = res.data.count;
         }
-      });
+      })
     },
-    summary() {
-      apiCheckMemberSummary(this.userForm.checkId).then(res => {
-        if (res.code === "0000") {
-          let data = res.data;
-          this.summryTotal = data.total;
-          this.newEmployeeCount = data.newEmployeeCount;
-          this.changeEmployeeCount = data.changeEmployeeCount;
-        }
-      });
-    },
-    getSalaryStatus() {
-      this.$store
-        .dispatch("salaryCalStore/actionGetSalaryStatus", this.userForm.checkId)
-        .then(res => {
-          if (res.code === "0000") {
-            this.checkStatus = res.data.checkStatus;
-            this.deleteDisabled = !(
-              this.checkStatus === "INIT" || this.checkStatus === "COMPURED"
-            );
-            console.log(this.checkStatus);
+    summary(){
+      apiCheckMemberSummary(this.userForm.checkId)
+        .then(res=>{
+          if(res.code === "0000") {
+            let data = res.data;
+            this.summryTotal = data.total;
+            this.newEmployeeCount = data.newEmployeeCount;
+            this.changeEmployeeCount = data.changeEmployeeCount;
           }
-        });
+        })
+    },
+    getSalaryStatus(){
+      this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.userForm.checkId).then(res=>{
+        if(res.code === "0000"){
+          this.checkStatus = res.data.checkStatus;
+          this.deleteDisabled = !(this.checkStatus ==='INIT' || this.checkStatus ==='COMPURED');
+          console.log(this.checkStatus)
+        }
+      })
+    },
+    //人员模板下载
+    downloadMember(){
+      this.$store.dispatch('salaryCalStore/postCheckMemberDownload').then(res=>{
+        if(res.code === "0000"){
+        }
+      })
     },
     handleDelete(id) {
-      this.$confirm(
-        "您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }
-      )
+      this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
         .then(() => {
-          apiCheckMemberdelete(id).then(res => {
-            if (res.code === "0000") {
+          apiCheckMemberdelete(id,this.userForm.checkId).then(res=>{
+            if(res.code === "0000"){
               this.$message({
                 type: "success",
                 message: "删除成功!"
               });
-              this.loading();
+              this.loading()
             }
-          });
-        })
-        .catch(() => {});
+          })
+        }).catch(() => {});
     },
     //切换pageId
-    handleCurrentChange(val) {
+    handleCurrentChange(val){
       this.userForm.currPage = val;
-      this.loading();
+      this.loading()
     },
-    handleSizeChange(val) {
+    handleSizeChange(val){
       this.userForm.pageSize = val;
-      this.loading();
+      this.loading()
     },
-    searchUser() {
-      this.loading();
+    searchUser(){
+      this.loading()
     },
     //文件上传前校验
     beforeAvatarUpload(file) {
@@ -345,71 +326,67 @@ export default {
           message: "上传文件类型只能是 xls,xlsx 格式!",
           type: "warning"
         });
-        this.fileList = [];
+        this.fileList = []
       }
       if (!isLt5M) {
         this.$message({
           message: "上传文件大小不能超过 5MB!",
           type: "warning"
         });
-        this.fileList = [];
+        this.fileList = []
       }
       return isxls && isLt5M;
     },
     handleSuccess(res, file) {
       let data = res.data;
-      if (res.code === "0000") {
+      if(res.code === "0000"){
         this.successCount = data.successCount;
         this.failCount = data.failCount;
         this.uuid = data.uuid;
-      } else {
+      }else{
         this.$message.error(res.message);
-        this.fileList = [];
+        this.fileList = []
       }
+
     },
-    // 导出通过数据
-    uploadFile() {
-      apiImportMember({
-        uuid: this.uuid,
-        id: this.userForm.checkId
-      }).then(res => {
-        if (res.code === "0000") {
-          let importData = res.data;
-          this.importFinishForm.failCount = importData.failCount;
-          this.importFinishForm.successCount = importData.successCount;
-          this.isShowIncrease = false;
-          this.isShowIncreaseFinish = true;
-        }
-      });
+  // 导出通过数据
+    uploadFile(){
+       apiImportMember({
+         uuid:this.uuid,
+         id:this.userForm.checkId
+       }).then(res=>{
+       if(res.code === '0000'){
+         let importData = res.data;
+         this.importFinishForm.failCount = importData.failCount;
+         this.importFinishForm.successCount = importData.successCount;
+         this.isShowIncrease = false;
+         this.isShowIncreaseFinish = true;
+       }
+       })
     },
     //选择某一行
-    handleSelectionChange(val) {
-      this.selectUserIdList = val.map((item, index) => item.id);
+    handleSelectionChange(val){
+      this.selectUserIdList = val.map((item,index)=>item.id);
     },
-    handleDropdown(val) {
-      if (val === "delete") {
-        if (this.selectUserIdList.length === 0) {
+    handleDropdown(val){
+      if(val === 'delete'){
+        if(this.selectUserIdList.length === 0){
           this.$message.warning("请选择要删除的人员");
-        } else {
-          this.handleDelete(this.selectUserIdList);
+        }else{
+          this.handleDelete(this.selectUserIdList)
         }
-      } else {
-        window.location.href =
-          "/api/salary/checkMember/export?checkId=" +
-          this.userForm.checkId +
-          "&" +
-          "key=" +
-          this.userForm.key;
+      }else{
+        window.location.href = "/api/salary/checkMember/export?checkId="+this.userForm.checkId+"&"+"key="+this.userForm.key
       }
     },
-    showIncrease() {
+    showIncrease(){
       this.isShowIncrease = true;
       this.fileList = [];
-      this.uuid = "";
+      this.uuid = ""
     },
-    importMemberFinish() {
+    importMemberFinish(){
       this.loading();
-      this.isShowIncreaseFinish = false;
+      this.isShowIncreaseFinish = false
     }
   }
 };
@@ -452,28 +429,41 @@ export default {
     }
     position: relative;
     margin-top: 27px;
+    .floating-menu {
+      position: absolute;
+      left: 100px;
+      width: 500px;
+      z-index: 99;
+      top: 0;
+      line-height: 40px;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 3px;
+      color: #fff;
+      span {
+        margin: 0 10px;
+      }
+    }
     .staff-page {
       margin-top: 20px;
       text-align: right;
     }
   }
-  .el-pagination {
+  .el-pagination{
     text-align: right;
   }
-  .importFinishDialog {
-    .title {
+  .importFinishDialog{
+    .title{
       font-size: 20px;
     }
-    .el-icon-success {
-      color: #06b806;
-    }
-    div {
+    .el-icon-success{color:#06B806;}
+    div{
       width: 300px;
       margin: 0 auto;
-      margin-top: 10px;
+      margin-top:10px;
     }
   }
-  .search {
+  .search{
     display: inline-block;
     margin-left: 20px;
   }
