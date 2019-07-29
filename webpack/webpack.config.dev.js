@@ -42,8 +42,8 @@ const config = Object.assign(webpackConfigBase.config, {
   devServer: {
     proxy: {
       '/api': {
-        target: "http://172.19.60.38:8017/",
-        // target:"http://172.19.65.13:9999",
+        // target: "http://172.19.60.38:8017/",
+        target:"http://172.19.64.3:9999",
         secure: false,
         changeOrigin: true,
         // pathRewrite: {

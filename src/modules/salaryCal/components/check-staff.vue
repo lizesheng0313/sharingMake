@@ -376,11 +376,11 @@ export default {
     },
     handleDropdown(val){
       if(val === 'delete'){
-        if(this.selectUserIdList.length === 0){
-          this.$message.warning("请选择要删除的人员");
-        }else{
-          this.handleDelete(this.selectUserIdList)
-        }
+        // if(this.selectUserIdList.length === 0){
+        //   this.$message.warning("请选择要删除的人员");
+        // }else{
+        //   this.handleDelete(this.selectUserIdList)
+        // }
       }else{
         window.location.href = "/api/salary/checkMember/export?checkId="+this.userForm.checkId+"&"+"key="+this.userForm.key
       }
@@ -435,21 +435,6 @@ export default {
     }
     position: relative;
     margin-top: 27px;
-    .floating-menu {
-      position: absolute;
-      left: 100px;
-      width: 500px;
-      z-index: 99;
-      top: 0;
-      line-height: 40px;
-      height: 40px;
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 3px;
-      color: #fff;
-      span {
-        margin: 0 10px;
-      }
-    }
     .staff-page {
       margin-top: 20px;
       text-align: right;
