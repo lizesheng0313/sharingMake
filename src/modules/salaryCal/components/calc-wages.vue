@@ -652,6 +652,18 @@ export default {
     },
   //  薪资审核
     handleCheckSalary(type){
+      if(type === "UN_AUDIT"){
+        if(this.checkStatus === "PAID"){
+          this.$message.warning("本月工资条已发放，请先撤回并删除已发放工资条后再取消审核？")
+        }else{
+          this.audited(type)
+        }
+      }else{
+          this.audited(type)
+      }
+      
+    },
+    audited(type){
       let status = this.checkStatus ==='AUDITED'?"":"AUDIT";
       let message = type ==='UN_AUDIT'?'已发放本期工资条，如取消审核，将撤回本期工资条，确定要继续取消审核吗？':"薪资审核后，将锁定工资表数据，您可以发送工资条、银行报盘等操作"
       this.$confirm(message, '提示', {
