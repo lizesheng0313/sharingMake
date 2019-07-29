@@ -19,12 +19,10 @@
 export default {
   data() {
     return {
-      originUrl:location.host === "http://172.19.60.38:18490"?"http://172.19.60.38/main.html#/":"http://172.19.60.38/main.html#/"
+      originUrl:window.__CURRENT_ENV__ === "prod" ? 'https://www.olading.com/main.html#/':'http://172.19.60.38/main.html#/',//跳转路径
     };
   },
   created(){
-    this.token = location.href.split('?')[1].split('=')[1];
-    this.$store.commit(AT.SET_TOKEN,this.token);
   },
   methods: {
     goOladingServer(){

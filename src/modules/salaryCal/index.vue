@@ -28,7 +28,7 @@
         <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>
       </div>
       <div class="salary-payroll">
-        <div class="payroll-box" v-for="(item,index) in salaryRuleList.used">
+        <div class="payroll-box" v-for="(item,index) in salaryRuleUsedList">
           <el-row type="flex">
             <el-col :span="12">
               <div>
@@ -106,6 +106,7 @@ export default {
         "used":[],
         "disabled":[]
       },
+      salaryRuleUsedList:[],
       payTh:{
         0:"第一次发薪",
         1:"第二次发薪",
@@ -140,15 +141,22 @@ export default {
   methods: {
     loading(){
       apiSalaryRuleList(this.currentDate).then(res=>{
-        this.salaryRuleList = res.data;
-        this.salaryRuleList.used.forEach((item,index)=>{
-          if(item.payInfos && item.payInfos.length>0){
-            item.payInfos.forEach((it,ins)=>{
-              it.dec = this.payTh[ins];
-              this.selectUsedForm[item.salaryRuleId] = item.payInfos[item.payInfos.length-1]['salaryCheckStatus']+','+item.payInfos[item.payInfos.length-1]['id']
-            })
+        if(res.code==="0000"){
+          this.salaryRuleList = res.data;
+          this.salaryRuleUsedList = this.salaryRuleList?this.salaryRuleList.used:null;
+          if(this.salaryRuleUsedList){
+            this.salaryRuleUsedList.forEach((item,index)=>{
+              if(item.payInfos && item.payInfos.length>0){
+                item.payInfos.forEach((it,ins)=>{
+                  it.dec = this.payTh[ins];
+                  this.selectUsedForm[item.salaryRuleId] = item.payInfos[item.payInfos.length-1]['salaryCheckStatus']+','+item.payInfos[item.payInfos.length-1]['id']
+                })
+              }
+            });
           }
-        });
+        }else{
+          this.$message.error(res.message)
+        }
       })
     },
     showSelect:function(item){
