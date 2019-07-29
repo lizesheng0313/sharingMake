@@ -1,4 +1,4 @@
-import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload} from './api'
+import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll} from './api'
 
 export const actionGetSalaryStatus = ({ dispatch },id) => {
   return apiGetSalaryStatus(id);
@@ -15,5 +15,8 @@ export const actionPostSalarySum = ({ dispatch },form) => {
 export const postCheckMemberDownload = ({ dispatch }) => {
   return apiCheckMemberDownload();
 }
-
+//核对人员删除全部
+export const deleteCheckMemberDeleteAll = ({ dispatch },checkId) => {
+  return apiCheckMemberDeleteAll(checkId);
+}
 

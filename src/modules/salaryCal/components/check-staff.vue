@@ -381,6 +381,20 @@ export default {
         // }else{
         //   this.handleDelete(this.selectUserIdList)
         // }
+        this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.$store.dispatch('salaryCalStore/deleteCheckMemberDeleteAll',this.userForm.checkId).then(res=>{
+              if(res.code === "0000"){
+                this.loading();
+                this.$message.success("删除成功")
+              }
+            })
+          }).catch(() => {});
+
       }else{
         window.location.href = "/api/salary/checkMember/export?checkId="+this.userForm.checkId+"&"+"key="+this.userForm.key
       }

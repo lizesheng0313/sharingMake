@@ -101,6 +101,17 @@ export function apiCheckMemberdelete(ids,checkId) {
     },
   })
 }
+//核对人员删除全部
+export function apiCheckMemberDeleteAll(checkId) {
+  return fetch({
+    url: '/api/salary/checkMember/deleteAll',
+    method: 'delete',
+    data: {
+      checkId:checkId
+    },
+  })
+}
+
 export function apiCheckMemberSummary(checkId) {
   return fetch({
     url: '/api/salary/checkMember/summary/'+checkId,

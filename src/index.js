@@ -21,8 +21,13 @@ import store from './store'
 Vue.config.productionTip = false;
 
 //存储本地token
-let token =location.href.includes('?')? location.href.split('?')[1].split('=')[1]:"";
-store.commit("SET_TOKEN",token);
+if(location.href.includes('?')){
+  if(location.href.split('?')[1].split('=')[0] === "token"){
+    let token =location.href.includes('?')? location.href.split('?')[1].split('=')[1]:"";
+    store.commit("SET_TOKEN",token);
+  }
+}
+
 
 // fetchGetConfig().then(res=> {
 
