@@ -18,9 +18,11 @@ import 'directives'
 
 import store from './store'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
-
+//存储本地token
+let token =location.href.includes('?')? location.href.split('?')[1].split('=')[1]:"";
+store.commit("SET_TOKEN",token);
 
 // fetchGetConfig().then(res=> {
 
