@@ -39,8 +39,8 @@ export function fetch(options) {
       let data = response.data;
       if (data.code != "0000") {
         Message.error(data.message);
-        if(data.code === "1000"){
-          window.open(window.__CURRENT_ENV__+'login', "_self")
+        if (data.code === "1000") {
+          window.open(window.__CURRENT_ENV__ + 'login', "_self")
         }
       }
       resolve(data)
@@ -53,6 +53,7 @@ export function fetch(options) {
 }
 //导出excel
 export function fetchFile(options) {
+
   return new Promise((resolve, reject) => {
     options.responseType = "blob";
     instance(options).then(response => {

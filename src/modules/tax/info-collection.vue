@@ -325,11 +325,12 @@ export default {
     margin: 0 auto;
   }
   .title {
-    margin-left: 25px;
+    margin-left: 250px;
     display: inline-block;
     margin-top: 30px;
     font-weight: 500;
-    font-size: 14px;
+    font-size:16px;
+    margin-bottom:50px;
   }
   .right-input-box {
     margin-left: 20px;
