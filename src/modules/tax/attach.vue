@@ -318,7 +318,6 @@ export default {
       }
       .update-value {
         height: 35px;
-        margin-top: -5px;
         margin-right: 50px;
         color: $mainColor;
         cursor: pointer;

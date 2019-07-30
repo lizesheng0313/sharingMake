@@ -2,8 +2,8 @@
   <div class="check-staff sflary-el-step">
     <full-screen :fsTitle="'月度工资表'" :bgColor="'#fff'" ref="full">
       <div slot="fs-buttons" class="header-button">
-        <span class="collect" v-if="active==0">
-          <i class="iconqiyexinxicaiji iconfont"></i>个税系统人员人信息采集
+        <span class="collect" v-if="active==0" >
+         <router-link :to="{ path: '/tax/collect' }"> <i class="iconqiyexinxicaiji iconfont"></i>个税系统人员人信息采集</router-link>
         </span>
         <div class="more-operation" v-if="active==1">
           <el-dropdown trigger="click">

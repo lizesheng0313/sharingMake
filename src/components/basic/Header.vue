@@ -15,13 +15,16 @@
   </div>
 </template>
 <script>
-  import * as AT from "@/store/actionTypes";
+  import { mapState } from "vuex";
 export default {
   data() {
     return {
       originUrl:window.__CURRENT_ENV__ === "prod" ? 'https://www.olading.com/main.html#/':'http://172.19.60.38/main.html#/',//跳转路径
     };
   },
+  computed:mapState({
+    token:"token",
+  }),
   created(){
   },
   methods: {

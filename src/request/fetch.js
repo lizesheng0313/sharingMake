@@ -58,6 +58,7 @@ export function fetchFile(options) {
     options.responseType = "blob";
     instance(options).then(response => {
       let resData = response.data;
+      console.log(resData)
       resolve(response);
       let data = response.data;
       let url = window.URL.createObjectURL(data);

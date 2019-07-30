@@ -42,6 +42,11 @@
       </span>
     </div>
     <div class="staff-table">
+      <div class="floating-menu" v-if="selectUserIdList.length>0">
+        <span>已选中{{selectUserIdList.length}}人</span>
+        <el-button size="mini" class="button-mini" @click="handleBatchSend" v-if="selectUserStatusList.includes('已发放')">批量发放</el-button>
+        <el-button size="mini" class="button-mini" @click="handleBatchCancel" v-if="selectUserStatusList.includes('未发放')">批量撤回</el-button>
+      </div>
       <el-table :data="salaryList" class="check-staff_table" :style="{width:screenWidth-40+'px'}" v-loading="salaryLoading"  @selection-change="handleSelectionChange" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}">
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column
@@ -87,6 +92,7 @@
         isShowIncrease: false,
         count:0,
         selectUserIdList:[],
+        selectUserStatusList:[],
         total:"",
         send:"",
         un_send:"",
@@ -149,12 +155,13 @@
           }
         })
       },
+      //单个发放/撤销
       setSalaryItem(data){
-        let stubId = data[0]['val'];
+        let stubIds = [data[0]['val']];
         let payStubsStatus = this.getSendStatus(data)?"PROVIDED":"NO_PROVIDE";
         apiSalaryStubsStatusAlter({
           "payStubsStatus":payStubsStatus,
-          "stubId":stubId
+          "stubIds":stubIds
         }).then(res=>{
           if(res.code === "0000"){
             this.loading()
@@ -176,8 +183,50 @@
       searchUser(){
         this.loading()
       },
+      //批量选择
       handleSelectionChange(val){
-        console.log(val)
+      
+      this.selectUserIdList = []
+
+       val.forEach(item=>{
+         item.forEach(it=>{
+           if(it.col === "ID"){
+             this.selectUserIdList.push(it.val)
+           }
+           if(it.col === "发放状态"){
+             this.selectUserStatusList.push(it.val)
+           }
+         })
+       })
+      console.log(this.selectUserIdList)
+      },
+      //批量发放
+      handleBatchSend(){
+        apiSalaryStubsStatusAlter({
+          "payStubsStatus":"PROVIDED",
+          "stubIds":this.selectUserIdList
+        }).then(res=>{
+          if(res.code === "0000"){
+            this.loading()
+            this.$message.success("批量发放成功")
+          }else{
+            this.$message.error(res.message)
+          }
+        })
+      },
+      //批量撤回
+      handleBatchCancel(){
+          apiSalaryStubsStatusAlter({
+          "payStubsStatus":"NO_PROVIDE",
+          "stubIds":this.selectUserIdList
+        }).then(res=>{
+          if(res.code === "0000"){
+            this.loading()
+            this.$message.success("批量撤回成功")
+          }else{
+            this.$message.error(res.message)
+          }
+        })
       },
       //返回
       goBack(){
@@ -192,6 +241,9 @@
   .salary-send {
     padding: 0 20px;
     box-sizing: border-box;
+    .staff-table{
+      position: relative;
+    }
     .head-fun{
       span{display: inline-block}
       .goBack{

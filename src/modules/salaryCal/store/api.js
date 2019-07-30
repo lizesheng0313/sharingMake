@@ -101,6 +101,17 @@ export function apiCheckMemberdelete(ids,checkId) {
     },
   })
 }
+//核对人员删除全部
+export function apiCheckMemberDeleteAll(checkId) {
+  return fetch({
+    url: '/api/salary/checkMember/deleteAll',
+    method: 'delete',
+    data: {
+      checkId:checkId
+    },
+  })
+}
+
 export function apiCheckMemberSummary(checkId) {
   return fetch({
     url: '/api/salary/checkMember/summary/'+checkId,
@@ -268,7 +279,16 @@ export function apiAuditSalaryCheck(form) {
     data:form
   })
 }
-
+// 核对人员下载日志
+export function apiMemberErrorRecord(uuid) {
+  return fetchFile({
+    url: '/api/salary/checkMember/errorRecord/download',
+    method: 'post',
+    data:{
+      uuid:uuid
+    }
+  })
+}
 
 
 
