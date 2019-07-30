@@ -30,18 +30,22 @@
         <i>{{this.summryTotal}}</i>人
       </span>
       <span>
-        本月：入职
-        <i>{{this.newEmployeeCount}}</i>人
+        本月：新增
+        <i>{{incNum || incNum==0?this.incNum:"--"}}</i>人
       </span>
       <span>
-        调动
-        <i>{{this.changeEmployeeCount}}</i>人
+        减少：
+        <i>{{decNum || decNum ==0?this.decNum:"--"}}</i>人
       </span>
     </div>
     <div class="staff-table">
       <!-- <div class="floating-menu">
         <span>删除</span>
       </div>-->
+      <div class="floating-menu" v-if="selectUserIdList.length>0">
+        <span>已选中{{selectUserIdList.length}}人</span>
+        <el-button size="mini" class="button-mini" @click="handleDelete(selectUserIdList)">批量删除</el-button>
+      </div>
       <el-table :data="userList" class="check-staff_table" :style="{width:screenWidth-40+'px'}" v-loading="userLoading"  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column label="姓名">
@@ -223,7 +227,8 @@ export default {
       uuid: "",
       selectUserIdList:[],
       summryTotal:"",
-      changeEmployeeCount:"",
+      decNum:"",
+      incNum:"",
       newEmployeeCount:"",
       isShowIncreaseFinish:false,
       importFinishForm:{
@@ -235,7 +240,6 @@ export default {
   },
   mounted() {
     const that = this;
-    console.log(this.$store.state.token)
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
@@ -257,6 +261,8 @@ export default {
           this.count = res.data.count;
         }
       })
+      //总计
+      this.summary()
     },
     summary(){
       apiCheckMemberSummary(this.userForm.checkId)
@@ -264,8 +270,8 @@ export default {
           if(res.code === "0000") {
             let data = res.data;
             this.summryTotal = data.total;
-            this.newEmployeeCount = data.newEmployeeCount;
-            this.changeEmployeeCount = data.changeEmployeeCount;
+            this.decNum = data.decNum;
+            this.incNum = data.incNum;
           }
         })
     },
@@ -370,11 +376,11 @@ export default {
     },
     handleDropdown(val){
       if(val === 'delete'){
-        if(this.selectUserIdList.length === 0){
-          this.$message.warning("请选择要删除的人员");
-        }else{
-          this.handleDelete(this.selectUserIdList)
-        }
+        // if(this.selectUserIdList.length === 0){
+        //   this.$message.warning("请选择要删除的人员");
+        // }else{
+        //   this.handleDelete(this.selectUserIdList)
+        // }
       }else{
         window.location.href = "/api/salary/checkMember/export?checkId="+this.userForm.checkId+"&"+"key="+this.userForm.key
       }
@@ -429,21 +435,6 @@ export default {
     }
     position: relative;
     margin-top: 27px;
-    .floating-menu {
-      position: absolute;
-      left: 100px;
-      width: 500px;
-      z-index: 99;
-      top: 0;
-      line-height: 40px;
-      height: 40px;
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 3px;
-      color: #fff;
-      span {
-        margin: 0 10px;
-      }
-    }
     .staff-page {
       margin-top: 20px;
       text-align: right;

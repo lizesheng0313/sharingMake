@@ -44,7 +44,6 @@ const config = Object.assign(webpackConfigBase.config, {
       '/api': {
         target: "http://172.19.60.38:8017",
         // target:"http://172.19.65.130:9999",
-        
         secure: false,
         changeOrigin: true,
         // pathRewrite: {
