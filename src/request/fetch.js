@@ -39,8 +39,9 @@ export function fetch(options) {
       let data = response.data;
       if (data.code != "0000") {
         Message.error(data.message);
-        if (data.code === "1000") {
-          window.open(window.__CURRENT_ENV__ + 'login', "_self")
+        let originUrl = window.__CURRENT_ENV__ === "prod" ? 'https://www.olading.com/main.html#/':'http://172.19.60.38/main.html#/';
+        if(data.code === "1000"){
+          window.open(originUrl+'login', "_self")
         }
       }
       resolve(data)
@@ -53,7 +54,6 @@ export function fetch(options) {
 }
 //导出excel
 export function fetchFile(options) {
-
   return new Promise((resolve, reject) => {
     options.responseType = "blob";
     instance(options).then(response => {
