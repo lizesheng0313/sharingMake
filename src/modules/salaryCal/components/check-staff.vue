@@ -159,7 +159,7 @@
           <span v-if="failCount === 0"><i class="el-icon-success"></i>全部导入成功</span>
           <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
           <span v-if="successCount === 0"><i class="el-icon-error">数据全部未通过校验</i></span>
-          <span><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></span>
+          <span><a @click="downloadLog" style="cursor:pointer">下载日志</a></span>
         </div>
         <p>
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
@@ -183,7 +183,7 @@
     >
       <div class="title"><i class="el-icon-success"></i>导入完成</div>
       <div>导入成功<span style="color:#06B806">{{this.importFinishForm.successCount}}</span>条数据,<span style="color:red">{{this.importFinishForm.failCount}}</span>条数据导入未通过，忽略导入</div>
-      <div><a :href="'/api/salary/checkMember/errorRecord/download/'+uuid">下载日志</a></div>
+      <div><a @click="downloadLog" style="cursor:pointer">下载日志</a></div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="importMemberFinish">我知道了</el-button>
 <!--        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>-->
@@ -192,7 +192,7 @@
   </div>
 </template>
 <script>
-  import { apiCheckMember,apiImportMember,apiCheckMemberdelete,apiCheckMemberSummary} from '../store/api'
+  import { apiCheckMember,apiImportMember,apiCheckMemberdelete,apiCheckMemberSummary,apiMemberErrorRecord} from '../store/api'
 export default {
 
   data() {
@@ -309,6 +309,13 @@ export default {
           })
         }).catch(() => {});
     },
+    // 下载导入人员日志
+    downloadLog(){
+      this.$store.dispatch('salaryCalStore/postMemberErrorRecord',this.uuid).then(res=>{
+        if(res.code === "0000"){
+        }
+      })
+    },
     //切换pageId
     handleCurrentChange(val){
       this.userForm.currPage = val;
@@ -376,11 +383,20 @@ export default {
     },
     handleDropdown(val){
       if(val === 'delete'){
-        // if(this.selectUserIdList.length === 0){
-        //   this.$message.warning("请选择要删除的人员");
-        // }else{
-        //   this.handleDelete(this.selectUserIdList)
-        // }
+        this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.$store.dispatch('salaryCalStore/deleteCheckMemberDeleteAll',this.userForm.checkId).then(res=>{
+              if(res.code === "0000"){
+                this.loading();
+                this.$message.success("删除成功")
+              }
+            })
+          }).catch(() => {});
+
       }else{
         window.location.href = "/api/salary/checkMember/export?checkId="+this.userForm.checkId+"&"+"key="+this.userForm.key
       }
