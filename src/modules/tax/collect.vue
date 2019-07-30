@@ -417,7 +417,7 @@ export default {
               }
             });
         } else {
-          this.feedbackForm.taxSubjectId = this.taxSubjectId;
+          this.feedbackForm.taxSubjectId = this.ruleForm.taxSubjectId;
           this.$store
             .dispatch("taxPageStore/actionGetFeedback", this.feedbackForm)
             .then(res => {
