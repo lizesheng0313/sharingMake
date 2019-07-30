@@ -40,7 +40,7 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="handleReport" v-if="reportForm.ids.length>0">报送</el-button>
+              <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
               <el-button type="primary" class="add-import" @click="handleGetFeedback">获取反馈</el-button>
             </div>
           </div>

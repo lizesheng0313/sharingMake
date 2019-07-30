@@ -22,6 +22,7 @@
           class="avatar-uploader"
           :action="apiCheck"
           :limit="1"
+          :headers="myHeaders"
           :file-list="fileList"
           :before-upload="beforeAvatarUpload"
           :on-success="handleSuccess"
@@ -89,6 +90,7 @@ export default {
   },
   data() {
     return {
+      myHeaders:{Authorization:this.$store.state.token},
       isShowIncrease: false,
       radio: 1,
       importFinishForm: {

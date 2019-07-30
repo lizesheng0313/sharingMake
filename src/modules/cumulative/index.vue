@@ -87,7 +87,7 @@ let year = [];
 for (let i = maxYear; i >= 2019; i--) {
   year.push(i);
 }
-import importData from "@/components/tool/import";
+import importData from "@/components/tool/importData";
 export default {
   components: {
     importData
