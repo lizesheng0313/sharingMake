@@ -21,7 +21,8 @@ import store from './store'
 Vue.config.productionTip = false;
 
 //存储本地token
-let token =location.href.includes('?')? location.href.split('?')[1].split('=')[1]:"";
+// let token =location.href.includes('?')? location.href.split('?')[1].split('=')[1]:"";
+let token = "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiemN0ZXN0MDExIiwiZW50ZXJwcmlzZUlkIjoxMjMxLCJ1c2VyVHlwZSI6IkVOVEVSUFJJU0UiLCJ1c2VySWQiOjk2MywiZXhwIjoxNTY1NjU5MDYxfQ._mstPTt1OLA-UDlodxRuoq2JDebOTQmnOqy1MeX6pC8";
 store.commit("SET_TOKEN",token);
 
 // fetchGetConfig().then(res=> {
