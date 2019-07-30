@@ -54,7 +54,6 @@ export function fetch(options) {
 }
 //导出excel
 export function fetchFile(options) {
-
   return new Promise((resolve, reject) => {
     options.responseType = "blob";
     instance(options).then(response => {
