@@ -230,9 +230,7 @@ export default {
               this.updatedFormData
             )
             .then(res => {
-              if (res.success) {
-                this.isShowUpdate = false;
-              }
+              this.isShowUpdate = false;
             });
         }
       });
@@ -251,7 +249,7 @@ export default {
     },
     //显示更新累计值框
     handleShowUpdated(item) {
-      this.updatedFormData.date = item.downloadDate;
+      this.updatedFormData.date = this.totalListForm.queryMonth;
       this.currenCompanyName = item.taxSubName;
       this.updatedFormData.taxSubjectId = item.taxSubId;
       this.isShowUpdate = true;
