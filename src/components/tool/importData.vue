@@ -47,7 +47,7 @@
         <p>
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
           <span>
-            <a :href="apiDownloadTemplate">下载模板</a>
+            <a @click="handleTemplate">下载模板</a>
           </span>
         </p>
         <p class="instructions">说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资</p>
@@ -67,7 +67,7 @@
         <span style="color:red">{{importFinishForm.failCount}}</span>条数据导入未通过，忽略导入
       </div>
       <div>
-        <a :href="apiDownloadLog+uuid" v-if="failCount !== 0">下载日志</a>
+        <a @click="handleDownload" v-if="failCount !== 0">下载日志</a>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="importMemberFinish">确定</el-button>
@@ -90,7 +90,7 @@ export default {
   },
   data() {
     return {
-      myHeaders:{Authorization:this.$store.state.token},
+      myHeaders: { Authorization: this.$store.state.token },
       isShowIncrease: false,
       radio: 1,
       importFinishForm: {
@@ -105,6 +105,12 @@ export default {
     };
   },
   methods: {
+    handleTemplate() {
+      this.$store.dispatch(this.apiDownloadTemplate);
+    },
+    handleDownload() {
+      this.$store.dispatch(this.apiDownloadLog, this.uuid);
+    },
     //改变radio
     show() {
       this.isShowIncrease = true;
