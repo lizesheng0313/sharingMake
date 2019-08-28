@@ -109,7 +109,7 @@ export default {
       this.$store.dispatch(this.apiDownloadTemplate);
     },
     handleDownload() {
-      this.$store.dispatch(this.apiDownloadLog, this.uuid);
+      this.$store.dispatch(this.apiDownloadLog, { uuid: this.uuid });
     },
     //改变radio
     show() {
