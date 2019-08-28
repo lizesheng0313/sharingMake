@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="import-data">
     <el-dialog
       :title="title"
       :visible.sync="isShowIncrease"
@@ -41,7 +41,7 @@
           </span>
           <span v-else-if="successCount === 0">数据全部未通过校验</span>
           <span>
-            <a :href="handleDownload" v-if="failCount !== 0" classs="download">下载日志</a>
+            <a @click="handleDownload" v-if="failCount !== 0" classs="download">下载日志</a>
           </span>
         </div>
         <p>
@@ -167,7 +167,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.download {
-  cursor: pointer;
+.import-data {
+  .download {
+    cursor: pointer;
+  }
 }
 </style>
