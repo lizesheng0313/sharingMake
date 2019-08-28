@@ -1,5 +1,4 @@
-import { apiTaxTotalBaseList,apiDelTaxTotalBase,apidownloadTemplate,apiImportTaxTotalBaseSuccess } from './api'
-import { rule } from 'postcss';
+import { apiTaxTotalBaseList,apiDelTaxTotalBase,apidownloadTemplate,apiImportTaxTotalBaseSuccess,apiExportErrorRecord} from './api'
 
 //累计应税所得额初始化-集合列表
 export const actionTaxTotalBaseList = ({ dispatch },ruleForm) => {
@@ -16,9 +15,14 @@ export const actionDownloadTemplate = ({ dispatch }) => {
     return apidownloadTemplate()
 }
 
-//累计应税所得额初始化-下载模版
+//累计应税所得额初始化-导入成功数据
 export const actionImportTaxTotalBaseSuccess = ({ dispatch },ruleForm) => {
     return apiImportTaxTotalBaseSuccess(ruleForm)
+}
+
+//累计应税所得额初始化-导出错误记录
+export const getExportErrorRecord = ({ dispatch },ruleForm) => {
+    return apiExportErrorRecord(ruleForm)
 }
 
 

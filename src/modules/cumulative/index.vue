@@ -7,7 +7,6 @@
         </el-col>
       </el-row>
     </header>
-    <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p>
     <div class="clearfix check-staff-menu">
       <div class="left">
         <el-select v-model="ruleForm.queryYear" placeholder="请选择" @change="handleChange">
@@ -71,8 +70,8 @@
       :radioList="radioList"
       :title="'累计应纳税所得导入'"
       :apiCheck="'/api/taxTotalBase/importTaxTotalBaseCheck'"
-      :apiDownloadLog="'/api/taxTotalBase/exportErrorRecord'"
-      :apiDownloadTemplate="'/api/taxTotalBase/downloadTemplate'"
+      :apiDownloadLog="'cumulativePageStore/getExportErrorRecord'"
+      :apiDownloadTemplate="'cumulativePageStore/actionDownloadTemplate'"
       :parameterData="parameterData"
       @changeRadioValue="changeRadioValue"
       :impoartAction="'cumulativePageStore/actionImportTaxTotalBaseSuccess'"
@@ -118,7 +117,6 @@ export default {
       total: 0,
       fileList: [],
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      isShowIncrease: false,
       list: []
     };
   },
