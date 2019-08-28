@@ -67,7 +67,7 @@
         <span style="color:red">{{importFinishForm.failCount}}</span>条数据导入未通过，忽略导入
       </div>
       <div>
-        <a @click="handleDownload" v-if="failCount !== 0" class="download">下载日志</a>
+        <a @click="handleDownload" v-if="importFinishForm.failCount !== 0" class="download">下载日志</a>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="importMemberFinish">确定</el-button>
@@ -98,7 +98,7 @@ export default {
         successCount: ""
       },
       isShowIncreaseFinish: false,
-      failCount: true,
+      failCount: 0,
       fileList: [],
       successCount: "",
       uuid: ""
