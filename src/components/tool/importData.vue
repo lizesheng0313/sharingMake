@@ -98,7 +98,7 @@ export default {
         successCount: ""
       },
       isShowIncreaseFinish: false,
-      failCount: "",
+      failCount: true,
       fileList: [],
       successCount: "",
       uuid: ""
