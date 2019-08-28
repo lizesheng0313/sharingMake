@@ -18,7 +18,7 @@ export default new Vuex.Store({
     cumulativePageStore
   },
   state: {
-    token: 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoidXNlcl8xNjI5IiwiZW50ZXJwcmlzZUlkIjoxNjI5LCJ1c2VyVHlwZSI6IkVOVEVSUFJJU0UiLCJ1c2VySWQiOjE2MTEsImV4cCI6MTU2ODE4MTU0M30.kNhImkznwX4C6JKdoyNNxrkhCmzLNsuhEGWMbnTJfl4',
+    token: '',
     isShowApp: true
   },
   mutations,
