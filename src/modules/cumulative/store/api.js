@@ -1,4 +1,4 @@
-import { fetch,fetchFile} from 'request/fetch'
+import { fetch, fetchFile } from 'request/fetch'
 
 //累计应税所得额初始化-集合列表
 export function apiTaxTotalBaseList(ruleForm) {
@@ -14,7 +14,7 @@ export function apiDelTaxTotalBase(idsForm) {
   return fetch({
     url: '/api/taxTotalBase/delTaxTotalBase',
     method: 'delete',
-    data:idsForm
+    data: idsForm
   })
 }
 
@@ -23,7 +23,7 @@ export function apiImportTaxTotalBaseSuccess(ruleForm) {
   return fetch({
     url: '/api/taxTotalBase/importTaxTotalBaseSuccess',
     method: 'post',
-    params:ruleForm
+    params: ruleForm
   })
 }
 
@@ -37,10 +37,11 @@ export function apidownloadTemplate() {
 }
 
 //导出错误记录
-export function apiExportErrorRecord() {
+export function apiExportErrorRecord(ruleForm) {
   return fetchFile({
     url: '/api/taxTotalBase/exportErrorRecord',
     method: 'get',
+    params: ruleForm
   })
 }
 
