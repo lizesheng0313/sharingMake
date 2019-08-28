@@ -41,7 +41,7 @@
           </span>
           <span v-else-if="successCount === 0">数据全部未通过校验</span>
           <span>
-            <a :href="apiDownloadLog+uuid" v-if="failCount !== 0">>下载日志</a>
+            <a :href="handleDownload" v-if="failCount !== 0" classs="download">下载日志</a>
           </span>
         </div>
         <p>
@@ -67,7 +67,7 @@
         <span style="color:red">{{importFinishForm.failCount}}</span>条数据导入未通过，忽略导入
       </div>
       <div>
-        <a @click="handleDownload" v-if="failCount !== 0">下载日志</a>
+        <a @click="handleDownload" v-if="failCount !== 0" class="download">下载日志</a>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="importMemberFinish">确定</el-button>
@@ -166,5 +166,8 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss" scoped>
+.download {
+  cursor: pointer;
+}
 </style>
