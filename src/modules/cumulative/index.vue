@@ -71,7 +71,7 @@
       :radioList="radioList"
       :title="'累计应纳税所得导入'"
       :apiCheck="'/api/taxTotalBase/importTaxTotalBaseCheck'"
-      :apiDownloadLog="'/api/taxTotalBase/exportErrorRecord/'"
+      :apiDownloadLog="'/api/taxTotalBase/exportErrorRecord'"
       :apiDownloadTemplate="'/api/taxTotalBase/downloadTemplate'"
       :parameterData="parameterData"
       @changeRadioValue="changeRadioValue"
