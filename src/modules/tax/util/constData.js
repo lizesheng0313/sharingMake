@@ -65,3 +65,9 @@ export const declareStatus = {
   'CANCEL_REPORTING': "作废处理中",
   'CORRECT_REPORTING': "更正处理中"
 }
+
+export const subTaxReportType = {
+  "SALARY_PAY_RULE":"工资薪金所得申报",
+  "PERSON_PAY_RULE":"劳务报酬所得申报",
+  "TOTAL_RULE":"综合所得预扣预缴表"
+}

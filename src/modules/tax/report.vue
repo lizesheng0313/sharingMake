@@ -72,7 +72,11 @@
             :style="{width:screenWidth-285+'px'}"
             v-loading="loading"
           >
-            <el-table-column prop="salaryName" label="报表名称" width="180"></el-table-column>
+            <el-table-column prop="subTaxReportType" label="报表名称" width="180">
+              <template slot-scope="scope">
+                <span>{{reportSubTaxReportType(scope.row.subTaxReportType)}}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="taxEmpCounts" label="纳税人数" width="170"></el-table-column>
             <el-table-column prop="currentTotalIncome" label="本期收入" width="180"></el-table-column>
             <el-table-column prop="hisTotalIncome" label="累计收入" width="180"></el-table-column>
@@ -159,7 +163,7 @@ export default {
         //所选为上月且不是1月份
         if (
           this.currentMonth != 1 &&
-          this.currentMonth == this.selectMonth - 1 &&
+          this.selectMonth == this.currentMonth - 1 &&
           this.selectYear == this.currentYear
         ) {
           if (!this.reportObj.reportStatus) {
@@ -202,7 +206,7 @@ export default {
         //所选为上月且不是1月份
         if (
           this.currentMonth != 1 &&
-          this.currentMonth == this.selectMonth - 1 &&
+          this.selectMonth == this.currentMonth - 1 &&
           this.selectYear == this.currentYear
         ) {
           if (
@@ -255,7 +259,7 @@ export default {
         //所选为上月且不是1月份
         if (
           this.currentMonth != 1 &&
-          this.currentMonth == this.selectMonth - 1 &&
+          this.selectMonth == this.currentMonth - 1 &&
           this.selectYear == this.currentYear
         ) {
           if (
@@ -367,6 +371,9 @@ export default {
     };
   },
   methods: {
+    reportSubTaxReportType(params) {
+      return SCR.subTaxReportType[params];
+    },
     handleInvalid() {
       this.buttonForm.date = this.reportForm.queryMonth;
       this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
@@ -386,15 +393,22 @@ export default {
     },
     //生成申报数据
     handleGenerateData() {
-      this.buttonForm.queryMonth = this.reportForm.queryMonth;
-      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
-      this.$store
-        .dispatch("taxPageStore/postGenerateTaxReportData", this.buttonForm)
-        .then(res => {
-          if (res.success) {
-            this.getList(true);
-          }
+      if (this.list.length == 0) {
+        this.$message({
+          message: "纳税主体本月无申报数据",
+          type: "warning"
         });
+      } else {
+        this.buttonForm.queryMonth = this.reportForm.queryMonth;
+        this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+        this.$store
+          .dispatch("taxPageStore/postGenerateTaxReportData", this.buttonForm)
+          .then(res => {
+            if (res.success) {
+              this.getList(true);
+            }
+          });
+      }
     },
     //发送申报
     handleSendReport() {
@@ -448,14 +462,17 @@ export default {
     handleExportApplyTable() {
       this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
       this.buttonForm.date = this.reportForm.queryMonth;
-      this.$store.dispatch("taxPageStore/getSubTaxReportExport",this.buttonForm)
+      this.$store.dispatch(
+        "taxPageStore/getSubTaxReportExport",
+        this.buttonForm
+      );
     },
     showButton(arr) {
       if (this.currentDay < 16) {
         //所选为上月且不是1月份
         if (
           this.currentMonth != 1 &&
-          this.currentMonth == this.selectMonth - 1 &&
+          this.selectMonth == this.currentMonth - 1 &&
           this.selectYear == this.currentYear
         ) {
           if (
