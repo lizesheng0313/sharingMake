@@ -28,7 +28,7 @@
             扣缴义务人：
             <el-dropdown trigger="click">
               <el-button type="text">
-                <em>{{currentTaxSubName}}</em>
+                <em class="current-tab-sub_name">{{currentTaxSubName}}</em>
                 <em class="iconsanjiao iconfont"></em>
               </el-button>
               <el-dropdown-menu slot="dropdown">
@@ -36,6 +36,7 @@
                   v-for="(item,index) in taxSubjectInfolist"
                   :key="index"
                   @click.native="handleCheckTaxSubject(item)"
+                  class="current-tab-sub_name"
                 >{{item.taxSubName}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -59,7 +60,7 @@
             >发送申报</el-button>
             <el-button
               type="primary"
-              v-if="showButton(['申报处理中',['作废处理中']])"
+              v-if="showButton(['申报处理中','作废处理中'])"
               @click="handleGetFeedback"
             >获取反馈</el-button>
             <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>
@@ -479,10 +480,7 @@ export default {
           this.selectMonth == this.currentMonth - 1 &&
           this.selectYear == this.currentYear
         ) {
-          if (
-            this.reportObj.reportStatus == "未申报" ||
-            this.reportObj.reportStatus == "申报失败"
-          ) {
+          if (arr.indexOf(this.reportObj.reportStatus) > -1) {
             return true;
           }
         }
@@ -708,6 +706,11 @@ export default {
         text-align: right;
       }
     }
+  }
+  .current-tab-sub_name{
+    @include ellipsis;
+    width:200px;
+    display: inline-block;
   }
 }
 </style>
