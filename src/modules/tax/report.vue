@@ -25,7 +25,7 @@
       <div class="screening">
         <div class="clearfix">
           <div class="select_tax-payer left">
-            纳税主体：
+            扣缴义务人：
             <el-dropdown trigger="click">
               <el-button type="text">
                 <em>{{currentTaxSubName}}</em>
@@ -98,9 +98,9 @@
             class="staff-page"
           ></el-pagination>
         </div>
-        <div class="footnotes">
+        <div class="footnotes" v-if="isSendReport">
           <p>局端服务器处理结果如下：</p>
-          <p>[7001]您发送的申报正在处理，请稍后获取反馈信息，谢谢！</p>
+          <p>您发送的申报正在处理，请稍后获取反馈信息，谢谢！</p>
         </div>
       </div>
     </div>
@@ -326,6 +326,8 @@ export default {
           }
         ]
       },
+      //是否显示处理信息
+      isSendReport:false,
       loading: false,
       currentYear: new Date().getFullYear(),
       currentDay: new Date().getDate(),
@@ -395,7 +397,7 @@ export default {
     handleGenerateData() {
       if (this.list.length == 0) {
         this.$message({
-          message: "纳税主体本月无申报数据",
+          message: "扣缴义务人本月无申报数据",
           type: "warning"
         });
       } else {
@@ -412,6 +414,7 @@ export default {
     },
     //发送申报
     handleSendReport() {
+      this.isSendReport = true;
       this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
       this.buttonForm.date = this.reportForm.queryMonth;
       this.buttonForm.queryMonth = this.reportForm.queryMonth;
@@ -419,6 +422,7 @@ export default {
       this.$store
         .dispatch("taxPageStore/postCheckReportData", this.buttonForm)
         .then(res => {
+          this.isSendReport = false;
           if (res.success) {
             if (res.data.length == 0) {
               this.isShowPassword = true;
@@ -520,7 +524,7 @@ export default {
         }
       });
     },
-    //切换纳税主体
+    //切换扣缴义务人
     handleCheckTaxSubject(item) {
       this.reportForm.taxSubjectId = item.taxSubId;
       this.currentTaxSubName = item.taxSubName;

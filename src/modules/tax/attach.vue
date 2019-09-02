@@ -3,7 +3,7 @@
     <header class="header main-title">
       <el-row type="flex">
         <el-col :span="12">
-          <span>专项附加扣除累计</span>
+          <span>专项附加扣除</span>
         </el-col>
       </el-row>
     </header>
@@ -53,7 +53,7 @@
           </div>
         </div>
         <div class="select_tax-payer">
-          纳税主体：
+          扣缴义务人：
           <el-dropdown trigger="click">
             <el-button type="text">
               <em>{{currentTaxSubName}}</em>
@@ -180,7 +180,7 @@ export default {
         this.totalListForm
       );
     },
-    //纳税主体集合
+    //扣缴义务人集合
     getTaxSubjectInfoList() {
       this.$store
         .dispatch(
@@ -196,7 +196,7 @@ export default {
           }
         });
     },
-    //切换纳税主体
+    //切换扣缴义务人
     handleCheckTaxSubject(item) {
       this.totalListForm.taxSubjectId = item.taxSubId;
       this.currentTaxSubName = item.taxSubName;

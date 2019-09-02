@@ -73,7 +73,7 @@
             <span>{{scope.row.empType|filterEmpType}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="纳税主体">
+        <el-table-column label="扣缴义务人">
           <template slot-scope="scope">
             <span>{{scope.row.taxSubject}}</span>
           </template>
