@@ -8,7 +8,7 @@
           </el-col>
         </el-row>
       </header>
-      <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p>
+      <!-- <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p> -->
       <div class="tax-content">
         <div class="content-header">
           <i class="el-icon-arrow-left"></i>
@@ -29,7 +29,7 @@
               <el-button type="default" @click="isShowScreening=true">筛选</el-button>
             </div>
             <el-input
-              placeholder="请输入姓名\手机号"
+              placeholder="请输入姓名\工号\身份证号"
               v-model="ruleForm.nameOrMore"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               @keyup.enter.native="handleSearch"
@@ -290,7 +290,7 @@ export default {
       reportOrFeedback: false,
       ruleForm: {
         currPage: 1,
-        empStatus: "NORMAL",
+        empStatus: "",
         idValidStatus: [],
         iscgl: "",
         nameOrMore: "",
@@ -612,7 +612,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 22px;
+    padding: 40px;
     .content-header {
       position: relative;
       font-size: 18px;
@@ -634,7 +634,7 @@ export default {
     }
   }
   .tax-search {
-    margin-left: 20px;
+    margin-left: 40px;
   }
   .screening {
     .check-staff-menu {

@@ -7,7 +7,7 @@
         </el-col>
       </el-row>
     </header>
-    <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p>
+    <!-- <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p> -->
     <div class="clearfix check-staff-menu">
       <div class="left">
         <el-select v-model="ruleForm.queryYear" placeholder="请选择" @change="handleChange">

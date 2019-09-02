@@ -72,7 +72,7 @@
                   <el-input v-model="employeeFormData.idNo"></el-input>
                 </el-form-item>
                 <el-form-item label="国籍(地区)" prop="country" :disabled="checkSuccess">
-                  <el-input v-model="employeeFormData.country"></el-input>
+                  <el-input v-model="employeeFormData.country" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="出生日期" prop="birthday" :disabled="checkSuccess">
                   <el-date-picker
@@ -181,6 +181,7 @@ export default {
     this.employeeFormData = JSON.parse(
       JSON.stringify(this.personnelCollection)
     );
+    this.employeeFormData.country = "中国"
     if (this.employeeFormData.idValidStatus == "CHECK_SUCCESS") {
       this.checkSuccess = true;
     }
