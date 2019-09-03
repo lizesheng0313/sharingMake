@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="paid">
     <div class="tax el-diy-month">
       <header class="header main-title">
         <el-row type="flex">
@@ -221,7 +221,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
-.tax {
+.paid {
   .tax-search {
     margin-left: 20px;
   }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="collect">
     <div class="tax el-diy-month">
       <header class="header main-title">
         <el-row type="flex">
@@ -10,8 +10,7 @@
       </header>
       <!-- <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p> -->
       <div class="tax-content">
-        <div class="content-header">
-          <i class="el-icon-arrow-left"></i>
+        <div class="content-header head-date">
           <span>{{selectMonth}}</span>
           <el-date-picker
             v-model="selectMonth"
@@ -21,7 +20,6 @@
             :editable="false"
             :clearable="false"
           ></el-date-picker>
-          <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>
         </div>
         <div class="screening">
           <div class="clearfix check-staff-menu">
@@ -601,7 +599,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
-.tax {
+.collect {
   .header {
     .add-table {
       cursor: pointer;

@@ -8,8 +8,7 @@
       </el-row>
     </header>
     <div class="tax-content">
-      <div class="content-header">
-        <i class="el-icon-arrow-left"></i>
+      <div class="content-header head-date" >
         <span>{{selectDate}}</span>
         <el-date-picker
           v-model="selectDate"
@@ -19,7 +18,6 @@
           :editable="false"
           :clearable="false"
         ></el-date-picker>
-        <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>
       </div>
       <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>
       <div class="screening">
