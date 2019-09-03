@@ -25,10 +25,10 @@
       <div class="screening">
         <div class="clearfix">
           <div class="select_tax-payer left">
-            纳税主体：
+            扣缴义务人：
             <el-dropdown trigger="click">
               <el-button type="text">
-                <em>{{currentTaxSubName}}</em>
+                <em class="current-tab-sub_name">{{currentTaxSubName}}</em>
                 <em class="iconsanjiao iconfont"></em>
               </el-button>
               <el-dropdown-menu slot="dropdown">
@@ -36,6 +36,7 @@
                   v-for="(item,index) in taxSubjectInfolist"
                   :key="index"
                   @click.native="handleCheckTaxSubject(item)"
+                  class="current-tab-sub_name"
                 >{{item.taxSubName}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -59,7 +60,7 @@
             >发送申报</el-button>
             <el-button
               type="primary"
-              v-if="showButton(['申报处理中',['作废处理中']])"
+              v-if="showButton(['申报处理中','作废处理中'])"
               @click="handleGetFeedback"
             >获取反馈</el-button>
             <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>
@@ -72,7 +73,11 @@
             :style="{width:screenWidth-285+'px'}"
             v-loading="loading"
           >
-            <el-table-column prop="salaryName" label="报表名称" width="180"></el-table-column>
+            <el-table-column prop="subTaxReportType" label="报表名称" width="180">
+              <template slot-scope="scope">
+                <span>{{reportSubTaxReportType(scope.row.subTaxReportType)}}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="taxEmpCounts" label="纳税人数" width="170"></el-table-column>
             <el-table-column prop="currentTotalIncome" label="本期收入" width="180"></el-table-column>
             <el-table-column prop="hisTotalIncome" label="累计收入" width="180"></el-table-column>
@@ -94,9 +99,9 @@
             class="staff-page"
           ></el-pagination>
         </div>
-        <div class="footnotes">
+        <div class="footnotes" v-if="isSendReport">
           <p>局端服务器处理结果如下：</p>
-          <p>[7001]您发送的申报正在处理，请稍后获取反馈信息，谢谢！</p>
+          <p>您发送的申报正在处理，请稍后获取反馈信息，谢谢！</p>
         </div>
       </div>
     </div>
@@ -159,7 +164,7 @@ export default {
         //所选为上月且不是1月份
         if (
           this.currentMonth != 1 &&
-          this.currentMonth == this.selectMonth - 1 &&
+          this.selectMonth == this.currentMonth - 1 &&
           this.selectYear == this.currentYear
         ) {
           if (!this.reportObj.reportStatus) {
@@ -202,7 +207,7 @@ export default {
         //所选为上月且不是1月份
         if (
           this.currentMonth != 1 &&
-          this.currentMonth == this.selectMonth - 1 &&
+          this.selectMonth == this.currentMonth - 1 &&
           this.selectYear == this.currentYear
         ) {
           if (
@@ -255,7 +260,7 @@ export default {
         //所选为上月且不是1月份
         if (
           this.currentMonth != 1 &&
-          this.currentMonth == this.selectMonth - 1 &&
+          this.selectMonth == this.currentMonth - 1 &&
           this.selectYear == this.currentYear
         ) {
           if (
@@ -322,6 +327,8 @@ export default {
           }
         ]
       },
+      //是否显示处理信息
+      isSendReport:false,
       loading: false,
       currentYear: new Date().getFullYear(),
       currentDay: new Date().getDate(),
@@ -367,6 +374,9 @@ export default {
     };
   },
   methods: {
+    reportSubTaxReportType(params) {
+      return SCR.subTaxReportType[params];
+    },
     handleInvalid() {
       this.buttonForm.date = this.reportForm.queryMonth;
       this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
@@ -386,18 +396,26 @@ export default {
     },
     //生成申报数据
     handleGenerateData() {
-      this.buttonForm.queryMonth = this.reportForm.queryMonth;
-      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
-      this.$store
-        .dispatch("taxPageStore/postGenerateTaxReportData", this.buttonForm)
-        .then(res => {
-          if (res.success) {
-            this.getList(true);
-          }
+      if (this.list.length == 0) {
+        this.$message({
+          message: "扣缴义务人本月无申报数据",
+          type: "warning"
         });
+      } else {
+        this.buttonForm.queryMonth = this.reportForm.queryMonth;
+        this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+        this.$store
+          .dispatch("taxPageStore/postGenerateTaxReportData", this.buttonForm)
+          .then(res => {
+            if (res.success) {
+              this.getList(true);
+            }
+          });
+      }
     },
     //发送申报
     handleSendReport() {
+      this.isSendReport = true;
       this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
       this.buttonForm.date = this.reportForm.queryMonth;
       this.buttonForm.queryMonth = this.reportForm.queryMonth;
@@ -405,6 +423,7 @@ export default {
       this.$store
         .dispatch("taxPageStore/postCheckReportData", this.buttonForm)
         .then(res => {
+          this.isSendReport = false;
           if (res.success) {
             if (res.data.length == 0) {
               this.isShowPassword = true;
@@ -448,20 +467,20 @@ export default {
     handleExportApplyTable() {
       this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
       this.buttonForm.date = this.reportForm.queryMonth;
-      this.$store.dispatch("taxPageStore/getSubTaxReportExport",this.buttonForm)
+      this.$store.dispatch(
+        "taxPageStore/getSubTaxReportExport",
+        this.buttonForm
+      );
     },
     showButton(arr) {
       if (this.currentDay < 16) {
         //所选为上月且不是1月份
         if (
           this.currentMonth != 1 &&
-          this.currentMonth == this.selectMonth - 1 &&
+          this.selectMonth == this.currentMonth - 1 &&
           this.selectYear == this.currentYear
         ) {
-          if (
-            this.reportObj.reportStatus == "未申报" ||
-            this.reportObj.reportStatus == "申报失败"
-          ) {
+          if (arr.indexOf(this.reportObj.reportStatus) > -1) {
             return true;
           }
         }
@@ -503,7 +522,7 @@ export default {
         }
       });
     },
-    //切换纳税主体
+    //切换扣缴义务人
     handleCheckTaxSubject(item) {
       this.reportForm.taxSubjectId = item.taxSubId;
       this.currentTaxSubName = item.taxSubName;
@@ -687,6 +706,11 @@ export default {
         text-align: right;
       }
     }
+  }
+  .current-tab-sub_name{
+    @include ellipsis;
+    width:200px;
+    display: inline-block;
   }
 }
 </style>

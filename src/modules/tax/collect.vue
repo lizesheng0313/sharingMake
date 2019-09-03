@@ -46,7 +46,7 @@
           </div>
           <div class="staff-situation">
             <span class="staff-total">
-              纳税主体：
+              扣缴义务人：
               <el-dropdown trigger="click">
                 <el-button type="text">
                   <em>{{currentTaxSubName}}</em>
@@ -443,7 +443,7 @@ export default {
         }
       });
     },
-    //纳税主体集合
+    //扣缴义务人集合
     getTaxSubjectInfoList() {
       this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
         if (res.success) {

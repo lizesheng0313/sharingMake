@@ -3,7 +3,7 @@
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
-          <span>累计应税所得额初始化</span>
+          <span>累计应税项</span>
         </el-col>
       </el-row>
     </header>
@@ -41,7 +41,7 @@
         @selection-change="handleSelectItem"
       >
         <el-table-column type="selection" width="55" fixed></el-table-column>
-        <el-table-column prop="taxSubName" label="纳税主体" width="140"></el-table-column>
+        <el-table-column prop="taxSubName" label="扣缴义务人" width="140"></el-table-column>
         <el-table-column prop="empName" label="姓名" width="140"></el-table-column>
         <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
         <el-table-column prop="idNo" label="证件号码" width="140"></el-table-column>
@@ -71,8 +71,8 @@
       :radioList="radioList"
       :title="'累计应纳税所得导入'"
       :apiCheck="'/api/taxTotalBase/importTaxTotalBaseCheck'"
-      :apiDownloadLog="'/api/taxTotalBase/exportErrorRecord/'"
-      :apiDownloadTemplate="'/api/taxTotalBase/downloadTemplate'"
+      :apiDownloadLog="'cumulativePageStore/getExportErrorRecord'"
+      :apiDownloadTemplate="'cumulativePageStore/actionDownloadTemplate'"
       :parameterData="parameterData"
       @changeRadioValue="changeRadioValue"
       :impoartAction="'cumulativePageStore/actionImportTaxTotalBaseSuccess'"
@@ -118,7 +118,6 @@ export default {
       total: 0,
       fileList: [],
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      isShowIncrease: false,
       list: []
     };
   },

@@ -151,8 +151,8 @@
     >
       <el-form :model="salaryForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
-          <el-form-item label="纳税主体">
-            <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择纳税主体">
+          <el-form-item label="扣缴义务人">
+            <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择扣缴义务人">
               <el-option v-for="(item,index) in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
           </el-form-item>

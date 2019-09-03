@@ -134,7 +134,7 @@ export function apiSalarySum(form) {
     data:form
   })
 }
-//纳税主体列表
+//扣缴义务人列表
 export function apiGetTaxSubjectList() {
   return fetch({
     url: '/api/taxSubject/getTaxSubjectList',
