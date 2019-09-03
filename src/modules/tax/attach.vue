@@ -230,7 +230,10 @@ export default {
               this.updatedFormData
             )
             .then(res => {
-              this.isShowUpdate = false;
+              if (res.success) {
+                this.isShowUpdate = false;
+                this.getList();
+              }
             });
         }
       });

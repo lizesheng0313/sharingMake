@@ -129,6 +129,14 @@ const filtersSalaryType = (val) => {
     }
   }
 };
+const idType = (val) => {
+  switch (val) {
+    case 'PRC_ID': {
+      return '居民身份证';
+    }
+
+  }
+};
 export default {
   resetDate,
   texRule,
@@ -136,4 +144,5 @@ export default {
   filterEmpType,
   getDay,
   filterType,
+  idType
 }

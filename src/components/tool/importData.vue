@@ -161,7 +161,7 @@ export default {
     importMemberFinish() {
       this.isShowIncrease = false;
       this.isShowIncreaseFinish = false;
-      this.$emit("loading");
+      this.$emit("getLoading");
     }
   }
 };
