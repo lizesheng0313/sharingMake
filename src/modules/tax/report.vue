@@ -328,7 +328,7 @@ export default {
         ]
       },
       //是否显示处理信息
-      isSendReport:false,
+      isSendReport: false,
       loading: false,
       currentYear: new Date().getFullYear(),
       currentDay: new Date().getDate(),
@@ -396,22 +396,15 @@ export default {
     },
     //生成申报数据
     handleGenerateData() {
-      if (this.list.length == 0) {
-        this.$message({
-          message: "扣缴义务人本月无申报数据",
-          type: "warning"
+      this.buttonForm.queryMonth = this.reportForm.queryMonth;
+      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      this.$store
+        .dispatch("taxPageStore/postGenerateTaxReportData", this.buttonForm)
+        .then(res => {
+          if (res.success) {
+            this.getList(true);
+          }
         });
-      } else {
-        this.buttonForm.queryMonth = this.reportForm.queryMonth;
-        this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
-        this.$store
-          .dispatch("taxPageStore/postGenerateTaxReportData", this.buttonForm)
-          .then(res => {
-            if (res.success) {
-              this.getList(true);
-            }
-          });
-      }
     },
     //发送申报
     handleSendReport() {
@@ -562,10 +555,10 @@ export default {
             ];
             this.total = res.data.count;
             this.list = res.data.data;
-            if (flag) {
+            if (this.list.length == 0 && flag) {
               this.$message({
-                message: "操作完成",
-                type: "success"
+                message: "扣缴义务人本月无申报数据",
+                type: "warning"
               });
             }
           }
@@ -707,9 +700,9 @@ export default {
       }
     }
   }
-  .current-tab-sub_name{
+  .current-tab-sub_name {
     @include ellipsis;
-    width:200px;
+    width: 200px;
     display: inline-block;
   }
 }
