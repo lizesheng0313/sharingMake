@@ -154,8 +154,13 @@
    line-height:34px;
 }
 
-
 .cumulative .el-select{
   margin-right:20px;
   width:100px;
+}
+
+.el-dropdown-menu__item .current-tab-sub_name{
+  @include ellipsis;
+  width:200px;
+  display: block;
 }

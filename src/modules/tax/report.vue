@@ -25,10 +25,10 @@
       <div class="screening">
         <div class="clearfix">
           <div class="select_tax-payer left">
-            纳税主体：
+            扣缴义务人：
             <el-dropdown trigger="click">
               <el-button type="text">
-                <em>{{currentTaxSubName}}</em>
+                <em class="current-tab-sub_name">{{currentTaxSubName}}</em>
                 <em class="iconsanjiao iconfont"></em>
               </el-button>
               <el-dropdown-menu slot="dropdown">
@@ -36,6 +36,7 @@
                   v-for="(item,index) in taxSubjectInfolist"
                   :key="index"
                   @click.native="handleCheckTaxSubject(item)"
+                  class="current-tab-sub_name"
                 >{{item.taxSubName}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -59,7 +60,7 @@
             >发送申报</el-button>
             <el-button
               type="primary"
-              v-if="showButton(['申报处理中',['作废处理中']])"
+              v-if="showButton(['申报处理中','作废处理中'])"
               @click="handleGetFeedback"
             >获取反馈</el-button>
             <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>
@@ -98,9 +99,9 @@
             class="staff-page"
           ></el-pagination>
         </div>
-        <div class="footnotes">
+        <div class="footnotes" v-if="isSendReport">
           <p>局端服务器处理结果如下：</p>
-          <p>[7001]您发送的申报正在处理，请稍后获取反馈信息，谢谢！</p>
+          <p>您发送的申报正在处理，请稍后获取反馈信息，谢谢！</p>
         </div>
       </div>
     </div>
@@ -326,6 +327,8 @@ export default {
           }
         ]
       },
+      //是否显示处理信息
+      isSendReport:false,
       loading: false,
       currentYear: new Date().getFullYear(),
       currentDay: new Date().getDate(),
@@ -395,7 +398,7 @@ export default {
     handleGenerateData() {
       if (this.list.length == 0) {
         this.$message({
-          message: "纳税主体本月无申报数据",
+          message: "扣缴义务人本月无申报数据",
           type: "warning"
         });
       } else {
@@ -412,6 +415,7 @@ export default {
     },
     //发送申报
     handleSendReport() {
+      this.isSendReport = true;
       this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
       this.buttonForm.date = this.reportForm.queryMonth;
       this.buttonForm.queryMonth = this.reportForm.queryMonth;
@@ -419,6 +423,7 @@ export default {
       this.$store
         .dispatch("taxPageStore/postCheckReportData", this.buttonForm)
         .then(res => {
+          this.isSendReport = false;
           if (res.success) {
             if (res.data.length == 0) {
               this.isShowPassword = true;
@@ -475,10 +480,7 @@ export default {
           this.selectMonth == this.currentMonth - 1 &&
           this.selectYear == this.currentYear
         ) {
-          if (
-            this.reportObj.reportStatus == "未申报" ||
-            this.reportObj.reportStatus == "申报失败"
-          ) {
+          if (arr.indexOf(this.reportObj.reportStatus) > -1) {
             return true;
           }
         }
@@ -520,7 +522,7 @@ export default {
         }
       });
     },
-    //切换纳税主体
+    //切换扣缴义务人
     handleCheckTaxSubject(item) {
       this.reportForm.taxSubjectId = item.taxSubId;
       this.currentTaxSubName = item.taxSubName;
@@ -704,6 +706,11 @@ export default {
         text-align: right;
       }
     }
+  }
+  .current-tab-sub_name{
+    @include ellipsis;
+    width:200px;
+    display: inline-block;
   }
 }
 </style>

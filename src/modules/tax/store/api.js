@@ -50,7 +50,7 @@ export function apiOtherTotalList(totalListForm) {
   })
 }
 
-//专项附加扣除-纳税主体集合
+//专项附加扣除-扣缴义务人集合
 export function apiTaxSubjectInfoList(date) {
   return fetch({
     url: '/api/taxReport/getTaxSubjectInfoList',
@@ -146,8 +146,8 @@ export function apiSubTaxReportExport(reportForm) {
 
 
 
-/*个税-纳税主体*/
-//纳税主体-集合列表
+/*个税-扣缴义务人*/
+//扣缴义务人-集合列表
 export function apiTaxSubjectList(taxListFormData) {
   return fetch({
     url: '/api/taxSubject/getTaxSubjectList',
@@ -156,7 +156,7 @@ export function apiTaxSubjectList(taxListFormData) {
   })
 }
 
-//纳税主体-添加/修改
+//扣缴义务人-添加/修改
 export function apiDealTaxSubject(ruleForm) {
   return fetch({
     url: '/api/taxSubject/dealTaxSubject',
@@ -165,7 +165,7 @@ export function apiDealTaxSubject(ruleForm) {
   })
 }
 
-//纳税主体-添加/修改
+//扣缴义务人-添加/修改
 export function apiDelTaxSubject(id) {
   return fetch({
     url: '/api/taxSubject/delTaxSubject',

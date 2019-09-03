@@ -82,18 +82,18 @@ export const getSubTaxReportExport = ({ dispatch }, reportForm) => {
 
 
 
-/*个税-纳税主体*/
-//纳税主体-集合列表
+/*个税-扣缴义务人*/
+//扣缴义务人-集合列表
 export const actionTaxSubjectList = ({ dispatch },taxListFormData) => {
     return apiTaxSubjectList(taxListFormData)
 }
 
-//纳税主体-添加/修改
+//扣缴义务人-添加/修改
 export const actionDealTaxSubject = ({ dispatch }, ruleForm) => {
     return apiDealTaxSubject(ruleForm)
 }
 
-//纳税主体-删除
+//扣缴义务人-删除
 export const actionDelTaxSubject = ({ dispatch }, id) => {
     return apiDelTaxSubject(id)
 }
