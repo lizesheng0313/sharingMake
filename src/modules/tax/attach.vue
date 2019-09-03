@@ -232,6 +232,7 @@ export default {
             .then(res => {
               if (res.success) {
                 this.isShowUpdate = false;
+                this.getList();
               }
             });
         }

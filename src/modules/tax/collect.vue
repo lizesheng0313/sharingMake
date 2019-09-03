@@ -407,6 +407,7 @@ export default {
             .then(res => {
               if (res.success) {
                 this.isShowPassword = false;
+                this.getList()
                 this.$alert("人员信息报送成功，请稍后获取反馈", "提示信息", {
                   confirmButtonText: "确定",
                   callback: action => {
@@ -424,6 +425,7 @@ export default {
             .dispatch("taxPageStore/actionGetFeedback", this.feedbackForm)
             .then(res => {
               if (res.success) {
+                 this.getList()
                 this.isShowPassword = false;
                 this.isShowFeedback = true;
                 this.feedbackList = res.data;
