@@ -14,18 +14,18 @@
       </el-row>
     </header>
     <div class="salary-cal-content">
-      <div class="content-header">
-        <i class="el-icon-arrow-left"></i>
+      <div class="content-header head-date">
         <span>{{resetDate}}</span>
         <el-date-picker
           v-model="currentDate"
           type="month"
+          suffix-icon="el-icon-date"
           value-format="yyyy-MM"
           :editable="false"
           :clearable="false"
           @change="changeDate"
         ></el-date-picker>
-        <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>
+<!--        <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>-->
       </div>
       <div class="salary-payroll">
         <div class="payroll-box" v-for="(item,index) in salaryRuleUsedList">
@@ -219,6 +219,9 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
 .salary-cal {
+  .el-icon-date{
+    font-size:16px;
+  }
   .header {
     padding: 0 20px;
     font-size: 14px;

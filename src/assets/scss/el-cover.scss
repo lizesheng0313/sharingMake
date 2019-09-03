@@ -42,10 +42,19 @@
     }
   }
 }
-.el-diy-month{
-  .el-date-editor{
-    width:120px;
-    opacity:0;
+.head-date{
+  .el-input--prefix .el-input__inner{
+    border:none;
+  }
+  .el-input__prefix{
+    left:0px;
+    .el-input__icon{
+      line-height: 30px;
+      font-size: 20px;
+    }
+    .el-input__inner{
+      font-size:16px;
+    }
   }
 }
 .sflary-el-step{
@@ -159,13 +168,12 @@
   width:100px;
 }
 
-.tax{
+.collect{
   .search-input{
     .el-input__inner{
       width: 230px;
     }
   }
-  
 }
 .el-dropdown-menu__item .current-tab-sub_name{
   @include ellipsis;
