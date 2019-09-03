@@ -76,7 +76,7 @@
       :parameterData="parameterData"
       @changeRadioValue="changeRadioValue"
       :impoartAction="'cumulativePageStore/actionImportTaxTotalBaseSuccess'"
-      @getLoading="_loading"
+      @getLoading="refresh"
       :uploadFileData="uploadFileData"
     ></import-data>
   </div>
@@ -146,7 +146,7 @@ export default {
       this.parameterData.year = this.selectYear;
       this.$refs.import.show();
     },
-    _loading(data) {
+    refresh(data) {
       this.ruleForm.nameOrEmpNo = "";
       this.ruleForm.currPage = 1;
       this.getList();
