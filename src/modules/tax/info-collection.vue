@@ -283,6 +283,7 @@ export default {
         this.employeeFormData.martyrFamilyNo = "";
       }
       this.employeeFormData.operType = "UPDATE";
+      console.log(this.employeeFormData.empDay)
       this.$refs.refEmployeeForm.validate(valid => {
         if (valid) {
           this.$store
