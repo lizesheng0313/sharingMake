@@ -283,21 +283,27 @@ export default {
         this.employeeFormData.martyrFamilyNo = "";
       }
       this.employeeFormData.operType = "UPDATE";
-      console.log(this.employeeFormData.empDay)
-      this.$refs.refEmployeeForm.validate(valid => {
-        if (valid) {
-          this.$store
-            .dispatch(
-              "taxPageStore/actionSaveEmpCollectInfo",
-              this.employeeFormData
-            )
-            .then(res => {
-              if (res.success) {
-                this.$router.back(-1);
-              }
-            });
-        }
-      });
+      if(this.employeeFormData.empDay > this.employeeFormData.leaveDay){
+        this.$message({
+          message: "离职日期不能早于任职受雇从业日期",
+          type: "warning"
+        });
+      }else{
+        this.$refs.refEmployeeForm.validate(valid => {
+          if (valid) {
+            this.$store
+              .dispatch(
+                "taxPageStore/actionSaveEmpCollectInfo",
+                this.employeeFormData
+              )
+              .then(res => {
+                if (res.success) {
+                  this.$router.back(-1);
+                }
+              });
+          }
+        });
+      }
     }
   }
 };
