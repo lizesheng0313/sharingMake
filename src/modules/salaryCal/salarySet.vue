@@ -69,7 +69,7 @@
                 </el-switch>
                 <i class="iconfont question">&#xe64e;</i>
               </el-form-item>
-              <div class="buttonCon"><el-button type="primary" @click="SaveSalaryRule">保存设置</el-button></div>
+              <div class="buttonCon"><el-button type="primary" :disabled="saveSalaryDisabled" @click="SaveSalaryRule">保存设置</el-button></div>
             </el-form>
           </div>
         </el-tab-pane>
@@ -244,6 +244,7 @@ export default {
       tableData:[],
       salaryItemLoding:false,
       isEdit: this.$route.query.isEdit,
+      saveSalaryDisabled:false,
     };
   },
   components: {
@@ -321,8 +322,10 @@ export default {
         if(valid){
           this.basicInfoForm.name = this.basicInfoForm.name.trim();
           this.basicInfoForm.id =  this.isEdit ? this.sendBasicInfoForm.id:null;
+          this.saveSalaryDisabled = true;
           apiSaveSalaryRule(this.basicInfoForm)
             .then(res=>{
+              this.saveSalaryDisabled = false;
               if(res.code == "0000"){
                 this.ruleId = res.data.id;
                 this.$store.commit("salaryCalStore/SET_ROULEID", res.data.id);
@@ -372,7 +375,7 @@ export default {
     //新增工资项
     setSalaryItem(){
       this.salaryItemDetailForm.group = this.salaryType;
-      this.salaryItemDetailForm.types = this.salaryType === "人员信息"?[]:[this.salaryItemDetailForm.type2,this.salaryItemDetailForm.type1];
+      this.salaryItemDetailForm.types = this.salaryType === "人员信息"?["TEXT_INFO"]:["NUMBER_INFO",this.salaryItemDetailForm.type2,this.salaryItemDetailForm.type1];
       this.salaryItemDetailForm.salaryRuleId = this.ruleId;
       this.$refs['salaryItemDetailForm'].validate((valid) => {
         if(valid){
