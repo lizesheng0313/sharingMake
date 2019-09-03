@@ -96,7 +96,9 @@
                   >{{scope.row.empName }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="idType" label="证件类型" width="140"></el-table-column>
+              <el-table-column prop="idType" label="证件类型" width="140">
+                <template slot-scope="scope">{{scope.row.idType | idType}}</template>
+              </el-table-column>
               <el-table-column prop="idNo" label="证件号码" width="140"></el-table-column>
               <el-table-column prop="empSex" label="性别" width="140">
                 <template slot-scope="scope">{{returnStatus('empSex',scope.row.empSex)}}</template>
