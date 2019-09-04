@@ -72,7 +72,7 @@
                   <el-input v-model="employeeFormData.idNo"></el-input>
                 </el-form-item>
                 <el-form-item label="国籍(地区)" prop="country" :disabled="checkSuccess">
-                  <el-input v-model="employeeFormData.country"></el-input>
+                  <el-input value="中国" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="出生日期" prop="birthday" :disabled="checkSuccess">
                   <el-date-picker
@@ -283,20 +283,27 @@ export default {
         this.employeeFormData.martyrFamilyNo = "";
       }
       this.employeeFormData.operType = "UPDATE";
-      this.$refs.refEmployeeForm.validate(valid => {
-        if (valid) {
-          this.$store
-            .dispatch(
-              "taxPageStore/actionSaveEmpCollectInfo",
-              this.employeeFormData
-            )
-            .then(res => {
-              if (res.success) {
-                this.$router.back(-1);
-              }
-            });
-        }
-      });
+      if(this.employeeFormData.empDay > this.employeeFormData.leaveDay){
+        this.$message({
+          message: "离职日期不能早于任职受雇从业日期",
+          type: "warning"
+        });
+      }else{
+        this.$refs.refEmployeeForm.validate(valid => {
+          if (valid) {
+            this.$store
+              .dispatch(
+                "taxPageStore/actionSaveEmpCollectInfo",
+                this.employeeFormData
+              )
+              .then(res => {
+                if (res.success) {
+                  this.$router.back(-1);
+                }
+              });
+          }
+        });
+      }
     }
   }
 };

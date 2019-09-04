@@ -3,7 +3,7 @@
     <div class="clearfix check-staff-menu">
       <el-button class="screen" size="small" @click="showScreen">筛选</el-button>
       <el-input
-        placeholder="请输入姓名\手机号"
+        placeholder="请输入姓名\手机号\工号"
         v-model="salaryForm.key"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
@@ -704,13 +704,12 @@ export default {
   .el-date-editor {width: 180px;}
   .screen{
     display: inline-block;
-    float: left;
     margin-right:20px;
   }
   .check-staff-menu {
     margin-top: 66.5px;
     .search-input {
-      width: 205px;
+      width: 215px;
     }
   }
   .iconiconfonticonfontsousuo1 {font-size: 12px;}
