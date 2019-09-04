@@ -16,7 +16,14 @@
         <img src="../../../assets/images/item2.png" alt="" width="49px" height="50px">
         <div class="box-fun">
           <p class="box-title">发放工资条</p>
-          <p class="tip">员工可在微信小程序中查看工资条<span class="seeExample">预览实例</span></p>
+          <p class="tip">员工可在微信小程序中查看工资条<span class="seeExample" v-popover:salaryExample>预览实例</span></p>
+          <el-popover
+            ref="salaryExample"
+            placement="right"
+            width="200"
+            trigger="click">
+            <img src="../../../assets/images/salary.png" width="200px" alt="">
+          </el-popover>
           <el-button type="warning" @click="sendSalary" v-if="checkStatus === 'AUDITED'">发放</el-button>
           <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH'">
             <el-button type="warning" @click="seeRecord">查看发放记录</el-button>
@@ -45,9 +52,8 @@ export default {
   data() {
     return {
       popShow: { isshow: false },
-
       checkId:this.$route.query.id,
-      checkStatus:""
+      checkStatus:"",
     };
   },
   created(){

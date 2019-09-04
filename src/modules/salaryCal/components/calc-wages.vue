@@ -116,7 +116,7 @@
         </p>
         <p class="instructions">
           说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资
-          <span>查看举例</span>
+<!--          <span>查看举例</span>-->
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -661,7 +661,7 @@ export default {
       }else{
           this.audited(type)
       }
-      
+
     },
     audited(type){
       let status = this.checkStatus ==='AUDITED'?"":"AUDIT";

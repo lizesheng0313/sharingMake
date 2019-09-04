@@ -67,7 +67,14 @@
                   active-text=""
                   inactive-text="">
                 </el-switch>
-                <i class="iconfont question">&#xe64e;</i>
+                <i class="iconfont question" v-popover:salaryTable>&#xe64e;</i>
+                <el-popover
+                  ref="salaryTable"
+                  placement="right"
+                  width="500"
+                  trigger="click">
+                    <img src="../../assets/images/salaryTable.png" width="500px">
+                </el-popover>
               </el-form-item>
               <div class="buttonCon"><el-button type="primary" :disabled="saveSalaryDisabled" @click="SaveSalaryRule">保存设置</el-button></div>
             </el-form>
