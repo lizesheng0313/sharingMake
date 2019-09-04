@@ -402,6 +402,11 @@ export default {
       display: inline-block;
     }
   }
+  .current-tab-sub_name {
+    @include ellipsis;
+    width: 200px;
+    display: inline-block;
+  }
 }
 </style>
 
