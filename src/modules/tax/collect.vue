@@ -718,6 +718,11 @@ export default {
   .el-input__inner {
     height: auto;
   }
+  .current-tab-sub_name {
+    @include ellipsis;
+    width: 200px;
+    display: inline-block;
+  }
 }
 </style>
 
