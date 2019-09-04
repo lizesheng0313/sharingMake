@@ -700,6 +700,11 @@ export default {
       }
     }
   }
+  .current-tab-sub_name {
+    @include ellipsis;
+    width: 200px;
+    display: inline-block;
+  }
 }
 </style>
 
