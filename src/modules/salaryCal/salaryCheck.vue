@@ -1,5 +1,5 @@
 <template>
-  <div class="check-staff sflary-el-step">
+  <div class="salary-check sflary-el-step">
     <full-screen :fsTitle="'月度工资表'" :bgColor="'#fff'" ref="full">
       <div slot="fs-buttons" class="header-button">
         <span class="collect" v-if="active==0" >
@@ -22,24 +22,21 @@
         </span>
       </div>
       <div slot="fs-container">
-        <div class="step-box" v-if="active!==3" >
-          <el-steps :active="active" finish-status="success" class="steps" :align-center="true">
-            <el-step title="核对人员" @click.native = "goStep(0)"style="cursor: pointer;"></el-step>
-            <el-step title="核算薪资" @click.native = "goStep(1)" style="cursor: pointer;"></el-step>
-            <el-step title="发放薪资" @click.native = "goStep(2)" style="cursor: pointer;"></el-step>
-          </el-steps>
-          <el-button-group class="turn-page">
-            <el-button icon="el-icon-arrow-left" @click="handlePrve">上一步</el-button>
-            <el-button @click="handleNext">
-              下一步
-              <i class="el-icon-arrow-right el-icon--right"></i>
-            </el-button>
-          </el-button-group>
+        <div class="step-box" v-if="active!==4" >
+            <el-steps :active="active" finish-status="success" simple style="margin-top: 20px">
+              <el-step title="开始" disabled></el-step>
+              <el-step title="核对人员" @click.native = "goStep(1)"style="cursor: pointer;"></el-step>
+              <el-step title="核算薪资" @click.native = "goStep(2)" style="cursor: pointer;"></el-step>
+              <el-step title="发放薪资" @click.native = "goStep(3)" style="cursor: pointer;"></el-step>
+              <el-step title="结束" disabled></el-step>
+            </el-steps>
         </div>
-        <check-staff v-if="active==0"></check-staff>
-        <calc-wages v-if="active==1"></calc-wages>
-        <payment v-if="active==2" @changeActive="changeActive"></payment>
-        <salarySend v-if="active==3" @changeActive="changeActive"></salarySend>
+        <div class="view-content">
+          <check-staff v-if="active==1"></check-staff>
+          <calc-wages v-if="active==2"></calc-wages>
+          <payment v-if="active==3" @changeActive="changeActive"></payment>
+          <salarySend v-if="active==4" @changeActive="changeActive"></salarySend>
+        </div>
       </div>
     </full-screen>
   </div>
@@ -84,18 +81,6 @@ export default {
         }
       })
     },
-    handlePrve() {
-      if (this.active != 0) {
-        this.active--;
-        this.replaceRoute(this.active)
-      }
-    },
-    handleNext() {
-      if (this.active != 2) {
-        this.active++;
-        this.replaceRoute(this.active)
-      }
-    },
     refresh(){
       this.$router.go(0)
     },
@@ -103,7 +88,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.check-staff {
+.salary-check {
+  background:#f5f7fa;
   .more-operation {
     display: inline-block;
   }
@@ -128,9 +114,9 @@ export default {
   }
 
   .step-box {
-    position: relative;
+    margin:0 2%;
     .steps {
-      width: 690px;
+      width: 100%;
       margin: 30px auto 0;
     }
     .turn-page {
@@ -138,6 +124,9 @@ export default {
       right: 20px;
       bottom: 10px;
     }
+  }
+  .view-content{
+    margin: 0px 1%;
   }
 }
 </style>

@@ -419,7 +419,7 @@ export default {
   padding: 0 20px;
   box-sizing: border-box;
   .check-staff-menu {
-    margin-top: 66.5px;
+    margin-top: 30px;
     .search-input {
       width: 205px;
     }

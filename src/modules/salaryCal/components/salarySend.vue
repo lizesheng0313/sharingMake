@@ -185,7 +185,7 @@
       },
       //批量选择
       handleSelectionChange(val){
-      
+
       this.selectUserIdList = []
 
        val.forEach(item=>{
@@ -230,7 +230,7 @@
       },
       //返回
       goBack(){
-        this.$emit("changeActive",2);
+        this.$emit("changeActive",3);
         this.$router.push({path:"/salaryCheck",query:{id:this.salaryForm.checkId,active:2,salaryRuleId:this.$route.query.salaryRuleId}})
       }
     }
