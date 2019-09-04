@@ -134,7 +134,14 @@ const idType = (val) => {
     case 'PRC_ID': {
       return '居民身份证';
     }
+  }
+};
 
+const countryType = (val) => {
+  switch (val) {
+    case 'CHINA': {
+      return '中国';
+    }
   }
 };
 export default {
@@ -142,7 +149,6 @@ export default {
   texRule,
   salaryCheckStatus,
   filterEmpType,
-  getDay,
-  filterType,
-  idType
+  idType,
+  countryType,
 }

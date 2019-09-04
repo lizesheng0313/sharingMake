@@ -126,7 +126,9 @@
               <el-table-column prop="workerType" label="任职受雇从业类型" width="140">
                 <template slot-scope="scope">{{returnStatus('workerType',scope.row.workerType)}}</template>
               </el-table-column>
-              <el-table-column prop="country" label="国籍" width="140"></el-table-column>
+              <el-table-column  label="国籍" width="140">
+                <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
+              </el-table-column>
               <el-table-column prop="reportFinishTime" label="更新时间" width="140"></el-table-column>
               <el-table-column prop="updateTime" label="最近操作时间" width="140"></el-table-column>
             </el-table>
