@@ -56,7 +56,7 @@
           扣缴义务人：
           <el-dropdown trigger="click">
             <el-button type="text">
-              <em>{{currentTaxSubName}}</em>
+              <em class="current-tab-sub_name">{{currentTaxSubName}}</em>
               <em class="iconsanjiao iconfont"></em>
             </el-button>
             <el-dropdown-menu slot="dropdown">
@@ -64,6 +64,7 @@
                 v-for="(item,index) in taxSubjectInfolist"
                 :key="index"
                 @click.native="handleCheckTaxSubject(item)"
+                class="current-tab-sub_name"
               >{{item.taxSubName}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
