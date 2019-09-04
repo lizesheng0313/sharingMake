@@ -177,8 +177,8 @@
     }
   }
 }
-//.el-dropdown-menu__item .current-tab-sub_name{
-//  @include ellipsis;
-//  width:200px;
-//  display: block;
-//}
+.el-dropdown-menu__item.current-tab-sub_name{
+  @include ellipsis;
+  width:200px;
+  display: block;
+}
