@@ -54,7 +54,6 @@ export default {
       popShow: { isshow: false },
       checkId:this.$route.query.id,
       checkStatus:"",
-      exampleVisible:false,
     };
   },
   created(){
