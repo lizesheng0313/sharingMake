@@ -22,11 +22,11 @@
         </span>
       </div>
       <div slot="fs-container">
-        <div class="step-box" v-if="active!==3">
+        <div class="step-box" v-if="active!==3" >
           <el-steps :active="active" finish-status="success" class="steps" :align-center="true">
-            <el-step title="核对人员" @click.native="active = 0" style="cursor: pointer;"></el-step>
-            <el-step title="核算薪资" @click.native="active = 1" style="cursor: pointer;"></el-step>
-            <el-step title="发放薪资" @click.native="active = 2" style="cursor: pointer;"></el-step>
+            <el-step title="核对人员" @click.native = "goStep(0)"style="cursor: pointer;"></el-step>
+            <el-step title="核算薪资" @click.native = "goStep(1)" style="cursor: pointer;"></el-step>
+            <el-step title="发放薪资" @click.native = "goStep(2)" style="cursor: pointer;"></el-step>
           </el-steps>
           <el-button-group class="turn-page">
             <el-button icon="el-icon-arrow-left" @click="handlePrve">上一步</el-button>
@@ -70,14 +70,30 @@ export default {
     changeActive(data){
       this.active = data;
     },
+    goStep(data){
+      this.active = data;
+      this.replaceRoute(data)
+    },
+    replaceRoute(data){
+      this.$router.replace({
+        path:"/salaryCheck",
+        query:{
+          id:this.$route.query.id,
+          active:data,
+          salaryRuleId:this.$route.query.salaryRuleId
+        }
+      })
+    },
     handlePrve() {
       if (this.active != 0) {
         this.active--;
+        this.replaceRoute(this.active)
       }
     },
     handleNext() {
       if (this.active != 2) {
         this.active++;
+        this.replaceRoute(this.active)
       }
     },
     refresh(){
