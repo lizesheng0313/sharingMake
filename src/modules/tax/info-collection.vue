@@ -1,6 +1,7 @@
 <template>
   <div class="collection">
-    <full-screen :fsTitle="'人员信息'" :bgColor="'#fff'" class="info-collection">
+    <full-screen :fsTitle="'人员信息'" :bgColor="'#fff'" class="info-collection" :goUrl="'/tax/collect'">
+      <span slot="fs-button">关闭</span>
       <div slot="fs-container">
         <div class="state-personnel">
           <i>人员状态</i>
