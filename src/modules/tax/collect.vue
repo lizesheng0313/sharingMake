@@ -176,7 +176,7 @@
                 v-for="(value,key,index) in screening.empStatus"
                 :key="index"
                 @click="handleSelectScreening(key,'empStatus')"
-                :class="{active:ruleForm.empStatus == key,'right-span':true}"
+                :class="{active:ruleForm.empStatus == key,'right-span':index !==0}"
               >{{value}}</span>
             </el-col>
           </el-row>
@@ -187,7 +187,7 @@
                 v-for="(value,key,index) in screening.iscgl"
                 :key="index"
                 @click="handleSelectScreening(key,'iscgl')"
-                :class="{active:ruleForm.iscgl == key,'right-span':true}"
+                :class="{active:ruleForm.iscgl == key,'right-span': index!==0}"
               >{{value}}</span>
             </el-col>
           </el-row>
@@ -714,16 +714,11 @@ export default {
       padding: 7px 15px;
       cursor: pointer;
     }
-    .first-span{
+    span:first-child{
       border-radius: 4px;
     }
     .right-span{
       border-left:none;
-    }
-    .employee{
-      span:first-child{
-        border-left:1px solid #DCDFE6 !important;
-      }
     }
     .right-span:nth-child(2){
       border-left:1px solid #DCDFE6;
