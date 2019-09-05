@@ -218,10 +218,10 @@
     </el-dialog>
    <!-- 导出工资明细  -->
     <el-dialog
-      title=""
+      title="选择导出项"
       :visible.sync="showExportSalaryDetail"
       width="600px"
-      center
+      left
       class="exportSalaryDetailDialog"
     >
       <div v-show="isShowUserInfo">
@@ -786,8 +786,8 @@ export default {
   }
   .exportSalaryDetailDialog{
     .diyOptionItem{
-      margin-top:10px;
-      padding-top:10px;
+      /*margin-bottom:10px;*/
+      /*padding-top:10px;*/
     }
     .el-checkbox{
       height: 30px;
