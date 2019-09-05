@@ -151,28 +151,28 @@
     >
       <el-form :model="salaryForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
-          <el-form-item label="扣缴义务人">
+          <el-form-item label="扣缴义务人" label-width="38%">
             <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择扣缴义务人">
               <el-option v-for="(item,index) in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
           </el-form-item>
         </div>
         <div class="shortCon">
-          <el-form-item label="部门">
+          <el-form-item label="部门" label-width="38%">
             <el-input v-model="salaryForm.queryFilterParam.departmentName"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
-          <el-form-item label="岗位">
+          <el-form-item label="岗位" label-width="38%">
             <el-input v-model="salaryForm.queryFilterParam.jobTitle"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
-          <el-form-item label="工作地点">
+          <el-form-item label="工作地点" label-width="38%">
             <el-input v-model="salaryForm.queryFilterParam.workAddress"></el-input>
           </el-form-item>
         </div>
-        <el-form-item label="入职日期">
+        <el-form-item label="入职日期" label-width="22%">
           <el-date-picker
             v-model="salaryForm.queryFilterParam.enterStartTime"
             type="date"
@@ -187,7 +187,7 @@
             placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="离职日期">
+        <el-form-item label="离职日期" label-width="22%">
           <el-date-picker
             v-model="salaryForm.queryFilterParam.lastEmployStartTime"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -202,7 +202,7 @@
             placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="员工类型">
+        <el-form-item label="员工类型" label-width="22%">
           <el-radio-group v-model="noEnumEmpType" size="small" @change="changeNoEmployType">
             <el-radio-button  label="null">不限</el-radio-button>
           </el-radio-group>
@@ -704,10 +704,6 @@ export default {
   .screen{
     display: inline-block;
     margin-right:20px;
-  }
-  .screen-dialog  .el-form{
-    width: 540px;
-    margin:0 auto;
   }
   .file-tip{
     margin-top:15px;
