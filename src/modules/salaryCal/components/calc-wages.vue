@@ -68,7 +68,7 @@
       :visible.sync="isShowImport"
       width="600px"
       center
-      class="diy-el_dialog"
+      class="screenDialog"
     >
       <div>
         <p class="headings">1、选择导入匹配方式</p>
@@ -145,9 +145,9 @@
     <el-dialog
       title=""
       :visible.sync="isShowScreen"
-      width="600px"
+      width="52%"
       center
-      class="diy-el_dialog"
+      class="screenDialog"
     >
       <el-form :model="salaryForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
@@ -203,10 +203,10 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="员工类型">
-          <el-radio-group v-model="noEnumEmpType" size="mini" @change="changeNoEmployType">
+          <el-radio-group v-model="noEnumEmpType" size="small" @change="changeNoEmployType">
             <el-radio-button  label="null">不限</el-radio-button>
           </el-radio-group>
-          <el-checkbox-group v-model="enumEmpType" size="mini" @change="changeEmployType">
+          <el-checkbox-group v-model="enumEmpType" size="small" @change="changeEmployType">
             <el-checkbox-button  v-for="(item,index) in screenOption" :label="item.value" :key="item.index">{{item.label}}</el-checkbox-button>
           </el-checkbox-group>
         </el-form-item>
@@ -706,8 +706,12 @@ export default {
     display: inline-block;
     margin-right:20px;
   }
+  .screenDialog  .el-form{
+    width: 540px;
+    margin:0 auto;
+  }
   .check-staff-menu {
-    margin-top: 66.5px;
+    margin-top: 30px;
     .search-input {
       width: 215px;
     }
@@ -736,7 +740,7 @@ export default {
       span {
         cursor: pointer;
         margin-right: 20px;
-        color: 333;
+        color: #333;
       }
     }
     .el-dropdown-link {
