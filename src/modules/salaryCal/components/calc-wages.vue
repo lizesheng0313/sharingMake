@@ -3,7 +3,7 @@
     <div class="clearfix check-staff-menu">
       <el-button class="screen" size="small" @click="showScreen">筛选</el-button>
       <el-input
-        placeholder="请输入姓名\手机号\工号"
+        placeholder="请输入姓名\手机号"
         v-model="salaryForm.key"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="staff-table">
-      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}" width="100%" v-loading="tableLoading">
+      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle"  width="100%" v-loading="tableLoading">
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
           min-width="120px"

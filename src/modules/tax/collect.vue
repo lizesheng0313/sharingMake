@@ -381,13 +381,13 @@ export default {
     },
     handleReport() {
       this.reportOrFeedback = true;
+      console.log(this.reportForm.ids)
       if (this.reportForm.ids.length > 0) {
         this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
         this.$confirm(
           "系统共检测到有" +
             this.reportForm.ids.length +
-            "位人员需要进行信息提交，请确认是否现在提交",
-          "删除确认",
+            "位人员需要进行信息提交，请确认是否现在提交 ?",
           {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
@@ -441,6 +441,7 @@ export default {
       row.forEach(element => {
         if (element.reportStatus == "AWAIT_REPORT") {
           this.reportForm.ids.push(element.id);
+
         }
       });
     },

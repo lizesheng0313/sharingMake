@@ -4,15 +4,15 @@ export const idValidStatus = {
   'AWAIT_CHECK': '待验证',
   'CHECKING': '验证中',
   'CHECK_SUCCESS': '验证通过',
-  'CHECK_FAIL': '验证不通',
-  'NO_CHECK': '暂不通过'
+  'CHECK_FAIL': '验证不通过',
+  'NO_CHECK': '暂不验证'
 };
 //报送状态
 export const reportStatus = {
   'AWAIT_REPORT': "待报送",
   'REPORTING': "待反馈",
   'REPORT_SUCCESS': "报送成功",
-  'REPORT_ERROR': "报关失败"
+  'REPORT_ERROR': "报送失败"
 }
 //人员状态
 export const empStatus = {
