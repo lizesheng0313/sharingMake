@@ -96,7 +96,7 @@ export default {
     sendSalary(){
       apiProvideStubs(this.checkId).then(res=>{
         if(res.code === "0000"){
-          this.$emit("changeActive",3);
+          this.$emit("changeActive",4);
           this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:3,salaryRuleId:this.$route.query.salaryRuleId}})
         }else{
           this.$message.error(res.message)
@@ -133,6 +133,7 @@ export default {
 @import "../../../assets/scss/helpers.scss";
 .payment {
   margin-top:50px;
+  padding-bottom: 50px;
   .box{
     width:546px;
     margin:0 auto;

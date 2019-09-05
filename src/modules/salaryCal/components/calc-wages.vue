@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="staff-table">
-      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}" width="100%" v-loading="tableLoading">
+      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle"  width="100%" v-loading="tableLoading">
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
           min-width="120px"

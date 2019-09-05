@@ -1,6 +1,6 @@
 <template>
   <div class="salary-check sflary-el-step">
-    <full-screen :fsTitle="'月度工资表'" :bgColor="'#fff'" ref="full">
+    <full-screen :fsTitle="'月度工资表'" :bgColor="'#fafafa'" ref="full" style="overflow: hidden;">
       <div slot="fs-buttons" class="header-button">
         <span class="collect" v-if="active==0" >
          <router-link :to="{ path: '/tax/collect' }"> <i class="iconqiyexinxicaiji iconfont"></i>个税系统人员人信息采集</router-link>
@@ -21,7 +21,7 @@
           <i class="iconshuaxin iconfont"></i>刷新
         </span>
       </div>
-      <div slot="fs-container">
+      <div slot="fs-container" class="content-st">
         <div class="step-box" v-if="active!==4" >
             <el-steps :active="active" finish-status="success" simple style="margin-top: 20px">
               <el-step title="开始" disabled></el-step>
@@ -92,6 +92,13 @@ export default {
   background:#f5f7fa;
   .more-operation {
     display: inline-block;
+  }
+  .content-st{
+    background: #fff;
+    width:98%;
+    margin:0 auto;
+    padding-top: 10px;
+    overflow: hidden;
   }
   .el-dropdown-link {
     color: #fff;
