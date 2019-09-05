@@ -229,8 +229,8 @@
           </el-row>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="handleSearch">查询</el-button>
-          <el-button type="primary" @click="handleReset">重置</el-button>
+          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button  @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
       <el-dialog
@@ -605,6 +605,7 @@ export default {
 @import "../../assets/scss/helpers.scss";
 .collect {
   .header {
+    border-bottom: 1px solid #ededed;
     .add-table {
       cursor: pointer;
       float: right;
@@ -618,7 +619,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 40px;
+    padding: 20px;
     .content-header {
       position: relative;
       font-size: 18px;

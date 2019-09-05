@@ -19,7 +19,7 @@
           :clearable="false"
         ></el-date-picker>
       </div>
-      <p class="tax-attach-tips">点击更新后，系统将自动从税务系统中下载本年度截至当前税款所属期员工的累计专项附加扣除额，累计值将用于本月薪资核算</p>
+<!--      <p class="tax-attach-tips">点击更新后，系统将自动从税务系统中下载本年度截至当前税款所属期员工的累计专项附加扣除额，累计值将用于本月薪资核算</p>-->
       <div class="screening">
         <div class="company-collection">
           <div
@@ -365,7 +365,6 @@ export default {
     }
   }
   .check-staff-menu {
-    border-top: 1px solid #eee;
     margin-top: 30px;
     padding-top: 30px;
     .search-input {
