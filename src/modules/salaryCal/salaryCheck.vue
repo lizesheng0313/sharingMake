@@ -2,13 +2,13 @@
   <div class="salary-check sflary-el-step">
     <full-screen :fsTitle="'月度工资表'" :bgColor="'#fafafa'" ref="full" style="overflow: hidden;">
       <div slot="fs-buttons" class="header-button">
-        <span class="collect" v-if="active==0" >
+        <span class="collect" v-if="active==1" >
          <router-link :to="{ path: '/tax/collect' }"> <i class="iconqiyexinxicaiji iconfont"></i>个税系统人员人信息采集</router-link>
         </span>
-        <div class="more-operation" v-if="active==1">
+        <div class="more-operation" v-if="active==2">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
-              <i>...</i>更多
+            更多  <i>...</i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item><router-link :to="{ path: '/tax/attach' }">累计专项附加扣除</router-link></el-dropdown-item>
