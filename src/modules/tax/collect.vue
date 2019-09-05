@@ -8,7 +8,6 @@
           </el-col>
         </el-row>
       </header>
-      <!-- <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p> -->
       <div class="tax-content">
         <div class="content-header head-date">
           <span>{{selectMonth}}</span>
@@ -39,7 +38,6 @@
             </div>
             <div class="right">
               <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
-              <el-button type="primary" class="add-import" @click="handleGetFeedback">获取反馈</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -374,11 +372,6 @@ export default {
     };
   },
   methods: {
-    handleGetFeedback() {
-      this.reportOrFeedback = false;
-      this.isShowPassword = true;
-      this.feedbackForm.password = "";
-    },
     handleReport() {
       this.reportOrFeedback = true;
       console.log(this.reportForm.ids)
@@ -618,7 +611,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 40px;
+    padding:40px 0 40px 40px;
     .content-header {
       position: relative;
       font-size: 18px;
