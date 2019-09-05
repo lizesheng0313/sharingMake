@@ -68,7 +68,7 @@
       :visible.sync="isShowImport"
       width="600px"
       center
-      class="screenDialog"
+      class="screen-dialog"
     >
       <div>
         <p class="headings">1、选择导入匹配方式</p>
@@ -98,7 +98,7 @@
           <span class="headings">2、</span>
           <el-button size="small" type="primary">选择文件</el-button>
         </el-upload>
-        <div v-show="uuid" style="margin:15px 0 0 28px">
+        <div v-show="uuid" style="margin:15px 0 15px 28px">
           <span v-if="failCount === 0"><i class="el-icon-success"></i>全部导入成功</span>
           <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
           <span v-if="successCount === 0"><i class="el-icon-error"></i>数据全部未通过校验</span>
@@ -107,7 +107,7 @@
             <a :href="'/api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
           </span>
         </div>
-        <p>
+        <p class="file-tip">
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
           <span>
              <a href="/api/salary/socialProvident/template/download" v-if="importT === 'social'">下载模板</a>
@@ -147,7 +147,7 @@
       :visible.sync="isShowScreen"
       width="52%"
       center
-      class="screenDialog"
+      class="screen-dialog"
     >
       <el-form :model="salaryForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
@@ -661,7 +661,6 @@ export default {
       }else{
           this.audited(type)
       }
-
     },
     audited(type){
       let status = this.checkStatus ==='AUDITED'?"":"AUDIT";
@@ -706,9 +705,14 @@ export default {
     display: inline-block;
     margin-right:20px;
   }
-  .screenDialog  .el-form{
+  .screen-dialog  .el-form{
     width: 540px;
     margin:0 auto;
+  }
+  .file-tip{
+    margin-top:15px;
+    line-height: 30px;
+    height:30px;
   }
   .check-staff-menu {
     margin-top: 30px;
