@@ -168,14 +168,13 @@ export default {
       height:36px;
       line-height: 36px;
       margin-top: 20px;
-      padding-left:20px;
       background: #F7F7F7;
       color:#666666;
       clear: both;
     }
     .el-checkbox{
       width:80%;
-      margin-left: 12px;
+      margin-left: 16px;
     }
     .el-textarea{
       /*width: 90%;*/
@@ -195,7 +194,7 @@ export default {
       padding-left:0px;
      img{
        vertical-align: middle;
-       margin-left: 6px;
+       margin-left: 18px;
      }
     }
     .salary-tip{
