@@ -156,6 +156,7 @@ export default {
       this.currentTypeName = "修改";
       this.$nextTick(() => {
         this.newBodyFormData = { ...row };
+        this.$refs.taxListForm.clearValidate();
       });
     },
     handleNewBody() {

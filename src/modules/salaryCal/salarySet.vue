@@ -91,17 +91,13 @@
             </div>
             <draggable animation=150  v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
               <el-row v-for="(item,index) in items" :key="index">
-                <el-col :span="8" v-if="item.group ==='人员信息' || item.types.sys"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
-                <el-col :span="8" v-else><div class="grid-content bg-purple" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
-                <el-col :span="8"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
-                <el-col :span="8">
+                <el-col :span="6"><i class="el-icon-sort-up"></i><i class="el-icon-sort-down"></i></el-col>
+                <el-col :span="6" v-if="item.group ==='人员信息' || item.types.sys"><div class="grid-content bg-purple nameStyle">{{item.name}}</div></el-col>
+                <el-col :span="6" v-else><div class="grid-content bg-purple nameStyle" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
+                <el-col :span="6">
                   <div class="grid-content bg-purple">
-                    <el-popover trigger="hover" placement="right" v-if="item.canDelete">
-                      <el-button @click="deleteItem(item.id)">删除</el-button>
-                      <div slot="reference" class="deletedStyle" >
-                        <i class="el-icon-more" style="cursor: pointer"></i>
-                      </div>
-                    </el-popover>
+                    <el-button type="warning" plain size="mini"  @click="deleteItem(item.id)" v-if="item.canDelete">删除</el-button>
                     <el-button type="warning" plain size="mini" v-else @click="changeStatus(item)">{{item.enable?'禁用':'启用'}}</el-button>
                 </div>
                 </el-col>
@@ -487,16 +483,20 @@ export default {
       }
     }
   }
-  .el-col-8{
-    height: 46px;
-    line-height: 46px;
-    text-align: center;
+  .el-col-6{
+    height: 50px;
+    line-height: 50px;
+    text-align: left;
+    padding-left:40px;
   }
   .deletedStyle{
     width:20px;
     height:10px;
     line-height:10px;
     margin: 10px auto;
+  }
+  .nameStyle{
+    color:#2C7CFF;
   }
 }
 </style>

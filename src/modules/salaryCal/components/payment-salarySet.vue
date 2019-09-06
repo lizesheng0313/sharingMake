@@ -7,7 +7,7 @@
       </div>
       <div v-for="(item,index) in stubsItems" :key="index" class="diy-Item">
         <div class="check-all">
-          <img src="../../../assets/images/itemT.png" alt="" width="15px" >
+          <img src="../../../assets/images/itemT.png" alt="" width="14px" >
           <el-checkbox :indeterminate="isIndeterminates[index]" v-model="checkAlls[index]" @change="handleDiyCheckAllChange(index,item.stubsItems)">{{item.stubsGroup}}</el-checkbox>
         </div>
         <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
@@ -168,34 +168,34 @@ export default {
       height:36px;
       line-height: 36px;
       margin-top: 20px;
-      padding-left:20px;
       background: #F7F7F7;
       color:#666666;
       clear: both;
     }
     .el-checkbox{
       width:80%;
-      margin-left: 12px;
+      margin-left: 16px;
     }
     .el-textarea{
       /*width: 90%;*/
     }
     .diy-all{
-      padding-left: 30px;
       margin-bottom: 10px;
-    }
-    .check-all{
-     img{
-       vertical-align: middle;
-     }
     }
     .diy-Item{
       border-top:1px solid #E6E6E6;
       border-left:1px solid #E6E6E6;
       border-right:1px solid #E6E6E6;
       img{
-        margin-left: 12px;
+        margin-left: 24px;
       }
+    }
+    .check-all{
+      padding-left:0px;
+     img{
+       vertical-align: middle;
+       margin-left: 18px;
+     }
     }
     .salary-tip{
       margin:10px;
@@ -207,7 +207,9 @@ export default {
       font-size: 12px;
     }
     .btn-con{
-      text-align: center;
+      position: absolute;
+      left:40%;
+      bottom: 20px;
     }
   }
 </style>

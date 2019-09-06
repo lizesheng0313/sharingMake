@@ -9,5 +9,8 @@ export default {
   [AT.SET_INDEXCURRENTDATE](state, currentDate) {
     state.IndexCurrentDate = currentDate;
   },
+  [AT.SET_SALARYITEM](state, item) {
+    state.salaryItem = item;
+  },
 }
 

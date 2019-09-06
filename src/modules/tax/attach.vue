@@ -19,7 +19,7 @@
           :clearable="false"
         ></el-date-picker>
       </div>
-<!--      <p class="tax-attach-tips">点击更新后，系统将自动从税务系统中下载本年度截至当前税款所属期员工的累计专项附加扣除额，累计值将用于本月薪资核算</p>-->
+      <!--      <p class="tax-attach-tips">点击更新后，系统将自动从税务系统中下载本年度截至当前税款所属期员工的累计专项附加扣除额，累计值将用于本月薪资核算</p>-->
       <div class="screening">
         <div class="company-collection">
           <div
@@ -36,7 +36,7 @@
         </div>
         <div class="clearfix check-staff-menu">
           <el-input
-            placeholder="请输入姓名\手机号"
+            placeholder="请输入姓名\证件号码"
             v-model="totalListForm.nameOrMore"
             prefix-icon="iconiconfonticonfontsousuo1 iconfont"
             clearable
@@ -112,6 +112,10 @@
         <el-form-item label="请输入密码：" prop="password">
           <el-input type="password" v-model="updatedFormData.password"></el-input>
         </el-form-item>
+        <el-form-item label="请输入验证码：" prop="capText">
+          <el-input type="text" v-model="updatedFormData.capText" style="width:90px"></el-input>
+          <img :src="imgCodeSrc" alt class="dialog-cap_test" @click="getCode" />
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleUpdateValue">确定</el-button>
@@ -130,6 +134,7 @@ export default {
   components: {},
   data() {
     return {
+      imgCodeSrc: "",
       loading: false,
       totalListForm: {
         currPage: 1,
@@ -140,6 +145,7 @@ export default {
       },
       currenCompanyName: "",
       updatedFormData: {
+        capText: "",
         date: "",
         password: "",
         taxSubjectId: ""
@@ -158,11 +164,19 @@ export default {
             message: "请输入密码",
             trigger: "blur"
           }
+        ],
+        capText: [
+          {
+            required: true,
+            message: "请输入验证码",
+            trigger: "blur"
+          }
         ]
       }
     };
   },
   mounted() {
+    this.getCode();
     this.formatQuerymonth(this.selectMonth);
     window.onresize = () => {
       return (() => {
@@ -173,6 +187,11 @@ export default {
     this.getTaxSubjectInfoList();
   },
   methods: {
+    getCode() {
+      this.$store.dispatch("getCode").then(res => {
+        this.imgCodeSrc = res.data;
+      });
+    },
     handleExport() {
       this.$store.dispatch(
         "taxPageStore/actionOtherTotalExport",
@@ -229,8 +248,8 @@ export default {
               this.updatedFormData
             )
             .then(res => {
-                this.isShowUpdate = false;
-                this.getList();
+              this.isShowUpdate = false;
+              this.getList();
             });
         }
       });
