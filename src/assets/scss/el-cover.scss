@@ -96,6 +96,12 @@
     display: block;
   }
 }
+.cumulative{
+  .el-input__suffix{
+    top:-2px;
+    cursor: pointer;
+  }
+}
 .diy-el_dialog{
   border-radius:6px;
   .el-form-item__content{
