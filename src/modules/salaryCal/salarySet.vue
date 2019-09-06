@@ -93,7 +93,7 @@
               <el-row v-for="(item,index) in items" :key="index">
                 <el-col :span="6"><i class="el-icon-sort-up"></i><i class="el-icon-sort-down"></i></el-col>
                 <el-col :span="6" v-if="item.group ==='人员信息' || item.types.sys"><div class="grid-content bg-purple nameStyle">{{item.name}}</div></el-col>
-                <el-col :span="6" v-else><div class="grid-content bg-purple" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
+                <el-col :span="6" v-else><div class="grid-content bg-purple nameStyle" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
                 <el-col :span="6"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
                 <el-col :span="6">
                   <div class="grid-content bg-purple">
