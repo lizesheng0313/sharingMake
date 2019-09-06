@@ -8,6 +8,7 @@ export const salaryCalStore = {
     rouleId:"",
     basicInfoForm:{},
     IndexCurrentDate:"",//薪资核算首页选择时间
+    salaryItem:""
   },
   actions,
   mutations,
