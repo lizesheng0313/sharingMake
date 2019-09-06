@@ -44,7 +44,7 @@
       </div>-->
       <div class="floating-menu" v-if="selectUserIdList.length>0">
         <span>已选中{{selectUserIdList.length}}人</span>
-        <el-button size="mini" class="button-mini" @click="handleDelete(selectUserIdList)">批量删除</el-button>
+        <el-button size="mini" class="button-mini" @click="handleDelete(selectUserIdList)" :disabled="deleteDisabled">批量删除</el-button>
       </div>
       <el-table :data="userList" class="check-staff_table" :style="{width:screenWidth-40+'px'}" v-loading="userLoading"  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" fixed></el-table-column>

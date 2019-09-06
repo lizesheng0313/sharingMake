@@ -422,12 +422,6 @@ export default {
                   this.getList();
                   this.$alert("人员信息报送成功，请稍后获取反馈", "提示信息", {
                     confirmButtonText: "确定",
-                    callback: action => {
-                      this.$message({
-                        type: "info",
-                        message: `action: ${action}`
-                      });
-                    }
                   });
                 }
               });

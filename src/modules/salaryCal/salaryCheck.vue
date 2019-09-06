@@ -1,6 +1,6 @@
 <template>
   <div class="salary-check sflary-el-step">
-    <full-screen :fsTitle="'月度工资表'" :bgColor="'#fafafa'" ref="full" style="overflow: hidden;">
+    <full-screen :fsTitle="salaryItem.salaryRuleName" :bgColor="'#fafafa'" ref="full" style="overflow: hidden;">
       <div slot="fs-buttons" class="header-button">
         <span class="collect" v-if="active==1" >
          <router-link :to="{ path: '/tax/collect' }"> <i class="iconqiyexinxicaiji iconfont"></i>个税系统人员人信息采集</router-link>
@@ -47,6 +47,7 @@ import checkStaff from "./components/check-staff";
 import calcWages from "./components/calc-wages";
 import payment from "./components/payment";
 import salarySend from "./components/salarySend"
+import { mapState } from "vuex";
 export default {
   components: {
     fullScreen,
@@ -59,6 +60,15 @@ export default {
     return {
       active: typeof (this.$route.query.active) == "string" ? this.$route.query.active-0 : this.$route.query.active-0
     };
+  },
+  computed:{
+     ...mapState("salaryCalStore", {
+        salaryItem: "salaryItem",
+      })
+  },
+
+  mounted(){
+    console.log(this.salaryItem)
   },
   methods: {
     handle(val){

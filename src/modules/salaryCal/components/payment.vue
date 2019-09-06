@@ -33,7 +33,7 @@
       </div>
       <i class="el-icon-setting" @click="showSalarySet"></i>
     </div>
-    <right-pop :pop-show="popShow" :has-footer="false" popTitle="工资条设置" :popWidth="440">
+    <right-pop :pop-show="popShow" :has-footer="false" popTitle="工资条设置" :popWidth="500">
       <div slot="pop-content">
         <paymentSalarySet @changeSatus="changeSatus"></paymentSalarySet>
       </div>
