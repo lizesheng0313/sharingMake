@@ -1,7 +1,7 @@
 import { fetch } from 'request/fetch'
 
 export function apiGetCode() {
-    return fetch.request({
+    return fetch({
         url: '/api/taxReport/getCaptcha',
     })
 }
