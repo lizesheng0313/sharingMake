@@ -279,8 +279,7 @@ export default {
       this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.userForm.checkId).then(res=>{
         if(res.code === "0000"){
           this.checkStatus = res.data.checkStatus;
-          this.deleteDisabled = !(this.checkStatus ==='INIT' || this.checkStatus ==='COMPURED');
-          console.log(this.checkStatus)
+          this.deleteDisabled = !(this.checkStatus ==='INIT' || this.checkStatus ==='COMPUTED');
         }
       })
     },

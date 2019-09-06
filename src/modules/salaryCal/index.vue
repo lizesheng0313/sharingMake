@@ -160,7 +160,7 @@ export default {
       })
     },
     showSelect:function(item){
-      return item.salaryRule.enableMiltSalary || item.payInfos?item.payInfos.length>0:false
+      return item.salaryRule.enableMiltSalary || item.payInfos?item.payInfos.length>1:false
     },
     //选择时间
     changeDate(){

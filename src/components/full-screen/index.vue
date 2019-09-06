@@ -41,7 +41,11 @@ export default {
     bgColor: {
       type: String,
       default: "#fafafa"
-    }
+    },
+    goUrl: {
+      type: String,
+      default: ""
+    },
   },
   mounted() {
     this.$store.commit(AT.SHOWAPP, false);
@@ -51,7 +55,8 @@ export default {
   },
   methods:{
     goBack(){
-      this.$router.push("/salary-cal");
+      let goUrl = this.goUrl ? this.goUrl: "/salary-cal";
+      this.$router.push(goUrl);
     }
   }
 };

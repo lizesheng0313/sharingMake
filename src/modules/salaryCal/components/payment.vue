@@ -105,8 +105,8 @@ export default {
     },
     //查看记录
     seeRecord(){
-      this.$emit("changeActive",3)
-      this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:3,salaryRuleId:this.$route.query.salaryRuleId}})
+      this.$emit("changeActive",4)
+      this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:4,salaryRuleId:this.$route.query.salaryRuleId}})
     },
     //删除发放
     deleteSalary(){
@@ -175,7 +175,6 @@ export default {
       position: absolute;
       right:16px;
       top:20px;
-      color:#E6E6E6;
       font-size: 16px;
       cursor: pointer;
     }
