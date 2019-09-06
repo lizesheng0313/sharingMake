@@ -1,6 +1,7 @@
 <template>
   <div class="collection">
-    <full-screen :fsTitle="'人员信息'" :bgColor="'#fff'" class="info-collection">
+    <full-screen :fsTitle="'人员信息'" :bgColor="'#fff'" class="info-collection" :goUrl="'/tax/collect'">
+      <span slot="fs-button">关闭</span>
       <div slot="fs-container">
         <div class="state-personnel">
           <i>人员状态</i>
@@ -28,7 +29,7 @@
             <el-row type="flex" justify="center">
               <el-col :span="7">
                 <el-form-item label="证件类型" prop="idType">
-                  <el-select v-model="employeeFormData.idType" placeholder="请选择">
+                  <el-select v-model="employeeFormData.idType" placeholder="请选择" disabled>
                     <el-option
                       v-for="(value,key) in baseInfo.idType"
                       :key="key"
@@ -58,12 +59,12 @@
                 </el-form-item>
                 <el-form-item
                   label="残疾证号"
-                  :class="{'is-required':employeeFormData.disabilityYn && employeeFormData.lonelyOldYn == false}"
+                  :class="{'is-required':employeeFormData.disabilityYn}"
                   prop="disabilityNo"
                 >
                   <el-input
                     v-model="employeeFormData.disabilityNo"
-                    :disabled="!employeeFormData.disabilityYn || employeeFormData.lonelyOldYn"
+                    :disabled="!employeeFormData.disabilityYn"
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -84,12 +85,12 @@
                 </el-form-item>
                 <el-form-item
                   label="烈属证号"
-                  :class="{'is-required':employeeFormData.martyrFamilyYn && employeeFormData.lonelyOldYn == false}"
+                  :class="{'is-required':employeeFormData.martyrFamilyYn}"
                   prop="martyrFamilyNo"
                 >
                   <el-input
                     v-model="employeeFormData.martyrFamilyNo"
-                    :disabled="!employeeFormData.martyrFamilyYn || employeeFormData.lonelyOldYn"
+                    :disabled="!employeeFormData.martyrFamilyYn"
                   ></el-input>
                 </el-form-item>
               </el-col>

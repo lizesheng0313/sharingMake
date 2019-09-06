@@ -68,7 +68,7 @@
       :visible.sync="isShowImport"
       width="600px"
       center
-      class="diy-el_dialog"
+      class="screen-dialog"
     >
       <div>
         <p class="headings">1、选择导入匹配方式</p>
@@ -98,7 +98,7 @@
           <span class="headings">2、</span>
           <el-button size="small" type="primary">选择文件</el-button>
         </el-upload>
-        <div v-show="uuid" style="margin:15px 0 0 28px">
+        <div v-show="uuid" style="margin:15px 0 15px 28px">
           <span v-if="failCount === 0"><i class="el-icon-success"></i>全部导入成功</span>
           <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
           <span v-if="successCount === 0"><i class="el-icon-error"></i>数据全部未通过校验</span>
@@ -107,7 +107,7 @@
             <a :href="'/api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
           </span>
         </div>
-        <p>
+        <p class="file-tip">
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
           <span>
              <a href="/api/salary/socialProvident/template/download" v-if="importT === 'social'">下载模板</a>
@@ -145,34 +145,34 @@
     <el-dialog
       title=""
       :visible.sync="isShowScreen"
-      width="600px"
+      width="52%"
       center
-      class="diy-el_dialog"
+      class="screen-dialog"
     >
       <el-form :model="salaryForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
-          <el-form-item label="扣缴义务人">
+          <el-form-item label="扣缴义务人" label-width="38%">
             <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择扣缴义务人">
               <el-option v-for="(item,index) in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
           </el-form-item>
         </div>
         <div class="shortCon">
-          <el-form-item label="部门">
+          <el-form-item label="部门" label-width="38%">
             <el-input v-model="salaryForm.queryFilterParam.departmentName"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
-          <el-form-item label="岗位">
+          <el-form-item label="岗位" label-width="38%">
             <el-input v-model="salaryForm.queryFilterParam.jobTitle"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
-          <el-form-item label="工作地点">
+          <el-form-item label="工作地点" label-width="38%">
             <el-input v-model="salaryForm.queryFilterParam.workAddress"></el-input>
           </el-form-item>
         </div>
-        <el-form-item label="入职日期">
+        <el-form-item label="入职日期" label-width="22%">
           <el-date-picker
             v-model="salaryForm.queryFilterParam.enterStartTime"
             type="date"
@@ -187,7 +187,7 @@
             placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="离职日期">
+        <el-form-item label="离职日期" label-width="22%">
           <el-date-picker
             v-model="salaryForm.queryFilterParam.lastEmployStartTime"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -202,11 +202,11 @@
             placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="员工类型">
-          <el-radio-group v-model="noEnumEmpType" size="mini" @change="changeNoEmployType">
+        <el-form-item label="员工类型" label-width="22%">
+          <el-radio-group v-model="noEnumEmpType" size="small" @change="changeNoEmployType">
             <el-radio-button  label="null">不限</el-radio-button>
           </el-radio-group>
-          <el-checkbox-group v-model="enumEmpType" size="mini" @change="changeEmployType">
+          <el-checkbox-group v-model="enumEmpType" size="small" @change="changeEmployType">
             <el-checkbox-button  v-for="(item,index) in screenOption" :label="item.value" :key="item.index">{{item.label}}</el-checkbox-button>
           </el-checkbox-group>
         </el-form-item>
@@ -218,10 +218,10 @@
     </el-dialog>
    <!-- 导出工资明细  -->
     <el-dialog
-      title=""
+      title="选择导出项"
       :visible.sync="showExportSalaryDetail"
       width="600px"
-      center
+      left
       class="exportSalaryDetailDialog"
     >
       <div v-show="isShowUserInfo">
@@ -661,7 +661,6 @@ export default {
       }else{
           this.audited(type)
       }
-
     },
     audited(type){
       let status = this.checkStatus ==='AUDITED'?"":"AUDIT";
@@ -706,8 +705,13 @@ export default {
     display: inline-block;
     margin-right:20px;
   }
+  .file-tip{
+    margin-top:15px;
+    line-height: 30px;
+    height:30px;
+  }
   .check-staff-menu {
-    margin-top: 66.5px;
+    margin-top: 30px;
     .search-input {
       width: 215px;
     }
@@ -736,7 +740,7 @@ export default {
       span {
         cursor: pointer;
         margin-right: 20px;
-        color: 333;
+        color: #333;
       }
     }
     .el-dropdown-link {
@@ -782,8 +786,8 @@ export default {
   }
   .exportSalaryDetailDialog{
     .diyOptionItem{
-      margin-top:10px;
-      padding-top:10px;
+      /*margin-bottom:10px;*/
+      /*padding-top:10px;*/
     }
     .el-checkbox{
       height: 30px;

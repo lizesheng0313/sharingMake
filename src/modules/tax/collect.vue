@@ -146,35 +146,35 @@
           <el-row type="flex" class="screening-box" align="middle">
             <el-col :span="6">身份证状态</el-col>
             <el-col>
-              <span :class="{active:idValidStatus}" @click="handleDontLimit('idValidStatus')">不限</span>
+              <span :class="{active:idValidStatus,'first-span':true}" @click="handleDontLimit('idValidStatus')">不限</span>
               <span
                 v-for="(value,key) in screening.idValidStatus"
                 :key="key"
                 @click="handleSelectScreening(key,'idValidStatus')"
-                :class="{'active':ruleForm.idValidStatus.indexOf(key) >-1,}"
+                :class="{'active':ruleForm.idValidStatus.indexOf(key) >-1,'right-span':true}"
               >{{value}}</span>
             </el-col>
           </el-row>
           <el-row type="flex" class="screening-box" align="middle">
             <el-col :span="6">报送状态</el-col>
             <el-col>
-              <span :class="{active:reportStatus}" @click="handleDontLimit('reportStatus')">不限</span>
+              <span :class="{active:reportStatus,'first-span':true}" @click="handleDontLimit('reportStatus')">不限</span>
               <span
                 v-for="(value,key) in screening.reportStatus"
                 :key="key"
                 @click="handleSelectScreening(key,'reportStatus')"
-                :class="{'active':ruleForm.reportStatus.indexOf(key) >-1}"
+                :class="{'active':ruleForm.reportStatus.indexOf(key) >-1,'right-span':true}"
               >{{value}}</span>
             </el-col>
           </el-row>
-          <el-row type="flex" class="screening-box" align="middle">
+          <el-row type="flex" class="screening-box employee" align="middle">
             <el-col :span="6">人员状态</el-col>
             <el-col>
               <span
                 v-for="(value,key,index) in screening.empStatus"
                 :key="index"
                 @click="handleSelectScreening(key,'empStatus')"
-                :class="{active:ruleForm.empStatus == key}"
+                :class="{active:ruleForm.empStatus == key,'right-span':index !==0}"
               >{{value}}</span>
             </el-col>
           </el-row>
@@ -185,19 +185,19 @@
                 v-for="(value,key,index) in screening.iscgl"
                 :key="index"
                 @click="handleSelectScreening(key,'iscgl')"
-                :class="{active:ruleForm.iscgl == key}"
+                :class="{active:ruleForm.iscgl == key,'right-span': index!==0}"
               >{{value}}</span>
             </el-col>
           </el-row>
           <el-row type="flex" class="screening-box" align="middle">
             <el-col :span="6">任职受雇从业类型</el-col>
             <el-col>
-              <span :class="{active:workerType}" @click="handleDontLimit('workerType')">不限</span>
+              <span :class="{active:workerType,'first-span':true}" @click="handleDontLimit('workerType')">不限</span>
               <span
                 v-for="(value,key,index) in screening.workerType"
                 :key="index"
                 @click="handleSelectScreening(key,'workerType')"
-                :class="{'active':ruleForm.workerType.indexOf(key) >-1}"
+                :class="{'active':ruleForm.workerType.indexOf(key) >-1,'right-span':true}"
               >{{value}}</span>
             </el-col>
           </el-row>
@@ -227,8 +227,8 @@
           </el-row>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="handleSearch">查询</el-button>
-          <el-button type="primary" @click="handleReset">重置</el-button>
+          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button  @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
       <el-dialog
@@ -598,6 +598,7 @@ export default {
 @import "../../assets/scss/helpers.scss";
 .collect {
   .header {
+    border-bottom: 1px solid #ededed;
     .add-table {
       cursor: pointer;
       float: right;
@@ -611,7 +612,7 @@ export default {
     }
   }
   .tax-content {
-    padding:40px 0 40px 40px;
+    padding: 20px;
     .content-header {
       position: relative;
       font-size: 18px;
@@ -701,15 +702,33 @@ export default {
     span {
       display: inline-block;
       text-align: center;
-      border: 1px solid #bdbdbd;
-      border-radius: 5px;
-      margin-right: 10px;
-      padding: 5px 15px;
+      border: 1px solid #DCDFE6;
+      /*margin-right: px;*/
+      font-size: 12px;
+      padding: 7px 15px;
       cursor: pointer;
     }
+    span:first-child{
+      border-radius: 4px;
+    }
+    .right-span{
+      border-left:none;
+    }
+    .right-span:nth-child(2){
+      border-left:1px solid #DCDFE6;
+      border-radius: 4px 0px 0px 4px;
+      margin-left:10px;
+    }
+    .right-span:last-child{
+      border-radius: 0px 4px 4px 0px;
+    }
+    .right-span:first-child{
+      border-radius: 4px;
+    }
     .active {
-      color: $lineBorderPointer;
-      border: 1px solid $lineBorderPointer;
+      color: #fff;
+      border: 1px solid #5b9cf8;
+      background: #5b9cf8;
     }
   }
   .el-diy-date .el-date-editor {
@@ -719,7 +738,6 @@ export default {
   .el-input__inner {
     height: auto;
   }
-
 }
 </style>
 

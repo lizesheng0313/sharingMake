@@ -19,7 +19,7 @@
           :clearable="false"
         ></el-date-picker>
       </div>
-      <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>
+<!--      <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>-->
       <div class="screening">
         <div class="clearfix">
           <div class="select_tax-payer left">
@@ -668,7 +668,6 @@ export default {
         color: #ff8f2c;
       }
     }
-    border-top: 1px solid #eee;
     margin-top: 18px;
     padding-top: 18px;
     .staff-table {

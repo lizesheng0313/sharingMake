@@ -2,13 +2,13 @@
   <div class="salary-check sflary-el-step">
     <full-screen :fsTitle="'月度工资表'" :bgColor="'#fafafa'" ref="full" style="overflow: hidden;">
       <div slot="fs-buttons" class="header-button">
-        <span class="collect" v-if="active==0" >
+        <span class="collect" v-if="active==1" >
          <router-link :to="{ path: '/tax/collect' }"> <i class="iconqiyexinxicaiji iconfont"></i>个税系统人员人信息采集</router-link>
         </span>
-        <div class="more-operation" v-if="active==1">
+        <div class="more-operation" v-if="active==2">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
-              <i>...</i>更多
+            更多  <i>...</i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item><router-link :to="{ path: '/tax/attach' }">累计专项附加扣除</router-link></el-dropdown-item>
@@ -24,7 +24,7 @@
       <div slot="fs-container" class="content-st">
         <div class="step-box" v-if="active!==4" >
             <el-steps :active="active" finish-status="success" simple style="margin-top: 20px">
-              <el-step title="开始" disabled></el-step>
+              <el-step title="开始" class="first-step"></el-step>
               <el-step title="核对人员" @click.native = "goStep(1)"style="cursor: pointer;"></el-step>
               <el-step title="核算薪资" @click.native = "goStep(2)" style="cursor: pointer;"></el-step>
               <el-step title="发放薪资" @click.native = "goStep(3)" style="cursor: pointer;"></el-step>
@@ -90,15 +90,21 @@ export default {
 <style lang="scss" scoped>
 .salary-check {
   background:#f5f7fa;
+  .first-step{
+    .el-step__head.is-success{
+      color:#eee !important;
+    }
+  }
   .more-operation {
     display: inline-block;
   }
   .content-st{
     background: #fff;
-    width:98%;
+    width:96%;
     margin:0 auto;
     padding-top: 10px;
     overflow: hidden;
+    height:100%;
   }
   .el-dropdown-link {
     color: #fff;
@@ -121,7 +127,7 @@ export default {
   }
 
   .step-box {
-    margin:0 2%;
+    margin:0 20px;
     .steps {
       width: 100%;
       margin: 30px auto 0;
@@ -131,9 +137,6 @@ export default {
       right: 20px;
       bottom: 10px;
     }
-  }
-  .view-content{
-    margin: 0px 1%;
   }
 }
 </style>

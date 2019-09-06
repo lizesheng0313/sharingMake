@@ -60,7 +60,7 @@
       >
         <el-form
           :rules="taxListRules"
-          label-width="110px"
+          label-width="130px"
           ref="taxListForm"
           class="addForm"
           :model="newBodyFormData"

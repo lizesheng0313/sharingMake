@@ -63,7 +63,6 @@
   .el-step__main {
     color:#999;
   }
-
   .el-step__title{
     font-size:14px;
   }
@@ -77,7 +76,17 @@
     color:$mainColor;
   }
 }
-
+.salary-check {
+  .first-step{
+    .el-step__head.is-success{
+      color:#C0C4CC !important;
+      border-color:#C0C4CC;
+    }
+    .el-step__title.is-success {
+      color: #C0C4CC;
+    }
+  }
+}
 .check-staff{
   .el-input__suffix{
     top:5px;
