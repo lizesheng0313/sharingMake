@@ -1,5 +1,7 @@
-// import { } from './api'
-import * as AT from './actionTypes'
+import { apiGetCode } from './api'
 
 export default {
+    getCode({ commit }) {
+        return apiGetCode()
+    }
 }
