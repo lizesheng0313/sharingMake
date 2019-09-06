@@ -146,7 +146,10 @@
           <el-row type="flex" class="screening-box" align="middle">
             <el-col :span="6">身份证状态</el-col>
             <el-col>
-              <span :class="{active:idValidStatus,'first-span':true}" @click="handleDontLimit('idValidStatus')">不限</span>
+              <span
+                :class="{active:idValidStatus,'first-span':true}"
+                @click="handleDontLimit('idValidStatus')"
+              >不限</span>
               <span
                 v-for="(value,key) in screening.idValidStatus"
                 :key="key"
@@ -158,7 +161,10 @@
           <el-row type="flex" class="screening-box" align="middle">
             <el-col :span="6">报送状态</el-col>
             <el-col>
-              <span :class="{active:reportStatus,'first-span':true}" @click="handleDontLimit('reportStatus')">不限</span>
+              <span
+                :class="{active:reportStatus,'first-span':true}"
+                @click="handleDontLimit('reportStatus')"
+              >不限</span>
               <span
                 v-for="(value,key) in screening.reportStatus"
                 :key="key"
@@ -192,7 +198,10 @@
           <el-row type="flex" class="screening-box" align="middle">
             <el-col :span="6">任职受雇从业类型</el-col>
             <el-col>
-              <span :class="{active:workerType,'first-span':true}" @click="handleDontLimit('workerType')">不限</span>
+              <span
+                :class="{active:workerType,'first-span':true}"
+                @click="handleDontLimit('workerType')"
+              >不限</span>
               <span
                 v-for="(value,key,index) in screening.workerType"
                 :key="index"
@@ -228,7 +237,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="handleSearch">查询</el-button>
-          <el-button  @click="handleReset">重置</el-button>
+          <el-button @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
       <el-dialog
@@ -269,9 +278,9 @@
           <el-form-item label="请输入密码：" prop="password">
             <el-input type="password" v-model="feedbackForm.password"></el-input>
           </el-form-item>
-          <el-form-item label="请输入验证码：" prop="password">
-            <el-input type="password" v-model="feedbackForm.capText" style="width:80px"></el-input>
-            <img src="/api/taxReport/getCaptcha" alt />
+          <el-form-item label="请输入验证码：" prop="capText">
+            <el-input type="text" v-model="feedbackForm.capText" style="width:90px"></el-input>
+            <img :src="imgCodeSrc" alt class="dialog-cap_test" @click="getCode" />
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -292,6 +301,7 @@ let defaultDate =
 export default {
   data() {
     return {
+      imgCodeSrc: "",
       reportOrFeedback: false,
       ruleForm: {
         currPage: 1,
@@ -361,6 +371,7 @@ export default {
   },
   mounted() {
     this.getTaxSubjectInfoList();
+    this.getCode();
     this.formatQuerymonth(this.selectMonth);
     const that = this;
     window.onresize = () => {
@@ -371,6 +382,11 @@ export default {
     };
   },
   methods: {
+    getCode() {
+      this.$store.dispatch("getCode").then(res => {
+        this.imgCodeSrc = res.data;
+      });
+    },
     handleReport() {
       this.reportOrFeedback = true;
       if (this.reportForm.ids.length > 0) {
@@ -387,6 +403,9 @@ export default {
         ).then(() => {
           this.feedbackForm.password = "";
           this.isShowPassword = true;
+          // this.reportOrFeedback = false;
+          // this.isShowPassword = true;
+          // this.feedbackForm.password = "";
         });
       }
     },
@@ -695,27 +714,27 @@ export default {
     span {
       display: inline-block;
       text-align: center;
-      border: 1px solid #DCDFE6;
+      border: 1px solid #dcdfe6;
       /*margin-right: px;*/
       font-size: 12px;
       padding: 7px 15px;
       cursor: pointer;
     }
-    span:first-child{
+    span:first-child {
       border-radius: 4px;
     }
-    .right-span{
-      border-left:none;
+    .right-span {
+      border-left: none;
     }
-    .right-span:nth-child(2){
-      border-left:1px solid #DCDFE6;
+    .right-span:nth-child(2) {
+      border-left: 1px solid #dcdfe6;
       border-radius: 4px 0px 0px 4px;
-      margin-left:10px;
+      margin-left: 10px;
     }
-    .right-span:last-child{
+    .right-span:last-child {
       border-radius: 0px 4px 4px 0px;
     }
-    .right-span:first-child{
+    .right-span:first-child {
       border-radius: 4px;
     }
     .active {

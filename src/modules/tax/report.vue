@@ -8,7 +8,7 @@
       </el-row>
     </header>
     <div class="tax-content">
-      <div class="content-header head-date" >
+      <div class="content-header head-date">
         <span>{{selectDate}}</span>
         <el-date-picker
           v-model="selectDate"
@@ -19,7 +19,7 @@
           :clearable="false"
         ></el-date-picker>
       </div>
-<!--      <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>-->
+      <!--      <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>-->
       <div class="screening">
         <div class="clearfix">
           <div class="select_tax-payer left">
@@ -137,6 +137,10 @@
       >
         <el-form-item label="请输入密码：" prop="password">
           <el-input type="password" v-model="buttonForm.password"></el-input>
+        </el-form-item>
+        <el-form-item label="请输入验证码：" prop="capText">
+          <el-input type="text" v-model="buttonForm.capText" style="width:90px"></el-input>
+          <img :src="imgCodeSrc" alt class="dialog-cap_test" @click="getCode" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -304,16 +308,8 @@ export default {
   },
   data() {
     return {
-      abnormalList: [
-        {
-          empName: "李泽胜",
-          idNo: "1307221994010567145"
-        },
-        {
-          empName: "李2",
-          idNo: "1307221994010567145"
-        }
-      ],
+      imgCodeSrc: "",
+      abnormalList: [],
       isShowAbnormal: false,
       currentPasItem: "",
       passwordRules: {
@@ -321,6 +317,13 @@ export default {
           {
             required: true,
             message: "请输入密码",
+            trigger: "blur"
+          }
+        ],
+        capText: [
+          {
+            required: true,
+            message: "请输入验证码",
             trigger: "blur"
           }
         ]
@@ -335,6 +338,7 @@ export default {
       selectMonth: "",
       statusType: SCR,
       buttonForm: {
+        capText: "",
         date: "",
         password: "",
         taxSubjectId: "",
@@ -362,6 +366,7 @@ export default {
     };
   },
   mounted() {
+    this.getCode();
     this.getTaxSubjectInfoList();
     this.formatQuerymonth(this.selectDate);
     window.onresize = () => {
@@ -372,6 +377,11 @@ export default {
     };
   },
   methods: {
+    getCode() {
+      this.$store.dispatch("getCode").then(res => {
+        this.imgCodeSrc = res.data;
+      });
+    },
     reportSubTaxReportType(params) {
       return SCR.subTaxReportType[params];
     },
