@@ -124,7 +124,7 @@
               <el-table-column prop="workerType" label="任职受雇从业类型" width="140">
                 <template slot-scope="scope">{{returnStatus('workerType',scope.row.workerType)}}</template>
               </el-table-column>
-              <el-table-column  label="国籍" width="140">
+              <el-table-column label="国籍" width="140">
                 <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
               </el-table-column>
               <el-table-column prop="reportFinishTime" label="更新时间" width="140"></el-table-column>
@@ -261,13 +261,17 @@
       >
         <el-form
           :rules="feekbackRules"
-          label-width="110px"
+          label-width="150px"
           ref="feekbackForm"
           class
           :model="feedbackForm"
         >
           <el-form-item label="请输入密码：" prop="password">
             <el-input type="password" v-model="feedbackForm.password"></el-input>
+          </el-form-item>
+          <el-form-item label="请输入验证码：" prop="password">
+            <el-input type="password" v-model="feedbackForm.capText" style="width:80px"></el-input>
+            <img src="/api/taxReport/getCaptcha" alt />
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -313,6 +317,13 @@ export default {
             message: "请输入密码",
             trigger: "blur"
           }
+        ],
+        capText: [
+          {
+            required: true,
+            message: "请输入验证码",
+            trigger: "blur"
+          }
         ]
       },
       reportForm: {
@@ -322,22 +333,10 @@ export default {
       },
       feedbackForm: {
         taxSubjectId: "",
-        password: ""
+        password: "",
+        capText: ""
       },
-      feedbackList: [
-        {
-          empName: "李泽胜",
-          idNo: "1307221994010567145",
-          idType: "COMPATRIOTS_CARD",
-          reportStatus: "AWAIT_REPORT"
-        },
-        {
-          empName: "李2",
-          idNo: "1307221994010567145",
-          idType: "COMPATRIOTS_CARD",
-          reportStatus: "AWAIT_REPORT"
-        }
-      ],
+      feedbackList: [],
       isShowPassword: false,
       isShowFeedback: false,
       taxSubjectInfolist: [],
@@ -374,7 +373,6 @@ export default {
   methods: {
     handleReport() {
       this.reportOrFeedback = true;
-      console.log(this.reportForm.ids)
       if (this.reportForm.ids.length > 0) {
         this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
         this.$confirm(
@@ -395,31 +393,33 @@ export default {
     handleSubmitPassword() {
       this.$refs.feekbackForm.validate(valid => {
         if (this.reportOrFeedback) {
-          this.reportForm.password = this.feedbackForm.password;
-          this.$store
-            .dispatch("taxPageStore/actionReport", this.reportForm)
-            .then(res => {
-              if (res.success) {
-                this.isShowPassword = false;
-                this.getList()
-                this.$alert("人员信息报送成功，请稍后获取反馈", "提示信息", {
-                  confirmButtonText: "确定",
-                  callback: action => {
-                    this.$message({
-                      type: "info",
-                      message: `action: ${action}`
-                    });
-                  }
-                });
-              }
-            });
+          if (valid) {
+            this.reportForm.password = this.feedbackForm.password;
+            this.$store
+              .dispatch("taxPageStore/actionReport", this.reportForm)
+              .then(res => {
+                if (res.success) {
+                  this.isShowPassword = false;
+                  this.getList();
+                  this.$alert("人员信息报送成功，请稍后获取反馈", "提示信息", {
+                    confirmButtonText: "确定",
+                    callback: action => {
+                      this.$message({
+                        type: "info",
+                        message: `action: ${action}`
+                      });
+                    }
+                  });
+                }
+              });
+          }
         } else {
           this.feedbackForm.taxSubjectId = this.ruleForm.taxSubjectId;
           this.$store
             .dispatch("taxPageStore/actionGetFeedback", this.feedbackForm)
             .then(res => {
               if (res.success) {
-                 this.getList()
+                this.getList();
                 this.isShowPassword = false;
                 this.isShowFeedback = true;
                 this.feedbackList = res.data;
@@ -434,7 +434,6 @@ export default {
       row.forEach(element => {
         if (element.reportStatus == "AWAIT_REPORT") {
           this.reportForm.ids.push(element.id);
-
         }
       });
     },
@@ -612,7 +611,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 20px;
+    padding: 40px 0 40px 40px;
     .content-header {
       position: relative;
       font-size: 18px;
