@@ -35,7 +35,7 @@ export default {
     },
     hasFooter: {
       type: Boolean,
-      default:true
+      default:false
     },
     popTitle: {
       type: String,
