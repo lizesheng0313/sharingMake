@@ -1,6 +1,6 @@
 <template>
   <div class="salary-check sflary-el-step">
-    <full-screen :fsTitle="salaryItem.salaryRuleName" :bgColor="'#fafafa'" ref="full" style="overflow: hidden;">
+    <full-screen :fsTitle="salaryTitle" :bgColor="'#fafafa'" ref="full" style="overflow: hidden;">
       <div slot="fs-buttons" class="header-button">
         <span class="collect" v-if="active==1" >
          <router-link :to="{ path: '/tax/collect' }"> <i class="iconqiyexinxicaiji iconfont"></i>个税系统人员人信息采集</router-link>
@@ -64,7 +64,11 @@ export default {
   computed:{
      ...mapState("salaryCalStore", {
         salaryItem: "salaryItem",
-      })
+      }),
+    salaryTitle:function(){
+       let dateArr = this.salaryItem.endDate.split("-");
+       return  this.salaryItem.salaryRuleName + " " +dateArr[0]+"-"+dateArr[1]
+    }
   },
 
   mounted(){

@@ -42,22 +42,30 @@
     }
   }
 }
+
 .head-date{
   .el-input--prefix .el-input__inner{
     border:none;
     font-size: 16px;
   }
   .el-input__prefix{
-    left:-5px;
+    right:-60px;
     top:-1px;
+    color: #2C7CFF;
     .el-input__icon{
       line-height: 30px;
       font-size: 20px;
-    }
-    .el-input__inner{
-      font-size:16px;
+      cursor: pointer;
     }
   }
+}
+.collect{
+  .el-input--prefix .el-input__inner{
+    font-size: 14px;
+  }
+}
+.el-date-editor.el-input{
+  width: 180px;
 }
 .sflary-el-step{
   .el-step__main {
@@ -150,7 +158,6 @@
 }
 
 
-
 .el-table th, .el-table td {
   text-align: center !important
 }
@@ -175,6 +182,11 @@
 }
 .el-button{
   padding:9px 20px;
+}
+.el-dropdown{
+  .el-button{
+    padding:9px 0px;
+  }
 }
 .search-input .el-input__icon{
    line-height:34px;

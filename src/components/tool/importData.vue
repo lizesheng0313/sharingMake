@@ -33,7 +33,7 @@
         </el-upload>
         <div v-show="uuid" style="margin:15px 0 0 28px">
           <span v-if="failCount === 0">
-            <i class="el-icon-success"></i>全部导入成功
+            <i class="el-icon-success"></i>数据全部校验通过
           </span>
           <span v-else-if="failCount !== 0 && successCount !==0">
             <i class="el-icon-warning"></i>数据部分校验通过，有

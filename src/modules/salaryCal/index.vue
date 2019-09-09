@@ -15,6 +15,7 @@
     </header>
     <div class="salary-cal-content">
       <div class="content-header head-date">
+        <i class="el-icon-arrow-left"></i>
         <span>{{resetDate}}</span>
         <el-date-picker
           v-model="currentDate"
@@ -25,7 +26,7 @@
           :clearable="false"
           @change="changeDate"
         ></el-date-picker>
-<!--        <i class="el-icon-arrow-left rotate-el-icon-arrow-left"></i>-->
+        <i class="el-icon-arrow-right"></i>
       </div>
       <div class="salary-payroll">
         <div class="payroll-box" v-for="(item,index) in salaryRuleUsedList">
@@ -250,7 +251,6 @@ export default {
       position: relative;
       font-size: 18px;
       margin-bottom: 30px;
-      cursor: pointer;
       i {
         font-size: 16px;
         color: #ccc;
