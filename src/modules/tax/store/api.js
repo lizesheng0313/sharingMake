@@ -75,7 +75,7 @@ export function apiDownloadOtherTotal(exportForm) {
   return fetchFile({
     url: '/api/taxReport/downloadOtherTotal',
     method: 'post',
-    params: exportForm
+    data: exportForm
   })
 }
 
