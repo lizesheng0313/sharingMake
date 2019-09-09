@@ -200,6 +200,7 @@ export default {
             .then(res => {
               if (res.success) {
                 this.getList();
+                this.deleteIdsForm.ids = [];
                 this.$message({
                   type: "success",
                   message: "删除成功!"
