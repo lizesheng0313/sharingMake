@@ -64,7 +64,7 @@
               <i>{{decreaseCount}}</i>人
             </span>
             <div class="content-header head-date">
-<!--              <span>{{selectMonth}}</span>-->
+              <!--              <span>{{selectMonth}}</span>-->
               <el-date-picker
                 v-model="selectMonth"
                 @input="changeMonth"
@@ -276,6 +276,9 @@
           class
           :model="reportForm"
         >
+          <el-form-item label="扣缴义务人：">
+            <span class="company-name">{{currenCompanyName}}</span>
+          </el-form-item>
           <el-form-item label="请输入密码：" prop="password">
             <el-input type="password" v-model="reportForm.password"></el-input>
           </el-form-item>
@@ -307,7 +310,7 @@ let defaultDate =
 export default {
   data() {
     return {
-      imgCodeSrc: new Date(),
+      currenCompanyName: "",
       ruleForm: {
         currPage: 1,
         empStatus: "",
@@ -612,7 +615,7 @@ export default {
   .tax-content {
     padding: 40px 0 40px 40px;
     .content-header {
-      display:inline-block;
+      display: inline-block;
       font-size: 16px;
       margin-bottom: 30px;
       i {
@@ -734,6 +737,13 @@ export default {
   }
   .el-input__inner {
     height: auto;
+  }
+  .diy-el_dialog {
+    .company-name {
+      @include ellipsis;
+      width: 200px;
+      display: inline-block;
+    }
   }
 }
 </style>

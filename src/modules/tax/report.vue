@@ -133,6 +133,9 @@
         class
         :model="buttonForm"
       >
+        <el-form-item label="扣缴义务人：">
+          <span class="company-name">{{currentTaxSubName}}</span>
+        </el-form-item>
         <el-form-item label="请输入密码：" prop="password">
           <el-input type="password" v-model="buttonForm.password"></el-input>
         </el-form-item>
@@ -315,7 +318,6 @@ export default {
   },
   data() {
     return {
-      imgCodeSrc: new Date(),
       abnormalList: [],
       isShowAbnormal: false,
       currentPasItem: "",
@@ -724,6 +726,13 @@ export default {
     @include ellipsis;
     width: 200px;
     display: inline-block;
+  }
+  .diy-el_dialog {
+    .company-name {
+      @include ellipsis;
+      width: 200px;
+      display: inline-block;
+    }
   }
 }
 </style>

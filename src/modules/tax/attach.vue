@@ -21,7 +21,6 @@
         ></el-date-picker>
         <i class="el-icon-arrow-right"></i>
       </div>
-      <!--      <p class="tax-attach-tips">点击更新后，系统将自动从税务系统中下载本年度截至当前税款所属期员工的累计专项附加扣除额，累计值将用于本月薪资核算</p>-->
       <div class="screening">
         <div class="company-collection">
           <div
@@ -108,7 +107,7 @@
         class
         :model="updatedFormData"
       >
-        <el-form-item label="企业名称：">
+        <el-form-item label="扣缴义务人：">
           <span class="company-name">{{currenCompanyName}}</span>
         </el-form-item>
         <el-form-item label="请输入密码：" prop="password">
@@ -141,7 +140,7 @@ export default {
   components: {},
   data() {
     return {
-      imgCodeSrc: new Date(),
+      currenCompanyName: "",
       loading: false,
       totalListForm: {
         currPage: 1,
@@ -150,7 +149,6 @@ export default {
         taxSubjectId: "",
         nameOrMore: ""
       },
-      currenCompanyName: "",
       updatedFormData: {
         captchaId: "",
         capText: "",
