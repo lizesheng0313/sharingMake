@@ -112,7 +112,7 @@ export function apiGetReportBack(reportForm) {
   return fetch({
     url: '/api/taxReport/getReportBack',
     method: 'post',
-    params: reportForm
+    data: reportForm
   })
 }
 
