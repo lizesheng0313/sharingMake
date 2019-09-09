@@ -430,7 +430,7 @@ export default {
     //发送申报
     handleSendReport() {
       this.isSendReport = true;
-      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
       this.buttonForm.date = this.reportForm.queryMonth;
       this.buttonForm.queryMonth = this.reportForm.queryMonth;
       this.currentPasItem = "send";
