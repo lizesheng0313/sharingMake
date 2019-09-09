@@ -101,7 +101,7 @@
     <el-dialog title="输入密码" :visible.sync="isShowUpdate" width="450px" center class="diy-el_dialog">
       <el-form
         :rules="updateRules"
-        label-width="110px"
+        label-width="150px"
         ref="updatedForm"
         class
         :model="updatedFormData"
