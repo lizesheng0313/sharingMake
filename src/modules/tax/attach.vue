@@ -101,7 +101,7 @@
     <el-dialog title="输入密码" :visible.sync="isShowUpdate" width="450px" center class="diy-el_dialog">
       <el-form
         :rules="updateRules"
-        label-width="110px"
+        label-width="140px"
         ref="updatedForm"
         class
         :model="updatedFormData"
@@ -114,7 +114,12 @@
         </el-form-item>
         <el-form-item label="请输入验证码：" prop="capText">
           <el-input type="text" v-model="updatedFormData.capText" style="width:90px"></el-input>
-          <img :src="imgCodeSrc" alt class="dialog-cap_test" @click="getCode" />
+          <img
+            :src="`/api/taxReport/getCaptcha/${updatedFormData.captchaId}/captcha`"
+            alt
+            class="dialog-cap_test"
+            @click="getCode"
+          />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -134,7 +139,7 @@ export default {
   components: {},
   data() {
     return {
-      imgCodeSrc: "",
+      imgCodeSrc: new Date(),
       loading: false,
       totalListForm: {
         currPage: 1,
@@ -145,10 +150,11 @@ export default {
       },
       currenCompanyName: "",
       updatedFormData: {
+        captchaId: "",
         capText: "",
         date: "",
         password: "",
-        taxSubjectId: ""
+        taxSubId:""
       },
       taxSubjectInfolist: [],
       currentTaxSubName: "",
@@ -189,7 +195,7 @@ export default {
   methods: {
     getCode() {
       this.$store.dispatch("getCode").then(res => {
-        this.imgCodeSrc = res.data;
+        this.updatedFormData.captchaId = res.data;
       });
     },
     handleExport() {
@@ -270,9 +276,11 @@ export default {
     handleShowUpdated(item) {
       this.updatedFormData.date = this.totalListForm.queryMonth;
       this.currenCompanyName = item.taxSubName;
-      this.updatedFormData.taxSubjectId = item.taxSubId;
+      this.updatedFormData.taxSubId = item.taxSubId;
       this.isShowUpdate = true;
-      this.updatedFormData.password = "";
+      this.$nextTick(() => {
+        this.$refs["updatedForm"].resetFields();
+      });
     },
     handleCalcSalary() {
       this.$router.push("/salary-cal/start");

@@ -252,7 +252,7 @@
           <el-table-column prop="idType" label="证件类型" width="120">
             <template slot-scope="scope">{{returnStatus('idType',scope.row.idType)}}</template>
           </el-table-column>
-          <el-table-column prop="idNo" label="证件号码" width="140"></el-table-column>
+          <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
           <el-table-column prop="reportStatus" label="报送状态" width="90">
             <template slot-scope="scope">{{returnStatus('reportStatus',scope.row.reportStatus)}}</template>
           </el-table-column>
@@ -273,14 +273,19 @@
           label-width="150px"
           ref="feekbackForm"
           class
-          :model="feedbackForm"
+          :model="reportForm"
         >
           <el-form-item label="请输入密码：" prop="password">
-            <el-input type="password" v-model="feedbackForm.password"></el-input>
+            <el-input type="password" v-model="reportForm.password"></el-input>
           </el-form-item>
           <el-form-item label="请输入验证码：" prop="capText">
-            <el-input type="text" v-model="feedbackForm.capText" style="width:90px"></el-input>
-            <img :src="imgCodeSrc" alt class="dialog-cap_test" @click="getCode" />
+            <el-input type="text" v-model="reportForm.capText" style="width:90px"></el-input>
+            <img
+              :src="`/api/taxReport/getCaptcha/${reportForm.captchaId}/captcha`"
+              alt
+              class="dialog-cap_test"
+              @click="getCode"
+            />
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -301,8 +306,7 @@ let defaultDate =
 export default {
   data() {
     return {
-      imgCodeSrc: "",
-      reportOrFeedback: false,
+      imgCodeSrc: new Date(),
       ruleForm: {
         currPage: 1,
         empStatus: "",
@@ -337,14 +341,12 @@ export default {
         ]
       },
       reportForm: {
+        captchaId: "",
+        date: "",
+        capText: "",
         taxSubId: "",
         ids: [],
         password: ""
-      },
-      feedbackForm: {
-        taxSubjectId: "",
-        password: "",
-        capText: ""
       },
       feedbackList: [],
       isShowPassword: false,
@@ -384,11 +386,10 @@ export default {
   methods: {
     getCode() {
       this.$store.dispatch("getCode").then(res => {
-        this.imgCodeSrc = res.data;
+        this.reportForm.captchaId = res.data;
       });
     },
     handleReport() {
-      this.reportOrFeedback = true;
       if (this.reportForm.ids.length > 0) {
         this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
         this.$confirm(
@@ -401,41 +402,24 @@ export default {
             type: "warning"
           }
         ).then(() => {
-          this.feedbackForm.password = "";
           this.isShowPassword = true;
-          // this.reportOrFeedback = false;
-          // this.isShowPassword = true;
-          // this.feedbackForm.password = "";
+          this.$nextTick(() => {
+            this.$refs["feekbackForm"].resetFields();
+          });
         });
       }
     },
     handleSubmitPassword() {
       this.$refs.feekbackForm.validate(valid => {
-        if (this.reportOrFeedback) {
-          if (valid) {
-            this.reportForm.password = this.feedbackForm.password;
-            this.$store
-              .dispatch("taxPageStore/actionReport", this.reportForm)
-              .then(res => {
-                if (res.success) {
-                  this.isShowPassword = false;
-                  this.getList();
-                  this.$alert("人员信息报送成功，请稍后获取反馈", "提示信息", {
-                    confirmButtonText: "确定",
-                  });
-                }
-              });
-          }
-        } else {
-          this.feedbackForm.taxSubjectId = this.ruleForm.taxSubjectId;
+        if (valid) {
           this.$store
-            .dispatch("taxPageStore/actionGetFeedback", this.feedbackForm)
+            .dispatch("taxPageStore/actionReport", this.reportForm)
             .then(res => {
               if (res.success) {
-                this.getList();
                 this.isShowPassword = false;
                 this.isShowFeedback = true;
                 this.feedbackList = res.data;
+                this.getList();
               }
             });
         }
@@ -504,6 +488,7 @@ export default {
     formatQuerymonth(defaultDate) {
       let currentDate = defaultDate.replace("年", "-");
       this.ruleForm.queryMonth = currentDate.replace("月", "");
+      this.reportForm.date = this.ruleForm.queryMonth;
     },
     returnStatus(obj, key) {
       return this.screening[obj][key];
