@@ -405,7 +405,7 @@ export default {
       });
     },
     handleGetFeedback() {
-      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
       this.buttonForm.date = this.reportForm.queryMonth;
       this.$store
         .dispatch("taxPageStore/postGetReportBack", this.buttonForm)
