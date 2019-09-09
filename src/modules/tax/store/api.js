@@ -121,7 +121,7 @@ export function apiSendReport(sendReportForm) {
   return fetch({
     url: '/api/taxReport/sendReport',
     method: 'post',
-    params: sendReportForm
+    data: sendReportForm
   })
 }
 
