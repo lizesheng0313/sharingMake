@@ -253,8 +253,11 @@ export default {
               this.updatedFormData
             )
             .then(res => {
-              this.isShowUpdate = false;
-              this.getList();
+              if (res.success) {
+                this.isShowUpdate = false;
+                this.getList();
+                this.getTaxSubjectInfoList();
+              }
             });
         }
       });
