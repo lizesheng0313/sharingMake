@@ -42,11 +42,11 @@
             </el-dropdown>
             <span class="staff-total">
               申报类型：
-              <i>{{reportObj.reportType}}</i>
+              <i>{{reportObj.reportType || '-'}}</i>
             </span>
             <span class="staff-total">
               申报状态：
-              <i>{{reportObj.reportStatus}}</i>
+              <i>{{reportObj.reportStatus|| '-'}}</i>
             </span>
           </div>
           <div class="right declare-buttton-groups">
