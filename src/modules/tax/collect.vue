@@ -279,12 +279,12 @@
           :model="reportForm"
         >
           <el-form-item label="扣缴义务人：">
-            <span class="company-name">{{currenCompanyName}}</span>
+            <span class="company-name">{{currentTaxSubName}}</span>
           </el-form-item>
-          <el-form-item label="请输入密码：" prop="password">
+          <el-form-item label="输入密码：" prop="password">
             <el-input type="password" v-model="reportForm.password"></el-input>
           </el-form-item>
-          <el-form-item label="请输入验证码：" prop="capText">
+          <el-form-item label="输入验证码：" prop="capText">
             <el-input type="text" v-model="reportForm.capText" style="width:90px"></el-input>
             <img
               :src="`/api/taxReport/getCaptcha/${reportForm.captchaId}/captcha`"
@@ -312,7 +312,6 @@ let defaultDate =
 export default {
   data() {
     return {
-      currenCompanyName: "",
       ruleForm: {
         currPage: 1,
         empStatus: "",
@@ -380,7 +379,6 @@ export default {
   },
   mounted() {
     this.getTaxSubjectInfoList();
-    this.getCode();
     this.formatQuerymonth(this.selectMonth);
     const that = this;
     window.onresize = () => {
@@ -410,9 +408,15 @@ export default {
           }
         ).then(() => {
           this.isShowPassword = true;
+          this.getCode();
           this.$nextTick(() => {
             this.$refs["feekbackForm"].resetFields();
           });
+        });
+      } else {
+        this.$message({
+          message: "请选择未报送数据",
+          type: "warning"
         });
       }
     },
@@ -448,6 +452,7 @@ export default {
           this.taxSubjectInfolist = res.data;
           this.ruleForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
           this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
+          console.log(this.currentTaxSubName);
           this.getList();
         }
       });

@@ -42,11 +42,11 @@
             </el-dropdown>
             <span class="staff-total">
               申报类型：
-              <i>{{reportObj.reportType}}</i>
+              <i>{{reportObj.reportType || '-'}}</i>
             </span>
             <span class="staff-total">
               申报状态：
-              <i>{{reportObj.reportStatus}}</i>
+              <i>{{reportObj.reportStatus|| '-'}}</i>
             </span>
           </div>
           <div class="right declare-buttton-groups">
@@ -138,10 +138,10 @@
         <el-form-item label="扣缴义务人：">
           <span class="company-name">{{currentTaxSubName}}</span>
         </el-form-item>
-        <el-form-item label="请输入密码：" prop="password">
+        <el-form-item label="输入密码：" prop="password">
           <el-input type="password" v-model="buttonForm.password"></el-input>
         </el-form-item>
-        <el-form-item label="请输入验证码：" prop="capText">
+        <el-form-item label="输入验证码：" prop="capText">
           <el-input type="text" v-model="buttonForm.capText" style="width:90px"></el-input>
           <img
             :src="`/api/taxReport/getCaptcha/${buttonForm.captchaId}/captcha`"
@@ -379,7 +379,6 @@ export default {
     };
   },
   mounted() {
-    this.getCode();
     this.getTaxSubjectInfoList();
     this.formatQuerymonth(this.selectDate);
     window.onresize = () => {
@@ -403,6 +402,7 @@ export default {
       this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
       this.currentPasItem = "invalid";
       this.isShowPassword = true;
+      this.getCode();
       this.$nextTick(() => {
         this.$refs["refPassword"].resetFields();
       });
@@ -444,6 +444,7 @@ export default {
           if (res.success) {
             if (res.data.length == 0) {
               this.isShowPassword = true;
+              this.getCode();
               this.$nextTick(() => {
                 this.$refs["refPassword"].resetFields();
               });
