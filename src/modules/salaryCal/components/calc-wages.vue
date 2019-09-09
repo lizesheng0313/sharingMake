@@ -674,7 +674,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-        center: true
+        center: false
       }).then(() => {
         apiAuditSalaryCheck({
           "checkAuditStatus":type,

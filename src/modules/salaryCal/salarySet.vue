@@ -400,7 +400,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-        center: true
+        center: false
       }).then(() => {
         deleteSalaryItems(id).then(res=>{
          if(res.code == "0000"){
