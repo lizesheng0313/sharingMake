@@ -377,7 +377,6 @@ export default {
   },
   mounted() {
     this.getTaxSubjectInfoList();
-    this.getCode();
     this.formatQuerymonth(this.selectMonth);
     const that = this;
     window.onresize = () => {
@@ -407,6 +406,7 @@ export default {
           }
         ).then(() => {
           this.isShowPassword = true;
+          this.getCode();
           this.$nextTick(() => {
             this.$refs["feekbackForm"].resetFields();
           });

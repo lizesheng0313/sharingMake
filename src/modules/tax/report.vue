@@ -376,7 +376,6 @@ export default {
     };
   },
   mounted() {
-    this.getCode();
     this.getTaxSubjectInfoList();
     this.formatQuerymonth(this.selectDate);
     window.onresize = () => {
@@ -400,6 +399,7 @@ export default {
       this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
       this.currentPasItem = "invalid";
       this.isShowPassword = true;
+      this.getCode();
       this.$nextTick(() => {
         this.$refs["refPassword"].resetFields();
       });
@@ -441,6 +441,7 @@ export default {
           if (res.success) {
             if (res.data.length == 0) {
               this.isShowPassword = true;
+              this.getCode();
               this.$nextTick(() => {
                 this.$refs["refPassword"].resetFields();
               });
