@@ -54,13 +54,9 @@
             <el-button
               type="primary"
               @click="handleSendReport"
-              v-if="showButton(['未申报','申报失败'])"
+              v-if="showButton(['未申报','申报失败','作废成功'])"
             >发送申报</el-button>
-            <el-button
-              type="primary"
-              v-if="showButton(['申报处理中','作废处理中'])"
-              @click="handleGetFeedback"
-            >获取反馈</el-button>
+            <el-button type="primary" v-if="showButton(['申报处理中'])" @click="handleGetFeedback">获取反馈</el-button>
             <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>
           </div>
         </div>
@@ -130,7 +126,7 @@
     >
       <el-form
         :rules="passwordRules"
-        label-width="110px"
+        label-width="140px"
         ref="refPassword"
         class
         :model="buttonForm"
@@ -140,7 +136,12 @@
         </el-form-item>
         <el-form-item label="请输入验证码：" prop="capText">
           <el-input type="text" v-model="buttonForm.capText" style="width:90px"></el-input>
-          <img :src="imgCodeSrc" alt class="dialog-cap_test" @click="getCode" />
+          <img
+            :src="`/api/taxReport/getCaptcha/${buttonForm.captchaId}/captcha`"
+            alt
+            class="dialog-cap_test"
+            @click="getCode"
+          />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -215,7 +216,8 @@ export default {
           if (
             this.reportObj.reportStatus == "未申报" ||
             this.reportObj.reportStatus == "申报成功" ||
-            this.reportObj.reportStatus == "申报失败"
+            this.reportObj.reportStatus == "申报失败" ||
+            this.reportObj.reportStatus == "作废成功"
           ) {
             return true;
           }
@@ -229,7 +231,8 @@ export default {
           if (
             this.reportObj.reportStatus == "未申报" ||
             this.reportObj.reportStatus == "申报成功" ||
-            this.reportObj.reportStatus == "申报失败"
+            this.reportObj.reportStatus == "申报失败" ||
+            this.reportObj.reportStatus == "作废成功"
           ) {
             return true;
           }
@@ -268,7 +271,8 @@ export default {
           if (
             this.reportObj.reportStatus == "未申报" ||
             this.reportObj.reportStatus == "申报成功" ||
-            this.reportObj.reportStatus == "申报失败"
+            this.reportObj.reportStatus == "申报失败" ||
+            this.reportObj.reportStatus == "作废成功"
           ) {
             return true;
           }
@@ -282,7 +286,8 @@ export default {
           if (
             this.reportObj.reportStatus == "未申报" ||
             this.reportObj.reportStatus == "申报成功" ||
-            this.reportObj.reportStatus == "申报失败"
+            this.reportObj.reportStatus == "申报失败" ||
+            this.reportObj.reportStatus == "作废成功"
           ) {
             return true;
           }
@@ -308,7 +313,7 @@ export default {
   },
   data() {
     return {
-      imgCodeSrc: "",
+      imgCodeSrc: new Date(),
       abnormalList: [],
       isShowAbnormal: false,
       currentPasItem: "",
@@ -338,10 +343,11 @@ export default {
       selectMonth: "",
       statusType: SCR,
       buttonForm: {
+        captchaId: "",
         capText: "",
         date: "",
         password: "",
-        taxSubjectId: "",
+        taxSubId: "",
         queryMonth: ""
       },
       reportForm: {
@@ -379,7 +385,7 @@ export default {
   methods: {
     getCode() {
       this.$store.dispatch("getCode").then(res => {
-        this.imgCodeSrc = res.data;
+        this.buttonForm.captchaId = res.data;
       });
     },
     reportSubTaxReportType(params) {
@@ -387,9 +393,12 @@ export default {
     },
     handleInvalid() {
       this.buttonForm.date = this.reportForm.queryMonth;
-      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
       this.currentPasItem = "invalid";
       this.isShowPassword = true;
+      this.$nextTick(() => {
+        this.$refs["refPassword"].resetFields();
+      });
     },
     handleGetFeedback() {
       this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
@@ -428,6 +437,9 @@ export default {
           if (res.success) {
             if (res.data.length == 0) {
               this.isShowPassword = true;
+              this.$nextTick(() => {
+                this.$refs["refPassword"].resetFields();
+              });
             } else {
               this.abnormalList = res.data;
               this.isShowAbnormal = true;
