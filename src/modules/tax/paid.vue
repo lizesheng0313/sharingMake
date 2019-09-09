@@ -57,6 +57,7 @@
         width="480px"
         center
         class="diy-el_dialog"
+        :close-on-click-modal="closeModel"
       >
         <el-form
           :rules="taxListRules"
@@ -128,7 +129,8 @@ export default {
       currentTypeName: "",
       list: [],
       isShowScreen: false,
-      screenWidth: document.body.clientWidth // 屏幕尺寸
+      screenWidth: document.body.clientWidth,// 屏幕尺寸
+      closeModel:false
     };
   },
   mounted() {

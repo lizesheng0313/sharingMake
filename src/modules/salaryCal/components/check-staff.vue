@@ -130,6 +130,7 @@
       width="600px"
       center
       class="diy-el_dialog"
+      :close-on-click-modal="closeModel"
     >
       <div>
         <p class="headings">1、选择导入匹配方式</p>
@@ -180,6 +181,7 @@
       width="500px"
       center
       class="importFinishDialog"
+      :close-on-click-modal="closeModel"
     >
       <div class="title"><i class="el-icon-success"></i>导入完成</div>
       <div>导入成功<span style="color:#06B806">{{this.importFinishForm.successCount}}</span>条数据,<span style="color:red">{{this.importFinishForm.failCount}}</span>条数据导入未通过，忽略导入</div>
@@ -236,6 +238,7 @@ export default {
         successCount:""
       },
       deleteDisabled:false,
+      closeModel:false,
     };
   },
   mounted() {

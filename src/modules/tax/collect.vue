@@ -142,7 +142,7 @@
         </div>
       </div>
       <!-- 获取反馈结果-->
-      <el-dialog :visible.sync="isShowScreening" width="52%" center class="screen-dialog">
+      <el-dialog :visible.sync="isShowScreening" width="52%" center class="screen-dialog" :close-on-click-modal="closeModel">
         <div class="screening-wapper">
           <el-row type="flex" class="screening-box" align="middle">
             <el-col :span="6">身份证状态</el-col>
@@ -247,6 +247,7 @@
         width="550px"
         center
         class="diy-el_dialog"
+        :close-on-click-modal="closeModel"
       >
         <el-table :data="feedbackList">
           <el-table-column prop="empName" label="姓名" width="120"></el-table-column>
@@ -268,6 +269,7 @@
         width="450px"
         center
         class="diy-el_dialog"
+        :close-on-click-modal="closeModel"
       >
         <el-form
           :rules="feekbackRules"
@@ -372,7 +374,8 @@ export default {
       isShowScreening: false,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
-      screening: SCR
+      screening: SCR,
+      closeModel:false
     };
   },
   mounted() {

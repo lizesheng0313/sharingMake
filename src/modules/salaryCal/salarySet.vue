@@ -112,6 +112,7 @@
       title="工资项目详情"
       :visible.sync="salaryItemDetailVisible"
       width="30%"
+      :close-on-click-modal="closeModel"
       center>
         <el-form :model="salaryItemDetailForm" :rules="salaryItemDetailRules" ref="salaryItemDetailForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="活动名称" prop="name">
@@ -248,6 +249,7 @@ export default {
       salaryItemLoding:false,
       isEdit: this.$route.query.isEdit,
       saveSalaryDisabled:false,
+      closeModel:false
     };
   },
   components: {
