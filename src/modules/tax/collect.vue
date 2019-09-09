@@ -9,17 +9,6 @@
         </el-row>
       </header>
       <div class="tax-content">
-        <div class="content-header head-date">
-          <span>{{selectMonth}}</span>
-          <el-date-picker
-            v-model="selectMonth"
-            @input="changeMonth"
-            type="month"
-            value-format="yyyy年MM月"
-            :editable="false"
-            :clearable="false"
-          ></el-date-picker>
-        </div>
         <div class="screening">
           <div class="clearfix check-staff-menu">
             <div class="left">
@@ -61,6 +50,10 @@
             <span class="staff-total">
               正常
               <i>{{normalCount}}</i>人
+              <span class="wait-report">
+                待报送
+                <i>{{awaitReportCount}}</i>人
+              </span>
             </span>
             <span>
               本月：新增
@@ -70,10 +63,17 @@
               减少
               <i>{{decreaseCount}}</i>人
             </span>
-            <span>
-              待报送
-              <i>{{awaitReportCount}}</i>人
-            </span>
+            <div class="content-header head-date">
+<!--              <span>{{selectMonth}}</span>-->
+              <el-date-picker
+                v-model="selectMonth"
+                @input="changeMonth"
+                type="month"
+                value-format="yyyy年MM月"
+                :editable="false"
+                :clearable="false"
+              ></el-date-picker>
+            </div>
           </div>
           <div class="staff-table">
             <el-table
@@ -627,10 +627,9 @@ export default {
   .tax-content {
     padding: 40px 0 40px 40px;
     .content-header {
-      position: relative;
-      font-size: 18px;
+      display:inline-block;
+      font-size: 16px;
       margin-bottom: 30px;
-      cursor: pointer;
       i {
         font-size: 16px;
         color: #ccc;

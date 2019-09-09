@@ -9,6 +9,7 @@
     </header>
     <div class="tax-content">
       <div class="content-header head-date">
+        <i class="el-icon-arrow-left"></i>
         <span>{{selectDate}}</span>
         <el-date-picker
           v-model="selectDate"
@@ -18,6 +19,7 @@
           :editable="false"
           :clearable="false"
         ></el-date-picker>
+        <i class="el-icon-arrow-right"></i>
       </div>
       <!--      <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>-->
       <div class="screening">
@@ -623,7 +625,6 @@ export default {
       position: relative;
       font-size: 18px;
       margin-bottom: 18px;
-      cursor: pointer;
       i {
         font-size: 16px;
         color: #ccc;
