@@ -709,6 +709,10 @@ export default {
     margin-top:15px;
     line-height: 30px;
     height:30px;
+    margin-left:26px;
+  }
+  .instructions{
+    margin-left:26px;
   }
   .check-staff-menu {
     margin-top: 30px;
@@ -812,6 +816,14 @@ export default {
   .el-checkbox-group{
     display: inline-block;
     vertical-align: middle;
+  }
+  .screen-dialog{
+    .headings{
+      margin-bottom:20px;
+    }
+    .avatar-uploader{
+      margin-top:20px;
+    }
   }
 }
 </style>
