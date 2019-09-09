@@ -154,7 +154,7 @@ export default {
         capText: "",
         date: "",
         password: "",
-        taxSubId:""
+        taxSubId: ""
       },
       taxSubjectInfolist: [],
       currentTaxSubName: "",
@@ -182,7 +182,6 @@ export default {
     };
   },
   mounted() {
-    this.getCode();
     this.formatQuerymonth(this.selectMonth);
     window.onresize = () => {
       return (() => {
@@ -278,6 +277,7 @@ export default {
       this.currenCompanyName = item.taxSubName;
       this.updatedFormData.taxSubId = item.taxSubId;
       this.isShowUpdate = true;
+      this.getCode();
       this.$nextTick(() => {
         this.$refs["updatedForm"].resetFields();
       });
