@@ -277,7 +277,7 @@
           :model="reportForm"
         >
           <el-form-item label="扣缴义务人：">
-            <span class="company-name">{{currenCompanyName}}</span>
+            <span class="company-name">{{currentTaxSubName}}</span>
           </el-form-item>
           <el-form-item label="请输入密码：" prop="password">
             <el-input type="password" v-model="reportForm.password"></el-input>
@@ -310,7 +310,6 @@ let defaultDate =
 export default {
   data() {
     return {
-      currenCompanyName: "",
       ruleForm: {
         currPage: 1,
         empStatus: "",
@@ -445,6 +444,7 @@ export default {
           this.taxSubjectInfolist = res.data;
           this.ruleForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
           this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
+          console.log(this.currentTaxSubName)
           this.getList();
         }
       });
