@@ -297,7 +297,8 @@ export default {
       this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
+        center:false
       })
         .then(() => {
           apiCheckMemberdelete(id,this.userForm.checkId).then(res=>{
@@ -388,7 +389,8 @@ export default {
         this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
+          center:false
         })
           .then(() => {
             this.$store.dispatch('salaryCalStore/deleteCheckMemberDeleteAll',this.userForm.checkId).then(res=>{
