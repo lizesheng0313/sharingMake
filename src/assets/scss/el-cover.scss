@@ -134,11 +134,12 @@
   }
   .diy-el_radio{
     margin-top:20px;
-    margin-left:70px;
+    margin-left:18px;
   }
   .headings{
     font-weight:500;
     font-size:14px;
+    margin-bottom:10px;
   }
   .select-file {
     margin-top:20px;
@@ -151,12 +152,8 @@
         color:#FF8F2C;
       }
     }
-    .instructions{
-      margin-top:40px;
-    }
   }
 }
-
 
 .el-table th, .el-table td {
   text-align: center !important
@@ -186,6 +183,24 @@
 .el-dropdown{
   .el-button{
     padding:9px 0px;
+  }
+}
+.check-staff{
+  .el-dropdown{
+    .el-button{
+      padding:9px 20px;
+    }
+  }
+  .el-upload-list__item-name{
+    margin-left: 22px;
+  }
+}
+.calc-wages{
+  .el-upload-list__item-name{
+    margin-left: 22px;
+  }
+  .el-radio-group{
+    margin-left:18px;
   }
 }
 .search-input .el-input__icon{
