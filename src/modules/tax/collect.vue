@@ -279,10 +279,10 @@
           <el-form-item label="扣缴义务人：">
             <span class="company-name">{{currentTaxSubName}}</span>
           </el-form-item>
-          <el-form-item label="请输入密码：" prop="password">
+          <el-form-item label="输入密码：" prop="password">
             <el-input type="password" v-model="reportForm.password"></el-input>
           </el-form-item>
-          <el-form-item label="请输入验证码：" prop="capText">
+          <el-form-item label="输入验证码：" prop="capText">
             <el-input type="text" v-model="reportForm.capText" style="width:90px"></el-input>
             <img
               :src="`/api/taxReport/getCaptcha/${reportForm.captchaId}/captcha`"
