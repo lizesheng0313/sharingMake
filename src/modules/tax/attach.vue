@@ -400,7 +400,6 @@ export default {
   }
   .check-staff-menu {
     margin-top: 30px;
-    padding-top: 30px;
     .search-input {
       width: 250px;
     }

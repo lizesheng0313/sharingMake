@@ -91,11 +91,11 @@
             </div>
             <draggable animation=150  v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
               <el-row v-for="(item,index) in items" :key="index">
-                <el-col :span="6"><i class="el-icon-sort-up"></i><i class="el-icon-sort-down"></i></el-col>
-                <el-col :span="6" v-if="item.group ==='人员信息' || item.types.sys"><div class="grid-content bg-purple nameStyle">{{item.name}}</div></el-col>
-                <el-col :span="6" v-else><div class="grid-content bg-purple nameStyle" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
-                <el-col :span="6"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
-                <el-col :span="6">
+                <el-col :span="2"><i class="el-icon-sort-up"></i><i class="el-icon-sort-down"></i></el-col>
+                <el-col :span="10" v-if="item.group ==='人员信息' || item.types.sys"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
+                <el-col :span="10" v-else><div class="grid-content bg-purple nameStyle" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
+                <el-col :span="10"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
+                <el-col :span="2">
                   <div class="grid-content bg-purple">
                     <el-button type="warning" plain size="mini"  @click="deleteItem(item.id)" v-if="item.canDelete">删除</el-button>
                     <el-button type="warning" plain size="mini" v-else @click="changeStatus(item)">{{item.enable?'禁用':'启用'}}</el-button>
@@ -111,11 +111,11 @@
     <el-dialog
       title="工资项目详情"
       :visible.sync="salaryItemDetailVisible"
-      width="30%"
+      width="600px"
       :close-on-click-modal="closeModel"
       center>
         <el-form :model="salaryItemDetailForm" :rules="salaryItemDetailRules" ref="salaryItemDetailForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="活动名称" prop="name">
+          <el-form-item label="项目名称" prop="name">
             <el-input v-model="salaryItemDetailForm.name"></el-input>
           </el-form-item>
           <el-form-item prop="" v-if="salaryType != '人员信息'">
@@ -127,7 +127,7 @@
           <el-form-item label="薪资数据" prop="itemDataSrc">
             <el-radio v-model="salaryItemDetailForm.itemDataSrc" label="EXCEL">浮动项-录入/excel导入</el-radio>
           </el-form-item>
-          <el-form-item label="活动区域" prop="region">
+          <el-form-item label="" prop="region">
             <el-select v-model="salaryItemDetailForm.content" placeholder="请选择">
               <el-option label="下月延用" value="used"></el-option>
               <el-option label="下月清零" value="zero"></el-option>
@@ -474,7 +474,7 @@ export default {
     }
     .person-info-fun{
       float:right;
-      margin-right:40px;
+      margin-right:20px;
       color:#2C7CFF;
       cursor:pointer;
       .el-icon-document{
@@ -485,11 +485,17 @@ export default {
       }
     }
   }
-  .el-col-6{
+  .el-col-2,.el-col-10{
     height: 50px;
     line-height: 50px;
+  }
+  .el-col-10{
     text-align: left;
-    padding-left:40px;
+  }
+  .el-col-2{
+    padding-left:20px;
+    text-align: right;
+    padding-right: 40px;
   }
   .deletedStyle{
     width:20px;

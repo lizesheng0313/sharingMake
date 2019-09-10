@@ -27,15 +27,15 @@
     <div class="staff-situation">
       <span class="staff-total">
         人员总数
-        <i>{{this.summryTotal}}</i>人
+        <i>{{ summryTotal ? summryTotal : "0" }}</i>人
       </span>
       <span>
         本月：新增
-        <i>{{incNum || incNum==0?this.incNum:"--"}}</i>人
+        <i>{{incNum || incNum==0?this.incNum:"0"}}</i>人
       </span>
       <span>
         减少：
-        <i>{{decNum || decNum ==0?this.decNum:"--"}}</i>人
+        <i>{{decNum || decNum ==0?this.decNum:"0"}}</i>人
       </span>
     </div>
     <div class="staff-table">

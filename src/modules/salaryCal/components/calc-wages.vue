@@ -227,17 +227,18 @@
       left
       class="exportSalaryDetailDialog"
       :close-on-click-modal="closeModel"
+      v-loading="exportLoading"
     >
       <div v-show="isShowUserInfo">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="checkedPersonAllChange">人员信息</el-checkbox>
-        <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="checkedPersonAllChange"><b>人员信息</b></el-checkbox>
+        <div style="margin:10px 0px; border-bottom:1px solid #E5E5E5"></div>
         <el-checkbox-group v-model="checkedPerson" @change="checkedPersonChange">
           <el-checkbox v-for="item in personOptions" :label="item" :key="item">{{item}}</el-checkbox>
         </el-checkbox-group>
       </div>
       <div v-for="(item,index) in diyOption" :key="index" class="diyOptionItem">
-        <el-checkbox :indeterminate="isIndeterminates[index]" v-model="checkAlls[index]" @change="handleDiyCheckAllChange(index,item.value)">{{item.title}}</el-checkbox>
-        <div style="margin-bottom:10px; border-bottom:1px solid #E5E5E5"></div>
+        <el-checkbox :indeterminate="isIndeterminates[index]" v-model="checkAlls[index]" @change="handleDiyCheckAllChange(index,item.value)"><b>{{item.title}}</b></el-checkbox>
+        <div style="margin:10px 0px; border-bottom:1px solid #E5E5E5"></div>
         <el-checkbox-group v-model="diyCheckeds[index]" @change="handleDiyCheckedChange(index,item.value)">
           <el-checkbox v-for="(it,index) in item.value" :label="it.id" :key="index">{{it.name}}</el-checkbox>
         </el-checkbox-group>
@@ -336,6 +337,7 @@ export default {
       showCount:true,
       tableLoading:false,
       closeModel:false,
+      exportLoading:false,
     };
   },
   computed:{
@@ -448,8 +450,10 @@ export default {
     },
     //获取工资表配置中启动的信息项
     getSalaryItem(){
+      this.exportLoading = true;
       apiSalaryItemEnableInfo(this.salaryRuleId).then(res=>{
         if(res.code === "0000"){
+          this.exportLoading = false
           let salaryItemData = res.data;
           this.diyOption=[];
           salaryItemData.forEach((item,index)=>{
@@ -794,9 +798,9 @@ export default {
     font-weight: bold;
   }
   .exportSalaryDetailDialog{
-    .diyOptionItem{
-      /*margin-bottom:10px;*/
-      /*padding-top:10px;*/
+    b{
+      display: inline-block;
+      padding:12px 0px;
     }
     .el-checkbox{
       height: 30px;

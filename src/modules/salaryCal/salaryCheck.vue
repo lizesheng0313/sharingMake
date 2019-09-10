@@ -3,7 +3,10 @@
     <full-screen :fsTitle="salaryTitle" :bgColor="'#fafafa'" ref="full" style="overflow: hidden;">
       <div slot="fs-buttons" class="header-button">
         <span class="collect" v-if="active==1" >
-         <router-link :to="{ path: '/tax/collect' }"> <i class="iconqiyexinxicaiji iconfont"></i>个税系统人员人信息采集</router-link>
+         <router-link :to="{ path: '/tax/collect' }"> <i class="iconqiyexinxicaiji iconfont"></i>人员信息采集</router-link>
+        </span>
+        <span class="refresh" @click="refresh">
+          <i class="iconshuaxin iconfont"></i>刷新
         </span>
         <div class="more-operation" v-if="active==2">
           <el-dropdown trigger="click">
@@ -11,15 +14,13 @@
             更多  <i>...</i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item><router-link :to="{ path: '/tax/attach' }">累计专项附加扣除</router-link></el-dropdown-item>
-              <el-dropdown-item><router-link :to="{ path: '/cumulative' }">累计应税所得初始化</router-link></el-dropdown-item>
+              <el-dropdown-item><router-link :to="{ path: '/tax/attach' }">专项附加扣除</router-link></el-dropdown-item>
+              <el-dropdown-item><router-link :to="{ path: '/cumulative' }">累计应税项</router-link></el-dropdown-item>
               <el-dropdown-item><router-link :to="{path:'/salarySet',query:{'isEdit':true}}">设置工资表</router-link></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-        <span class="refresh" @click="refresh">
-          <i class="iconshuaxin iconfont"></i>刷新
-        </span>
+
       </div>
       <div slot="fs-container" class="content-st">
         <div class="step-box" v-if="active!==4" >
@@ -107,6 +108,11 @@ export default {
   .first-step{
     .el-step__head.is-success{
       color:#eee !important;
+    }
+  }
+  .collect{
+    a{
+      color:#fff;
     }
   }
   .more-operation {

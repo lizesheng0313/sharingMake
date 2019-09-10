@@ -238,7 +238,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 22px;
+    padding: 30px;
     .content-header {
       position: relative;
       font-size: 18px;
