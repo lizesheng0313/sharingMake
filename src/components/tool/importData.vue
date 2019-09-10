@@ -6,6 +6,7 @@
       width="600px"
       center
       class="diy-el_dialog"
+      :close-on-click-modal="closeModel"
     >
       <div>
         <p class="headings">1、选择导入匹配方式</p>
@@ -57,7 +58,7 @@
         <el-button @click="isShowIncrease = false">取 消</el-button>
       </span>
     </el-dialog>
-    <el-dialog :visible.sync="isShowIncreaseFinish" width="500px" center class="importFinishDialog">
+    <el-dialog :visible.sync="isShowIncreaseFinish" width="500px" center class="importFinishDialog"  :close-on-click-modal="closeModel">
       <div class="title">
         <i class="el-icon-success"></i>导入完成
       </div>
@@ -101,7 +102,8 @@ export default {
       failCount: 0,
       fileList: [],
       successCount: "",
-      uuid: ""
+      uuid: "",
+      closeModel:false
     };
   },
   methods: {

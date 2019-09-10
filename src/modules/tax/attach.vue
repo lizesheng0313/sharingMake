@@ -106,6 +106,7 @@
         ref="updatedForm"
         class
         :model="updatedFormData"
+        :close-on-click-modal="closeModel"
       >
         <el-form-item label="扣缴义务人：">
           <span class="company-name">{{currenCompanyName}}</span>
@@ -178,7 +179,8 @@ export default {
             trigger: "blur"
           }
         ]
-      }
+      },
+      closeModel:false
     };
   },
   mounted() {

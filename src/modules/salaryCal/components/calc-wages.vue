@@ -69,6 +69,7 @@
       width="600px"
       center
       class="screen-dialog"
+      :close-on-click-modal="closeModel"
     >
       <div>
         <p class="headings">1、选择导入匹配方式</p>
@@ -130,6 +131,7 @@
       width="500px"
       center
       class="importFinishDialog"
+      :close-on-click-modal="closeModel"
     >
       <div class="title"><i class="el-icon-success"></i>导入完成</div>
       <div>导入成功<span style="color:#06B806">{{this.importFinishForm.successCount}}</span>条数据,<span style="color:red">{{this.importFinishForm.failCount}}</span>条数据导入未通过，忽略导入</div>
@@ -148,6 +150,7 @@
       width="52%"
       center
       class="screen-dialog"
+      :close-on-click-modal="closeModel"
     >
       <el-form :model="salaryForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
@@ -223,6 +226,7 @@
       width="600px"
       left
       class="exportSalaryDetailDialog"
+      :close-on-click-modal="closeModel"
     >
       <div v-show="isShowUserInfo">
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="checkedPersonAllChange">人员信息</el-checkbox>
@@ -330,7 +334,8 @@ export default {
       uploadFileDisabled:true,//导入通过数据禁用
       tableAllData:[],
       showCount:true,
-      tableLoading:false
+      tableLoading:false,
+      closeModel:false,
     };
   },
   computed:{
@@ -669,7 +674,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-        center: true
+        center: false
       }).then(() => {
         apiAuditSalaryCheck({
           "checkAuditStatus":type,
