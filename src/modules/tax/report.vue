@@ -402,7 +402,8 @@ export default {
         .dispatch("taxPageStore/postGenerateTaxReportData", this.buttonForm)
         .then(res => {
           if (res.success) {
-            this.getList(true);
+            this.getTaxSubjectInfoList();
+            // this.getList(true);
           }
         });
     },
@@ -457,6 +458,7 @@ export default {
               .dispatch("taxPageStore/postSendReport", this.buttonForm)
               .then(res => {
                 if (res.success) {
+                  this.isShowPassword = false;
                   this.$message({
                     message:
                       "当前" +
@@ -464,7 +466,7 @@ export default {
                       "申请表已发送申报，请在申请表中获取反馈",
                     type: "success"
                   });
-                  this.getList();
+                  this.getTaxSubjectInfoList();
                 }
               });
             break;
@@ -473,7 +475,15 @@ export default {
               .dispatch("taxPageStore/postCancelSubTaxReport", this.buttonForm)
               .then(res => {
                 if (res.success) {
-                  this.getList(true);
+                  this.isShowPassword = false;
+                  this.$message({
+                    message:
+                      "当前" +
+                      this.selectDate +
+                      "申请表已作废成功",
+                    type: "success"
+                  });
+                  this.getTaxSubjectInfoList();
                 }
               });
             break;
@@ -482,7 +492,15 @@ export default {
               .dispatch("taxPageStore/postGetReportBack", this.buttonForm)
               .then(res => {
                 if (res.success) {
-                  this.getList(true);
+                  this.$message({
+                    message:
+                      "当前" +
+                      this.selectDate +
+                      "申请表已获取反馈成功",
+                    type: "success"
+                  });
+                  this.isShowPassword = false;
+                  this.getTaxSubjectInfoList();
                 }
               });
             break;
@@ -588,12 +606,12 @@ export default {
             ];
             this.total = res.data.count;
             this.list = res.data.data;
-            if (this.list.length == 0 && flag) {
-              this.$message({
-                message: "扣缴义务人本月无申报数据",
-                type: "warning"
-              });
-            }
+            // if (this.list.length == 0 && flag) {
+            //   this.$message({
+            //     message: "扣缴义务人本月无申报数据",
+            //     type: "warning"
+            //   });
+            // }
           }
         });
     }
