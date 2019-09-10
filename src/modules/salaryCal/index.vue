@@ -73,6 +73,7 @@
 <script>
 import { mapState } from "vuex";
 import { apiSalaryRuleList,apiInitSalaryCheck } from './store/api'
+import  fun from "@/util/fun"
 import AT from "./store/actionTypes"
 export default {
   components: {},
@@ -103,7 +104,7 @@ export default {
           label: "本月第一次发薪"
         }
       ],
-      currentDate: "2019年7月",
+      currentDate: "",
       salaryRuleList:{
         "used":[],
         "disabled":[]
@@ -130,26 +131,15 @@ export default {
   },
   created(){
     //默认日期
-
     if(this.IndexCurrentDate){
       this.currentDate = this.IndexCurrentDate
     }else{
-      let nowDate = new Date();
+      let nowDate = fun.headDate();
       let year = nowDate.getFullYear();
-      let month = nowDate.getMonth()-(-1)<10?"0"+(nowDate.getMonth()-(-1)).toString():nowDate.getMonth()-(-1);
-      let day = nowDate.getDate();
-      if(day <= 15){
-        if(month == "01"){
-          year-=1;
-          month=12;
-        }else{
-          month-=1;
-        }
-      }
+      let month = date.month > 10 ? date.month : "0" + date.month;
       this.currentDate = year+"-"+month;
     }
     this.loading();
-    // console.log(this.selectUsedForm)
   },
   methods: {
     loading(){
@@ -237,6 +227,9 @@ export default {
 .salary-cal {
   .el-icon-date{
     font-size:16px;
+    .el-month-table td.today .cell{
+      color: #606266;
+    }
   }
   .header {
     padding: 0 20px;

@@ -159,11 +159,14 @@
   </div>
 </template>
 <script>
+ import { mapState } from "vuex";
+import * as SCR from "./util/constData";
+import fun from "@/util/fun";
+let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
-  new Date().getFullYear() + "年" + (month > 10 ? month : "0" + month) + "月";
-import { mapState } from "vuex";
-import * as SCR from "./util/constData";
+  date.year + "年" + (date.month > 10 ? date.month : "0" + date.month) + "月";
+
 export default {
   computed: {
     //当前日期在15号之前且所选月份是上月或本月以及申报状态为空以及所选年为当年

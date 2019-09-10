@@ -132,11 +132,12 @@
   </div>
 </template>
 <script>
-let month = new Date().getMonth() + 1;
-let defaultDate =
-  new Date().getFullYear() + "年" + (month > 10 ? month : "0" + month) + "月";
-
 import { mapState } from "vuex";
+import fun from "@/util/fun"
+let date = fun.headDate();
+let defaultDate =
+  date.year + "年" + (date.month > 10 ? date.month : "0" + date.month) + "月";
+
 export default {
   components: {},
   data() {
