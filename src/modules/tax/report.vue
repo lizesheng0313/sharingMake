@@ -394,27 +394,6 @@ export default {
     reportSubTaxReportType(params) {
       return SCR.subTaxReportType[params];
     },
-    handleInvalid() {
-      this.buttonForm.date = this.reportForm.queryMonth;
-      this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
-      this.currentPasItem = "invalid";
-      this.isShowPassword = true;
-      this.getCode();
-      this.$nextTick(() => {
-        this.$refs["refPassword"].resetFields();
-      });
-    },
-    handleGetFeedback() {
-      this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
-      this.buttonForm.date = this.reportForm.queryMonth;
-      this.$store
-        .dispatch("taxPageStore/postGetReportBack", this.buttonForm)
-        .then(res => {
-          if (res.success) {
-            this.getList(true);
-          }
-        });
-    },
     //生成申报数据
     handleGenerateData() {
       this.buttonForm.queryMonth = this.reportForm.queryMonth;
@@ -430,7 +409,7 @@ export default {
     //发送申报
     handleSendReport() {
       this.isSendReport = true;
-      this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
+      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
       this.buttonForm.date = this.reportForm.queryMonth;
       this.buttonForm.queryMonth = this.reportForm.queryMonth;
       this.currentPasItem = "send";
@@ -440,11 +419,7 @@ export default {
           this.isSendReport = false;
           if (res.success) {
             if (res.data.length == 0) {
-              this.isShowPassword = true;
-              this.getCode();
-              this.$nextTick(() => {
-                this.$refs["refPassword"].resetFields();
-              });
+              this.publicParams();
             } else {
               this.abnormalList = res.data;
               this.isShowAbnormal = true;
@@ -452,32 +427,65 @@ export default {
           }
         });
     },
+    //作废申报
+    handleInvalid() {
+      this.currentPasItem = "invalid";
+      this.publicParams();
+    },
+    // 获取反馈
+    handleGetFeedback() {
+      this.currentPasItem = "feedback";
+      this.publicParams();
+    },
+    //发送申报 获取反馈  作废申报接口公共参数
+    publicParams() {
+      this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
+      this.buttonForm.date = this.reportForm.queryMonth;
+      this.buttonForm.queryMonth = this.reportForm.queryMonth;
+      this.isShowPassword = true;
+      this.getCode();
+      this.$nextTick(() => {
+        this.$refs["refPassword"].resetFields();
+      });
+    },
     //密码提交
     handleSubmitPassword() {
       this.$refs.refPassword.validate(valid => {
-        if (this.currentPasItem == "send") {
-          this.$store
-            .dispatch("taxPageStore/postSendReport", this.buttonForm)
-            .then(res => {
-              if (res.success) {
-                this.$message({
-                  message:
-                    "当前" +
-                    this.selectDate +
-                    "申请表已发送申报，请在申请表中获取反馈",
-                  type: "success"
-                });
-                this.getList();
-              }
-            });
-        } else if (this.currentPasItem == "invalid") {
-          this.$store
-            .dispatch("taxPageStore/postCancelSubTaxReport", this.buttonForm)
-            .then(res => {
-              if (res.success) {
-                this.getList(true);
-              }
-            });
+        switch (this.currentPasItem) {
+          case "send":
+            this.$store
+              .dispatch("taxPageStore/postSendReport", this.buttonForm)
+              .then(res => {
+                if (res.success) {
+                  this.$message({
+                    message:
+                      "当前" +
+                      this.selectDate +
+                      "申请表已发送申报，请在申请表中获取反馈",
+                    type: "success"
+                  });
+                  this.getList();
+                }
+              });
+            break;
+          case "invalid":
+            this.$store
+              .dispatch("taxPageStore/postCancelSubTaxReport", this.buttonForm)
+              .then(res => {
+                if (res.success) {
+                  this.getList(true);
+                }
+              });
+            break;
+          case "feedback":
+            this.$store
+              .dispatch("taxPageStore/postGetReportBack", this.buttonForm)
+              .then(res => {
+                if (res.success) {
+                  this.getList(true);
+                }
+              });
+            break;
         }
       });
     },

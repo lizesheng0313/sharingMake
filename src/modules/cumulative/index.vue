@@ -15,7 +15,7 @@
         </el-select>
       </div>
       <el-input
-        placeholder="请输入姓名\手机号"
+        placeholder="请输入姓名\工号"
         v-model="ruleForm.nameOrEmpNo"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         @keyup.enter.native="handleSearch"
