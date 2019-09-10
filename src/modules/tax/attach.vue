@@ -125,7 +125,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleUpdateValue">确定</el-button>
+        <el-button type="primary" @click="handleUpdateValue" :loading="submitLoading">确定</el-button>
         <el-button @click="isShowUpdate=false">取消</el-button>
       </span>
     </el-dialog>
@@ -141,6 +141,7 @@ export default {
   components: {},
   data() {
     return {
+      submitLoading: false,
       currenCompanyName: "",
       loading: false,
       totalListForm: {
@@ -180,7 +181,7 @@ export default {
           }
         ]
       },
-      closeModel:false
+      closeModel: false
     };
   },
   mounted() {
@@ -249,12 +250,14 @@ export default {
     handleUpdateValue() {
       this.$refs.updatedForm.validate(valid => {
         if (valid) {
+          this.submitLoading = true;
           this.$store
             .dispatch(
               "taxPageStore/actionDownloadOtherTotal",
               this.updatedFormData
             )
             .then(res => {
+              this.submitLoading = false;
               if (res.success) {
                 this.isShowUpdate = false;
                 this.getList();

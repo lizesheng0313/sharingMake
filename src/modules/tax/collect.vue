@@ -142,7 +142,13 @@
         </div>
       </div>
       <!-- 获取反馈结果-->
-      <el-dialog :visible.sync="isShowScreening" width="52%" center class="screen-dialog" :close-on-click-modal="closeModel">
+      <el-dialog
+        :visible.sync="isShowScreening"
+        width="52%"
+        center
+        class="screen-dialog"
+        :close-on-click-modal="closeModel"
+      >
         <div class="screening-wapper">
           <el-row type="flex" class="screening-box" align="middle">
             <el-col :span="6">身份证状态</el-col>
@@ -295,7 +301,7 @@
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handleSubmitPassword">确定</el-button>
+          <el-button type="primary" @click="handleSubmitPassword" :loading="submitLoading">确定</el-button>
           <el-button @click="isShowPassword=false">取消</el-button>
         </span>
       </el-dialog>
@@ -312,6 +318,7 @@ let defaultDate =
 export default {
   data() {
     return {
+      submitLoading: false,
       ruleForm: {
         currPage: 1,
         empStatus: "",
@@ -374,7 +381,7 @@ export default {
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
       screening: SCR,
-      closeModel:false
+      closeModel: false
     };
   },
   mounted() {
@@ -405,7 +412,7 @@ export default {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning",
-            center:false
+            center: false
           }
         ).then(() => {
           this.isShowPassword = true;
@@ -424,9 +431,11 @@ export default {
     handleSubmitPassword() {
       this.$refs.feekbackForm.validate(valid => {
         if (valid) {
+          this.submitLoading = true;
           this.$store
             .dispatch("taxPageStore/actionReport", this.reportForm)
             .then(res => {
+              this.submitLoading = false;
               if (res.success) {
                 this.isShowPassword = false;
                 this.isShowFeedback = true;
