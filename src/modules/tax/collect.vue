@@ -635,7 +635,7 @@ export default {
     .content-header {
       display: inline-block;
       font-size: 16px;
-      margin-bottom: 30px;
+      margin-bottom: 6px;
       i {
         font-size: 16px;
         color: #ccc;
@@ -691,7 +691,6 @@ export default {
         overflow-x: auto;
       }
       position: relative;
-      margin-top: 27px;
       .staff-page {
         margin-top: 20px;
         text-align: right;

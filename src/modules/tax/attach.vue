@@ -126,7 +126,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleUpdateValue" :loading="submitLoading">确定</el-button>
-        <el-button @click="isShowUpdate=false">取消</el-button>
+        <el-button @click="isShowUpdate=false" :disabled="updateDisabled">取消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -181,7 +181,8 @@ export default {
           }
         ]
       },
-      closeModel: false
+      closeModel: false,
+      updateDisabled:false
     };
   },
   mounted() {
@@ -248,6 +249,7 @@ export default {
       this.getList();
     },
     handleUpdateValue() {
+      this.updateDisabled = true;
       this.$refs.updatedForm.validate(valid => {
         if (valid) {
           this.submitLoading = true;
@@ -258,7 +260,8 @@ export default {
             )
             .then(res => {
               this.submitLoading = false;
-              if (res.success) {
+              this.updateDisabled = false;
+              if (res.status === 200) {
                 this.isShowUpdate = false;
                 this.getList();
                 this.getTaxSubjectInfoList();
