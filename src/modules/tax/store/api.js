@@ -103,7 +103,7 @@ export function apiCancelSubTaxReport(invalidForm) {
   return fetch({
     url: '/api/taxReport/cancelSubTaxReport',
     method: 'post',
-    params: invalidForm
+    data: invalidForm
   })
 }
 
