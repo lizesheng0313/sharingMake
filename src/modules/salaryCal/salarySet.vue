@@ -91,7 +91,11 @@
             </div>
             <draggable animation=150  v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
               <el-row v-for="(item,index) in items" :key="index">
-                <el-col :span="2"><i class="el-icon-sort-up"></i><i class="el-icon-sort-down"></i></el-col>
+                <el-col :span="2">
+                  <el-tooltip class="item" effect="dark" content="拖动调整排序" placement="top-start">
+                    <i class="el-icon-sort"></i>
+                  </el-tooltip>
+                </el-col>
                 <el-col :span="10" v-if="item.group ==='人员信息' || item.types.sys"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
                 <el-col :span="10" v-else><div class="grid-content bg-purple nameStyle" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
                 <el-col :span="10"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
@@ -99,7 +103,7 @@
                   <div class="grid-content bg-purple">
                     <el-button type="warning" plain size="mini"  @click="deleteItem(item.id)" v-if="item.canDelete">删除</el-button>
                     <el-button type="warning" plain size="mini" v-else @click="changeStatus(item)">{{item.enable?'禁用':'启用'}}</el-button>
-                </div>
+                  </div>
                 </el-col>
               </el-row>
             </draggable>
@@ -505,6 +509,9 @@ export default {
   }
   .nameStyle{
     color:#2C7CFF;
+  }
+  .el-icon-sort:before{
+    color:#9c9c9c;
   }
 }
 </style>

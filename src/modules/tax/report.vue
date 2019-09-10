@@ -153,7 +153,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmitPassword" :loading="submitLoading">确定</el-button>
-        <el-button @click="isShowPassword=false">取消</el-button>
+        <el-button @click="isShowPassword=false" :disabled="sendReportDisabled">取消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -376,7 +376,8 @@ export default {
       currentTaxSubName: "",
       selectDate: defaultDate,
       isShowScreening: false,
-      screenWidth: document.body.clientWidth // 屏幕尺寸
+      screenWidth: document.body.clientWidth,// 屏幕尺寸
+      sendReportDisabled:false,
     };
   },
   mounted() {
@@ -455,6 +456,7 @@ export default {
     },
     //密码提交
     handleSubmitPassword() {
+      this.sendReportDisabled = true;
       this.$refs.refPassword.validate(valid => {
         if (valid) {
           this.submitLoading = true;
@@ -464,6 +466,7 @@ export default {
                 .dispatch("taxPageStore/postSendReport", this.buttonForm)
                 .then(res => {
                   this.submitLoading = false;
+                  this.sendReportDisabled = false;
                   if (res.success) {
                     this.isShowPassword = false;
                     this.$message({
