@@ -1,5 +1,5 @@
 <template>
-  <div class="check-staff el-diy-month cumulative">
+  <div class="el-diy-month cumulative">
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
@@ -8,63 +8,65 @@
       </el-row>
     </header>
     <!-- <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p> -->
-    <div class="clearfix check-staff-menu">
-      <div class="left">
-        <el-select v-model="ruleForm.queryYear" placeholder="请选择" @change="handleChange">
-          <el-option v-for="(item,index) in selectYear" :key="index" :value="item"></el-option>
-        </el-select>
+    <div class="table-content">
+      <div class="clearfix check-staff-menu">
+        <div class="left">
+          <el-select v-model="ruleForm.queryYear" placeholder="请选择" @change="handleChange">
+            <el-option v-for="(item,index) in selectYear" :key="index" :value="item"></el-option>
+          </el-select>
+        </div>
+        <el-input
+          placeholder="请输入姓名\工号"
+          v-model="ruleForm.nameOrEmpNo"
+          prefix-icon="iconiconfonticonfontsousuo1 iconfont"
+          @keyup.enter.native="handleSearch"
+          clearable
+          class="search-input left"
+        ></el-input>
+        <div class="left">
+          <el-button type="primary" class="check-search" @click="handleSearch">查询</el-button>
+        </div>
+        <div class="right">
+          <el-button type="primary" @click="handleImport" class="add-import">导入</el-button>
+        </div>
       </div>
-      <el-input
-        placeholder="请输入姓名\工号"
-        v-model="ruleForm.nameOrEmpNo"
-        prefix-icon="iconiconfonticonfontsousuo1 iconfont"
-        @keyup.enter.native="handleSearch"
-        clearable
-        class="search-input left"
-      ></el-input>
-      <div class="left">
-        <el-button type="primary" class="check-search" @click="handleSearch">查询</el-button>
+      <div class="staff-table">
+        <div class="floating-menu" v-if="deleteIdsForm.ids.length>0">
+          <span>已选中{{deleteIdsForm.ids.length}}人</span>
+          <el-button size="mini" class="button-mini" @click="handleDeleteItem">批量删除</el-button>
+        </div>
+        <el-table
+          :data="list"
+          class="check-staff_table"
+          :style="{width:screenWidth-285+'px'}"
+          @selection-change="handleSelectItem"
+        >
+          <el-table-column type="selection" width="55" fixed></el-table-column>
+          <el-table-column prop="taxSubName" label="扣缴义务人" width="140"></el-table-column>
+          <el-table-column prop="empName" label="姓名" width="140"></el-table-column>
+          <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
+          <el-table-column prop="idNo" label="证件号码" width="140"></el-table-column>
+          <el-table-column prop="endMonth" label="截止月份" width="140"></el-table-column>
+          <el-table-column prop="totalIncome" label="累计收入" width="140"></el-table-column>
+          <el-table-column prop="spectialDeduction" label="累计专项扣除" width="140"></el-table-column>
+          <el-table-column prop="otherDeduction" label="累计其他扣除" width="140"></el-table-column>
+          <el-table-column prop="totalDonated" label="累计准予扣除的捐赠" width="140"></el-table-column>
+          <el-table-column prop="taxBreakTotal" label="累计减免税额" width="140"></el-table-column>
+          <el-table-column prop="taxTotal" label="累计已预缴税额" width="140"></el-table-column>
+          <el-table-column label="操作" fixed="right">
+            <template slot-scope="scope">
+              <el-button size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @current-change="handleSelectionChange"
+          :page-size="ruleForm.pageSize"
+          layout="prev, pager, next"
+          :total="total"
+          class="staff-page"
+        ></el-pagination>
       </div>
-      <div class="right">
-        <el-button type="primary" @click="handleImport" class="add-import">导入</el-button>
-      </div>
-    </div>
-    <div class="staff-table">
-      <div class="floating-menu" v-if="deleteIdsForm.ids.length>0">
-        <span>已选中{{deleteIdsForm.ids.length}}人</span>
-        <el-button size="mini" class="button-mini" @click="handleDeleteItem">批量删除</el-button>
-      </div>
-      <el-table
-        :data="list"
-        class="check-staff_table"
-        :style="{width:screenWidth-285+'px'}"
-        @selection-change="handleSelectItem"
-      >
-        <el-table-column type="selection" width="55" fixed></el-table-column>
-        <el-table-column prop="taxSubName" label="扣缴义务人" width="140"></el-table-column>
-        <el-table-column prop="empName" label="姓名" width="140"></el-table-column>
-        <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
-        <el-table-column prop="idNo" label="证件号码" width="140"></el-table-column>
-        <el-table-column prop="endMonth" label="截止月份" width="140"></el-table-column>
-        <el-table-column prop="totalIncome" label="累计收入" width="140"></el-table-column>
-        <el-table-column prop="spectialDeduction" label="累计专项扣除" width="140"></el-table-column>
-        <el-table-column prop="otherDeduction" label="累计其他扣除" width="140"></el-table-column>
-        <el-table-column prop="totalDonated" label="累计准予扣除的捐赠" width="140"></el-table-column>
-        <el-table-column prop="taxBreakTotal" label="累计减免税额" width="140"></el-table-column>
-        <el-table-column prop="taxTotal" label="累计已预缴税额" width="140"></el-table-column>
-        <el-table-column label="操作" fixed="right">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        @current-change="handleSelectionChange"
-        :page-size="ruleForm.pageSize"
-        layout="prev, pager, next"
-        :total="total"
-        class="staff-page"
-      ></el-pagination>
     </div>
     <import-data
       ref="import"
@@ -226,14 +228,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
-.check-staff {
-  padding: 0 20px;
-  box-sizing: border-box;
+.cumulative {
   .header {
     padding: 0 20px;
-    font-size: 14px;
+    font-size: 17px;
     height: 61px;
     line-height: 61px;
+    border-bottom: 1px solid #ededed;
     .add-table {
       cursor: pointer;
       float: right;
@@ -245,6 +246,9 @@ export default {
       position: relative;
       top: 1px;
     }
+  }
+  .table-content{
+    padding-left:22px;
   }
   .check-search {
     margin-left: 20px;
@@ -270,7 +274,7 @@ export default {
   }
 
   .check-staff-menu {
-    margin-top: 40px;
+    margin-top: 30px;
     .search-input {
       width: 205px;
     }

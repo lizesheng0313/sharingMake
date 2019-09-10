@@ -705,8 +705,6 @@ export default {
         color: #ff8f2c;
       }
     }
-    margin-top: 18px;
-    padding-top: 18px;
     .staff-table {
       .check-staff_table {
         overflow-x: auto;

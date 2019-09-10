@@ -229,7 +229,7 @@ export default {
   }
   .header {
     padding: 0 20px;
-    font-size: 14px;
+    font-size: 17px;
     height: 61px;
     border-bottom: 1px solid #ededed;
     line-height: 61px;
