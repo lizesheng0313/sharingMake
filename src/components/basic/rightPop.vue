@@ -1,7 +1,7 @@
 <template>
   <div class="right-pop">
     <transition name="fade">
-      <div class="pop-mask" v-show="popShow.isshow"  @click="popShow.isshow=false"></div>
+      <div class="pop-mask" v-show="popShow.isshow"></div>
     </transition>
     <div class="pop-slide card-box" :style="{width:popWidth+'px','right': popShow.isshow ? '0px' : -popWidth+'px'}">
       <div class="pop-header" v-if="hasHeader">

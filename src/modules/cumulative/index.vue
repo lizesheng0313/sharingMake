@@ -188,7 +188,8 @@ export default {
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
+          center:false,
         }
       )
         .then(() => {
@@ -200,6 +201,7 @@ export default {
             .then(res => {
               if (res.success) {
                 this.getList();
+                this.deleteIdsForm.ids = [];
                 this.$message({
                   type: "success",
                   message: "删除成功!"

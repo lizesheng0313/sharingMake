@@ -107,6 +107,7 @@
       width="550px"
       center
       class="diy-el_dialog"
+      :close-on-click-modal="closeModel"
     >
       <el-table :data="abnormalList">
         <el-table-column prop="empName" label="姓名" width="120"></el-table-column>
@@ -125,6 +126,7 @@
       width="450px"
       center
       class="diy-el_dialog"
+      :close-on-click-modal="closeModel"
     >
       <el-form
         :rules="passwordRules"
@@ -321,6 +323,7 @@ export default {
       abnormalList: [],
       isShowAbnormal: false,
       currentPasItem: "",
+      closeModel:false,
       passwordRules: {
         password: [
           {
