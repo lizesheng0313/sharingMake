@@ -152,7 +152,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleSubmitPassword">确定</el-button>
+        <el-button type="primary" @click="handleSubmitPassword" :loading="submitLoading">确定</el-button>
         <el-button @click="isShowPassword=false">取消</el-button>
       </span>
     </el-dialog>
@@ -320,10 +320,11 @@ export default {
   },
   data() {
     return {
+      submitLoading: false,
       abnormalList: [],
       isShowAbnormal: false,
       currentPasItem: "",
-      closeModel:false,
+      closeModel: false,
       passwordRules: {
         password: [
           {
@@ -455,58 +456,62 @@ export default {
     //密码提交
     handleSubmitPassword() {
       this.$refs.refPassword.validate(valid => {
-        switch (this.currentPasItem) {
-          case "send":
-            this.$store
-              .dispatch("taxPageStore/postSendReport", this.buttonForm)
-              .then(res => {
-                if (res.success) {
-                  this.isShowPassword = false;
-                  this.$message({
-                    message:
-                      "当前" +
-                      this.selectDate +
-                      "申请表已发送申报，请在申请表中获取反馈",
-                    type: "success"
-                  });
-                  this.getTaxSubjectInfoList();
-                }
-              });
-            break;
-          case "invalid":
-            this.$store
-              .dispatch("taxPageStore/postCancelSubTaxReport", this.buttonForm)
-              .then(res => {
-                if (res.success) {
-                  this.isShowPassword = false;
-                  this.$message({
-                    message:
-                      "当前" +
-                      this.selectDate +
-                      "申请表已作废成功",
-                    type: "success"
-                  });
-                  this.getTaxSubjectInfoList();
-                }
-              });
-            break;
-          case "feedback":
-            this.$store
-              .dispatch("taxPageStore/postGetReportBack", this.buttonForm)
-              .then(res => {
-                if (res.success) {
-                  this.$message({
-                    message:
-                      "当前" +
-                      this.selectDate +
-                      "申请表已获取反馈成功",
-                    type: "success"
-                  });
-                  this.isShowPassword = false;
-                  this.getTaxSubjectInfoList();
-                }
-              });
-            break;
+        if (valid) {
+          this.submitLoading = true;
+          switch (this.currentPasItem) {
+            case "send":
+              this.$store
+                .dispatch("taxPageStore/postSendReport", this.buttonForm)
+                .then(res => {
+                  this.submitLoading = false;
+                  if (res.success) {
+                    this.isShowPassword = false;
+                    this.$message({
+                      message:
+                        "当前" +
+                        this.selectDate +
+                        "申请表已发送申报，请在申请表中获取反馈",
+                      type: "success"
+                    });
+                    this.getTaxSubjectInfoList();
+                  }
+                });
+              break;
+            case "invalid":
+              this.$store
+                .dispatch(
+                  "taxPageStore/postCancelSubTaxReport",
+                  this.buttonForm
+                )
+                .then(res => {
+                  this.submitLoading = false;
+                  if (res.success) {
+                    this.isShowPassword = false;
+                    this.$message({
+                      message: "当前" + this.selectDate + "申请表已作废成功",
+                      type: "success"
+                    });
+                    this.getTaxSubjectInfoList();
+                  }
+                });
+              break;
+            case "feedback":
+              this.$store
+                .dispatch("taxPageStore/postGetReportBack", this.buttonForm)
+                .then(res => {
+                  this.submitLoading = false;
+                  if (res.success) {
+                    this.$message({
+                      message:
+                        "当前" + this.selectDate + "申请表已获取反馈成功",
+                      type: "success"
+                    });
+                    this.isShowPassword = false;
+                    this.getTaxSubjectInfoList();
+                  }
+                });
+              break;
+          }
         }
       });
     },
