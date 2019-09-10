@@ -81,7 +81,11 @@
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empName" label="姓名" width="130"></el-table-column>
             <el-table-column prop="idNo" label="身份证号" width="180"></el-table-column>
-            <el-table-column prop="empDay" label="入职日期" width="180"></el-table-column>
+            <el-table-column label="入职日期" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.empDay.split(' ')[0] }}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="140"></el-table-column>
             <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="140"></el-table-column>
             <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140"></el-table-column>
