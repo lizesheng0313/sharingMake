@@ -130,12 +130,23 @@ export default {
   },
   created(){
     //默认日期
+
     if(this.IndexCurrentDate){
       this.currentDate = this.IndexCurrentDate
     }else{
       let nowDate = new Date();
+      let year = nowDate.getFullYear();
       let month = nowDate.getMonth()-(-1)<10?"0"+(nowDate.getMonth()-(-1)).toString():nowDate.getMonth()-(-1);
-      this.currentDate = nowDate.getFullYear()+"-"+month;
+      let day = nowDate.getDate();
+      if(day <= 15){
+        if(month == "01"){
+          year-=1;
+          month=12;
+        }else{
+          month-=1;
+        }
+      }
+      this.currentDate = year+"-"+month;
     }
     this.loading();
     // console.log(this.selectUsedForm)
