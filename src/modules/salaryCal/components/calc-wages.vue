@@ -156,7 +156,7 @@
       <el-form :model="salaryForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
           <el-form-item label="扣缴义务人" label-width="38%">
-            <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择扣缴义务人">
+            <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择扣缴义务人" v-loading="taxSubIdLoading">
               <el-option v-for="(item,index) in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
           </el-form-item>
@@ -339,6 +339,7 @@ export default {
       tableLoading:false,
       closeModel:false,
       exportLoading:false,
+      taxSubIdLoading:false,
     };
   },
   computed:{
@@ -583,8 +584,10 @@ export default {
       // this.resetSreen();
       //获取个税列表
       apiGetTaxSubjectList(this.id).then(res=>{
+        this.taxSubIdLoading = true;
         if(res.code == "0000"){
           this.screenTaxOption = res.data;
+          this.taxSubIdLoading = false;
         }else{
           this.$message.error(res.message)
         }
