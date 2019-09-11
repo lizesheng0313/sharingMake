@@ -44,7 +44,7 @@
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
           :min-width="col.col === '序号' || col.col === '工号' || col.col === '姓名'?'80px':'140px'"
-          :show-overflow-tooltip="col.col === '部门' || col.col === '岗位'"
+          :show-overflow-tooltip="col.col === '部门' || col.col === '岗位' || col.col === '工号' || col.col === '姓名'"
           :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="col.col == '序号' || col.col == '姓名' || col.col == '工号' || col.col == '部门'">
           <template slot-scope="scope">
             <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>
