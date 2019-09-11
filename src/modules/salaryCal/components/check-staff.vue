@@ -58,12 +58,12 @@
             <span>{{scope.row.empNo}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="身份证号">
+        <el-table-column label="身份证号" width="180px">
           <template slot-scope="scope">
             <span>{{scope.row.idCardNo}}</span>
           </template>
         </el-table-column>
-        <el-table-column  label="手机号">
+        <el-table-column  label="手机号" width="160px">
           <template slot-scope="scope">
             <span>{{scope.row.phoneNo}}</span>
           </template>
@@ -73,37 +73,37 @@
             <span>{{scope.row.empType|filterEmpType}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="扣缴义务人">
+        <el-table-column label="扣缴义务人" width="180px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{scope.row.taxSubject}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="部门">
+        <el-table-column label="部门" width="160x" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{scope.row.departName}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="岗位">
+        <el-table-column label="岗位" width="160x" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{scope.row.jobTitle}}</span>
           </template>
         </el-table-column>
-        <el-table-column  label="工作地点">
+        <el-table-column  label="工作地点" width="140x" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{scope.row.workAddress}}</span>
           </template>
         </el-table-column>
-        <el-table-column  label="入职时间">
+        <el-table-column  label="入职时间" width="160px">
           <template slot-scope="scope">
             <span>{{scope.row.empStartDate?scope.row.empStartDate.split(" ")[0]:""}}</span>
           </template>
         </el-table-column>
-        <el-table-column  label="工资卡银行">
+        <el-table-column  label="工资卡银行" width="140px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{scope.row.bank}}</span>
           </template>
         </el-table-column>
-        <el-table-column  label="工资卡号">
+        <el-table-column  label="工资卡号" width="180px">
           <template slot-scope="scope">
             <span>{{scope.row.bankNo}}</span>
           </template>
@@ -167,7 +167,7 @@
           <span><a @click="downloadMember">下载模板</a></span>
         </p>
         <p class="instructions">
-          说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资
+          说明：若人员本月已存在，更新本人数据，若本月不存在，新增人员
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
