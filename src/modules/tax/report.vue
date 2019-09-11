@@ -50,8 +50,8 @@
             </span>
           </div>
           <div class="right declare-buttton-groups">
-            <el-button type="primary" v-if="showGenerate" @click="handleGenerateData">生成申报数据</el-button>
-            <el-button type="primary" v-if="showUpdate" @click="handleGenerateData">更新申报数据</el-button>
+            <el-button type="primary" v-if="showGenerate" @click="handleGenerateData('creat')">生成申报数据</el-button>
+            <el-button type="primary" v-if="showUpdate" @click="handleGenerateData('update')">更新申报数据</el-button>
             <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
             <el-button
               type="primary"
@@ -403,15 +403,18 @@ export default {
       return SCR.subTaxReportType[params];
     },
     //生成申报数据
-    handleGenerateData() {
+    handleGenerateData(type) {
       this.buttonForm.queryMonth = this.reportForm.queryMonth;
       this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
       this.$store
         .dispatch("taxPageStore/postGenerateTaxReportData", this.buttonForm)
         .then(res => {
           if (res.success) {
+            if(type==='update'){
+              this.$message.success('更新申报数据成功');
+            }
             this.getTaxSubjectInfoList();
-            // this.getList(true);
+
           }
         });
     },
@@ -620,12 +623,12 @@ export default {
             ];
             this.total = res.data.count;
             this.list = res.data.data;
-            // if (this.list.length == 0 && flag) {
-            //   this.$message({
-            //     message: "扣缴义务人本月无申报数据",
-            //     type: "warning"
-            //   });
-            // }
+            if (this.list.length == 0) {
+              this.$message({
+                message: "暂无申报数据",
+                type: "warning"
+              });
+            }
           }
         });
     }
