@@ -81,7 +81,11 @@
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empName" label="姓名" width="130"></el-table-column>
             <el-table-column prop="idNo" label="身份证号" width="180"></el-table-column>
-            <el-table-column prop="empDay" label="入职日期" width="180"></el-table-column>
+            <el-table-column label="入职日期" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.empDay.split(' ')[0] }}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="140"></el-table-column>
             <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="140"></el-table-column>
             <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140"></el-table-column>
@@ -126,17 +130,18 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleUpdateValue" :loading="submitLoading">确定</el-button>
-        <el-button @click="isShowUpdate=false">取消</el-button>
+        <el-button @click="isShowUpdate=false" :disabled="updateDisabled">取消</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-let month = new Date().getMonth() + 1;
-let defaultDate =
-  new Date().getFullYear() + "年" + (month > 10 ? month : "0" + month) + "月";
-
 import { mapState } from "vuex";
+import fun from "@/util/fun"
+let date = fun.headDate();
+let defaultDate =
+  date.year + "年" + (date.month > 10 ? date.month : "0" + date.month) + "月";
+
 export default {
   components: {},
   data() {
@@ -181,7 +186,8 @@ export default {
           }
         ]
       },
-      closeModel: false
+      closeModel: false,
+      updateDisabled:false
     };
   },
   mounted() {
@@ -248,6 +254,7 @@ export default {
       this.getList();
     },
     handleUpdateValue() {
+      this.updateDisabled = true;
       this.$refs.updatedForm.validate(valid => {
         if (valid) {
           this.submitLoading = true;
@@ -258,7 +265,8 @@ export default {
             )
             .then(res => {
               this.submitLoading = false;
-              if (res.success) {
+              this.updateDisabled = false;
+              if (res.status === 200) {
                 this.isShowUpdate = false;
                 this.getList();
                 this.getTaxSubjectInfoList();

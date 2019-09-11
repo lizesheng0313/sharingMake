@@ -312,9 +312,11 @@
 import { mapState } from "vuex";
 import * as SCR from "./util/constData";
 import * as AT from "./store/actionTypes";
+import fun from "@/util/fun";
+let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
-  new Date().getFullYear() + "年" + (month > 10 ? month : "0" + month) + "月";
+  date.year + "年" + (date.month > 10 ? date.month : "0" + date.month) + "月";
 export default {
   data() {
     return {
@@ -635,7 +637,7 @@ export default {
     .content-header {
       display: inline-block;
       font-size: 16px;
-      margin-bottom: 30px;
+      margin-bottom: 6px;
       i {
         font-size: 16px;
         color: #ccc;
@@ -691,7 +693,6 @@ export default {
         overflow-x: auto;
       }
       position: relative;
-      margin-top: 27px;
       .staff-page {
         margin-top: 20px;
         text-align: right;

@@ -59,7 +59,7 @@
                   ></el-option>
                 </el-select>
                 <el-button type="primary" @click="InitCalcSalary(item)" v-show="item.salaryCheckStatus === 'NONE'">启动算薪</el-button>
-                <p v-show="item.salaryCheckStatus === 'NONE'">启动算薪时，系统根据算薪范围生成本月计薪人员</p>
+<!--                <p v-show="item.salaryCheckStatus === 'NONE'">启动算薪时，系统根据算薪范围生成本月计薪人员</p>-->
                 <el-button type="primary" @click="calcSalary(item)" v-show="item.salaryCheckStatus === 'INIT'">计算薪资</el-button>
                 <el-button type="primary" @click="seeCalcSalary(item)" v-show="item.salaryCheckStatus === 'COMPUTED' || item.salaryCheckStatus === 'AUDITED' || item.salaryCheckStatus === 'FINISH' || item.salaryCheckStatus === 'PAID'">查看薪资</el-button>
               </div>
@@ -73,6 +73,7 @@
 <script>
 import { mapState } from "vuex";
 import { apiSalaryRuleList,apiInitSalaryCheck } from './store/api'
+import  fun from "@/util/fun"
 import AT from "./store/actionTypes"
 export default {
   components: {},
@@ -103,7 +104,7 @@ export default {
           label: "本月第一次发薪"
         }
       ],
-      currentDate: "2019年7月",
+      currentDate: "",
       salaryRuleList:{
         "used":[],
         "disabled":[]
@@ -133,12 +134,12 @@ export default {
     if(this.IndexCurrentDate){
       this.currentDate = this.IndexCurrentDate
     }else{
-      let nowDate = new Date();
-      let month = nowDate.getMonth()-(-1)<10?"0"+(nowDate.getMonth()-(-1)).toString():nowDate.getMonth()-(-1);
-      this.currentDate = nowDate.getFullYear()+"-"+month;
+      let nowDate = fun.headDate();
+      let year = nowDate.year;
+      let month = nowDate.month > 10 ? nowDate.month : "0" + nowDate.month;
+      this.currentDate = year+"-"+month;
     }
     this.loading();
-    // console.log(this.selectUsedForm)
   },
   methods: {
     loading(){
@@ -226,6 +227,9 @@ export default {
 .salary-cal {
   .el-icon-date{
     font-size:16px;
+    .el-month-table td.today .cell{
+      color: #606266;
+    }
   }
   .header {
     padding: 0 20px;

@@ -153,17 +153,20 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmitPassword" :loading="submitLoading">确定</el-button>
-        <el-button @click="isShowPassword=false">取消</el-button>
+        <el-button @click="isShowPassword=false" :disabled="sendReportDisabled">取消</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
+ import { mapState } from "vuex";
+import * as SCR from "./util/constData";
+import fun from "@/util/fun";
+let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
-  new Date().getFullYear() + "年" + (month > 10 ? month : "0" + month) + "月";
-import { mapState } from "vuex";
-import * as SCR from "./util/constData";
+  date.year + "年" + (date.month > 10 ? date.month : "0" + date.month) + "月";
+
 export default {
   computed: {
     //当前日期在15号之前且所选月份是上月或本月以及申报状态为空以及所选年为当年
@@ -376,7 +379,8 @@ export default {
       currentTaxSubName: "",
       selectDate: defaultDate,
       isShowScreening: false,
-      screenWidth: document.body.clientWidth // 屏幕尺寸
+      screenWidth: document.body.clientWidth,// 屏幕尺寸
+      sendReportDisabled:false,
     };
   },
   mounted() {
@@ -455,6 +459,7 @@ export default {
     },
     //密码提交
     handleSubmitPassword() {
+      this.sendReportDisabled = true;
       this.$refs.refPassword.validate(valid => {
         if (valid) {
           this.submitLoading = true;
@@ -464,6 +469,7 @@ export default {
                 .dispatch("taxPageStore/postSendReport", this.buttonForm)
                 .then(res => {
                   this.submitLoading = false;
+                  this.sendReportDisabled = false;
                   if (res.success) {
                     this.isShowPassword = false;
                     this.$message({

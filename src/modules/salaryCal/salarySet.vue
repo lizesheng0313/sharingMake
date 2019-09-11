@@ -91,15 +91,19 @@
             </div>
             <draggable animation=150  v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
               <el-row v-for="(item,index) in items" :key="index">
-                <el-col :span="2"><i class="el-icon-sort-up"></i><i class="el-icon-sort-down"></i></el-col>
-                <el-col :span="10" v-if="item.group ==='人员信息' || item.types.sys"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
-                <el-col :span="10" v-else><div class="grid-content bg-purple nameStyle" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
-                <el-col :span="10"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
+                <el-col :span="2">
+                  <el-tooltip class="item" effect="dark" content="拖动调整排序" placement="top-start">
+                    <i class="el-icon-sort"></i>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="9" v-if="item.group ==='人员信息' || item.types.sys"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
+                <el-col :span="9" v-else><div class="grid-content bg-purple nameStyle" @click="salaryItemDetailShow(items[0]['group'],item)" style="cursor:pointer">{{item.name}}</div></el-col>
+                <el-col :span="11"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
                 <el-col :span="2">
                   <div class="grid-content bg-purple">
-                    <el-button type="warning" plain size="mini"  @click="deleteItem(item.id)" v-if="item.canDelete">删除</el-button>
-                    <el-button type="warning" plain size="mini" v-else @click="changeStatus(item)">{{item.enable?'禁用':'启用'}}</el-button>
-                </div>
+                    <el-button  plain size="mini"  @click="deleteItem(item.id)" v-if="item.canDelete">删除</el-button>
+                    <el-button  plain size="mini" v-else @click="changeStatus(item)">{{item.enable?'禁用':'启用'}}</el-button>
+                  </div>
                 </el-col>
               </el-row>
             </draggable>
@@ -478,14 +482,14 @@ export default {
       color:#2C7CFF;
       cursor:pointer;
       .el-icon-document{
-        color:#9C9C9C;
-        font-size: 20px;
+        color:#2C7CFF;
+        font-size: 16px;
         display: inline-block;
         margin-right:10px;
       }
     }
   }
-  .el-col-2,.el-col-10{
+  .el-col-2,.el-col-9,.el-col-11{
     height: 50px;
     line-height: 50px;
   }
@@ -505,6 +509,12 @@ export default {
   }
   .nameStyle{
     color:#2C7CFF;
+  }
+  .el-icon-sort:before{
+    color:#dddbdb;
+  }
+  .el-row{
+    border-bottom:1px solid #f6f1f1;
   }
 }
 </style>

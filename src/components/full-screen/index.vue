@@ -96,7 +96,7 @@ export default {
   }
   .fs-container {
     padding-bottom: 50px;
-    height: calc(100vh - 100px);
+    /*height: calc(100vh - 100px);*/
     overflow: auto;
   }
 }
