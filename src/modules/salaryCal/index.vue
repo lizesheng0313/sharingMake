@@ -135,8 +135,8 @@ export default {
       this.currentDate = this.IndexCurrentDate
     }else{
       let nowDate = fun.headDate();
-      let year = nowDate.getFullYear();
-      let month = date.month > 10 ? date.month : "0" + date.month;
+      let year = nowDate.year;
+      let month = nowDate.month > 10 ? nowDate.month : "0" + nowDate.month;
       this.currentDate = year+"-"+month;
     }
     this.loading();
