@@ -527,6 +527,9 @@ export default {
       if (this.ruleForm[obj].length > 0) {
         this[obj] = !this[obj];
       }
+      if(this[obj]){
+        this.ruleForm[obj] = []
+      }
     },
     //查询
     handleSearch() {
@@ -586,6 +589,7 @@ export default {
         this.ruleForm[obj].splice(index, 1);
       } else if (index == -1) {
         this.ruleForm[obj].push(key);
+        this[obj] = false;
       }
     },
     handleCalcSalary() {
