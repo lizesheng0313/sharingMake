@@ -48,12 +48,12 @@
       </div>
       <el-table :data="userList" class="check-staff_table" :style="{width:screenWidth-40+'px'}" v-loading="userLoading"  @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" fixed></el-table-column>
-        <el-table-column label="姓名">
+        <el-table-column label="姓名" width="104px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
              <span>{{scope.row.name}}</span>
           </template>
         </el-table-column>
-        <el-table-column  label="工号">
+        <el-table-column  label="工号" width="100px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{scope.row.empNo}}</span>
           </template>
@@ -440,7 +440,7 @@ export default {
       padding-right: 15px;
       margin-right: 15px;
     }
-    margin-top: 20px;
+    margin-top: 25px;
     color: #999;
     font-size: 12px;
     i {
