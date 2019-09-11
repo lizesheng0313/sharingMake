@@ -43,7 +43,8 @@
       <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle"  width="100%" v-loading="tableLoading">
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
-          :min-width="col.col === '序号' || col.col === '工号' || col.col === '姓名'?'80px':'120px'"
+          :min-width="col.col === '序号' || col.col === '工号' || col.col === '姓名'?'80px':'140px'"
+          :show-overflow-tooltip="col.col === '部门' || col.col === '岗位'"
           :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="col.col == '序号' || col.col == '姓名' || col.col == '工号' || col.col == '部门'">
           <template slot-scope="scope">
             <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>
@@ -318,7 +319,7 @@ export default {
       count:0,
       salaryRuleId:this.$route.query.salaryRuleId,
       checkAll: false,
-      checkedPerson: [],
+      checkedPerson: ['工号', '姓名', '身份证号', '部门'],
       personOptions:['工号', '姓名', '身份证号', '部门',"岗位","工作地点","工作性质","入职日期","离职日期"],
       isIndeterminate: false,
       showExportSalaryDetail:false,
@@ -469,13 +470,24 @@ export default {
           })
           //  初始化导出配置项数据、
             //人员信息
-          this.checkedPerson = [];
-          this.isIndeterminate = false;
+          this.checkedPerson = ['工号', '姓名', '身份证号', '部门'];
+          this.isIndeterminate = true;
+          console.log(this.diyOption)
            // 配置项
           this.diyOption.forEach((item,index)=>{
-            this.$set(this.diyCheckeds, index, []);
-            this.isIndeterminates[index] = false;
-            this.checkAlls[index] = false;
+            if(item.title === '个税计算项'){
+              this.$set(this.diyCheckeds, index, []);
+              this.isIndeterminates[index] = false;
+              this.checkAlls[index] = false;
+            }else{
+              let itemArr = [];
+              item.value.forEach((ite,inx)=>{
+                itemArr.push(ite.id);
+                this.$set(this.diyCheckeds, index, itemArr);
+                this.isIndeterminates[index] = false;
+                this.checkAlls[index] = true;
+              })
+            }
           })
         }
       })
@@ -731,8 +743,6 @@ export default {
   }
   .iconiconfonticonfontsousuo1 {font-size: 12px;}
   .staff-situation {
-    border-top: 1px solid #ededed;
-    margin-top: 30px;
     padding-top: 25px;
     font-size: 12px;
     .staff-total {
@@ -765,7 +775,7 @@ export default {
       overflow-x: auto;
     }
     position: relative;
-    margin-top: 27px;
+    margin-top: 12px;
     .floating-menu {
       position: absolute;
       left: 100px;
