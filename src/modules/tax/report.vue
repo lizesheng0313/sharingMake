@@ -80,9 +80,9 @@
             <el-table-column prop="calculateTaxTotal" label="应扣缴税额" width="180"></el-table-column>
             <el-table-column prop="realTaxTotal" label="已缴税额" width="180"></el-table-column>
             <el-table-column prop="taxDiffTotal" label="应补(退)税额" width="180"></el-table-column>
-            <el-table-column prop="reportEnabled" label="是否可申报" width="140">
+            <el-table-column  label="是否可申报" width="140">
               <template slot-scope="scope">
-                <span>{{rePortEnabled(scope.row.reportEnabled)}}</span>
+                <span>{{scope.row.idReport?'是':'否'}}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -557,13 +557,6 @@ export default {
         }
       }
       return false;
-    },
-    rePortEnabled(item) {
-      let obj = {
-        Y: "是",
-        N: "否"
-      };
-      return obj[item];
     },
     changeMonth(month) {
       this.formatQuerymonth(month);
