@@ -13,7 +13,7 @@
   <div id="app"></div>
   <script>
     //todo initStore赋值 第三方对接、注入脚本、前期验证（登录、权限等）
-    window.__CURRENT_ENV__ = location.hostname.indexOf('test') === -1 ?'prod':'dev';
+    window.__CURRENT_ENV__ = location.hostname.includes('test') ?'dev':'prod';
   </script>
 </body>
 </html>
