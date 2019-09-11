@@ -19,7 +19,7 @@
 export default {
   data() {
     return {
-      originUrl:window.__CURRENT_ENV__ === "prod" ? 'https://www.olading.com/main.html#/':'http://172.19.60.38/main.html#/',//跳转路径
+      originUrl:window.__CURRENT_ENV__ === "prod" ? 'https://www.olading.com/main.html#/':'https://stage.olading.com/main.html#/',//跳转路径
     };
   },
   computed:mapState({

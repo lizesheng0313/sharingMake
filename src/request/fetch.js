@@ -39,7 +39,7 @@ export function fetch(options) {
       let data = response.data;
       if (data.code != "0000") {
         Message.error(data.message);
-        let originUrl = window.__CURRENT_ENV__ === "prod" ? 'https://www.olading.com/main.html#/':'http://172.19.60.38/main.html#/';
+        let originUrl = window.__CURRENT_ENV__ === "prod" ? 'https://www.olading.com/main.html#/':'https://stage.olading.com/main.html#/';
         //未认证跳回登陆
         if(data.code === "802"){
           window.open(originUrl+'login', "_self")
