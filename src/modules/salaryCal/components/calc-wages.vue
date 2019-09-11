@@ -318,7 +318,7 @@ export default {
       count:0,
       salaryRuleId:this.$route.query.salaryRuleId,
       checkAll: false,
-      checkedPerson: [],
+      checkedPerson: ['工号', '姓名', '身份证号', '部门'],
       personOptions:['工号', '姓名', '身份证号', '部门',"岗位","工作地点","工作性质","入职日期","离职日期"],
       isIndeterminate: false,
       showExportSalaryDetail:false,
@@ -469,13 +469,24 @@ export default {
           })
           //  初始化导出配置项数据、
             //人员信息
-          this.checkedPerson = [];
-          this.isIndeterminate = false;
+          this.checkedPerson = ['工号', '姓名', '身份证号', '部门'];
+          this.isIndeterminate = true;
+          console.log(this.diyOption)
            // 配置项
           this.diyOption.forEach((item,index)=>{
-            this.$set(this.diyCheckeds, index, []);
-            this.isIndeterminates[index] = false;
-            this.checkAlls[index] = false;
+            if(item.title === '个税计算项'){
+              this.$set(this.diyCheckeds, index, []);
+              this.isIndeterminates[index] = false;
+              this.checkAlls[index] = false;
+            }else{
+              let itemArr = [];
+              item.value.forEach((ite,inx)=>{
+                itemArr.push(ite.id);
+                this.$set(this.diyCheckeds, index, itemArr);
+                this.isIndeterminates[index] = false;
+                this.checkAlls[index] = true;
+              })
+            }
           })
         }
       })
