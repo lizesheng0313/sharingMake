@@ -743,7 +743,7 @@ export default {
   }
   .iconiconfonticonfontsousuo1 {font-size: 12px;}
   .staff-situation {
-    padding-top: 25px;
+    margin-top: 25px;
     font-size: 12px;
     .staff-total {
       color: #999;
@@ -775,7 +775,7 @@ export default {
       overflow-x: auto;
     }
     position: relative;
-    margin-top: 12px;
+    margin-top: 20px;
     .floating-menu {
       position: absolute;
       left: 100px;
