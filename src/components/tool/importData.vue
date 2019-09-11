@@ -51,7 +51,7 @@
             <a @click="handleTemplate">下载模板</a>
           </span>
         </p>
-        <p class="instructions">说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资</p>
+        <p class="instructions">{{tips}}</p>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="uploadFile">导入通过数据</el-button>
@@ -87,7 +87,8 @@ export default {
     parameterData: Object, //校验参数
     impoartAction: String, //导入通过数据接口  需为action
     title: String, //标题,
-    uploadFileData: Object //导入通过数据参数
+    uploadFileData: Object, //导入通过数据参数
+    tips:String,
   },
   data() {
     return {

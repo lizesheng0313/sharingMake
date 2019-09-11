@@ -71,7 +71,7 @@
     <import-data
       ref="import"
       :radioList="radioList"
-      :title="'累计应纳税所得导入'"
+      :title="'累计应税项导入'"
       :apiCheck="'/api/taxTotalBase/importTaxTotalBaseCheck'"
       :apiDownloadLog="'cumulativePageStore/getExportErrorRecord'"
       :apiDownloadTemplate="'cumulativePageStore/actionDownloadTemplate'"
@@ -80,6 +80,7 @@
       :impoartAction="'cumulativePageStore/actionImportTaxTotalBaseSuccess'"
       @getLoading="refresh"
       :uploadFileData="uploadFileData"
+      :tips="'说明：若本年度纳税主体下员工已存在累计值，再次导入后将覆盖原数据'"
     ></import-data>
   </div>
 </template>
