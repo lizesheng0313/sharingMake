@@ -187,7 +187,6 @@ export default {
     this.employeeFormData = JSON.parse(
       JSON.stringify(this.personnelCollection)
     );
-    console.log(this.employeeFormData);
     if (this.employeeFormData.idValidStatus == "CHECK_SUCCESS") {
       this.checkSuccess = true;
     }
