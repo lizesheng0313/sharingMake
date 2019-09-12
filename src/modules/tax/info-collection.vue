@@ -1,6 +1,11 @@
 <template>
   <div class="collection">
-    <full-screen :fsTitle="'人员信息'" :bgColor="'#fff'" class="info-collection" :goUrl="'/tax/collect'">
+    <full-screen
+      :fsTitle="'人员信息'"
+      :bgColor="'#fff'"
+      class="info-collection"
+      :goUrl="'/tax/collect'"
+    >
       <span slot="fs-button">关闭</span>
       <div slot="fs-container">
         <div class="state-personnel">
@@ -185,7 +190,6 @@ export default {
     if (this.employeeFormData.idValidStatus == "CHECK_SUCCESS") {
       this.checkSuccess = true;
     }
-
   },
   data() {
     const t = this;
@@ -283,13 +287,17 @@ export default {
       if (!this.employeeFormData.martyrFamilyYn) {
         this.employeeFormData.martyrFamilyNo = "";
       }
+
       this.employeeFormData.operType = "UPDATE";
-      if(this.employeeFormData.empDay > this.employeeFormData.leaveDay){
+      if (this.employeeFormData.empDay > this.employeeFormData.leaveDay) {
         this.$message({
           message: "离职日期不能早于任职受雇从业日期",
           type: "warning"
         });
-      }else{
+      } else {
+        if (!this.employeeFormData.leaveDay) {
+          this.employeeFormData.leaveDay = "";
+        }
         this.$refs.refEmployeeForm.validate(valid => {
           if (valid) {
             this.$store
@@ -337,8 +345,8 @@ export default {
     display: inline-block;
     margin-top: 30px;
     font-weight: 500;
-    font-size:16px;
-    margin-bottom:50px;
+    font-size: 16px;
+    margin-bottom: 50px;
   }
   .right-input-box {
     margin-left: 20px;
