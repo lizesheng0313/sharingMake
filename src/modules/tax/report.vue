@@ -225,7 +225,6 @@ export default {
         ) {
           if (
             this.reportObj.reportStatus == "未申报" ||
-            this.reportObj.reportStatus == "申报成功" ||
             this.reportObj.reportStatus == "申报失败" ||
             this.reportObj.reportStatus == "作废成功"
           ) {
@@ -240,7 +239,6 @@ export default {
         ) {
           if (
             this.reportObj.reportStatus == "未申报" ||
-            this.reportObj.reportStatus == "申报成功" ||
             this.reportObj.reportStatus == "申报失败" ||
             this.reportObj.reportStatus == "作废成功"
           ) {
@@ -413,8 +411,7 @@ export default {
             if(type==='update'){
               this.$message.success('更新申报数据成功');
             }
-            this.getTaxSubjectInfoList();
-
+            this.getList(true);
           }
         });
     },
@@ -482,7 +479,7 @@ export default {
                         "申请表已发送申报，请在申请表中获取反馈",
                       type: "success"
                     });
-                    this.getTaxSubjectInfoList();
+                    this.getList(true);
                   }
                 });
               break;
@@ -500,7 +497,7 @@ export default {
                       message: "当前" + this.selectDate + "申请表已作废成功",
                       type: "success"
                     });
-                    this.getTaxSubjectInfoList();
+                    this.getList(true);
                   }
                 });
               break;
@@ -516,7 +513,7 @@ export default {
                       type: "success"
                     });
                     this.isShowPassword = false;
-                    this.getTaxSubjectInfoList();
+                    this.getList(true);
                   }
                 });
               break;
@@ -616,7 +613,7 @@ export default {
             ];
             this.total = res.data.count;
             this.list = res.data.data;
-            if (this.list.length == 0) {
+            if (this.list.length == 0 && flag) {
               this.$message({
                 message: "暂无申报数据",
                 type: "warning"
