@@ -1,8 +1,7 @@
-// import 'babel-polyfill' // https://babeljs.io/docs/plugins/preset-env/#usebuiltins
 import 'assets/scss/base.scss'
-import 'assets/scss/el-cover.scss'
 import 'assets/scss/element-variables.scss'
-
+import 'assets/font/iconfont.css';
+import 'assets/scss/el-cover.scss'
 import Vue from 'vue'
 
 import ElementUI from 'element-ui'
@@ -19,8 +18,15 @@ import 'directives'
 
 import store from './store'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
+//存储本地token
+if(location.href.includes('?')){
+  if(location.href.split('?')[1].split('=')[0] === "token"){
+    let token =location.href.includes('?')? location.href.split('?')[1].split('=')[1]:"";
+    store.commit("SET_TOKEN",token);
+  }
+}
 
 
 // fetchGetConfig().then(res=> {

@@ -1,63 +1,58 @@
 <template>
-  <div>
-    <full-screen>
-      <div slot="fs-container">
-        <div slot="content" class="home">
-          <div class="display-flex">
-            <div style="width: 175px;height: 94vh;margin-right:10px;background-color: #fff;" v-if="showAside">
-              <el-menu
-                style="border:none;"
-                default-active="/home"
-                class="el-menu-vertical-demo"
-                @select='handleSelect'
-              >
-                <el-submenu index="1">
-                  <template slot="title">
-                    <i class="el-icon-location"></i>
-                    <span>一级菜单</span>
-                  </template>
-                  <el-menu-item index="/home">二级菜单</el-menu-item>
-                  <el-menu-item index="/xxx">二级菜单</el-menu-item>
-                </el-submenu>
-              </el-menu>
-            </div>
-            <div class="flex1">
-               <router-view></router-view>
-            </div>
-          </div>
+  <div class="app-page">
+    <div class="app-page">
+      <div class="header" v-if="isShowApp">
+        <top-header></top-header>
+      </div>
+      <div class="display-flex">
+        <div class="side-nav flex1" v-if="isShowApp">
+          <side-nav></side-nav>
+        </div>
+        <div class="flex1 div-content" :class="{'no-margin':!isShowApp}">
+          <router-view></router-view>
         </div>
       </div>
-    </full-screen>
-
+    </div>
   </div>
 </template>
-
 <script>
-import fullScreen from '../src/components/full-screen'
-import {hideNavList} from '@/assets/js/utils/constData'
-
+import topHeader from "@/components/basic/Header";
+import sideNav from "@/components/basic/SideNav";
+import { mapState } from "vuex";
+import * as AT from "@/store/actionTypes";
 export default {
-  data(){
-    return{
-      currentCom:''
-    }
-  },
   components: {
-    fullScreen
+    topHeader,
+    sideNav
   },
-  computed:{
-    showAside(){
-      return(
-        !hideNavList.includes(this.$route.name)
-      );
-    }
+  created() {
+    this.$store.commit(AT.SHOWAPP, true); //如用户手动改变路由， 需将full-screeen关闭
   },
-  mounted() {
-  },
-  methods:{
-    handleSelect(key,keyPath){
-      this.$router.push(key);
-    }
+  computed: {
+    ...mapState({
+      isShowApp: state => state.isShowApp
+    })
   }
 };
 </script>
+<style lang="scss" scoped>
+.app-page {
+  .div-content {
+    background: #fff;
+    margin-left: 17px;
+    margin-right: 24px;
+    border-radius: 7px;
+  }
+  .no-margin {
+    margin: 0;
+  }
+}
+.side-nav {
+  width: 223px;
+  flex-grow: 0;
+  background: #4a535e;
+  box-shadow: 0 0 56px 0 #f1f1f1;
+}
+</style>
+
+
