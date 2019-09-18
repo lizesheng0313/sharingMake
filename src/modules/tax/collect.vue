@@ -383,7 +383,8 @@ export default {
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
       screening: SCR,
-      closeModel: false
+      closeModel: false,
+      isSave:this.$route.query.isSave
     };
   },
   mounted() {
