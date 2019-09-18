@@ -464,7 +464,6 @@ export default {
           this.taxSubjectInfolist = res.data;
           this.ruleForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
           this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
-          console.log(this.currentTaxSubName);
           this.getList();
         }
       });

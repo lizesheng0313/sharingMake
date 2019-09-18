@@ -266,10 +266,10 @@ export default {
             .then(res => {
               this.submitLoading = false;
               this.updateDisabled = false;
-              if (res.status === 200) {
+              if (res.success) {
                 this.isShowUpdate = false;
+                this.$message.success("更新累计值成功");
                 this.getList();
-                this.getTaxSubjectInfoList();
               }
             });
         }
