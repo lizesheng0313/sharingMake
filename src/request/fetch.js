@@ -53,7 +53,7 @@ export function fetch(options) {
           case "local":
             originHref='http://localhost:8081/main.html#/';
             break;
-        };
+        }
         //未认证跳回登陆
         if(data.code === "802"){
           window.open(originHref+'login', "_self")
