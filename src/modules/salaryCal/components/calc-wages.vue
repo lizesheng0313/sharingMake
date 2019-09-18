@@ -438,7 +438,7 @@ export default {
     changeEmployType(val){
       if(val.length>0){
         this.noEnumEmpType = "";
-        this.salaryForm.queryFilterParam.enumEmpType= val;
+        this.salaryForm.queryFilterParam.enumEmpTypes = val;
       }else{
         this.noEnumEmpType = null;
         this.salaryForm.queryFilterParam.enumEmpTyps = [null];
