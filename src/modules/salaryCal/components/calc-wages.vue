@@ -163,7 +163,7 @@
         </div>
         <div class="shortCon">
           <el-form-item label="部门" label-width="38%">
-            <el-input v-model="salaryForm.queryFilterParam.departmentName"></el-input>
+            <el-input v-model="salaryForm.queryFilterParam.departName"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
@@ -301,14 +301,14 @@ export default {
         pageSize:20,
         queryFilterParam:{
           taxSubId:"",
-          departmentName:"",//部门
+          departName:"",//部门
           jobTitle:"",//岗位
           workAddress:"",//工作地点
           enterStartTime:"",
           enterEndTime:"",
           lastEmployStartTime:"",
           lastEmployEndTime:"",
-          enumEmpType:[],//用工类型
+          enumEmpTypes:[],//用工类型
         },
       },
       enumEmpType:[],//用工类型
@@ -441,7 +441,7 @@ export default {
         this.salaryForm.queryFilterParam.enumEmpType= val;
       }else{
         this.noEnumEmpType = null;
-        this.salaryForm.queryFilterParam.enumEmpTyp = [null];
+        this.salaryForm.queryFilterParam.enumEmpTyps = [null];
       }
     },
     //不限制用工类型
@@ -606,7 +606,7 @@ export default {
       this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
       this.noEnumEmpType = null;
       this.enumEmpType = [];
-      this.salaryForm.queryFilterParam.enumEmpType = ["null"];
+      this.salaryForm.queryFilterParam.enumEmpTypes = ["null"];
     },
     //导出工资表明细  dalog 显示
     exportSalaryDetail(type){
