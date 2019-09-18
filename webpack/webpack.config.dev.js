@@ -57,7 +57,8 @@ const config = Object.assign(webpackConfigBase.config, {
       //   changeOrigin: true
       // }
     },
-    host: getIP(),
+    // host: getIP(),
+    host: "0.0.0.0",
     disableHostCheck: true, // 为了手机可以访问
     publicPath: '/',
     // contentBase: webpackConfigBase.resolve('dev'), // 本地服务器所加载的页面所在的目录
