@@ -270,6 +270,7 @@ export default {
                 this.isShowUpdate = false;
                 this.$message.success("更新累计值成功");
                 this.getList();
+                this.getTaxSubjectInfoList();
               }
             });
         }
