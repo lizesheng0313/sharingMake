@@ -386,25 +386,7 @@ export default {
   methods: {
     loading(){
       this.tableLoading = true;
-      console.log()
-      apiSalaryList({
-          checkId:this.$route.query.id,
-          key:this.salaryForm.key,
-          currPage:this.salaryForm.currPage,
-          pageSize:this.salaryForm.pageSize,
-          queryFilterParam:{
-            taxSubId:this.salaryForm.queryFilterParam.taxSubId,
-            departName:this.salaryForm.queryFilterParam.departName,//部门
-            jobTitle:this.salaryForm.queryFilterParam.jobTitle,//岗位
-            workAddress:this.salaryForm.queryFilterParam.workAddress,//工作地点
-            enterStartTime:this.salaryForm.queryFilterParam.enterStartTime,
-            enterEndTime:this.salaryForm.queryFilterParam.enterEndTime,
-            lastEmployStartTime:this.salaryForm.queryFilterParam.lastEmployStartTime,
-            lastEmployEndTime:this.salaryForm.queryFilterParam.lastEmployEndTime,
-            enumEmpTypes:this.salaryForm.queryFilterParam.enumEmpTypes[0] == null?[]:this.salaryForm.queryFilterParam.enumEmpTypes,//用工类型
-        }
-      }
-      ).then(res=>{
+      apiSalaryList(this.salaryForm).then(res=>{
        if(res.code === "0000"){
          let salaryData = res.data;
          this.count = salaryData.count;
@@ -454,8 +436,6 @@ export default {
     },
     //选择用工类型
     changeEmployType(val){
-      console.log(this.salaryForm.queryFilterParam.enumEmpTypes)
-      console.log("val",val)
       if(val.length>0){
         this.noEnumEmpType = "";
         this.salaryForm.queryFilterParam.enumEmpTypes = val;
@@ -468,7 +448,7 @@ export default {
     changeNoEmployType(val){
       this.noEnumEmpType = null;
       this.enumEmpType = [];
-      this.salaryForm.queryFilterParam.enumEmpTypes=[null];
+      this.salaryForm.queryFilterParam.enumEmpTypes=[];
     },
     //获取工资表配置中启动的信息项
     getSalaryItem(){
@@ -626,7 +606,7 @@ export default {
       this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
       this.noEnumEmpType = null;
       this.enumEmpType = [];
-      this.salaryForm.queryFilterParam.enumEmpTypes = [null];
+      this.salaryForm.queryFilterParam.enumEmpTypes = [];
     },
     //导出工资表明细  dalog 显示
     exportSalaryDetail(type){
