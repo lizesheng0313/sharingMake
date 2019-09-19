@@ -606,7 +606,7 @@ export default {
       this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
       this.noEnumEmpType = null;
       this.enumEmpType = [];
-      this.salaryForm.queryFilterParam.enumEmpTypes = ["null"];
+      this.salaryForm.queryFilterParam.enumEmpTypes = [null];
     },
     //导出工资表明细  dalog 显示
     exportSalaryDetail(type){
