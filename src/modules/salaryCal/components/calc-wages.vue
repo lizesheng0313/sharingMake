@@ -208,7 +208,7 @@
         </el-form-item>
         <el-form-item label="员工类型" label-width="22%">
           <el-radio-group v-model="noEnumEmpType" size="small" @change="changeNoEmployType">
-            <el-radio-button  label="null">不限</el-radio-button>
+            <el-radio-button  label=null>不限</el-radio-button>
           </el-radio-group>
           <el-checkbox-group v-model="enumEmpType" size="small" @change="changeEmployType">
             <el-checkbox-button  v-for="(item,index) in screenOption" :label="item.value" :key="item.index">{{item.label}}</el-checkbox-button>
@@ -441,14 +441,14 @@ export default {
         this.salaryForm.queryFilterParam.enumEmpTypes = val;
       }else{
         this.noEnumEmpType = null;
-        this.salaryForm.queryFilterParam.enumEmpTyps = [null];
+        this.salaryForm.queryFilterParam.enumEmpTypes = [];
       }
     },
     //不限制用工类型
     changeNoEmployType(val){
       this.noEnumEmpType = null;
-      this.enumEmpType = "";
-      this.salaryForm.queryFilterParam.enumEmpType=[null];
+      this.enumEmpType = [];
+      this.salaryForm.queryFilterParam.enumEmpTypes=[];
     },
     //获取工资表配置中启动的信息项
     getSalaryItem(){
@@ -606,7 +606,7 @@ export default {
       this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
       this.noEnumEmpType = null;
       this.enumEmpType = [];
-      this.salaryForm.queryFilterParam.enumEmpTypes = [null];
+      this.salaryForm.queryFilterParam.enumEmpTypes = [];
     },
     //导出工资表明细  dalog 显示
     exportSalaryDetail(type){
