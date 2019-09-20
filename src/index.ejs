@@ -13,7 +13,10 @@
   <div id="app"></div>
   <script>
     //todo initStore赋值 第三方对接、注入脚本、前期验证（登录、权限等）
-    window.__CURRENT_ENV__ = location.hostname.includes('test') ?'dev':'prod';
+    if(location.hostname.includes('xst.olading.com')){window.__CURRENT_ENV__ = "prod"}
+    if(location.hostname.includes('xsttest.olading.com')){window.__CURRENT_ENV__ = "stage"}
+    if(location.hostname.includes('172.19.60.38')){window.__CURRENT_ENV__ = "dev"}
+    if(location.hostname.includes('localhost')){window.__CURRENT_ENV__ = "local"}
   </script>
 </body>
 </html>

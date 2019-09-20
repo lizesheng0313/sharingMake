@@ -18,8 +18,23 @@
   import { mapState } from "vuex";
 export default {
   data() {
+    let originHref = "";
+    switch (window.__CURRENT_ENV__) {
+      case "prod":
+        originHref='https://www.olading.com/main.html#/';
+        break;
+      case "stage":
+        originHref='https://stage.olading.com/main.html#/';
+        break;
+      case "dev":
+        originHref='http://172.19.60.38/main.html#/';
+        break;
+      case "local":
+        originHref='http://localhost:8081/main.html#/';
+        break;
+    }
     return {
-      originUrl:window.__CURRENT_ENV__ === "prod" ? 'https://www.olading.com/main.html#/':'https://stage.olading.com/main.html#/',//跳转路径
+      originUrl:originHref,//跳转路径
     };
   },
   computed:mapState({

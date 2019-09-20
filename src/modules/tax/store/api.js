@@ -72,7 +72,7 @@ export function apiOtherTotalExport(exportForm) {
 
 //专项附加扣除-更新累计值
 export function apiDownloadOtherTotal(exportForm) {
-  return fetchFile({
+  return fetch({
     url: '/api/taxReport/downloadOtherTotal',
     method: 'post',
     data: exportForm
@@ -136,7 +136,7 @@ export function apiCheckReportData(reportForm) {
 
 /*综合所得-申报表导出*/
 export function apiSubTaxReportExport(reportForm) {
-  return fetchFile({
+  return fetch({
     url: '/api/taxReport/subTaxReportExport',
     method: 'get',
     params: reportForm
