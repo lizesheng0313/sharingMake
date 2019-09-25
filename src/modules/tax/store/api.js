@@ -136,7 +136,7 @@ export function apiCheckReportData(reportForm) {
 
 /*综合所得-申报表导出*/
 export function apiSubTaxReportExport(reportForm) {
-  return fetch({
+  return fetchFile({
     url: '/api/taxReport/subTaxReportExport',
     method: 'get',
     params: reportForm
