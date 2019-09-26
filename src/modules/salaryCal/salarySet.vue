@@ -92,7 +92,8 @@
           </div>
 <!--        </el-tab-pane>-->
 <!--        <el-tab-pane label="薪资项目" name="secend" :disabled="salaryItemDisabled" v-loading="salaryItemLoding">-->
-            <div v-for="(items,indexs) in tableData" :key="indexs" v-loading="salaryItemLoding" v-if="active === 2" class="salary-item">
+          <div class="salary-item">
+               <div v-for="(items,indexs) in tableData" :key="indexs" v-loading="salaryItemLoding" v-if="active === 2">
             <div class="person-info">
               <span class="title">{{items[0]['group']}}</span>
               <span class="person-info-fun" @click="salaryItemDetailShow(items[0]['group'],false)">
@@ -118,6 +119,7 @@
                 </el-col>
               </el-row>
             </draggable>
+          </div>
           </div>
 <!--        </el-tab-pane>-->
 <!--      </el-tabs>-->
