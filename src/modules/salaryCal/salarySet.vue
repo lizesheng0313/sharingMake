@@ -92,7 +92,7 @@
           </div>
 <!--        </el-tab-pane>-->
 <!--        <el-tab-pane label="薪资项目" name="secend" :disabled="salaryItemDisabled" v-loading="salaryItemLoding">-->
-            <div v-for="(items,indexs) in tableData" :key="indexs" v-loading="salaryItemLoding" v-if="active === 2">
+            <div v-for="(items,indexs) in tableData" :key="indexs" v-loading="salaryItemLoding" v-if="active === 2" class="salary-item">
             <div class="person-info">
               <span class="title">{{items[0]['group']}}</span>
               <span class="person-info-fun" @click="salaryItemDetailShow(items[0]['group'],false)">
@@ -264,6 +264,7 @@ export default {
       tableData:[],
       salaryItemLoding:false,
       isEdit: this.$route.query.isEdit,
+      isSet:this.$route.query.isSet,
       closeModel:false,
       active:1,
     };
@@ -290,11 +291,11 @@ export default {
     if(this.rouleId){ this.ruleId = this.rouleId; this.salaryItemDisabled = false; }
     //编辑工资表
     if(this.isEdit && this.sendBasicInfoForm){
-      for(let key in this.basicInfoForm){
-        this.basicInfoForm[key] = this.sendBasicInfoForm[key];
-      }
-      // this.active = 1;
-      this.onTabClick()
+        for(let key in this.basicInfoForm){
+          this.basicInfoForm[key] = this.sendBasicInfoForm[key];
+        }
+       this.active = 2;
+       this.onTabClick()
     }
   },
   methods:{
@@ -350,7 +351,7 @@ export default {
                 this.$store.commit("salaryCalStore/SET_ROULEID", res.data.id);
                 this.salaryItemDisabled = false;
                 this.$store.commit("salaryCalStore/SET_BASICINFOFORM",this.basicInfoForm);
-                this.$message.success('设置成功');
+                // this.$message.success('设置成功');
                 //基本信息成功跳转到第二步
                 this.active = 2;
                 this.onTabClick()
@@ -449,11 +450,15 @@ export default {
   }
   .weekend-style{
     display: inline-block;
-    padding:0 10px;
+    padding:0 14px;
   }
   .select-style{
     display: inline-block;
-    width:38%;
+    width:116px;
+    text-align: center;
+  }
+  .salary-item{
+    padding-bottom: 64px;
   }
   .header {
     padding:0 20px;
@@ -484,11 +489,11 @@ export default {
     }
     .taxRule{
       .el-select{
-        width: 526px;
+        width: 490px;
       }
     }
     .question{display:inline-block;margin:0px 4px;color:#DBDBDB;font-size: 18px;cursor: pointer;background: #fff;}
-    .buttonCon{text-align: center; position:relative; bottom:-10px;width:100%;background: #fff; padding-bottom: 10px;}
+    .buttonCon{text-align: center; position:fixed; bottom:0px;left:240px;width:82%;background: #fff; padding: 20px 0px;}
   }
   .person-info{
     height: 40px;
