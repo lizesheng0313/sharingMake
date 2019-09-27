@@ -40,12 +40,12 @@
       </div>
     </div>
     <div class="staff-table">
-      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle"  width="100%" v-loading="tableLoading">
+      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle"  width="100%" v-loading="tableLoading"  border>
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
-          :min-width="col.col === '序号' || col.col === '工号' || col.col === '姓名'?'80px':'140px'"
+          :min-width="setMinWidth(col.col)"
           :show-overflow-tooltip="col.col === '部门' || col.col === '岗位' || col.col === '工号' || col.col === '姓名'"
-          :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="col.col == '序号' || col.col == '姓名' || col.col == '工号' || col.col == '部门'">
+          :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="[0,1,2,3].includes(index)">
           <template slot-scope="scope">
             <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>
 <!--            <span v-else> <el-switch v-model="showCount"></el-switch> </span>-->
@@ -421,6 +421,11 @@ export default {
       })
       //查看工资表状态
      this.getSalaryStatus()
+    },
+    setMinWidth(value){
+      if(['序号','工号','姓名'].includes(value)){ return '80px'}
+      else if(value === "身份证号"){ return '170px' }
+      else {return '100px'}
     },
     //查看工资表状态
     getSalaryStatus(){

@@ -10,10 +10,22 @@
       </el-row>
     </header>
     <div class="salarySet_con">
-      <el-tabs type="border-card" v-model="activeName" @tab-click="onTabClick">
-        <el-tab-pane label="基本信息" name="first">
-          <div class="basicInfo-con">
-            <el-form :model="basicInfoForm" :rules="basicInfoRule" ref="basicInfoForm" label-width="140px" class="demo-ruleForm">
+      <el-steps :active="active"  class="step-style"  align-center>
+        <el-step title="开始"  icon="el-icon-caret-right"></el-step>
+        <el-step title="① 基本信息"  icon="el-icon-edit"></el-step>
+        <el-step title="② 薪资项目"  icon="el-icon-edit-outline"
+        ></el-step>
+        <el-step title="完成"  icon="el-icon-circle-check"></el-step>
+      </el-steps>
+<!--      <el-steps :active="1">-->
+<!--        <el-step title="步骤 1" icon="el-icon-edit"></el-step>-->
+<!--        <el-step title="步骤 2" icon="el-icon-upload"></el-step>-->
+<!--        <el-step title="步骤 3" icon="el-icon-picture"></el-step>-->
+<!--      </el-steps>-->
+<!--      <el-tabs type="border-card" v-model="activeName" @tab-click="onTabClick">-->
+<!--        <el-tab-pane label="基本信息" name="first">-->
+          <div class="basicInfo-con" v-if="active == 1">
+            <el-form :model="basicInfoForm" :rules="basicInfoRule" ref="basicInfoForm" label-width="220px" class="demo-ruleForm">
               <el-form-item label="工资表名称" prop="name">
                 <el-input v-model="basicInfoForm.name"></el-input>
               </el-form-item>
@@ -27,39 +39,39 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="算薪周期">
-                 <el-select v-model="basicInfoForm.startMonth" placeholder="请选择" @change="selectMonth">
+                <span class="select-style"><el-select v-model="basicInfoForm.startMonth" placeholder="请选择" @change="selectMonth">
                    <el-option v-for="item in startDayOptions"
-                     :key="item.value"
-                     :label="item.label"
-                     :value="item.value">
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
                    </el-option>
-                 </el-select>
-                 <el-select v-model="basicInfoForm.startDay" @change="selectDay">
+                 </el-select></span>
+                <span class="select-style"> <el-select v-model="basicInfoForm.startDay" @change="selectDay">
                   <el-option
                     v-for="item in days"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value">
                   </el-option>
-                </el-select>
-                <span>至{{this.endTime}}</span>
+                </el-select></span>
+                <span> <span class="weekend-style">至</span> {{this.endTime}}</span>
               </el-form-item>
               <el-form-item label="发薪日期" prop="">
-                <el-select v-model="basicInfoForm.payMonth" placeholder="请选择">
+                <span class="select-style"><el-select v-model="basicInfoForm.payMonth" placeholder="请选择">
                   <el-option v-for="item in payMonthOptions"
                              :key="item.value"
                              :label="item.label"
                              :value="item.value">
                   </el-option>
-                </el-select>
-                <el-select v-model="basicInfoForm.payDay">
+                </el-select></span>
+                <span class="select-style"><el-select v-model="basicInfoForm.payDay">
                   <el-option
                     v-for="item in payDay"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value">
                   </el-option>
-                </el-select>
+                </el-select></span>
               </el-form-item>
               <el-form-item label="启动单月多次算发薪">
                 <el-switch
@@ -76,12 +88,12 @@
                     <img src="../../assets/images/salaryTable.png" width="500px">
                 </el-popover>
               </el-form-item>
-              <div class="buttonCon"><el-button type="primary" :disabled="saveSalaryDisabled" @click="SaveSalaryRule">保存设置</el-button></div>
             </el-form>
           </div>
-        </el-tab-pane>
-        <el-tab-pane label="薪资项目" name="secend" :disabled="salaryItemDisabled" v-loading="salaryItemLoding">
-          <div v-for="(items,indexs) in tableData" :key="indexs">
+<!--        </el-tab-pane>-->
+<!--        <el-tab-pane label="薪资项目" name="secend" :disabled="salaryItemDisabled" v-loading="salaryItemLoding">-->
+          <div class="salary-item">
+               <div v-for="(items,indexs) in tableData" :key="indexs" v-loading="salaryItemLoding" v-if="active === 2">
             <div class="person-info">
               <span class="title">{{items[0]['group']}}</span>
               <span class="person-info-fun" @click="salaryItemDetailShow(items[0]['group'],false)">
@@ -108,8 +120,11 @@
               </el-row>
             </draggable>
           </div>
-        </el-tab-pane>
-      </el-tabs>
+          </div>
+<!--        </el-tab-pane>-->
+<!--      </el-tabs>-->
+      <div class="buttonCon" v-if="active === 1"><el-button @click="$router.back(-1)" size="large">取消</el-button><el-button type="primary"  @click="SaveSalaryRule">下一步</el-button></div>
+      <div class="buttonCon" v-if="active === 2"><el-button @click="active = 1" size="large">上一步</el-button><el-button type="primary"  @click="$router.back(-1)">完成</el-button></div>
     </div>
 <!--人员信息-->
     <el-dialog
@@ -209,7 +224,6 @@ export default {
       days:[],
       payDay:[],
       endTime:"",
-      activeName:"first",
       salaryItemDetailVisible:false,
       salaryItemDetailForm:{//工资项编辑
         name:"",
@@ -252,8 +266,9 @@ export default {
       tableData:[],
       salaryItemLoding:false,
       isEdit: this.$route.query.isEdit,
-      saveSalaryDisabled:false,
-      closeModel:false
+      isSet:this.$route.query.isSet,
+      closeModel:false,
+      active:1,
     };
   },
   components: {
@@ -278,11 +293,11 @@ export default {
     if(this.rouleId){ this.ruleId = this.rouleId; this.salaryItemDisabled = false; }
     //编辑工资表
     if(this.isEdit && this.sendBasicInfoForm){
-      for(let key in this.basicInfoForm){
-        this.basicInfoForm[key] = this.sendBasicInfoForm[key];
-      }
-      this.activeName = "secend";
-      this.onTabClick()
+        for(let key in this.basicInfoForm){
+          this.basicInfoForm[key] = this.sendBasicInfoForm[key];
+        }
+       this.active = 2;
+       this.onTabClick()
     }
   },
   methods:{
@@ -331,18 +346,16 @@ export default {
         if(valid){
           this.basicInfoForm.name = this.basicInfoForm.name.trim();
           this.basicInfoForm.id =  this.isEdit ? this.sendBasicInfoForm.id:null;
-          this.saveSalaryDisabled = true;
           apiSaveSalaryRule(this.basicInfoForm)
             .then(res=>{
-              this.saveSalaryDisabled = false;
               if(res.code == "0000"){
                 this.ruleId = res.data.id;
                 this.$store.commit("salaryCalStore/SET_ROULEID", res.data.id);
                 this.salaryItemDisabled = false;
                 this.$store.commit("salaryCalStore/SET_BASICINFOFORM",this.basicInfoForm);
-                this.$message.success('设置成功');
+                // this.$message.success('设置成功');
                 //基本信息成功跳转到第二步
-                // this.activeName = "secend";
+                this.active = 2;
                 this.onTabClick()
               }
             })
@@ -351,7 +364,7 @@ export default {
     },
     //切换薪资项目Tab
     onTabClick(){
-     if(this.activeName === "secend"){
+     if(this.active === 2){
        this.getSalaryItem(this.ruleId)
      }
     },
@@ -433,6 +446,22 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
 .salarySet-page {
+  .step-style{
+    width:100%;
+    margin: 30px auto;
+  }
+  .weekend-style{
+    display: inline-block;
+    padding:0 14px;
+  }
+  .select-style{
+    display: inline-block;
+    width:116px;
+    text-align: center;
+  }
+  .salary-item{
+    padding-bottom: 64px;
+  }
   .header {
     padding:0 20px;
     font-size: 14px;
@@ -456,17 +485,17 @@ export default {
     padding:0 10px;
   }
   .salarySet_con{
-    padding:30px;
+    padding:10px 30px;
     .basicInfo-con{
-      width: 666px;
+      width: 706px;
     }
     .taxRule{
       .el-select{
-        width: 526px;
+        width: 490px;
       }
     }
-    .question{display:inline-block;margin:0px 4px;color:#DBDBDB;font-size: 18px;cursor: pointer;}
-    .buttonCon{text-align: center;}
+    .question{display:inline-block;margin:0px 4px;color:#DBDBDB;font-size: 18px;cursor: pointer;background: #fff;}
+    .buttonCon{text-align: center; position:fixed; bottom:0px;left:240px;width:82%;background: #fff; padding: 20px 0px;}
   }
   .person-info{
     height: 40px;

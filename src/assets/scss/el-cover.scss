@@ -206,12 +206,10 @@
 .search-input .el-input__icon{
    line-height:34px;
 }
-
 .cumulative .el-select{
   margin-right:20px;
   width:100px;
 }
-
 .collect{
   .search-input{
     .el-input__inner{
@@ -227,5 +225,14 @@
 .el-month-table td.today .cell {
   color:#606266;
   font-weight: normal;
+}
 
+.salarySet-page{
+  .el-step__head.is-finish{
+    color: #303133 !important;
+    border-color: #303133 !important;
+  }
+  .el-step__title.is-finish{
+    color: #303133 !important;
+  }
 }
