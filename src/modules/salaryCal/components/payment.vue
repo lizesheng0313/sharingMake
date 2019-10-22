@@ -93,11 +93,12 @@ export default {
     changeSatus(data){
      this.popShow.isshow = data;
     },
+    //发放薪资
     sendSalary(){
       apiProvideStubs(this.checkId).then(res=>{
         if(res.code === "0000"){
-          this.$emit("changeActive",4);
-          this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:3,salaryRuleId:this.$route.query.salaryRuleId}})
+          this.$emit("changeActive",6);
+          this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:6,salaryRuleId:this.$route.query.salaryRuleId}})
         }else{
           this.$message.error(res.message)
         }
@@ -105,8 +106,8 @@ export default {
     },
     //查看记录
     seeRecord(){
-      this.$emit("changeActive",4)
-      this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:4,salaryRuleId:this.$route.query.salaryRuleId}})
+      this.$emit("changeActive",6)
+      this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:6,salaryRuleId:this.$route.query.salaryRuleId}})
     },
     //删除发放
     deleteSalary(){

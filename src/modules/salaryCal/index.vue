@@ -197,7 +197,7 @@ export default {
       }).then(res=>{
         if(res.code == "0000"){
           this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
-          this.$router.push({path:"/salaryCheck",query:{id:res.data.checkId,active:1,salaryRuleId:item.salaryRuleId}})
+          this.$router.push({path:"/salaryCheck",query:{id:res.data.checkId,active:0,salaryRuleId:item.salaryRuleId}})
         }else{
           this.$message.error(res.message);
         }
@@ -207,13 +207,13 @@ export default {
     calcSalary(item){
       this.$store.commit("salaryCalStore/SET_BASICINFOFORM",item.salaryRule);
       this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
-      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:2,salaryRuleId:item.salaryRuleId}});
+      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:0,salaryRuleId:item.salaryRuleId}});
     },
     //查看信息
     seeCalcSalary(item){
       this.$store.commit("salaryCalStore/SET_BASICINFOFORM",item.salaryRule);
       this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
-      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:2,salaryRuleId:item.salaryRuleId}})
+      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:4,salaryRuleId:item.salaryRuleId}})
     },
     //切换查看第几次发薪
     changePayth(index,status){
