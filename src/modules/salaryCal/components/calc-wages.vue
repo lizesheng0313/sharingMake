@@ -25,7 +25,7 @@
         </span>
       </div>
       <div class="right calc-table_menu">
-        <span @click="showImport('social')">社会公积金导入</span>
+<!--        <span @click="showImport('social')">社会公积金导入</span>-->
         <span class="have-border_right" @click="showImport('floatItem')">浮动项导入</span>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
@@ -252,7 +252,7 @@
   </div>
 </template>
 <script>
-  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
+  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,apiSocialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
 export default {
   data() {
     return {
@@ -563,7 +563,7 @@ export default {
     },
     // 导出通过数据
     uploadFile(){
-      let methods = this.importT == "social"?socialProvident:floatItem;
+      let methods = this.importT == "social"?apiSocialProvident:floatItem;
         methods({
         uuid:this.uuid,
         id:this.salaryForm.checkId,

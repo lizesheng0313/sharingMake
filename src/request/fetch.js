@@ -74,6 +74,7 @@ export function fetchFile(options) {
     instance(options).then(response => {
       let resData = response.data;
       resolve(response);
+      console.log(resData)
       let data = response.data;
       let url = window.URL.createObjectURL(data);
       let a = document.createElement('a');

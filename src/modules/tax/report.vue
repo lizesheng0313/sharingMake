@@ -8,8 +8,7 @@
       </el-row>
     </header>
     <div class="tax-content">
-      <div class="content-header head-date">
-        <i class="el-icon-arrow-left"></i>
+      <div class="content-header head-date" style="display: inline-block">
         <span>{{selectDate}}</span>
         <el-date-picker
           v-model="selectDate"
@@ -19,7 +18,18 @@
           :editable="false"
           :clearable="false"
         ></el-date-picker>
-        <i class="el-icon-arrow-right"></i>
+      </div>
+      <div class="right declare-buttton-groups" style="float: right">
+        <el-button type="primary" v-if="showGenerate" @click="handleGenerateData('creat')">生成申报数据</el-button>
+        <el-button type="primary" v-if="showUpdate" @click="handleGenerateData('update')">更新申报数据</el-button>
+        <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
+        <el-button
+          type="primary"
+          @click="handleSendReport"
+          v-if="showButton(['未申报','申报失败','作废成功'])"
+        >发送申报</el-button>
+        <el-button type="primary" v-if="showButton(['申报处理中'])" @click="handleGetFeedback">获取反馈</el-button>
+        <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>
       </div>
       <!--      <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>-->
       <div class="screening">
@@ -48,18 +58,6 @@
               申报状态：
               <i>{{reportObj.reportStatus|| '-'}}</i>
             </span>
-          </div>
-          <div class="right declare-buttton-groups">
-            <el-button type="primary" v-if="showGenerate" @click="handleGenerateData('creat')">生成申报数据</el-button>
-            <el-button type="primary" v-if="showUpdate" @click="handleGenerateData('update')">更新申报数据</el-button>
-            <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
-            <el-button
-              type="primary"
-              @click="handleSendReport"
-              v-if="showButton(['未申报','申报失败','作废成功'])"
-            >发送申报</el-button>
-            <el-button type="primary" v-if="showButton(['申报处理中'])" @click="handleGetFeedback">获取反馈</el-button>
-            <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>
           </div>
         </div>
         <div class="staff-table">

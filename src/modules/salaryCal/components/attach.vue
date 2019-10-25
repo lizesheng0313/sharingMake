@@ -27,7 +27,7 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
-            <el-button type="warning" plain class="export-button" @click="handleExport">导出</el-button>
+            <el-button type="warning" plain class="export-button" @click="handleExport">全部下载</el-button>
           </div>
         </div>
         <div class="staff-table">
@@ -64,6 +64,19 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      title=""
+      :visible.sync="isShowDownLoadTip"
+      width="500px"
+      center
+      class="diy-el_dialog"
+    >
+      <div class="downdloadTip"><i class="el-icon-success"></i> <span> 提示</span></div>
+      <div class="noDownLoad">申报密码错误，对应人员专项附加扣除未下载</div>
+      <div class="dialog-footer-right">
+        <el-button type="primary" @click="isShowDownLoadTip=false">我知道了</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -88,6 +101,7 @@ export default {
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
       total: 0,
+      isShowDownLoadTip:true,
     };
   },
   mounted() {
@@ -101,10 +115,13 @@ export default {
   },
   methods: {
     handleExport() {
-      this.$store.dispatch(
-        "taxPageStore/actionOtherTotalExport",
-        this.totalListForm
-      );
+      // this.$store.dispatch(
+      //   "taxPageStore/actionOtherTotalExport",
+      //   this.totalListForm
+      // ).then(res=>{
+      //   console.log(res)
+      // });
+      this.isShowDownLoadTip= true;
     },
     changeMonth() {
       this.getList()
@@ -276,6 +293,19 @@ export default {
     @include ellipsis;
     width: 200px;
     display: inline-block;
+  }
+  .el-icon-success{
+    color:#67C23A;
+    font-size: 18px;
+  }
+  .downdloadTip{
+    margin-bottom:20px;
+  }
+  .dialog-footer-right{
+    text-align: right !important;
+  }
+  .noDownLoad{
+    margin-left: 34px;
   }
 }
 </style>
