@@ -165,17 +165,29 @@ export function apiSalaryItemEnableInfo(id) {
   })
 }
 //公积金导入
-export function socialProvident({uuid,id,importType}) {
+export function apiSocialProvident(params) {
   return fetch({
     url: '/api/salary/socialProvident/import',
     method: 'post',
-    params: {
-      uuid:uuid,
-      checkId:id,
-      importType:importType
-    },
+    params: params
   })
 }
+
+// 公积金导入日志
+export function apiSocialProvidentRecord(data) {
+  return fetchFile({
+    url: '/api/salary/socialProvident/errorRecord/download/'+data.uuid,
+    method: 'get',
+  })
+}
+// 公积金模板下载
+export function apiSocialProvidentTemplate() {
+  return fetchFile({
+    url: '/api/salary/socialProvident/template/download',
+    method: 'get',
+  })
+}
+
 //浮动项导入
 export function floatItem({uuid,id,importType}) {
   return fetch({
@@ -289,6 +301,8 @@ export function apiMemberErrorRecord(uuid) {
     }
   })
 }
+
+
 
 
 

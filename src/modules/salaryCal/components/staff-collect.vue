@@ -29,14 +29,14 @@
               </span>
             </span>
             <div class="content-header head-date">
-              <el-date-picker
-                v-model="selectMonth"
-                @input="changeMonth"
-                type="month"
-                value-format="yyyy-MM"
-                :editable="false"
-                :clearable="false"
-              ></el-date-picker>
+<!--              <el-date-picker-->
+<!--                v-model="selectMonth"-->
+<!--                @input="changeMonth"-->
+<!--                type="month"-->
+<!--                value-format="yyyy-MM"-->
+<!--                :editable="false"-->
+<!--                :clearable="false"-->
+<!--              ></el-date-picker>-->
             </div>
           </div>
           <div class="staff-table">

@@ -42,7 +42,7 @@
           </span>
           <span v-else-if="successCount === 0">数据全部未通过校验</span>
           <span>
-            <a @click="handleDownload" v-if="failCount !== 0" classs="download">下载日志</a>
+            <a @click="handleDownload" v-if="failCount !== 0" class="download">下载日志</a>
           </span>
         </div>
         <p>
@@ -62,10 +62,10 @@
       <div class="title">
         <i class="el-icon-success"></i>导入完成
       </div>
-      <div>
+      <div class="importCount">
         导入成功
-        <span style="color:#06B806">{{importFinishForm.successCount}}</span>条数据,
-        <span style="color:red">{{importFinishForm.failCount}}</span>条数据导入未通过，忽略导入
+        <span style="color:#06B806">{{importFinishForm.successCount}}</span> 条数据,
+        <span style="color:red">{{importFinishForm.failCount}}</span> 条数据导入未通过，忽略导入
       </div>
       <div>
         <a @click="handleDownload" v-if="importFinishForm.failCount !== 0" class="download">下载日志</a>
@@ -173,6 +173,9 @@ export default {
 .import-data {
   .download {
     cursor: pointer;
+  }
+  .importCount{
+    margin:10px auto;
   }
 }
 </style>

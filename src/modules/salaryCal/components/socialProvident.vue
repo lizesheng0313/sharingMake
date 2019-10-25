@@ -1,5 +1,5 @@
 <template>
-  <div class="calc-attach el-diy-month">
+  <div class="socialProvident el-diy-month">
     <div class="tax-content">
 <!--      <div class="content-header head-date">-->
 <!--        <i class="el-icon-arrow-left"></i>-->
@@ -27,6 +27,7 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
+            <el-button type="primary" plain @click="handleImport">导入</el-button>
             <el-button type="warning" plain class="export-button" @click="handleExport">导出</el-button>
           </div>
         </div>
@@ -40,18 +41,33 @@
             v-loading="loading"
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
-            <el-table-column prop="empName" label="姓名"></el-table-column>
-            <el-table-column prop="idNo" label="身份证号"></el-table-column>
-            <el-table-column label="入职日期">
+            <el-table-column prop="empName" label="工号"></el-table-column>
+            <el-table-column prop="idNo" label="姓名"></el-table-column>
+            <el-table-column label="证件号码">
               <template slot-scope="scope">
                 <span>{{ scope.row.empDay.split(' ')[0] }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="totalChildrenEdu" label="累计子女教育"></el-table-column>
-            <el-table-column prop="totalFurtherEdu" label="累计继续教育"></el-table-column>
-            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="累计住房租金"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="累计赡养老人"></el-table-column>
+            <el-table-column prop="totalChildrenEdu" label="扣缴义务人"></el-table-column>
+            <el-table-column prop="totalFurtherEdu" label="养老个人"></el-table-column>
+            <el-table-column prop="totalHomeLoads" label="医疗个人"></el-table-column>
+            <el-table-column prop="totalHouseRent" label="失业个人"></el-table-column>
+            <el-table-column prop="totalSupportParents" label="大病医疗个人" width="100px"></el-table-column>
+            <el-table-column prop="totalHouseRent" label="社保个人合计" width="100px"></el-table-column>
+            <el-table-column prop="totalSupportParents" label="养老单位"></el-table-column>
+
+            <el-table-column prop="totalChildrenEdu" label="医疗单位"></el-table-column>
+            <el-table-column prop="totalFurtherEdu" label="事业单位"></el-table-column>
+            <el-table-column prop="totalHomeLoads" label="工伤单位"></el-table-column>
+            <el-table-column prop="totalHouseRent" label="生育单位"></el-table-column>
+            <el-table-column prop="totalSupportParents" label="大病医疗单位" width="100px"></el-table-column>
+            <el-table-column prop="totalHouseRent" label="社保单位合计" width="100px"></el-table-column>
+            <el-table-column prop="totalSupportParents" label="社保合计"></el-table-column>
+
+            <el-table-column prop="totalHouseRent" label="公积金个人"></el-table-column>
+            <el-table-column prop="totalSupportParents" label="公积金单位"></el-table-column>
+            <el-table-column prop="totalHouseRent" label="公积金合计"></el-table-column>
+            <el-table-column prop="totalSupportParents" label="残保金"></el-table-column>
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
@@ -63,18 +79,35 @@
           ></el-pagination>
         </div>
       </div>
+      <import-data
+        ref="import"
+        :radioList="radioList"
+        :title="'公积金导入'"
+        :apiCheck="'/api/salary/socialProvident/verify'"
+        :apiDownloadLog="'salaryCalStore/actionSocialProvidentRecord'"
+        :apiDownloadTemplate="'salaryCalStore/actionSocialProvidentTemplate'"
+        :parameterData="parameterData"
+        @changeRadioValue="changeRadioValue"
+        :impoartAction="'salaryCalStore/actionSocialProvident'"
+        @getLoading="refresh"
+        :uploadFileData="uploadFileData"
+        :tips="'说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资'"
+      ></import-data>
     </div>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
+import importData from "@/components/tool/importData";
 import fun from "@/util/fun"
 let date = fun.headDate();
 let defaultDate =
   date.year + "-" + (date.month >= 10 ? date.month : "0" + date.month);
 
 export default {
-  components: {},
+  components: {
+    importData,
+  },
   data() {
     return {
       loading: false,
@@ -88,6 +121,19 @@ export default {
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
       total: 0,
+      radioList: [
+          { lable: "BY_EMP_NO", title: "通过员工工号匹配人员" },
+          { lable: "BY_ID_NO", title: "通过身份证匹配人员" }
+        ],
+        parameterData: {
+          'checkId':this.$route.query.id,
+          'importType':'BY_EMP_NO'
+        },
+        uploadFileData: {
+          uuid: "",
+          checkId:this.$route.query.id,
+          importType:"BY_EMP_NO"
+        },
     };
   },
   mounted() {
@@ -105,6 +151,16 @@ export default {
         "taxPageStore/actionOtherTotalExport",
         this.totalListForm
       );
+    },
+    changeRadioValue(val) {
+      this.parameterData.importType = val;
+      this.uploadFileData.importType= val;
+    },
+    refresh(data) {
+      this.getList();
+    },
+    handleImport() {
+      this.$refs.import.show();
     },
     changeMonth() {
       this.getList()
@@ -141,8 +197,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../../assets/scss/helpers.scss";
-.calc-attach {
-  padding:0 22px;
+.socialProvident {
+  padding:0 20px;
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
