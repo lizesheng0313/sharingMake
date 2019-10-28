@@ -26,10 +26,10 @@
           v-loading="loading"
         >
           <el-table-column  label="序号" type="index"></el-table-column>
-          <el-table-column prop="name" label="扣缴义务人"></el-table-column>
+          <el-table-column prop="name" label="所得月份"></el-table-column>
           <el-table-column prop="tableName" label="申报表"></el-table-column>
-          <el-table-column prop="status" label="申报状态"></el-table-column>
-          <el-table-column prop="isThree" label="是否有三方协议"></el-table-column>
+          <el-table-column prop="status" label="征收品目"></el-table-column>
+          <el-table-column prop="isThree" label="税率"></el-table-column>
           <el-table-column prop="paidStatus" label="缴款状态" width="140"></el-table-column>
           <el-table-column prop="time" label="缴款日期" width="140"></el-table-column>
           <el-table-column label="操作" fixed="right">
@@ -72,7 +72,7 @@ export default {
     },
     //立即缴款
     handlePaid(data){
-      console.log(data)
+      this.$router.push({path:"/taxPaid/paidReport",query:{name:data}})
     },
     //缴款反馈
     handlePaidReturn(data){
@@ -99,7 +99,7 @@ export default {
     padding:22px;
   }
   .tableCon{
-    margin-top:20px;
+    margin-top:40px;
   }
 }
 </style>

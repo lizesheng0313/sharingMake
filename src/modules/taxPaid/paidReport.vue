@@ -3,25 +3,14 @@
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
-          <span>返回</span><span>三方协议缴税 缴纳税款</span>
+          <span @click="$router.go(-1)">返回 </span><span class="companyName">{{ $route.query.name }}</span>  缴纳税款</span>
         </el-col>
       </el-row>
     </header>
-    <div>
-      <span>应缴税额：2000元</span>
-      <div class="funCon"><el-button type="primary">立即缴款</el-button>  <el-button type="info">缴款反馈</el-button></div>
-    </div>
     <div class="taxPaidCon">
-      <div class="content-header head-date">
-        <el-date-picker
-          v-model="currentDate"
-          type="month"
-          suffix-icon="el-icon-date"
-          value-format="yyyy-MM"
-          :editable="false"
-          :clearable="false"
-          @change="changeDate"
-        ></el-date-picker>
+      <div>
+        <span>应缴税额：2000元</span>
+        <div class="funCon"><el-button type="primary">立即缴款</el-button>  <el-button type="info">缴款反馈</el-button></div>
       </div>
       <div class="tableCon">
         <el-table
@@ -30,18 +19,14 @@
           v-loading="loading"
         >
           <el-table-column  label="序号" type="index"></el-table-column>
-          <el-table-column prop="name" label="扣缴义务人"></el-table-column>
+          <el-table-column prop="name" label="所得月份"></el-table-column>
           <el-table-column prop="tableName" label="申报表"></el-table-column>
-          <el-table-column prop="status" label="申报状态"></el-table-column>
-          <el-table-column prop="isThree" label="是否有三方协议"></el-table-column>
-          <el-table-column prop="paidStatus" label="缴款状态" width="140"></el-table-column>
-          <el-table-column prop="time" label="缴款日期" width="140"></el-table-column>
-          <el-table-column label="操作" fixed="right">
-            <template slot-scope="scope">
-              <el-button size="primary" @click="handlePaid(scope.row.name)">立即缴款</el-button>
-              <el-button size="primary" @click="handlePaidReturn(scope.row.name)">缴款反馈</el-button>
-            </template>
-          </el-table-column>
+          <el-table-column prop="status" label="征收品目"></el-table-column>
+          <el-table-column prop="isThree" label="税率"></el-table-column>
+          <el-table-column prop="paidStatus" label="税款所属期起"></el-table-column>
+          <el-table-column prop="time" label="税款所属期止"></el-table-column>
+          <el-table-column prop="time" label="应补(退)税额"></el-table-column>
+          <el-table-column prop="time" label="缴款期限"></el-table-column>
         </el-table>
       </div>
     </div>
@@ -106,7 +91,11 @@ export default {
     padding:22px;
   }
   .tableCon{
-    margin-top:20px;
+    margin-top:40px;
+  }
+  .companyName{
+    display: inline-block;
+    padding:0 20px;
   }
 }
 </style>
