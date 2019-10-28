@@ -138,7 +138,7 @@ export default {
     }else{
       let nowDate = fun.headDate();
       let year = nowDate.year;
-      let month = nowDate.month > 10 ? nowDate.month : "0" + nowDate.month;
+      let month = nowDate.month >= 10 ? nowDate.month : "0" + nowDate.month;
       this.currentDate = year+"-"+month;
     }
     this.loading();

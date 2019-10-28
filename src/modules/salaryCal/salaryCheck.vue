@@ -20,7 +20,6 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-
       </div>
       <div slot="fs-container" class="content-st">
         <div class="step-box" v-if="active!==6">

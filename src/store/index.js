@@ -5,7 +5,7 @@ import createPersistedState from 'vuex-persistedstate'
 //各模块store
 import { salaryCalStore } from '../modules/salaryCal/store'
 import { taxPageStore } from '../modules/tax/store'
-import { cumulativePageStore } from '../modules/cumulative/store'
+import { cumulativePageStore } from '../modules/initialize/store'
 Vue.use(Vuex)
 
 import mutations from './mutations'

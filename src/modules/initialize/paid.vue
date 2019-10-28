@@ -42,11 +42,11 @@
               <el-table-column prop="remark" label="办税人员姓名"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
               <el-table-column label="操作" fixed="right">
-              <template slot-scope="scope">
-                <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
-                <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
-              </template>
-            </el-table-column>
+                <template slot-scope="scope">
+                  <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
+                  <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </div>
