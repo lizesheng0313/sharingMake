@@ -316,7 +316,7 @@ import fun from "@/util/fun";
 let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
-  date.year + "年" + (date.month > 10 ? date.month : "0" + date.month) + "月";
+  date.year + "年" + (date.month >= 10 ? date.month : "0" + date.month) + "月";
 export default {
   data() {
     return {
