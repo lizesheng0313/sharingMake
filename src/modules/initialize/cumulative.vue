@@ -27,6 +27,7 @@
           <el-button type="primary" class="check-search" @click="handleSearch">查询</el-button>
         </div>
         <div class="right">
+          <el-button type="primary" @click="handleImport" class="add-import">局端在线下载</el-button>
           <el-button type="primary" @click="handleImport" class="add-import">导入</el-button>
         </div>
       </div>

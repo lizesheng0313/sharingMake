@@ -101,7 +101,7 @@ export default {
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
       total: 0,
-      isShowDownLoadTip:true,
+      isShowDownLoadTip:false,
     };
   },
   mounted() {
