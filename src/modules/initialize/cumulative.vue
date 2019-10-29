@@ -27,9 +27,20 @@
           <el-button type="primary" class="check-search" @click="handleSearch">查询</el-button>
         </div>
         <div class="right">
-          <el-button type="primary" @click="handleImport" class="add-import">局端在线下载</el-button>
+<!--          <el-button type="primary" @click="handledDownload" class="add-import">局端在线下载</el-button>-->
           <el-button type="primary" @click="handleImport" class="add-import">导入</el-button>
         </div>
+      </div>
+      <div class="selectCon">
+        扣缴义务人：
+        <el-select v-model="ruleForm.taxSubId" placeholder="请选择" @change="selectSubject">
+          <el-option
+            v-for="item in taxSubjectInfolist"
+            :key="item.taxSubId"
+            :label="item.taxSubName"
+            :value="item.taxSubId">
+          </el-option>
+        </el-select>
       </div>
       <div class="staff-table">
         <div class="floating-menu" v-if="deleteIdsForm.ids.length>0">
@@ -117,12 +128,14 @@ export default {
         nameOrEmpNo: "",
         currPage: 1,
         pageSize: 20,
-        queryYear: year[0]
+        queryYear: year[0],
+        taxSubId:""
       },
       total: 0,
       fileList: [],
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      list: []
+      list: [],
+      taxSubjectInfolist:[]
     };
   },
   mounted() {
@@ -133,6 +146,7 @@ export default {
         that.screenWidth = window.screenWidth;
       })();
     };
+    this.getTaxSubjectInfoList();
     this.getList();
   },
   methods: {
@@ -142,6 +156,18 @@ export default {
       row.forEach(element => {
         this.deleteIdsForm.ids.push(element.id);
       });
+    },
+    //扣缴义务人集合
+    getTaxSubjectInfoList() {
+      this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
+        if (res.success) {
+          this.taxSubjectInfolist = res.data;
+          this.ruleForm.taxSubId = this.taxSubjectInfolist[0]['taxSubId'];
+        }
+      });
+    },
+    selectSubject(data){
+      this.getList()
     },
     changeRadioValue(val) {
       this.parameterData.type = val;
@@ -249,6 +275,9 @@ export default {
       top: 1px;
     }
   }
+  .selectCon{
+    margin:20px 0px;
+  }
   .table-content{
     padding-left:22px;
   }
@@ -307,8 +336,6 @@ export default {
       overflow-x: auto;
     }
     position: relative;
-    margin-top: 27px;
-
     .staff-page {
       margin-top: 20px;
       text-align: right;
