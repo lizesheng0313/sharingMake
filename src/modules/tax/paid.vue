@@ -89,7 +89,9 @@
 </template>
 <script>
 import { mapState } from "vuex";
+
 export default {
+
   data() {
     return {
       loading: false,
@@ -130,7 +132,8 @@ export default {
       list: [],
       isShowScreen: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
-      closeModel:false
+      closeModel:false,
+      popShow:false,
     };
   },
   mounted() {
@@ -145,21 +148,22 @@ export default {
   methods: {
     //新增
     handleShowBox() {
-      this.newBodyFormData.taxSubId = "";
-      this.currentTypeName = "新增";
-      this.isShowScreen = true;
-      this.$nextTick(() => {
-        this.$refs.taxListForm.resetFields();
-      });
+      this.popShow = true;
+      // this.newBodyFormData.taxSubId = "";
+      // this.currentTypeName = "新增";
+      // this.isShowScreen = true;
+      // this.$nextTick(() => {
+      //   this.$refs.taxListForm.resetFields();
+      // });
     },
     //编辑
     handleEditor(row) {
-      this.isShowScreen = true;
-      this.currentTypeName = "修改";
-      this.$nextTick(() => {
-        this.newBodyFormData = { ...row };
-        this.$refs.taxListForm.clearValidate();
-      });
+      this.popShow = true
+      console.log(row)
+      // this.$nextTick(() => {
+      //   this.newBodyFormData = { ...row };
+      //   this.$refs.taxListForm.clearValidate();
+      // });
     },
     handleNewBody() {
       this.$refs.taxListForm.validate(valid => {

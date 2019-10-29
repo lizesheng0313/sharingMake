@@ -85,11 +85,22 @@
         </span>
       </el-dialog>
     </div>
+    <right-pop :pop-show="popShow" :has-footer="false" popTitle="扣缴义务人" :popWidth="600">
+      <div slot="pop-content">
+        <paidEdit @hanleClose="hanleClose" :selectItem="selectItem"></paidEdit>
+      </div>
+    </right-pop>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
+import rightPop from '@/components/basic/rightPop'
+import paidEdit from './components/paidEdit'
 export default {
+  components:{
+    rightPop,
+    paidEdit
+  },
   data() {
     return {
       loading: false,
@@ -130,7 +141,9 @@ export default {
       list: [],
       isShowScreen: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
-      closeModel:false
+      closeModel:false,
+      popShow:{isshow:false},
+      selectItem:{}
     };
   },
   mounted() {
@@ -145,21 +158,17 @@ export default {
   methods: {
     //新增
     handleShowBox() {
-      this.newBodyFormData.taxSubId = "";
-      this.currentTypeName = "新增";
-      this.isShowScreen = true;
-      this.$nextTick(() => {
-        this.$refs.taxListForm.resetFields();
-      });
+      this.selectItem = {};
+      this.popShow.isshow = true;
     },
     //编辑
     handleEditor(row) {
-      this.isShowScreen = true;
-      this.currentTypeName = "修改";
-      this.$nextTick(() => {
-        this.newBodyFormData = { ...row };
-        this.$refs.taxListForm.clearValidate();
-      });
+      this.selectItem = row;
+      this.popShow.isshow = true;
+    },
+    hanleClose(data){
+      this.popShow.isshow = false;
+      if(data){this.getList()}
     },
     handleNewBody() {
       this.$refs.taxListForm.validate(valid => {
