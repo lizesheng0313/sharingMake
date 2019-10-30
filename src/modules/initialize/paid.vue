@@ -72,12 +72,13 @@
           <el-form-item label="纳税人识别号" prop="taxPayerNo">
             <el-input v-model="newBodyFormData.taxPayerNo"></el-input>
           </el-form-item>
-          <el-form-item label="办税人员姓名" prop="remark">
-            <el-input v-model="newBodyFormData.remark"></el-input>
-          </el-form-item>
           <el-form-item label="法定代表人" prop="legalName">
             <el-input v-model="newBodyFormData.legalName"></el-input>
           </el-form-item>
+          <el-form-item label="经办人姓名" prop="remark">
+            <el-input v-model="newBodyFormData.remark"></el-input>
+          </el-form-item>
+
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="handleNewBody">确定</el-button>

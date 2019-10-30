@@ -17,20 +17,20 @@
         <el-menu-item index="/tax/attach">专项附加扣除</el-menu-item>
         <el-menu-item index="/tax/report">综合所得申报</el-menu-item>
       </el-submenu>
-      <el-submenu index="/initialize">
-        <template slot="title">
-          <i class="iconfont iconshenbao"></i>
-          <span>初始化设置</span>
-        </template>
-        <el-menu-item index="/initialize/paid">扣缴义务人授权</el-menu-item>
-        <el-menu-item index="/initialize/cumulative">累计应税项初始化</el-menu-item>
-      </el-submenu>
       <el-submenu index="taxPaid">
         <template slot="title">
           <i class="iconfont iconshenbao"></i>
           <span>税款缴纳</span>
         </template>
         <el-menu-item index="/taxPaid/paid">三方协议缴税</el-menu-item>
+      </el-submenu>
+      <el-submenu index="/initialize">
+        <template slot="title">
+          <i class="iconfont iconshenbao"></i>
+          <span>初始化设置</span>
+        </template>
+        <el-menu-item index="/initialize/paid">扣缴义务人管理</el-menu-item>
+        <el-menu-item index="/initialize/cumulative">累计应税项初始化</el-menu-item>
       </el-submenu>
     </el-menu>
   </div>
