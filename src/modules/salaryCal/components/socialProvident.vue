@@ -27,6 +27,7 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
+            <el-button type="primary" plain @click="handleCopyData">复制上月数据</el-button>
             <el-button type="primary" plain @click="handleImport">导入</el-button>
             <el-button type="warning" plain class="export-button" @click="handleExport">导出</el-button>
           </div>
@@ -162,8 +163,19 @@ export default {
     handleImport() {
       this.$refs.import.show();
     },
-    changeMonth() {
-      this.getList()
+    //复制上月数据
+    handleCopyData(){
+      this.$confirm('您确定复制上月的社保公积金数据，复制后将覆盖本月相同人员的社保公积金数据', '复制确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '复制成功 * 条数据!'
+        });
+      }).catch(() => {
+      });
     },
     handleSearch() {
       this.totalListForm.currPage = 1;
