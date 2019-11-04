@@ -23,7 +23,7 @@ export function apiSaveEmpCollectInfo(employeeFormData) {
 //人员信息采集--报送
 export function apiReport(reportForm) {
   return fetch({
-    url: '/api/taxReport/report',
+    url: '/api/taxReport/allReport',
     method: 'post',
     data: reportForm
   })
@@ -37,7 +37,14 @@ export function apiGetFeedback(feedbackForm) {
     params: feedbackForm
   })
 }
-
+//人员信息采集--报送反馈
+export function apiPostReportInfo(reportInfoForm) {
+  return fetch({
+    url: '/api/taxReport/getReportInfo',
+    method: 'post',
+    data: reportInfoForm
+  })
+}
 
 /*个税-专项附加扣除累计*/
 

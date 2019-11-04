@@ -1,4 +1,4 @@
-import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData} from './api'
+import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo} from './api'
 
 /*个税-人员采集*/
 
@@ -19,7 +19,10 @@ export const actionReport = ({ dispatch }, reportForm) => {
 export const actionGetFeedback = ({ dispatch }, feedbackForm) => {
     return apiGetFeedback(feedbackForm)
 }
-
+//人员采集-报送反馈
+export const actionPostReportInfo = ({ dispatch }, reportInfoForm) => {
+  return apiPostReportInfo(reportInfoForm)
+}
 /*个税-专项附加扣除*/
 
 //集合列表
@@ -78,9 +81,6 @@ export const postCheckReportData = ({ dispatch }, reportForm) => {
 export const getSubTaxReportExport = ({ dispatch }, reportForm) => {
     return apiSubTaxReportExport(reportForm)
 }
-
-
-
 
 /*个税-扣缴义务人*/
 //扣缴义务人-集合列表

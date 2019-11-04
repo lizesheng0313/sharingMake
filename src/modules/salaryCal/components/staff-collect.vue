@@ -146,6 +146,7 @@ export default {
         currPage: 1,
         pageSize: 20,
         nameOrMore:"",
+        queryMonth:""
       },
       loading: false,
       isShowScreening:false,
@@ -173,45 +174,51 @@ export default {
         ids: [],
         password: ""
       },
+      awaitReportCount:"",
       feedbackList: [],
       isShowFeedback: false,
-      taxSubjectInfolist: [],
-      increaseCount: 0,
-      decreaseCount: 0,
-      awaitReportCount: 0,
-      normalCount: 0,
       total: 0,
-      idValidStatus: true,
-      reportStatus: true,
       workerType: true,
-      selectMonth: defaultDate,
-      updatedDate: "",
-      recentlyUpdatedDate: "",
-      isShowInfoColl: true,
-      screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
       screening: SCR,
       closeModel: false,
       isSave:this.$route.query.isSave
     };
   },
+  computed:{
+    ...mapState("salaryCalStore", {
+      IndexCurrentDate:"IndexCurrentDate"
+    })
+  },
+  created(){
+    this.ruleForm.queryMonth = this.IndexCurrentDate
+  },
   mounted() {
     const that = this;
     that.getList();
-    window.onresize = () => {
-      return (() => {
-        window.screenWidth = document.body.clientWidth;
-        that.screenWidth = window.screenWidth;
-      })();
-    };
   },
   methods: {
+    //列表查询
+    getList() {
+      this.loading = true;
+      this.$store
+        .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
+        .then(res => {
+          if (res.success) {
+            this.loading = false;
+            this.total = res.data.count;
+            this.list = res.data.data;
+            this.awaitReportCount = res.data.awaitReportCount;
+          }
+        });
+    },
+    //报送
     handleReport() {
-      if (this.reportForm.ids.length > 0) {
-        this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
+        let ids = this.reportForm.ids.length > 0 ? this.ruleForm.taxSubjectId:[];
+        let reportCount = this.reportForm.ids.length > 0 ? this.reportForm.ids.length:this.awaitReportCount;
         this.$confirm(
           "系统共检测到有" +
-            this.reportForm.ids.length +
+          reportCount +
             "位人员需要进行信息提交，请确认是否现在提交 ?",
           {
             confirmButtonText: "确定",
@@ -221,21 +228,19 @@ export default {
           }
         ).then(() => {
           this.$store
-            .dispatch("taxPageStore/actionReport", this.reportForm)
+            .dispatch("taxPageStore/actionReport", {
+              ids,
+              date:this.IndexCurrentDate,
+            })
             .then(res => {
-              if (res.success) {
-                this.isShowFeedback = true;
-                this.feedbackList = res.data;
-                this.getList();
-              }
-            });
-        });
-      } else {
-        this.$message({
-          message: "请选择未报送数据",
-          type: "warning"
-        });
-      }
+              this.$store
+                .dispatch("taxPageStore/actionPostReportInfo", {
+                    date:this.IndexCurrentDate,
+                  }).then(re => {
+                    console.log(re)
+                    });
+                });
+        }).catch(() => {});
     },
     //表格选中事件
     handleSelectItem(row) {
@@ -268,22 +273,7 @@ export default {
     handleSearch() {
       this.getList();
     },
-    getList() {
-      this.loading = true;
-      this.$store
-        .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
-        .then(res => {
-          if (res.success) {
-            this.loading = false;
-            this.total = res.data.count;
-            this.list = res.data.data;
-            this.awaitReportCount = res.data.awaitReportCount;
-          }
-        });
-    },
-    goSalarySet() {
-      this.$router.push("/salarySet");
-    },
+    //点击姓名跳转
     handleCollectionName(row) {
       this.$store.commit("taxPageStore/" + AT.PERSONNELCOLLECTION, row);
       this.$router.push("/tax/info-collection");

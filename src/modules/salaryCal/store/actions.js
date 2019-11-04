@@ -37,3 +37,4 @@ export const actionSocialProvidentRecord = ({ dispatch },uuid) => {
   return apiSocialProvidentRecord(uuid);
 }
 
+
