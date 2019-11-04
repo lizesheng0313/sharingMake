@@ -145,7 +145,7 @@ export default {
       ruleForm: {
         currPage: 1,
         pageSize: 20,
-        queryMonth: defaultDate,
+        nameOrMore:"",
       },
       loading: false,
       isShowScreening:false,
