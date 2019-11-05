@@ -17,6 +17,7 @@
             </div>
             <div class="right">
               <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
+              <el-button type="primary" class="add-import" @click="handleReportInfo">获取反馈</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -105,14 +106,16 @@
         </div>
       </div>
       <el-dialog
-        title="人员信息反馈结果"
-        :visible.sync="isShowFeedback"
+        :visible.sync="isShowReportInfo"
         width="550px"
         center
         class="diy-el_dialog"
+        :show-close="false"
         :close-on-click-modal="closeModel"
       >
-        <el-table :data="feedbackList">
+        <el-table :data="reportInfoList"
+        v-loading="reportInfoLoading"
+        :element-loading-text="reportInfoLodingText">
           <el-table-column prop="empName" label="姓名" width="120"></el-table-column>
           <el-table-column prop="idType" label="证件类型" width="120">
             <template slot-scope="scope">{{returnStatus('idType',scope.row.idType)}}</template>
@@ -122,9 +125,9 @@
             <template slot-scope="scope">{{returnStatus('reportStatus',scope.row.reportStatus)}}</template>
           </el-table-column>
         </el-table>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="isShowFeedback=false">关闭</el-button>
-        </span>
+        <div class="dialog-footer">
+          <el-button @click="isShowReportInfo=false">我知道了</el-button>
+        </div>
       </el-dialog>
     </div>
   </div>
@@ -166,17 +169,12 @@ export default {
           }
         ]
       },
-      reportForm: {
-        captchaId: "",
-        date: "",
-        capText: "",
-        taxSubId: "",
-        ids: [],
-        password: ""
-      },
+      ids: [],
       awaitReportCount:"",
-      feedbackList: [],
-      isShowFeedback: false,
+      reportInfoList:[],
+      isShowReportInfo: false,
+      reportInfoLoading:false,
+      reportInfoLodingText:"数据查询中请稍后！",
       total: 0,
       workerType: true,
       list: [],
@@ -187,11 +185,11 @@ export default {
   },
   computed:{
     ...mapState("salaryCalStore", {
-      IndexCurrentDate:"IndexCurrentDate"
+      salaryItem:"salaryItem"
     })
   },
   created(){
-    this.ruleForm.queryMonth = this.IndexCurrentDate
+    this.ruleForm.queryMonth = this.salaryItem.date;
   },
   mounted() {
     const that = this;
@@ -214,8 +212,8 @@ export default {
     },
     //报送
     handleReport() {
-        let ids = this.reportForm.ids.length > 0 ? this.ruleForm.taxSubjectId:[];
-        let reportCount = this.reportForm.ids.length > 0 ? this.reportForm.ids.length:this.awaitReportCount;
+        let ids = this.ids.length > 0 ? this.ruleForm.taxSubjectId:[];
+        let reportCount = this.ids.length > 0 ? this.ids.length:this.awaitReportCount;
         this.$confirm(
           "系统共检测到有" +
           reportCount +
@@ -227,27 +225,80 @@ export default {
             center: false
           }
         ).then(() => {
+          //报送
           this.$store
             .dispatch("taxPageStore/actionReport", {
               ids,
-              date:this.IndexCurrentDate,
+              date:this.salaryItem.date,
             })
             .then(res => {
-              this.$store
-                .dispatch("taxPageStore/actionPostReportInfo", {
-                    date:this.IndexCurrentDate,
-                  }).then(re => {
-                    console.log(re)
-                    });
-                });
+              if (res.success) {
+                this.isShowReportInfo = true;
+                this.reportInfoLoading = true;
+                this.reportInfoLodingText = "数据查询中请稍后！";
+                //查询第一次
+                setTimeout(()=>{
+                  this.$store
+                    .dispatch("taxPageStore/actionPostReportInfo", {
+                      date: this.salaryItem.date,
+                    }).then(r0 => {
+                      if(!r0.data) {
+                        //查询第二次
+                        setTimeout(()=>{
+                          this.$store.dispatch("taxPageStore/actionPostReportInfo", {
+                            date: this.salaryItem.date,
+                          }).then(r1 => {
+                            if (!r1.data) {
+                              //第三次查询
+                              setTimeout(()=>{
+                                this.$store
+                                  .dispatch("taxPageStore/actionPostReportInfo", {
+                                    date: this.salaryItem.date,
+                                  }).then(r2 => {
+                                  if(!r2.data){
+                                    this.reportInfoLodingText = "未查询到结果，请稍后点击“获取反馈”进行查询。"
+                                  }else{
+                                    this.reportInfoLoading = false;
+                                    this.reportInfoList = r2.data
+                                  }
+                                })
+                              },15000)
+                            }else{
+                              this.reportInfoLoading = false;
+                              this.reportInfoList = r1.data
+                            }
+                          })
+                        },10000)
+                      }else{
+                        this.reportInfoLoading = false;
+                        this.reportInfoList = r0.data
+                      }
+                  })
+                },3000)
+              }
+            });
         }).catch(() => {});
+    },
+    //获取反馈
+    handleReportInfo(){
+      this.$store
+        .dispatch("taxPageStore/actionPostReportInfo", {
+          date: this.IndexCurrentDate,
+        }).then(res=>{
+          if(res.data){
+            this.isShowReportInfo = true;
+            this.reportInfoList = res.data
+          }else{
+            this.$message.warning("未查询到结果，请稍后点击“获取反馈”进行查询。")
+          }
+        })
     },
     //表格选中事件
     handleSelectItem(row) {
-      this.reportForm.ids = [];
+      this.ids = [];
       row.forEach(element => {
         if (element.reportStatus == "AWAIT_REPORT") {
-          this.reportForm.ids.push(element.id);
+          this.ids.push(element.id);
         }
       });
     },
@@ -379,6 +430,10 @@ export default {
     width: 200px;
     display: inline-block;
   }
+}
+.dialog-footer{
+  margin-top: 20px;
+  text-align: right;
 }
 .screen-dialog {
   .screening-box {

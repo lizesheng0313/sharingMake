@@ -77,8 +77,7 @@ export default {
         salaryItem: "salaryItem",
       }),
     salaryTitle:function(){
-       let dateArr = this.salaryItem.endDate.split("-");
-       return  this.salaryItem.salaryRuleName + " " +dateArr[0]+"-"+dateArr[1]
+       return  this.salaryItem.salaryRuleName + " " +this.salaryItem.date
     }
   },
 
