@@ -6,7 +6,7 @@
           <div class="clearfix check-staff-menu">
             <el-input
               placeholder="请输入姓名\工号\身份证号"
-              v-model="ruleForm.nameOrMore"
+              v-model="ruleForm.key"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               @keyup.enter.native="handleSearch"
               clearable
@@ -146,10 +146,10 @@ export default {
     return {
       submitLoading: false,
       ruleForm: {
-        currPage: 1,
-        pageSize: 20,
-        nameOrMore:"",
-        queryMonth:""
+        "checkId":this.$route.query.id,
+        "currPage": 1,
+        "key": "",
+        "pageSize":20 ,
       },
       loading: false,
       isShowScreening:false,
@@ -173,7 +173,6 @@ export default {
     })
   },
   created(){
-    this.ruleForm.queryMonth = this.salaryItem.date;
   },
   mounted() {
     const that = this;
