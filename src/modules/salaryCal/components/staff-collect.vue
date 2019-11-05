@@ -153,22 +153,6 @@ export default {
       },
       loading: false,
       isShowScreening:false,
-      feekbackRules: {
-        password: [
-          {
-            required: true,
-            message: "请输入密码",
-            trigger: "blur"
-          }
-        ],
-        capText: [
-          {
-            required: true,
-            message: "请输入验证码",
-            trigger: "blur"
-          }
-        ]
-      },
       ids: [],
       awaitReportCount:"",
       reportInfoList:[],
@@ -212,7 +196,7 @@ export default {
     },
     //报送
     handleReport() {
-        let ids = this.ids.length > 0 ? this.ruleForm.taxSubjectId:[];
+        let ids = this.ids.length > 0 ? this.ids:[];
         let reportCount = this.ids.length > 0 ? this.ids.length:this.awaitReportCount;
         this.$confirm(
           "系统共检测到有" +

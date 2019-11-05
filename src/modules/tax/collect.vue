@@ -27,6 +27,7 @@
             </div>
             <div class="right">
               <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
+              <el-button type="primary" class="add-import" @click="handleReportInfo">获取反馈</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -81,8 +82,7 @@
               :data="list"
               class="check-staff_table"
               @selection-change="handleSelectItem"
-              :style="{width:screenWidth-285+'px'}"
-            >
+              :style="{width:screenWidth-285+'px'}">
               <el-table-column type="selection" width="55" fixed></el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
               <el-table-column prop="empName" label="姓名" width="140">
@@ -141,7 +141,7 @@
           </div>
         </div>
       </div>
-      <!-- 获取反馈结果-->
+      <!-- 筛选-->
       <el-dialog
         :visible.sync="isShowScreening"
         width="52%"
@@ -247,15 +247,18 @@
           <el-button @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
+      <!-- 获取反馈结果-->
       <el-dialog
-        title="人员信息反馈结果"
-        :visible.sync="isShowFeedback"
+        :visible.sync="isShowReportInfo"
         width="550px"
         center
         class="diy-el_dialog"
+        :show-close="false"
         :close-on-click-modal="closeModel"
       >
-        <el-table :data="feedbackList">
+        <el-table :data="reportInfoList"
+                  v-loading="reportInfoLoading"
+                  :element-loading-text="reportInfoLodingText">
           <el-table-column prop="empName" label="姓名" width="120"></el-table-column>
           <el-table-column prop="idType" label="证件类型" width="120">
             <template slot-scope="scope">{{returnStatus('idType',scope.row.idType)}}</template>
@@ -265,45 +268,9 @@
             <template slot-scope="scope">{{returnStatus('reportStatus',scope.row.reportStatus)}}</template>
           </el-table-column>
         </el-table>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="isShowFeedback=false">关闭</el-button>
-        </span>
-      </el-dialog>
-      <el-dialog
-        title="输入密码"
-        :visible.sync="isShowPassword"
-        width="450px"
-        center
-        class="diy-el_dialog"
-        :close-on-click-modal="closeModel"
-      >
-        <el-form
-          :rules="feekbackRules"
-          label-width="150px"
-          ref="feekbackForm"
-          class
-          :model="reportForm"
-        >
-          <el-form-item label="扣缴义务人：">
-            <span class="company-name">{{currentTaxSubName}}</span>
-          </el-form-item>
-          <el-form-item label="输入密码：" prop="password">
-            <el-input type="password" v-model="reportForm.password"></el-input>
-          </el-form-item>
-          <el-form-item label="输入验证码：" prop="capText">
-            <el-input type="text" v-model="reportForm.capText" style="width:90px"></el-input>
-            <img
-              :src="`/api/taxReport/getCaptcha/${reportForm.captchaId}/captcha`"
-              alt
-              class="dialog-cap_test"
-              @click="getCode"
-            />
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handleSubmitPassword" :loading="submitLoading">确定</el-button>
-          <el-button @click="isShowPassword=false">取消</el-button>
-        </span>
+        <div class="dialog-footer">
+          <el-button @click="isShowReportInfo=false">我知道了</el-button>
+        </div>
       </el-dialog>
     </div>
   </div>
@@ -338,22 +305,6 @@ export default {
         taxSubjectId: ""
       },
       loading: false,
-      feekbackRules: {
-        password: [
-          {
-            required: true,
-            message: "请输入密码",
-            trigger: "blur"
-          }
-        ],
-        capText: [
-          {
-            required: true,
-            message: "请输入验证码",
-            trigger: "blur"
-          }
-        ]
-      },
       reportForm: {
         captchaId: "",
         date: "",
@@ -362,9 +313,10 @@ export default {
         ids: [],
         password: ""
       },
-      feedbackList: [],
-      isShowPassword: false,
-      isShowFeedback: false,
+      reportInfoList:[],
+      isShowReportInfo: false,
+      reportInfoLoading:false,
+      reportInfoLodingText:"数据查询中请稍后！",
       taxSubjectInfolist: [],
       currentTaxSubName: "",
       increaseCount: 0,
@@ -376,16 +328,21 @@ export default {
       reportStatus: true,
       workerType: true,
       selectMonth: defaultDate,
+      screening: SCR,
       updatedDate: "",
       recentlyUpdatedDate: "",
       isShowInfoColl: true,
       isShowScreening: false,
-      screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenWidth: document.body.clientWidth,// 屏幕尺寸
       list: [],
-      screening: SCR,
       closeModel: false,
       isSave:this.$route.query.isSave
     };
+  },
+  computed:{
+    ...mapState("salaryCalStore", {
+      salaryItem:"salaryItem"
+    })
   },
   mounted() {
     this.getTaxSubjectInfoList();
@@ -399,55 +356,105 @@ export default {
     };
   },
   methods: {
-    getCode() {
-      this.$store.dispatch("getCode").then(res => {
-        this.reportForm.captchaId = res.data;
-      });
-    },
-    handleReport() {
-      if (this.reportForm.ids.length > 0) {
-        this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
-        this.$confirm(
-          "系统共检测到有" +
-            this.reportForm.ids.length +
-            "位人员需要进行信息提交，请确认是否现在提交 ?",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning",
-            center: false
+    getList() {
+      this.loading = true;
+      this.$store
+        .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
+        .then(res => {
+          if (res.success) {
+            this.loading = false;
+            this.total = res.data.count;
+            this.list = res.data.data;
+            this.increaseCount = res.data.increaseCount;
+            this.decreaseCount = res.data.decreaseCount;
+            this.awaitReportCount = res.data.awaitReportCount;
+            this.normalCount = res.data.normalCount;
           }
-        ).then(() => {
-          this.isShowPassword = true;
-          this.getCode();
-          this.$nextTick(() => {
-            this.$refs["feekbackForm"].resetFields();
-          });
         });
-      } else {
-        this.$message({
-          message: "请选择未报送数据",
-          type: "warning"
-        });
-      }
     },
-    handleSubmitPassword() {
-      this.$refs.feekbackForm.validate(valid => {
-        if (valid) {
-          this.submitLoading = true;
-          this.$store
-            .dispatch("taxPageStore/actionReport", this.reportForm)
-            .then(res => {
-              this.submitLoading = false;
-              if (res.success) {
-                this.isShowPassword = false;
-                this.isShowFeedback = true;
-                this.feedbackList = res.data;
-                this.getList();
-              }
-            });
+    //报送
+    handleReport() {
+      let ids = this.reportForm.ids.length > 0 ? this.reportForm.ids:[];
+      let reportCount = this.reportForm.ids.length > 0 ? this.ids.length:this.awaitReportCount;
+      this.$confirm(
+        "系统共检测到有" +
+        reportCount +
+        "位人员需要进行信息提交，请确认是否现在提交 ?",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+          center: false
         }
-      });
+      ).then(() => {
+        //报送
+        this.$store
+          .dispatch("taxPageStore/actionReport", {
+            ids,
+            date:this.salaryItem.date,
+          })
+          .then(res => {
+            console.log()
+            if (res.success) {
+              this.isShowReportInfo = true;
+              this.reportInfoLoading = true;
+              this.reportInfoLodingText = "数据查询中请稍后！";
+              //查询第一次
+              setTimeout(()=>{
+                this.$store
+                  .dispatch("taxPageStore/actionPostReportInfo", {
+                    date: this.salaryItem.date,
+                  }).then(r0 => {
+                  if(!r0.data) {
+                    //查询第二次
+                    setTimeout(()=>{
+                      this.$store.dispatch("taxPageStore/actionPostReportInfo", {
+                        date: this.salaryItem.date,
+                      }).then(r1 => {
+                        if (!r1.data) {
+                          //第三次查询
+                          setTimeout(()=>{
+                            this.$store
+                              .dispatch("taxPageStore/actionPostReportInfo", {
+                                date: this.salaryItem.date,
+                              }).then(r2 => {
+                              if(!r2.data){
+                                this.reportInfoLodingText = "未查询到结果，请稍后点击“获取反馈”进行查询。"
+                              }else{
+                                this.reportInfoLoading = false;
+                                this.reportInfoList = r2.data
+                              }
+                            })
+                          },15000)
+                        }else{
+                          this.reportInfoLoading = false;
+                          this.reportInfoList = r1.data
+                        }
+                      })
+                    },10000)
+                  }else{
+                    this.reportInfoLoading = false;
+                    this.reportInfoList = r0.data
+                  }
+                })
+              },3000)
+            }
+          });
+      }).catch(() => {});
+    },
+    //获取反馈
+    handleReportInfo(){
+      this.$store
+        .dispatch("taxPageStore/actionPostReportInfo", {
+          date: this.IndexCurrentDate,
+        }).then(res=>{
+        if(res.data){
+          this.isShowReportInfo = true;
+          this.reportInfoList = res.data
+        }else{
+          this.$message.warning("未查询到结果，请稍后点击“获取反馈”进行查询。")
+        }
+      })
     },
     //表格选中事件
     handleSelectItem(row) {
@@ -565,22 +572,6 @@ export default {
       this.isShowScreening = false;
       this.getList();
     },
-    getList() {
-      this.loading = true;
-      this.$store
-        .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
-        .then(res => {
-          if (res.success) {
-            this.loading = false;
-            this.total = res.data.count;
-            this.list = res.data.data;
-            this.increaseCount = res.data.increaseCount;
-            this.decreaseCount = res.data.decreaseCount;
-            this.awaitReportCount = res.data.awaitReportCount;
-            this.normalCount = res.data.normalCount;
-          }
-        });
-    },
     handleSelectScreening(key, obj) {
       let index = this.ruleForm[obj].indexOf(key);
       if (obj == "iscgl" || obj == "empStatus") {
@@ -591,12 +582,6 @@ export default {
         this.ruleForm[obj].push(key);
         this[obj] = false;
       }
-    },
-    handleCalcSalary() {
-      this.$router.push("/salary-cal/start");
-    },
-    goSalarySet() {
-      this.$router.push("/salarySet");
     },
     handleReset() {
       this.ruleForm.idValidStatus = [];
@@ -711,6 +696,10 @@ export default {
     @include ellipsis;
     width: 200px;
     display: inline-block;
+  }
+  .dialog-footer{
+    text-align: right;
+    margin-top: 20px;
   }
 }
 .screen-dialog {
