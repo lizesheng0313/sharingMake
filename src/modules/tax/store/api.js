@@ -187,8 +187,14 @@ export function apiSubTaxReportExport(reportForm) {
   })
 }
 
-
-
+//社保公积金列表
+export function apiSocialBenefitsList(reportForm) {
+  return fetch({
+    url: '/api/salary/getSocialBenefitsList',
+    method: 'get',
+    params: reportForm
+  })
+}
 
 /*个税-扣缴义务人*/
 //扣缴义务人-集合列表

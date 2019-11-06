@@ -62,6 +62,22 @@
         <el-button type="primary" @click="isShowDownLoadTip=false">我知道了</el-button>
       </div>
     </el-dialog>
+    <!-- 获取反馈结果-->
+    <el-dialog
+      :visible.sync="isShowReturn"
+      width="550px"
+      center
+      class="diy-el_dialog"
+      :show-close="false"
+      :close-on-click-modal="closeModel"
+    >
+      <div>
+
+      </div>
+      <div class="dialog-footer">
+        <el-button @click="isShowReportInfo=false" v-show="isShowIknow">我知道了</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -90,6 +106,11 @@ export default {
       list: [],
       total: 0,
       isShowDownLoadTip:false,
+      isShowReturn:false,
+      returnLoading:false,
+      returnLoadingText:"查询中",
+      closeModel:false,
+      isShowIknow:false,
     };
   },
   computed:{
@@ -132,6 +153,8 @@ export default {
               this.getList()
             }
             if(res.data === "PROCESSING"){
+              this.isShowReturn = true;
+              this.returnLoading = true;
               this.selectDownLoad()
             }
           }else{

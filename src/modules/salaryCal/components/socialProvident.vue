@@ -17,7 +17,7 @@
         <div class="clearfix check-staff-menu">
           <el-input
             placeholder="请输入姓名\证件号码"
-            v-model="totalListForm.nameOrMore"
+            v-model="totalListForm.key"
             prefix-icon="iconiconfonticonfontsousuo1 iconfont"
             clearable
             @keyup.enter.native="handleSearch"
@@ -42,33 +42,27 @@
             v-loading="loading"
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
-            <el-table-column prop="empName" label="工号"></el-table-column>
+            <el-table-column prop="empNo" label="工号"></el-table-column>
             <el-table-column prop="idNo" label="姓名"></el-table-column>
-            <el-table-column label="证件号码">
-              <template slot-scope="scope">
-                <span>{{ scope.row.empDay.split(' ')[0] }}</span>
-              </template>
+            <el-table-column label="证件号码" pro="idNo">
             </el-table-column>
-            <el-table-column prop="totalChildrenEdu" label="扣缴义务人"></el-table-column>
-            <el-table-column prop="totalFurtherEdu" label="养老个人"></el-table-column>
-            <el-table-column prop="totalHomeLoads" label="医疗个人"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="失业个人"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="大病医疗个人" width="100px"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="社保个人合计" width="100px"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="养老单位"></el-table-column>
-
-            <el-table-column prop="totalChildrenEdu" label="医疗单位"></el-table-column>
-            <el-table-column prop="totalFurtherEdu" label="事业单位"></el-table-column>
-            <el-table-column prop="totalHomeLoads" label="工伤单位"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="生育单位"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="大病医疗单位" width="100px"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="社保单位合计" width="100px"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="社保合计"></el-table-column>
-
-            <el-table-column prop="totalHouseRent" label="公积金个人"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="公积金单位"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="公积金合计"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="残保金"></el-table-column>
+            <el-table-column prop="pensionInsurancePerson" label="养老个人"></el-table-column>
+            <el-table-column prop="medicalInsurancePerson" label="医疗个人"></el-table-column>
+            <el-table-column prop="unemploymentInsurancePerson" label="失业个人"></el-table-column>
+            <el-table-column prop="seriousMedicalInsurancePerson" label="大病医疗个人" width="100px"></el-table-column>
+            <el-table-column prop="socialSecurityPerson" label="社保个人合计" width="100px"></el-table-column>
+            <el-table-column prop="pensionInsuranceComp" label="养老单位"></el-table-column>
+            <el-table-column prop="medicalInsuranceComp" label="医疗单位"></el-table-column>
+            <el-table-column prop="unemploymentInsuranceComp" label="失业单位"></el-table-column>
+            <el-table-column prop="industrialInjuryInsuranceComp" label="工伤单位"></el-table-column>
+            <el-table-column prop="birthInsuranceComp" label="生育单位"></el-table-column>
+            <el-table-column prop="seriousMedicalInsuranceComp" label="大病医疗单位" width="100px"></el-table-column>
+            <el-table-column prop="socialSecurityComp" label="社保单位合计" width="100px"></el-table-column>
+            <el-table-column prop="socialSecurityTotal" label="社保合计"></el-table-column>
+            <el-table-column prop="housingFundPerson" label="公积金个人"></el-table-column>
+            <el-table-column prop="housingFundComp" label="公积金单位"></el-table-column>
+            <el-table-column prop="housingFundTotal" label="公积金合计"></el-table-column>
+            <el-table-column prop="disabilityInsuranceFee" label="残保金"></el-table-column>
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
@@ -115,9 +109,8 @@ export default {
       totalListForm: {
         currPage: 1,
         pageSize: 20,
-        queryMonth: defaultDate,
-        taxSubjectId: "",
-        nameOrMore: ""
+        checkId:this.$route.query.id,
+        key: "",
       },
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
@@ -147,6 +140,18 @@ export default {
     };
   },
   methods: {
+    getList() {
+      this.loading = true;
+      this.$store
+        .dispatch("taxPageStore/actionSocialBenefitsList", this.totalListForm)
+        .then(res => {
+          if (res.success) {
+            this.loading = false;
+            this.total = res.data.count;
+            this.list = res.data.data;
+          }
+        });
+    },
     handleExport() {
       this.$store.dispatch(
         "taxPageStore/actionOtherTotalExport",
@@ -185,18 +190,6 @@ export default {
       this.totalListForm.pageSize = val;
       this.totalListForm.currPage = 1;
       this.getList();
-    },
-    getList() {
-      this.loading = true;
-      this.$store
-        .dispatch("taxPageStore/actionOtherTotalList", this.totalListForm)
-        .then(res => {
-          if (res.success) {
-            this.loading = false;
-            this.total = res.data.count;
-            this.list = res.data.data;
-          }
-        });
     },
     handleCalcSalary() {
       this.$router.push("/salary-cal/start");

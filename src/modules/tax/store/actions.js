@@ -1,4 +1,4 @@
-import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList,apiDownloadAddition,apiDownloadAdditionQuery} from './api'
+import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList,apiDownloadAddition,apiDownloadAdditionQuery,apiSocialBenefitsList} from './api'
 
 /*个税-人员采集*/
 
@@ -46,6 +46,11 @@ export const actionDownloadAddition = ({ dispatch }, totalListForm) => {
 export const actionDownloadAdditionQuery = ({ dispatch }, Form) => {
   return apiDownloadAdditionQuery(Form)
 }
+/*薪资计算-专项附加扣除列表-下载查询*/
+export const actionSocialBenefitsList = ({ dispatch }, Form) => {
+  return apiSocialBenefitsList(Form)
+}
+
 //主体集合
 export const actionTaxSubjectInfoList = ({ dispatch }, date) => {
     return apiTaxSubjectInfoList(date)
