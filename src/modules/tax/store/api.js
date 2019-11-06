@@ -1,8 +1,7 @@
 import { fetch, fetchFile } from 'request/fetch'
 
 /*个税-人员采集*/
-
-//人员信息采集-集合列表
+//个税申报-人员信息采集-集合列表
 export function apiEmpCollectList(ruleForm) {
   return fetch({
     url: '/api/taxReport/getEmpCollectList',
@@ -11,6 +10,14 @@ export function apiEmpCollectList(ruleForm) {
   })
 }
 
+//薪资核算-人员信息采集-集合列表
+export function apiEmpCollectNewList(ruleForm) {
+  return fetch({
+    url: '/api/salary/getEmpCollectNewList',
+    method: 'get',
+    params: ruleForm
+  })
+}
 //人员信息采集--境内人员信息编辑保存
 export function apiSaveEmpCollectInfo(employeeFormData) {
   return fetch({
@@ -20,10 +27,18 @@ export function apiSaveEmpCollectInfo(employeeFormData) {
   })
 }
 
-//人员信息采集--报送
+//薪资计算-人员信息采集--报送
 export function apiReport(reportForm) {
   return fetch({
     url: '/api/taxReport/allReport',
+    method: 'post',
+    data: reportForm
+  })
+}
+//个税申报-人员信息采集--报送
+export function apiTaxReport(reportForm) {
+  return fetch({
+      url: '/api/taxReport/report',
     method: 'post',
     data: reportForm
   })
@@ -56,7 +71,14 @@ export function apiOtherTotalList(totalListForm) {
     params: totalListForm
   })
 }
-
+//薪资计算-专项附加扣除-集合列表
+export function apiAdditionalList(totalListForm) {
+  return fetch({
+    url: '/api/salary/getAdditionalList',
+    method: 'get',
+    params: totalListForm
+  })
+}
 //专项附加扣除-扣缴义务人集合
 export function apiTaxSubjectInfoList(date) {
   return fetch({

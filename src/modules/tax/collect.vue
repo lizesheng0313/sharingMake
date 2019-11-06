@@ -269,7 +269,7 @@
           </el-table-column>
         </el-table>
         <div class="dialog-footer">
-          <el-button @click="isShowReportInfo=false">我知道了</el-button>
+          <el-button @click="isShowReportInfo=false" v-show="isShowIknow">我知道了</el-button>
         </div>
       </el-dialog>
     </div>
@@ -306,12 +306,9 @@ export default {
       },
       loading: false,
       reportForm: {
-        captchaId: "",
         date: "",
-        capText: "",
         taxSubId: "",
         ids: [],
-        password: ""
       },
       reportInfoList:[],
       isShowReportInfo: false,
@@ -336,7 +333,8 @@ export default {
       screenWidth: document.body.clientWidth,// 屏幕尺寸
       list: [],
       closeModel: false,
-      isSave:this.$route.query.isSave
+      isSave:this.$route.query.isSave,
+      isShowIknow:false,
     };
   },
   computed:{
@@ -374,8 +372,8 @@ export default {
     },
     //报送
     handleReport() {
-      let ids = this.reportForm.ids.length > 0 ? this.reportForm.ids:[];
-      let reportCount = this.reportForm.ids.length > 0 ? this.ids.length:this.awaitReportCount;
+      let reportCount = this.reportForm.ids.length > 0 ? this.reportForm.ids.length:this.awaitReportCount;
+      this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
       this.$confirm(
         "系统共检测到有" +
         reportCount +
@@ -389,70 +387,110 @@ export default {
       ).then(() => {
         //报送
         this.$store
-          .dispatch("taxPageStore/actionReport", {
-            ids,
-            date:this.salaryItem.date,
-          })
+          .dispatch("taxPageStore/actionTaxReport", this.reportForm)
           .then(res => {
-            console.log()
             if (res.success) {
               this.isShowReportInfo = true;
               this.reportInfoLoading = true;
-              this.reportInfoLodingText = "数据查询中请稍后！";
-              //查询第一次
-              setTimeout(()=>{
-                this.$store
-                  .dispatch("taxPageStore/actionPostReportInfo", {
-                    date: this.salaryItem.date,
-                  }).then(r0 => {
-                  if(!r0.data) {
-                    //查询第二次
-                    setTimeout(()=>{
-                      this.$store.dispatch("taxPageStore/actionPostReportInfo", {
-                        date: this.salaryItem.date,
-                      }).then(r1 => {
-                        if (!r1.data) {
-                          //第三次查询
-                          setTimeout(()=>{
-                            this.$store
-                              .dispatch("taxPageStore/actionPostReportInfo", {
-                                date: this.salaryItem.date,
-                              }).then(r2 => {
-                              if(!r2.data){
-                                this.reportInfoLodingText = "未查询到结果，请稍后点击“获取反馈”进行查询。"
-                              }else{
-                                this.reportInfoLoading = false;
-                                this.reportInfoList = r2.data
-                              }
-                            })
-                          },15000)
-                        }else{
-                          this.reportInfoLoading = false;
-                          this.reportInfoList = r1.data
-                        }
-                      })
-                    },10000)
-                  }else{
-                    this.reportInfoLoading = false;
-                    this.reportInfoList = r0.data
-                  }
-                })
-              },3000)
+              //如果是自由接口...报送直接返回数据
+              if(res.data){
+                this.reportInfoList = res.data;
+                this.reportInfoLoading = false;
+              }else{//如果是税友接口报送后需要查询
+                this.selectShuiyou()
+              }
+            }else{
+              this.$message.warning(res.message)
             }
           });
       }).catch(() => {});
+    },
+    selectShuiyou(){
+      this.reportInfoLodingText = "人员报送数据局端处理中。。。";
+      this.isShowIknow = false;
+      //查询第一次
+      setTimeout(()=>{
+        this.$store
+          .dispatch("taxPageStore/actionPostReportInfo", {
+            date: this.salaryItem.date,
+            taxSubjectId:this.ruleForm.taxSubjectId,
+          }).then(r0 => {
+          if(r0.success){
+            if(!r0.data) {
+              this.reportInfoLodingText = "人员报送数据局端处理中。。。";
+              this.selectSec()
+            }else{
+              this.reportInfoLoading = false;
+              this.reportInfoList = r0.data
+            }
+          }else{
+            this.reportInfoLodingText= "无待反馈的人员，无需获取反馈。";
+            this.isShowIknow = true;
+          }
+        })
+      },3000)
+    },
+    //第二次查询
+    selectSec(){
+      setTimeout(()=>{
+        this.$store.dispatch("taxPageStore/actionPostReportInfo", {
+          date: this.salaryItem.date,
+          taxSubjectId:this.ruleForm.taxSubjectId,
+        }).then(r1 => {
+          if(r1.success){
+            if (!r1.data) {
+              this.reportInfoLodingText = "人员报送数据局端处理中。。。";
+              this.selectThird()
+            }else{
+              this.reportInfoLoading = false;
+              this.reportInfoList = r1.data;
+            }
+          }else{
+            this.reportInfoLodingText= "无待反馈的人员，无需获取反馈";
+            this.isShowIknow = true;
+          }
+        })
+      },10000)
+    },
+    //第三次查询
+    selectThird(){
+      setTimeout(()=>{
+        this.$store
+          .dispatch("taxPageStore/actionPostReportInfo", {
+            date: this.salaryItem.date,
+            taxSubjectId:this.ruleForm.taxSubjectId,
+          }).then(r2 => {
+          if(r2.success){
+            if(!r2.data){
+              this.reportInfoLodingText = "人员报送数据局端处理中，请稍后再获取反馈。"
+              this.isShowIknow = true;
+            }else{
+              this.reportInfoLoading = false;
+              this.reportInfoList = r2.data
+            }
+          }else{
+            this.reportInfoLodingText= "无待反馈的人员，无需获取反馈"
+            this.isShowIknow = true;
+          }
+        })
+      },15000)
     },
     //获取反馈
     handleReportInfo(){
       this.$store
         .dispatch("taxPageStore/actionPostReportInfo", {
-          date: this.IndexCurrentDate,
+          date: this.salaryItem.date,
+          taxSubjectId:this.ruleForm.taxSubjectId,
         }).then(res=>{
-        if(res.data){
-          this.isShowReportInfo = true;
-          this.reportInfoList = res.data
+        if(res.success){
+          if(res.data){
+            this.isShowReportInfo = true;
+            this.reportInfoList = res.data
+          }else{
+            this.$message.warning("未查询到结果，请稍后点击“获取反馈”进行查询。")
+          }
         }else{
-          this.$message.warning("未查询到结果，请稍后点击“获取反馈”进行查询。")
+          this.$message.warning(res.message)
         }
       })
     },

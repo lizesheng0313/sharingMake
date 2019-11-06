@@ -1,20 +1,27 @@
-import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo} from './api'
+import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList} from './api'
 
 /*个税-人员采集*/
 
-//人员采集-集合列表
+//个税申报-人员采集-集合列表
 export const actionEmpCollectList = ({ dispatch }, ruleForm) => {
     return apiEmpCollectList(ruleForm)
+}
+//薪资核算-人员采集-集合列表
+export const actionEmpCollectNewList = ({ dispatch }, ruleForm) => {
+  return apiEmpCollectNewList(ruleForm)
 }
 //人员采集-境内人员信息编辑保存
 export const actionSaveEmpCollectInfo = ({ dispatch }, employeeFormData) => {
     return apiSaveEmpCollectInfo(employeeFormData)
 }
-//人员采集-报送
+//薪资计算-人员采集-报送
 export const actionReport = ({ dispatch }, reportForm) => {
     return apiReport(reportForm)
 }
-
+//个税申报-人员采集-报送
+export const actionTaxReport = ({ dispatch }, reportForm) => {
+  return apiTaxReport(reportForm)
+}
 //人员采集-获取反馈
 export const actionGetFeedback = ({ dispatch }, feedbackForm) => {
     return apiGetFeedback(feedbackForm)
@@ -23,11 +30,13 @@ export const actionGetFeedback = ({ dispatch }, feedbackForm) => {
 export const actionPostReportInfo = ({ dispatch }, reportInfoForm) => {
   return apiPostReportInfo(reportInfoForm)
 }
-/*个税-专项附加扣除*/
-
-//集合列表
+/*个税-专项附加扣除列表*/
 export const actionOtherTotalList = ({ dispatch }, totalListForm) => {
     return apiOtherTotalList(totalListForm)
+}
+/*薪资计算-专项附加扣除列表*/
+export const actionAdditionalList = ({ dispatch }, totalListForm) => {
+  return apiAdditionalList(totalListForm)
 }
 
 //主体集合

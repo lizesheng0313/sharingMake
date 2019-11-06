@@ -184,7 +184,7 @@ export default {
     getList() {
       this.loading = true;
       this.$store
-        .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
+        .dispatch("taxPageStore/actionEmpCollectNewList", this.ruleForm)
         .then(res => {
           if (res.success) {
             this.loading = false;

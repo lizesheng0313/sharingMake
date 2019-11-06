@@ -1,23 +1,11 @@
 <template>
   <div class="calc-attach el-diy-month">
     <div class="tax-content">
-<!--      <div class="content-header head-date">-->
-<!--        <i class="el-icon-arrow-left"></i>-->
-<!--        <el-date-picker-->
-<!--          v-model="totalListForm.queryMonth"-->
-<!--          type="month"-->
-<!--          @input="changeMonth"-->
-<!--          value-format="yyyy-MM"-->
-<!--          :editable="false"-->
-<!--          :clearable="false"-->
-<!--        ></el-date-picker>-->
-<!--        <i class="el-icon-arrow-right"></i>-->
-<!--      </div>-->
       <div class="screening">
         <div class="clearfix check-staff-menu">
           <el-input
             placeholder="请输入姓名\证件号码"
-            v-model="totalListForm.nameOrMore"
+            v-model="totalListForm.key"
             prefix-icon="iconiconfonticonfontsousuo1 iconfont"
             clearable
             @keyup.enter.native="handleSearch"
@@ -31,9 +19,6 @@
           </div>
         </div>
         <div class="staff-table">
-          <!-- <div class="floating-menu">
-        <span>删除</span>
-          </div>-->
           <el-table
             :data="list"
             class="check-staff_table"
@@ -92,11 +77,10 @@ export default {
     return {
       loading: false,
       totalListForm: {
-        currPage: 1,
-        pageSize: 20,
-        queryMonth: defaultDate,
-        taxSubjectId: "",
-        nameOrMore: ""
+        "checkId":this.$route.query.id,
+        "currPage": 1,
+        "key": "",
+        "pageSize":20 ,
       },
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
@@ -115,12 +99,6 @@ export default {
   },
   methods: {
     handleExport() {
-      // this.$store.dispatch(
-      //   "taxPageStore/actionOtherTotalExport",
-      //   this.totalListForm
-      // ).then(res=>{
-      //   console.log(res)
-      // });
       this.isShowDownLoadTip= true;
     },
     changeMonth() {
@@ -138,7 +116,7 @@ export default {
     getList() {
       this.loading = true;
       this.$store
-        .dispatch("taxPageStore/actionOtherTotalList", this.totalListForm)
+        .dispatch("taxPageStore/actionAdditionalList", this.totalListForm)
         .then(res => {
           if (res.success) {
             this.loading = false;
