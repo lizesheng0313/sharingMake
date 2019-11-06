@@ -62,7 +62,6 @@ export function apiPostReportInfo(reportInfoForm) {
 }
 
 /*个税-专项附加扣除累计*/
-
 //专项附加扣除-集合列表
 export function apiOtherTotalList(totalListForm) {
   return fetch({
@@ -108,6 +107,22 @@ export function apiDownloadOtherTotal(exportForm) {
   })
 }
 
+//专项附加扣除-下载
+export function apiDownloadAddition(exportForm) {
+  return fetch({
+    url: '/api/taxReport/downloadAddition',
+    method: 'post',
+    data: exportForm
+  })
+}
+//专项附加扣除-下载查询
+export function apiDownloadAdditionQuery(exportForm) {
+  return fetch({
+    url: '/api/taxReport/downloadAdditionQuery',
+    method: 'post',
+    data: exportForm
+  })
+}
 /*个税-综合所得申报*/
 /*综合所得-申报集合列表*/
 export function apiTaxReportTotalList(reportForm) {

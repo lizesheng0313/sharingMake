@@ -82,11 +82,23 @@ export default {
         "key": "",
         "pageSize":20 ,
       },
+      downLoadForm:{
+        "checkId":this.$route.query.id,
+        "date":""
+      },
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
       total: 0,
       isShowDownLoadTip:false,
     };
+  },
+  computed:{
+    ...mapState("salaryCalStore", {
+      salaryItem:"salaryItem"
+    })
+  },
+  created(){
+    this.downLoadForm.date = this.salaryItem.date;
   },
   mounted() {
    this.getList()
@@ -98,8 +110,45 @@ export default {
     };
   },
   methods: {
+    getList() {
+      this.loading = true;
+      this.$store
+        .dispatch("taxPageStore/actionAdditionalList", this.totalListForm)
+        .then(res => {
+          if (res.success) {
+            this.loading = false;
+            this.total = res.data.count;
+            this.list = res.data.data;
+          }
+        });
+    },
+    //下载
     handleExport() {
-      this.isShowDownLoadTip= true;
+      this.$store
+        .dispatch("taxPageStore/actionDownloadAddition", this.downLoadForm)
+        .then(res=>{
+          if(res.success){
+            if(res.data === "SUCCESS"){
+              this.getList()
+            }
+            if(res.data === "PROCESSING"){
+              this.selectDownLoad()
+            }
+          }else{
+
+          }
+        })
+      // this.isShowDownLoadTip= true;
+    },
+    //查询下载结果
+    selectDownLoad(){
+      this.$store
+        .dispatch("taxPageStore/actionDownloadAdditionQuery",this.downLoadForm)
+        .then(res=>{
+          console.log(res)
+        })
+
+
     },
     changeMonth() {
       this.getList()
@@ -112,18 +161,6 @@ export default {
       this.totalListForm.pageSize = val;
       this.totalListForm.currPage = 1;
       this.getList();
-    },
-    getList() {
-      this.loading = true;
-      this.$store
-        .dispatch("taxPageStore/actionAdditionalList", this.totalListForm)
-        .then(res => {
-          if (res.success) {
-            this.loading = false;
-            this.total = res.data.count;
-            this.list = res.data.data;
-          }
-        });
     },
     handleCalcSalary() {
       this.$router.push("/salary-cal/start");
