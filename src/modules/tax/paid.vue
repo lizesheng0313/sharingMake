@@ -161,7 +161,6 @@ export default {
     //编辑
     handleEditor(row) {
       this.popShow = true
-      console.log(row)
       // this.$nextTick(() => {
       //   this.newBodyFormData = { ...row };
       //   this.$refs.taxListForm.clearValidate();
