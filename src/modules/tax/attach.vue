@@ -30,7 +30,6 @@
             class="search-input left"
           ></el-input>
         </div>
-
         <div class="left">
           <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
         </div>
@@ -99,7 +98,6 @@ import fun from "@/util/fun"
 let date = fun.headDate();
 let defaultDate =
   date.year + "年" + (date.month >= 10 ? date.month : "0" + date.month) + "月";
-
 export default {
   components: {},
   data() {

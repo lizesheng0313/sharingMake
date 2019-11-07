@@ -67,6 +67,7 @@
               <el-table-column prop="workerStatus" label="人员状态" >
                 <template slot-scope="scope">{{returnStatus("empStatus",scope.row.workerStatus)}}</template>
               </el-table-column>
+              <el-table-column prop="taxSubName" label="纳税主体名称" width="170"></el-table-column>
               <el-table-column prop="reportStatus" label="报送状态" width="140">
                 <template slot-scope="scope">{{returnStatus('reportStatus',scope.row.reportStatus)}}</template>
               </el-table-column>

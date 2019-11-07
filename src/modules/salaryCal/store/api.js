@@ -187,6 +187,14 @@ export function apiSocialProvidentTemplate() {
     method: 'get',
   })
 }
+// 公积金复制上月数据
+export function apisyncLastMonthSocial(params) {
+  return fetch({
+    url: '/api/salary/syncLastMonthSocial',
+    method: 'get',
+    params:params
+  })
+}
 
 //浮动项导入
 export function floatItem({uuid,id,importType}) {

@@ -175,10 +175,18 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '复制成功 * 条数据!'
-        });
+          this.$store
+            .dispatch("salaryCalStore/actionSyncLastMonthSocial", {
+              checkId:this.$route.query.id
+            })
+            .then(res => {
+              if(res.success){
+                this.$message({
+                  type: 'success',
+                  message: '复制成功'+res.data+'条数据!'
+                });
+              }
+            })
       }).catch(() => {
       });
     },

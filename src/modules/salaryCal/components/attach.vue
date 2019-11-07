@@ -32,6 +32,7 @@
                 <span>{{ scope.row.empDay.split(' ')[0] }}</span>
               </template>
             </el-table-column>
+            <el-table-column prop="taxSubName" label="纳税主体名称" width="170"></el-table-column>
             <el-table-column prop="totalChildrenEdu" label="累计子女教育"></el-table-column>
             <el-table-column prop="totalFurtherEdu" label="累计继续教育"></el-table-column>
             <el-table-column prop="totalHomeLoads" label="累计住房贷款利息"></el-table-column>
@@ -153,10 +154,10 @@ export default {
               this.getList()
             }
             if(res.data === "PROCESSING"){
+              this.returnLoadingText ="查询中";
               this.isShowReturn = true;
               this.returnLoading = true;
               setTimeout(()=>{
-                this.returnLoadingText ="查询中";
                 this.selectDownLoadFirst()
               },3000)
             }
@@ -171,7 +172,7 @@ export default {
         .then(res=>{
           if(res.data === "PROCESSING"){
             setTimeout(()=>{
-              this.returnLoadingText ="查询中。。。";
+              this.returnLoadingText ="查询中";
               this.selectDownLoadSec()
             },10000)
           }

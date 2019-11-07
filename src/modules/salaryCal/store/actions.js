@@ -1,4 +1,4 @@
-import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord} from './api'
+import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial} from './api'
 
 export const actionGetSalaryStatus = ({ dispatch },id) => {
   return apiGetSalaryStatus(id);
@@ -36,5 +36,11 @@ export const actionSocialProvidentTemplate = ({ dispatch }) => {
 export const actionSocialProvidentRecord = ({ dispatch },uuid) => {
   return apiSocialProvidentRecord(uuid);
 }
+
+//社保公积金  复制上月累计数据
+export const actionSyncLastMonthSocial = ({ dispatch },params) => {
+  return apisyncLastMonthSocial(params);
+}
+
 
 
