@@ -208,7 +208,6 @@ export default {
       ) {
         return true;
       }
-      return false;
     },
     //当前日期在15号之前且所选月份是上月或本月以及申报状态为未申报以及所选年为今年
     //当前日期在15号之后且所选是年月为当年当月以及已生成数据
@@ -553,13 +552,11 @@ export default {
       }
       return false;
     },
-    changeMonth(month) {
-      this.formatQuerymonth(month);
-      this.getList();
-    },
     formatQuerymonth(defaultDate) {
       let currentDate = defaultDate.replace("年", "-");
       this.reportForm.queryMonth = currentDate.replace("月", "");
+      this.selectMonth = this.reportForm.queryMonth.split('-')[1];
+      this.selectYear = this.reportForm.queryMonth.split('-')[0];
     },
     getTaxSubjectInfoList() {
       this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
@@ -601,8 +598,8 @@ export default {
         .then(res => {
           if (res.success) {
             this.loading = false;
-            this.selectYear = this.reportForm.queryMonth.substr(0, 4);
-            this.selectMonth = this.reportForm.queryMonth.substr(6, 2);
+            // this.selectYear = this.reportForm.split('-')[0];
+            // this.selectMonth = this.reportForm.queryMonth.substr(6, 2);
             this.reportObj.reportStatus = this.statusType.declareStatus[
               res.data.reportStatus
             ];
