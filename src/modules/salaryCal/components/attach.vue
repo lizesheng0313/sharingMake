@@ -65,17 +65,16 @@
     <!-- 获取反馈结果-->
     <el-dialog
       :visible.sync="isShowReturn"
-      width="550px"
+      width="480px"
       center
       class="diy-el_dialog"
       :show-close="false"
       :close-on-click-modal="closeModel"
     >
-      <div>
-
+      <div v-loading="returnLoading" :element-loading-text="returnLoadingText" style="height: 80px;">
       </div>
-      <div class="dialog-footer">
-        <el-button @click="isShowReportInfo=false" v-show="isShowIknow">我知道了</el-button>
+      <div class="footer-btn">
+        <el-button @click="closeReturnMsg" v-show="isShowIknow">我知道了</el-button>
       </div>
     </el-dialog>
   </div>
@@ -111,6 +110,7 @@ export default {
       returnLoadingText:"查询中",
       closeModel:false,
       isShowIknow:false,
+      reportInfoList:[]
     };
   },
   computed:{
@@ -155,23 +155,86 @@ export default {
             if(res.data === "PROCESSING"){
               this.isShowReturn = true;
               this.returnLoading = true;
-              this.selectDownLoad()
+              setTimeout(()=>{
+                this.returnLoadingText ="查询中";
+                this.selectDownLoadFirst()
+              },3000)
             }
-          }else{
-
           }
         })
       // this.isShowDownLoadTip= true;
     },
     //查询下载结果
-    selectDownLoad(){
+    selectDownLoadFirst(){
       this.$store
         .dispatch("taxPageStore/actionDownloadAdditionQuery",this.downLoadForm)
         .then(res=>{
-          console.log(res)
+          if(res.data === "PROCESSING"){
+            setTimeout(()=>{
+              this.returnLoadingText ="查询中。。。";
+              this.selectDownLoadSec()
+            },10000)
+          }
+          if(res.data === "SUCCESS"){
+            this.returnLoadingText = "数据下载成功。";
+            setTimeout(()=>{
+              this.isShowReturn = false;
+              this.getList()
+            },3000)
+          }
+          if(res.data === "FAIL"){
+            this.returnLoadingText = res.message;
+            this.isShowIknow = true;
+          }
         })
-
-
+    },
+    selectDownLoadSec(){
+      this.$store
+        .dispatch("taxPageStore/actionDownloadAdditionQuery",this.downLoadForm)
+        .then(res=>{
+          if(res.data === "PROCESSING"){
+            setTimeout(()=>{
+              this.selectDownLoadThird()
+            },15000)
+          }
+          if(res.data === "SUCCESS"){
+            this.returnLoadingText = "数据下载成功。";
+            setTimeout(()=>{
+              this.isShowReturn = false;
+              this.getList()
+            },3000)
+          }
+          if(res.data === "FAIL"){
+            this.returnLoadingText = res.message;
+            this.isShowIknow = true;
+          }
+        })
+    },
+    selectDownLoadThird(){
+      this.$store
+        .dispatch("taxPageStore/actionDownloadAdditionQuery",this.downLoadForm)
+        .then(res=>{
+          if(res.data === "PROCESSING"){
+            this.returnLoadingText = "数据下载局端处理中，请稍后再获取反馈。"
+            this.isShowIknow = true;
+          }
+          if(res.data === "SUCCESS"){
+            this.returnLoadingText = "数据下载成功。";
+            setTimeout(()=>{
+              this.isShowReturn = false;
+              this.getList()
+            },3000)
+          }
+          if(res.data === "FAIL"){
+            this.returnLoadingText = res.message;
+            this.isShowIknow = true;
+          }
+        })
+    },
+    //关闭加载提示
+    closeReturnMsg(){
+      this.isShowReturn = false;
+      this.getList()
     },
     changeMonth() {
       this.getList()
@@ -198,6 +261,12 @@ export default {
 @import "../../../assets/scss/helpers.scss";
 .calc-attach {
   padding:0 22px;
+  .footer-btn{
+    height: 40px;
+    line-height: 40px;
+    margin-top: 10px;
+    text-align: right;
+  }
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
