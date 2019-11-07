@@ -39,8 +39,10 @@
               <el-table-column label="序号" type="index"></el-table-column>
               <el-table-column prop="taxSubName" label="扣缴义务人名称"></el-table-column>
               <el-table-column prop="taxPayerNo" label="纳税人识别号"></el-table-column>
-              <el-table-column prop="remark" label="办税人员姓名"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
+              <el-table-column prop="remark" label="经办人姓名"></el-table-column>
+              <el-table-column prop="accreditStatus" label="授权状态"></el-table-column>
+              <el-table-column prop="failReason" label="未通过原因"></el-table-column>
               <el-table-column label="操作" fixed="right">
               <template slot-scope="scope">
                 <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>

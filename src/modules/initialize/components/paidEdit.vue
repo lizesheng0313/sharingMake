@@ -22,8 +22,8 @@
           </el-form-item>
           <div class="tip">在自然人税收管理系统扣缴客户端中个税申报操作人员姓名</div>
           <div class="secTitle">扣缴义务人信息验证</div>
-          <el-form-item label="申报密码" prop="password">
-            <el-input v-model="newBodyFormData.password"></el-input>
+          <el-form-item label="申报密码" prop="pwd">
+            <el-input v-model="newBodyFormData.pwd"></el-input>
           </el-form-item>
           <div class="tip">自然人税收管理系统扣缴客户端的申报密码</div>
           <div class="checkStyle">
@@ -51,7 +51,7 @@ export default {
         taxPayerNo: "",
         taxSubId: "",
         taxSubName: "",
-        password:""
+        pwd:""
       },
       taxListRules: {
         taxSubName: [
@@ -75,7 +75,7 @@ export default {
             trigger: "blur"
           }
         ],
-        password: [
+        pwd: [
           {
             required: true,
             message: "请输入申报密码",
@@ -88,7 +88,7 @@ export default {
       isShowScreen: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
       closeModel:false,
-      checked:false
+      checked:true
     };
   },
   mounted() {
@@ -104,7 +104,7 @@ export default {
         this.$refs.taxListForm.resetFields();
       });
     },
-
+    //授权
     handleNewBody() {
       this.$refs.taxListForm.validate(valid => {
         if (valid) {
@@ -115,6 +115,7 @@ export default {
               .dispatch("taxPageStore/actionDealTaxSubject", this.newBodyFormData)
               .then(res => {
                 if (res.success) {
+                  this.$message.success("成功");
                   this.handleCancel(true)
                 }
               });

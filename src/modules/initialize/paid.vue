@@ -39,8 +39,10 @@
               <el-table-column label="序号" type="index"></el-table-column>
               <el-table-column prop="taxSubName" label="扣缴义务人名称"></el-table-column>
               <el-table-column prop="taxPayerNo" label="纳税人识别号"></el-table-column>
-              <el-table-column prop="remark" label="办税人员姓名"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
+              <el-table-column prop="remark" label="经办人姓名"></el-table-column>
+              <el-table-column prop="accreditStatus" label="授权状态"></el-table-column>
+              <el-table-column prop="failReason" label="未通过原因"></el-table-column>
               <el-table-column label="操作" fixed="right">
                 <template slot-scope="scope">
                   <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
@@ -51,40 +53,6 @@
           </div>
         </div>
       </div>
-      <el-dialog
-        :title="currentTypeName"
-        :visible.sync="isShowScreen"
-        width="480px"
-        center
-        class="diy-el_dialog"
-        :close-on-click-modal="closeModel"
-      >
-        <el-form
-          :rules="taxListRules"
-          label-width="130px"
-          ref="taxListForm"
-          class="addForm"
-          :model="newBodyFormData"
-        >
-          <el-form-item label="扣缴义务人名称" prop="taxSubName">
-            <el-input v-model="newBodyFormData.taxSubName"></el-input>
-          </el-form-item>
-          <el-form-item label="纳税人识别号" prop="taxPayerNo">
-            <el-input v-model="newBodyFormData.taxPayerNo"></el-input>
-          </el-form-item>
-          <el-form-item label="法定代表人" prop="legalName">
-            <el-input v-model="newBodyFormData.legalName"></el-input>
-          </el-form-item>
-          <el-form-item label="经办人姓名" prop="remark">
-            <el-input v-model="newBodyFormData.remark"></el-input>
-          </el-form-item>
-
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handleNewBody">确定</el-button>
-          <el-button @click="isShowScreen=false">取消</el-button>
-        </span>
-      </el-dialog>
     </div>
     <right-pop :pop-show="popShow" :has-footer="false" popTitle="扣缴义务人" :popWidth="600">
       <div slot="pop-content">
@@ -170,20 +138,6 @@ export default {
     hanleClose(data){
       this.popShow.isshow = false;
       if(data){this.getList()}
-    },
-    handleNewBody() {
-      this.$refs.taxListForm.validate(valid => {
-        if (valid) {
-          this.$store
-            .dispatch("taxPageStore/actionDealTaxSubject", this.newBodyFormData)
-            .then(res => {
-              if (res.success) {
-                this.getList();
-                this.isShowScreen = false;
-              }
-            });
-        }
-      });
     },
     handleSearch() {
       this.getList();
