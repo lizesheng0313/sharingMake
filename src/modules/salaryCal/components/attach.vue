@@ -75,7 +75,7 @@
       <div v-loading="returnLoading" :element-loading-text="returnLoadingText" style="height: 80px;">
       </div>
       <div class="footer-btn">
-        <el-button @click="closeReturnMsg" v-show="isShowIknow">我知道了</el-button>
+        <el-button @click="closeReturnMsg" v-show="isShowIknow" plain type="primary">我知道了</el-button>
       </div>
     </el-dialog>
   </div>
@@ -155,6 +155,7 @@ export default {
             }
             if(res.data === "PROCESSING"){
               this.returnLoadingText ="查询中";
+              this.isShowIknow = false;
               this.isShowReturn = true;
               this.returnLoading = true;
               setTimeout(()=>{
@@ -265,7 +266,7 @@ export default {
   .footer-btn{
     height: 40px;
     line-height: 40px;
-    margin-top: 10px;
+    margin-top: 20px;
     text-align: right;
   }
   .header {

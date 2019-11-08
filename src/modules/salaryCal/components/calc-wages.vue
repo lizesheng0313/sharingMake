@@ -249,6 +249,21 @@
         <el-button @click="showExportSalaryDetail = false">取消</el-button>
       </span>
     </el-dialog>
+    <!-- 获取反馈结果-->
+    <el-dialog
+      :visible.sync="isShowReturn"
+      width="480px"
+      center
+      class="diy-el_dialog"
+      :show-close="false"
+      :close-on-click-modal="closeModel"
+    >
+      <div v-loading="returnLoading" :element-loading-text="returnLoadingText" style="height: 80px;">
+      </div>
+      <div class="footer-btn">
+        <el-button @click="closeReturnMsg" v-show="isShowIknow" plain type="primary">我知道了</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -311,6 +326,9 @@ export default {
           enumEmpTypes:[],//用工类型
         },
       },
+      selectForm:{
+        checkId:this.$route.query.id,
+      },
       enumEmpType:[],//用工类型
       noEnumEmpType:null,
       salaryTableData:[],
@@ -336,8 +354,12 @@ export default {
       uploadFileDisabled:true,//导入通过数据禁用
       tableAllData:[],
       showCount:true,
-      tableLoading:false,
+      isShowReturn:false,
+      returnLoading:false,
+      returnLoadingText:"查询中",
       closeModel:false,
+      isShowIknow:false,
+      tableLoading:false,
       exportLoading:false,
       taxSubIdLoading:false,
     };
@@ -478,7 +500,6 @@ export default {
             //人员信息
           this.checkedPerson = ['工号', '姓名', '身份证号', '部门'];
           this.isIndeterminate = true;
-          console.log(this.diyOption)
            // 配置项
           this.diyOption.forEach((item,index)=>{
             if(item.title === '个税计算项'){
@@ -672,12 +693,93 @@ export default {
     handleCalcSalary(){
       apiSalaryComputes(this.salaryForm.checkId)
         .then(res=>{
-          if(res.code === "0000"){
-            //查看状态
-            this.$message.success('薪资计算成功');
-            this.loading()
+          if(res.success){
+            if(res.data === "SUCCESS"){
+              this.loading();
+            }
+            if(res.data === "PROCESSING"){
+              this.returnLoadingText ="查询中";
+              this.isShowReturn = true;
+              this.isShowIknow = false;
+              this.returnLoading = true;
+              setTimeout(()=>{
+                this.selectDownLoadFirst()
+              },3000)
+            }
           }
         })
+    },
+    //查询下载结果
+    selectDownLoadFirst(){
+      this.$store
+        .dispatch("salaryCalStore/actionSalaryCheckQuery",this.selectForm)
+        .then(res=>{
+          if(res.data === "PROCESSING"){
+            setTimeout(()=>{
+              this.returnLoadingText ="查询中";
+              this.selectDownLoadSec()
+            },10000)
+          }
+          if(res.data === "SUCCESS"){
+            this.returnLoadingText = "薪资计算成功。";
+            setTimeout(()=>{
+              this.isShowReturn = false;
+              this.loading()
+            },3000)
+          }
+          if(res.data === "FAIL"){
+            this.returnLoadingText = res.message;
+            this.isShowIknow = true;
+          }
+        })
+    },
+    selectDownLoadSec(){
+      this.$store
+        .dispatch("salaryCalStore/actionSalaryCheckQuery",this.selectForm)
+        .then(res=>{
+          if(res.data === "PROCESSING"){
+            setTimeout(()=>{
+              this.selectDownLoadThird()
+            },15000)
+          }
+          if(res.data === "SUCCESS"){
+            this.returnLoadingText = "薪资计算成功。";
+            setTimeout(()=>{
+              this.isShowReturn = false;
+              this.loading()
+            },3000)
+          }
+          if(res.data === "FAIL"){
+            this.returnLoadingText = res.message;
+            this.isShowIknow = true;
+          }
+        })
+    },
+    selectDownLoadThird(){
+      this.$store
+        .dispatch("salaryCalStore/actionSalaryCheckQuery",this.selectForm)
+        .then(res=>{
+          if(res.data === "PROCESSING"){
+            this.returnLoadingText = "薪资计算局端处理中，请稍后再获取反馈。"
+            this.isShowIknow = true;
+          }
+          if(res.data === "SUCCESS"){
+            this.returnLoadingText = "薪资计算成功。";
+            setTimeout(()=>{
+              this.isShowReturn = false;
+              this.loading()
+            },3000)
+          }
+          if(res.data === "FAIL"){
+            this.returnLoadingText = res.message;
+            this.isShowIknow = true;
+          }
+        })
+    },
+    //关闭加载提示
+    closeReturnMsg(){
+      this.isShowReturn = false;
+      this.loading()
     },
   //  薪资审核
     handleCheckSalary(type){
@@ -851,6 +953,12 @@ export default {
     .avatar-uploader{
       margin-top:20px;
     }
+  }
+  .footer-btn{
+    height: 40px;
+    line-height: 40px;
+    margin-top: 20px;
+    text-align: right;
   }
 }
 </style>

@@ -291,6 +291,15 @@ export function apiSalaryComputes(id) {
     }
   })
 }
+
+//薪资计算反馈
+export function apiSalaryCheckQuery(form) {
+  return fetch({
+    url: '/api/salary/salaryCheckQuery',
+    method: 'post',
+    params:form
+  })
+}
 //薪资审核
 export function apiAuditSalaryCheck(form) {
   return fetch({
