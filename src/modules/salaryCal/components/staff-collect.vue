@@ -16,7 +16,9 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
+              <el-tooltip class="item" effect="dark" content="若未选择人员，抓取工资表全部待报送人员；若选择了人员，抓取所选人员中待报送人员报送。" placement="top">
+                <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
+              </el-tooltip>
               <el-button type="primary" class="add-import" @click="handleReportInfo">获取反馈</el-button>
             </div>
           </div>
