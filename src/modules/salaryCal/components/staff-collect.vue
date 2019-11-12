@@ -132,6 +132,7 @@
           <el-button @click="isShowReportInfo=false" v-show="isShowIknow">我知道了</el-button>
         </div>
       </el-dialog>
+      <authorizeTip ref="authorizeTip"></authorizeTip>
     </div>
   </div>
 </template>
@@ -144,7 +145,13 @@ let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
   date.year + "-" + (date.month >= 10 ? date.month : "0" + date.month);
+import authorizeTip from "@/components/tool/authorizeTip"
+import importData from "@/components/tool/importData";
 export default {
+  components:{
+    authorizeTip,
+    importData,
+  },
   data() {
     return {
       submitLoading: false,
@@ -177,9 +184,11 @@ export default {
     })
   },
   created(){
+
   },
   mounted() {
     const that = this;
+  this.$refs.authorizeTip.show()
     that.getList();
   },
   methods: {
@@ -196,6 +205,8 @@ export default {
             this.awaitReportCount = res.data.awaitReportCount;
           }
         });
+    },
+    showAuth(){
     },
     //报送
     handleReport() {
@@ -217,18 +228,24 @@ export default {
             .dispatch("taxPageStore/actionReport", {
               ids,
               date:this.salaryItem.date,
+              checkId:this.ruleForm.checkId
             })
             .then(res => {
               if (res.success) {
-                this.isShowReportInfo = true;
-                this.reportInfoLoading = true;
-                //如果是自由接口...报送直接返回数据
-                if(res.data){
-                  this.reportInfoList = res.data;
-                  this.reportInfoLoading = false;
-                }else{//如果是税友接口报送后需要查询
-                  this.selectShuiyou()
+                if(res.data.status === "SUCCESS"){
+
+                }else{
+
                 }
+                // this.isShowReportInfo = true;
+                // this.reportInfoLoading = true;
+                // //如果是自由接口...报送直接返回数据
+                // if(res.data){
+                //   this.reportInfoList = res.data;
+                //   this.reportInfoLoading = false;
+                // }else{//如果是税友接口报送后需要查询
+                //   this.selectShuiyou()
+                // }
               }else{
                 this.$message.warning(res.message)
               }
