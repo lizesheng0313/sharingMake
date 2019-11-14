@@ -47,6 +47,8 @@ const config = Object.assign(webpackConfigBase.config, {
         // target:"http://172.19.63.49:9999",
         //陈莹2
         // target:"http://172.19.64.227:9999",
+        //小白
+        target:" http://172.19.65.31:9999",
         secure: false,
         changeOrigin: true,
         // pathRewrite: {

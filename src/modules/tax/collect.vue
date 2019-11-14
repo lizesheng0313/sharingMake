@@ -248,6 +248,7 @@
         </span>
       </el-dialog>
       <!-- 获取反馈结果-->
+      <!-- 报送-->
       <el-dialog
         :visible.sync="isShowReportInfo"
         width="550px"
@@ -256,22 +257,34 @@
         :show-close="false"
         :close-on-click-modal="closeModel"
       >
-        <el-table :data="reportInfoList"
-                  v-loading="reportInfoLoading"
-                  :element-loading-text="reportInfoLodingText">
-          <el-table-column prop="empName" label="姓名" width="120"></el-table-column>
-          <el-table-column prop="idType" label="证件类型" width="120">
-            <template slot-scope="scope">{{returnStatus('idType',scope.row.idType)}}</template>
-          </el-table-column>
-          <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
-          <el-table-column prop="reportStatus" label="报送状态" width="90">
-            <template slot-scope="scope">{{returnStatus('reportStatus',scope.row.reportStatus)}}</template>
-          </el-table-column>
-        </el-table>
+        <el-row v-for="(item,index) in reportInfoList" :key="index">
+          <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送完成</el-col></div>
+          <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">获取反馈中。。。</el-col></div>
+          <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送失败，{{item.failReason}}</el-col></div>
+        </el-row>
+        <div v-loading="reportInfoLoading" style="height: 40px"></div>
         <div class="dialog-footer">
-          <el-button @click="isShowReportInfo=false" v-show="isShowIknow">我知道了</el-button>
+          <el-button @click="isShowReportInfo=false" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
         </div>
       </el-dialog>
+      <!-- 获取反馈 -->
+      <el-dialog
+        :visible.sync="isShowReturnInfo"
+        width="550px"
+        title="获取反馈"
+        center
+        class="diy-el_dialog"
+        :show-close="false"
+        :close-on-click-modal="closeModel"
+      >
+        <el-row v-for="(item,index) in reportReturnList" :key="index">
+          <el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ item.dealStatus }}</el-col>
+        </el-row>
+        <div class="dialog-footer">
+          <el-button @click="isShowReturnInfo=false" type="primary" plain>我知道了</el-button>
+        </div>
+      </el-dialog>
+      <authorizeTip ref="authorizeTip"></authorizeTip>
     </div>
   </div>
 </template>
@@ -280,6 +293,7 @@ import { mapState } from "vuex";
 import * as SCR from "./util/constData";
 import * as AT from "./store/actionTypes";
 import fun from "@/util/fun";
+import authorizeTip from "@/components/tool/authorizeTip"
 let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
@@ -311,9 +325,11 @@ export default {
         ids: [],
       },
       reportInfoList:[],
+      reportReturnList:[],
+      isShowReturnInfo:false,
       isShowReportInfo: false,
       reportInfoLoading:false,
-      reportInfoLodingText:"数据查询中请稍后！",
+      isShowIknow:false,
       taxSubjectInfolist: [],
       currentTaxSubName: "",
       increaseCount: 0,
@@ -334,8 +350,10 @@ export default {
       list: [],
       closeModel: false,
       isSave:this.$route.query.isSave,
-      isShowIknow:false,
     };
+  },
+  components:{
+    authorizeTip,
   },
   computed:{
     ...mapState("salaryCalStore", {
@@ -373,59 +391,69 @@ export default {
     //报送
     handleReport() {
       let reportCount = this.reportForm.ids.length > 0 ? this.reportForm.ids.length:this.awaitReportCount;
-      this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
-      this.$confirm(
-        "系统共检测到有" +
-        reportCount +
-        "位人员需要进行信息提交，请确认是否现在提交 ?",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-          center: false
-        }
-      ).then(() => {
-        //报送
-        this.$store
-          .dispatch("taxPageStore/actionTaxReport", this.reportForm)
-          .then(res => {
-            if (res.success) {
-              this.isShowReportInfo = true;
-              this.reportInfoLoading = true;
-              //如果是自由接口...报送直接返回数据
-              if(res.data){
-                this.reportInfoList = res.data;
-                this.reportInfoLoading = false;
-              }else{//如果是税友接口报送后需要查询
-                this.selectShuiyou()
+      if( this.reportForm.ids.length > 0){
+        this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
+        this.$confirm(
+          "系统共检测到有" +
+          reportCount +
+          "位人员需要进行信息提交，请确认是否现在提交 ?",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+            center: false
+          }
+        ).then(() => {
+          //报送
+          this.$store
+            .dispatch("taxPageStore/actionTaxReport", this.reportForm)
+            .then(res => {
+              if (res.success) {
+                //验证通过
+                if(res.data.status === "SUCCESS"){
+                  this.isShowReportInfo = true;
+                  this.reportInfoLoading = true;
+                  this.reportInfoList = res.data.taxSubList;
+                  //是否进行下步查询
+                  if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+                    this.selectShuiyou()
+                  }else{//报送全部成功或失败
+                    this.reportInfoLoading = false;
+                    this.isShowIknow = true;
+                  }
+                }else{//授权失败
+                  this.$refs.authorizeTip.show()
+                }
+              }else{
+                this.$message.warning(res.message)
               }
-            }else{
-              this.$message.warning(res.message)
-            }
-          });
-      }).catch(() => {});
+            });
+        }).catch(() => {});
+      }else{
+        this.$message.warning("请选择报送人员。。。")
+      }
     },
     selectShuiyou(){
-      this.reportInfoLodingText = "人员报送数据局端处理中。。。";
       this.isShowIknow = false;
       //查询第一次
       setTimeout(()=>{
         this.$store
           .dispatch("taxPageStore/actionPostReportInfo", {
             date: this.salaryItem.date,
-            taxSubjectId:this.ruleForm.taxSubjectId,
+            checkId:this.$route.query.id,
           }).then(r0 => {
           if(r0.success){
-            if(!r0.data) {
-              this.reportInfoLodingText = "人员报送数据局端处理中。。。";
-              this.selectSec()
+            if(r0.data.status === "SUCCESS"){
+              this.reportInfoList.push(...r0.data.taxSubList);
+              if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+                this.selectSec()
+              } else{
+                this.reportInfoLoading = false;
+                this.isShowIknow = true;
+              }
             }else{
-              this.reportInfoLoading = false;
-              this.reportInfoList = r0.data
+
             }
-          }else{
-            this.reportInfoLodingText= "无待反馈的人员，无需获取反馈。";
-            this.isShowIknow = true;
           }
         })
       },3000)
@@ -435,19 +463,18 @@ export default {
       setTimeout(()=>{
         this.$store.dispatch("taxPageStore/actionPostReportInfo", {
           date: this.salaryItem.date,
-          taxSubjectId:this.ruleForm.taxSubjectId,
-        }).then(r1 => {
-          if(r1.success){
-            if (!r1.data) {
-              this.reportInfoLodingText = "人员报送数据局端处理中。。。";
+          checkId:this.$route.query.id,
+        }).then(r0 => {
+          if(r0.data.status === "SUCCESS"){
+            this.reportInfoList.push(...r0.data.taxSubList);
+            if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
               this.selectThird()
-            }else{
+            } else{
               this.reportInfoLoading = false;
-              this.reportInfoList = r1.data;
+              this.isShowIknow = true;
             }
           }else{
-            this.reportInfoLodingText= "无待反馈的人员，无需获取反馈";
-            this.isShowIknow = true;
+
           }
         })
       },10000)
@@ -458,18 +485,11 @@ export default {
         this.$store
           .dispatch("taxPageStore/actionPostReportInfo", {
             date: this.salaryItem.date,
-            taxSubjectId:this.ruleForm.taxSubjectId,
-          }).then(r2 => {
-          if(r2.success){
-            if(!r2.data){
-              this.reportInfoLodingText = "人员报送数据局端处理中，请稍后再获取反馈。"
-              this.isShowIknow = true;
-            }else{
-              this.reportInfoLoading = false;
-              this.reportInfoList = r2.data
-            }
-          }else{
-            this.reportInfoLodingText= "无待反馈的人员，无需获取反馈"
+            checkId:this.$route.query.id,
+          }).then(re => {
+          if(re.success){
+            this.reportInfoList.push(...re.data.taxSubList);
+            this.reportInfoLoading = false;
             this.isShowIknow = true;
           }
         })
@@ -477,17 +497,21 @@ export default {
     },
     //获取反馈
     handleReportInfo(){
+      this.reportReturnList = [];
       this.$store
         .dispatch("taxPageStore/actionPostReportInfo", {
           date: this.salaryItem.date,
-          taxSubjectId:this.ruleForm.taxSubjectId,
+          checkId:this.$route.query.id,
         }).then(res=>{
         if(res.success){
-          if(res.data){
+          // 已授权，有查询结果
+          if(res.data.status === "SUCCESS"){
+            this.reportReturnList = res.data.taxSubList;
+            console.log(res.data.taxSubList)
             this.isShowReportInfo = true;
-            this.reportInfoList = res.data
-          }else{
-            this.$message.warning("未查询到结果，请稍后点击“获取反馈”进行查询。")
+          }else{//未授权
+            this.isShowReportInfo = false;
+            this.$refs.authorizeTip.show()
           }
         }else{
           this.$message.warning(res.message)
