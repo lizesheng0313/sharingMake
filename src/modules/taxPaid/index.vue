@@ -26,12 +26,14 @@
           v-loading="loading"
         >
           <el-table-column  label="序号" type="index"></el-table-column>
-          <el-table-column prop="name" label="所得月份"></el-table-column>
+          <el-table-column prop="taxSubName" label="扣缴义务人"></el-table-column>
           <el-table-column prop="tableName" label="申报表"></el-table-column>
-          <el-table-column prop="status" label="征收品目"></el-table-column>
-          <el-table-column prop="isThree" label="税率"></el-table-column>
+          <el-table-column prop="status" label="申报状态"></el-table-column>
+          <el-table-column prop="isThree" label="是否有反方协议"></el-table-column>
           <el-table-column prop="paidStatus" label="缴款状态" width="140"></el-table-column>
-          <el-table-column prop="time" label="缴款日期" width="140"></el-table-column>
+          <el-table-column prop="payDate" label="缴款日期" width="140">
+
+          </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button size="primary" @click="handlePaid(scope.row.name)">立即缴款</el-button>
@@ -66,9 +68,25 @@ export default {
     let month = nowDate.month >= 10 ? nowDate.month : "0" + nowDate.month;
     this.currentDate = year+"-"+month;
   },
+  mounted(){
+    this.getList()
+  },
   methods:{
+    getList(){
+      this.$store
+        .dispatch(
+          "taxPaidStore/actionTripleAgreementList", {
+            date:this.currentDate
+          }
+        )
+        .then(res => {
+          if (res.success) {
+            this.paidList = res.data
+          }
+        });
+    },
     changeDate(data){
-      console.log(data)
+      this.currentDate = data
     },
     //立即缴款
     handlePaid(data){

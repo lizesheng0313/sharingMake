@@ -16,6 +16,7 @@
           </div>
           <div class="right">
             <el-button type="warning" plain class="export-button" @click="handleExport">全部下载</el-button>
+            <el-button type="primary" plain class="add-import" @click="handleReportInfo">获取反馈</el-button>
           </div>
         </div>
         <div class="staff-table">
@@ -50,45 +51,58 @@
         </div>
       </div>
     </div>
+    <!-- 下载-->
     <el-dialog
-      title=""
-      :visible.sync="isShowDownLoadTip"
-      width="500px"
-      center
-      class="diy-el_dialog"
-    >
-      <div class="downdloadTip"><i class="el-icon-success"></i> <span> 提示</span></div>
-      <div class="noDownLoad">申报密码错误，对应人员专项附加扣除未下载</div>
-      <div class="dialog-footer-right">
-        <el-button type="primary" @click="isShowDownLoadTip=false">我知道了</el-button>
-      </div>
-    </el-dialog>
-    <!-- 获取反馈结果-->
-    <el-dialog
-      :visible.sync="isShowReturn"
-      width="480px"
+      :visible.sync="isShowReportInfo"
+      width="550px"
       center
       class="diy-el_dialog"
       :show-close="false"
       :close-on-click-modal="closeModel"
     >
-      <div v-loading="returnLoading" :element-loading-text="returnLoadingText" style="height: 80px;">
-      </div>
-      <div class="footer-btn">
-        <el-button @click="closeReturnMsg" v-show="isShowIknow" plain type="primary">我知道了</el-button>
+      <el-row v-for="(item,index) in reportInfoList" :key="index">
+        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送完成</el-col></div>
+        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">获取反馈中。。。</el-col></div>
+        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送失败，{{item.failReason}}</el-col></div>
+      </el-row>
+      <div v-loading="reportInfoLoading" style="height: 40px"></div>
+      <div class="dialog-footer">
+        <el-button @click="onShowReportInfo" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
       </div>
     </el-dialog>
+    <!-- 获取反馈 -->
+    <el-dialog
+      :visible.sync="isShowReturnInfo"
+      width="550px"
+      title="获取反馈"
+      center
+      class="diy-el_dialog"
+      :show-close="false"
+      :close-on-click-modal="closeModel"
+    >
+      <el-row v-for="(item,index) in reportReturnList" :key="index">
+        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送完成</el-col></div>
+        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">获取反馈中。。。</el-col></div>
+        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送失败，{{item.failReason}}</el-col></div>
+      </el-row>
+      <div class="dialog-footer">
+        <el-button @click="isShowReturnInfo=false" type="primary" plain>我知道了</el-button>
+      </div>
+    </el-dialog>
+    <authorizeTip ref="authorizeTip"></authorizeTip>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
+import authorizeTip from "@/components/tool/authorizeTip"
 import fun from "@/util/fun"
 let date = fun.headDate();
 let defaultDate =
   date.year + "-" + (date.month >= 10 ? date.month : "0" + date.month);
-
 export default {
-  components: {},
+  components: {
+    authorizeTip,
+  },
   data() {
     return {
       loading: false,
@@ -105,13 +119,13 @@ export default {
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
       total: 0,
-      isShowDownLoadTip:false,
-      isShowReturn:false,
-      returnLoading:false,
-      returnLoadingText:"查询中",
-      closeModel:false,
+      reportInfoList:[],
+      reportReturnList:[],
+      isShowReturnInfo:false,
+      isShowReportInfo: false,
+      reportInfoLoading:false,
       isShowIknow:false,
-      reportInfoList:[]
+      closeModel:false,
     };
   },
   computed:{
@@ -144,94 +158,111 @@ export default {
           }
         });
     },
-    //下载
+    onShowReportInfo(){
+      this.isShowReportInfo = false;
+      this.getList();
+    },
+//下载
     handleExport() {
       this.$store
         .dispatch("taxPageStore/actionDownloadAddition", this.downLoadForm)
         .then(res=>{
-          if(res.success){
-            if(res.data === "SUCCESS"){
-              this.getList()
+          if (res.success) {
+            //验证通过
+            if(res.data.status === "SUCCESS"){
+              this.isShowReportInfo = true;
+              this.reportInfoLoading = true;
+              this.reportInfoList = res.data.taxSubList;
+              //是否进行下步查询
+              if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+                this.selectShuiyou()
+              }else{//全部成功或失败
+                this.reportInfoLoading = false;
+                this.isShowIknow = true;
+              }
+            }else{//授权失败
+              this.$refs.authorizeTip.show()
             }
-            if(res.data === "PROCESSING"){
-              this.returnLoadingText ="查询中";
-              this.isShowIknow = false;
-              this.isShowReturn = true;
-              this.returnLoading = true;
-              setTimeout(()=>{
-                this.selectDownLoadFirst()
-              },3000)
+          }else{
+            this.$message.warning(res.message)
+          }
+        })
+    },
+    selectShuiyou(){
+      this.isShowIknow = false;
+      //查询第一次
+      setTimeout(()=>{
+        this.$store
+          .dispatch("taxPageStore/actionDownloadAdditionQuery",this.downLoadForm)
+          .then(r0 => {
+          if(r0.success){
+            if(r0.data.status === "SUCCESS"){
+              this.reportInfoList.push(...r0.data.taxSubList);
+              if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+                this.selectSec()
+              } else{
+                this.reportInfoLoading = false;
+                this.isShowIknow = true;
+              }
+            }else{
+
             }
           }
         })
-      // this.isShowDownLoadTip= true;
+      },3000)
     },
-    //查询下载结果
-    selectDownLoadFirst(){
-      this.$store
-        .dispatch("taxPageStore/actionDownloadAdditionQuery",this.downLoadForm)
-        .then(res=>{
-          if(res.data === "PROCESSING"){
-            setTimeout(()=>{
-              this.returnLoadingText ="查询中";
-              this.selectDownLoadSec()
-            },10000)
+    //第二次查询
+    selectSec(){
+      setTimeout(()=>{
+        this.$store
+          .dispatch("taxPageStore/actionDownloadAdditionQuery",this.downLoadForm)
+          .then(r0 => {
+          if(r0.data.status === "SUCCESS"){
+            this.reportInfoList.push(...r0.data.taxSubList);
+            if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+              this.selectThird()
+            } else{
+              this.reportInfoLoading = false;
+              this.isShowIknow = true;
+            }
+          }else{
           }
-          if(res.data === "SUCCESS"){
-            this.returnLoadingText = "数据下载成功。";
-            setTimeout(()=>{
-              this.isShowReturn = false;
-              this.getList()
-            },3000)
-          }
-          if(res.data === "FAIL"){
-            this.returnLoadingText = res.message;
+        })
+      },10000)
+    },
+    //第三次查询
+    selectThird(){
+      setTimeout(()=>{
+        this.$store
+          .dispatch("taxPageStore/actionDownloadAdditionQuery",this.downLoadForm)
+          .then(re => {
+          if(re.success){
+            this.reportInfoList.push(...re.data.taxSubList);
+            this.reportInfoLoading = false;
             this.isShowIknow = true;
           }
         })
+      },15000)
     },
-    selectDownLoadSec(){
+    //获取反馈
+    handleReportInfo(){
+      this.reportReturnList = [];
       this.$store
         .dispatch("taxPageStore/actionDownloadAdditionQuery",this.downLoadForm)
         .then(res=>{
-          if(res.data === "PROCESSING"){
-            setTimeout(()=>{
-              this.selectDownLoadThird()
-            },15000)
+        if(res.success){
+          // 已授权，有查询结果
+          if(res.data.status === "SUCCESS"){
+            this.reportReturnList = res.data.taxSubList;
+            this.isShowReturnInfo = true;
+          }else{//未授权
+            this.isShowReportInfo = false;
+            this.$refs.authorizeTip.show()
           }
-          if(res.data === "SUCCESS"){
-            this.returnLoadingText = "数据下载成功。";
-            setTimeout(()=>{
-              this.isShowReturn = false;
-              this.getList()
-            },3000)
-          }
-          if(res.data === "FAIL"){
-            this.returnLoadingText = res.message;
-            this.isShowIknow = true;
-          }
-        })
-    },
-    selectDownLoadThird(){
-      this.$store
-        .dispatch("taxPageStore/actionDownloadAdditionQuery",this.downLoadForm)
-        .then(res=>{
-          if(res.data === "PROCESSING"){
-            this.returnLoadingText = "数据下载局端处理中，请稍后再获取反馈。"
-            this.isShowIknow = true;
-          }
-          if(res.data === "SUCCESS"){
-            this.returnLoadingText = "数据下载成功。";
-            setTimeout(()=>{
-              this.isShowReturn = false;
-              this.getList()
-            },3000)
-          }
-          if(res.data === "FAIL"){
-            this.returnLoadingText = res.message;
-            this.isShowIknow = true;
-          }
-        })
+        }else{
+          this.$message.warning(res.message)
+        }
+      })
     },
     //关闭加载提示
     closeReturnMsg(){
@@ -415,6 +446,11 @@ export default {
   }
   .noDownLoad{
     margin-left: 34px;
+  }
+  .dialog-footer{
+    text-align: right;
+    height: 40px;
+    line-height: 40px;
   }
 }
 </style>

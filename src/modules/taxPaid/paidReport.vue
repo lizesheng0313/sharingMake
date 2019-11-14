@@ -3,7 +3,7 @@
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
-          <span @click="$router.go(-1)">返回 </span><span class="companyName">{{ $route.query.name }}</span>  缴纳税款</span>
+          <span @click="$router.go(-1)">返回 </span><span class="companyName">{{ $route.query.name }}</span> 缴纳税款</span>
         </el-col>
       </el-row>
     </header>

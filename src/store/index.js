@@ -6,6 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 import { salaryCalStore } from '../modules/salaryCal/store'
 import { taxPageStore } from '../modules/tax/store'
 import { cumulativePageStore } from '../modules/initialize/store'
+import { taxPaidStore } from '../modules/taxPaid/store'
 Vue.use(Vuex)
 
 import mutations from './mutations'
@@ -15,7 +16,8 @@ export default new Vuex.Store({
   modules: {
     salaryCalStore,
     taxPageStore,
-    cumulativePageStore
+    cumulativePageStore,
+    taxPaidStore
   },
   state: {
     token: '',
