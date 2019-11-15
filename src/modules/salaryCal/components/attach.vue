@@ -52,24 +52,31 @@
       </div>
     </div>
     <!-- 下载-->
-    <el-dialog
-      :visible.sync="isShowReportInfo"
-      width="550px"
-      center
-      class="diy-el_dialog"
-      :show-close="false"
-      :close-on-click-modal="closeModel"
+<!--    <el-dialog-->
+<!--      :visible.sync="isShowReportInfo"-->
+<!--      width="550px"-->
+<!--      center-->
+<!--      class="diy-el_dialog"-->
+<!--      :show-close="false"-->
+<!--      :close-on-click-modal="closeModel"-->
+<!--    >-->
+<!--      <el-row v-for="(item,index) in reportInfoList" :key="index">-->
+<!--        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送完成</el-col></div>-->
+<!--        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">获取反馈中。。。</el-col></div>-->
+<!--        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送失败，{{item.failReason}}</el-col></div>-->
+<!--      </el-row>-->
+<!--      <div v-loading="reportInfoLoading" style="height: 40px"></div>-->
+<!--      <div class="dialog-footer">-->
+<!--        <el-button @click="onShowReportInfo" v-show="isShowIknow" type="primary" plain>我知道了</el-button>-->
+<!--      </div>-->
+<!--    </el-dialog>-->
+    <selectSY ref="selectSY"
+              :validParameter = "downLoadForm"
+              :validAction="validAction"
+              :selectAction="selectAction"
+              :sign="sign"
     >
-      <el-row v-for="(item,index) in reportInfoList" :key="index">
-        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送完成</el-col></div>
-        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">获取反馈中。。。</el-col></div>
-        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送失败，{{item.failReason}}</el-col></div>
-      </el-row>
-      <div v-loading="reportInfoLoading" style="height: 40px"></div>
-      <div class="dialog-footer">
-        <el-button @click="onShowReportInfo" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
-      </div>
-    </el-dialog>
+    </selectSY>
     <!-- 获取反馈 -->
     <el-dialog
       :visible.sync="isShowReturnInfo"
@@ -94,7 +101,8 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import authorizeTip from "@/components/tool/authorizeTip"
+import authorizeTip from "@/components/tool/authorizeTip";
+import selectSY from "@/components/tool/selectSY";
 import fun from "@/util/fun"
 let date = fun.headDate();
 let defaultDate =
@@ -102,6 +110,7 @@ let defaultDate =
 export default {
   components: {
     authorizeTip,
+    selectSY
   },
   data() {
     return {
@@ -125,6 +134,9 @@ export default {
       isShowReportInfo: false,
       reportInfoLoading:false,
       isShowIknow:false,
+      validAction:"taxPageStore/actionDownloadAddition",
+      selectAction:"taxPageStore/actionDownloadAdditionQuery",
+      sign:"attch",
       closeModel:false,
     };
   },
@@ -158,35 +170,38 @@ export default {
           }
         });
     },
-    onShowReportInfo(){
-      this.isShowReportInfo = false;
-      this.getList();
+    //子组件刷新
+    freshList(data){
+      if(data === this.sign){
+        this.getList()
+      }
     },
 //下载
     handleExport() {
-      this.$store
-        .dispatch("taxPageStore/actionDownloadAddition", this.downLoadForm)
-        .then(res=>{
-          if (res.success) {
-            //验证通过
-            if(res.data.status === "SUCCESS"){
-              this.isShowReportInfo = true;
-              this.reportInfoLoading = true;
-              this.reportInfoList = res.data.taxSubList;
-              //是否进行下步查询
-              if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
-                this.selectShuiyou()
-              }else{//全部成功或失败
-                this.reportInfoLoading = false;
-                this.isShowIknow = true;
-              }
-            }else{//授权失败
-              this.$refs.authorizeTip.show()
-            }
-          }else{
-            this.$message.warning(res.message)
-          }
-        })
+       this.$refs.selectSY.show(true)
+      // this.$store
+      //   .dispatch("taxPageStore/actionDownloadAddition", this.downLoadForm)
+      //   .then(res=>{
+      //     if (res.success) {
+      //       //验证通过
+      //       if(res.data.status === "SUCCESS"){
+      //         this.isShowReportInfo = true;
+      //         this.reportInfoLoading = true;
+      //         this.reportInfoList = res.data.taxSubList;
+      //         //是否进行下步查询
+      //         if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+      //           this.selectShuiyou()
+      //         }else{//全部成功或失败
+      //           this.reportInfoLoading = false;
+      //           this.isShowIknow = true;
+      //         }
+      //       }else{//授权失败
+      //         this.$refs.authorizeTip.show()
+      //       }
+      //     }else{
+      //       this.$message.warning(res.message)
+      //     }
+      //   })
     },
     selectShuiyou(){
       this.isShowIknow = false;

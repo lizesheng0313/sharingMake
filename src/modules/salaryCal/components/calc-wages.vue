@@ -13,6 +13,7 @@
       <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
         <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary">薪资计算</el-button>
+        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary">薪资计算反馈</el-button>
         <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')">薪资审核</el-button>
         <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')">取消审核</el-button>
       </div>
@@ -249,26 +250,23 @@
         <el-button @click="showExportSalaryDetail = false">取消</el-button>
       </span>
     </el-dialog>
-    <!-- 获取反馈结果-->
-    <el-dialog
-      :visible.sync="isShowReturn"
-      width="480px"
-      center
-      class="diy-el_dialog"
-      :show-close="false"
-      :close-on-click-modal="closeModel"
+    <!-- 薪资计算-->
+    <selectSY ref="selectSY"
+              :validParameter = "validParameter"
+              :validAction="validAction"
+              :selectAction="selectAction"
+              :sign="sign"
     >
-      <div v-loading="returnLoading" :element-loading-text="returnLoadingText" style="height: 80px;">
-      </div>
-      <div class="footer-btn">
-        <el-button @click="closeReturnMsg" v-show="isShowIknow" plain type="primary">我知道了</el-button>
-      </div>
-    </el-dialog>
+    </selectSY>
   </div>
 </template>
 <script>
   import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,apiSocialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
-export default {
+  import selectSY from "@/components/tool/selectSY";
+  export default {
+  components:{
+     selectSY
+  },
   data() {
     return {
       salaryTableDataAll:[],
@@ -354,14 +352,16 @@ export default {
       uploadFileDisabled:true,//导入通过数据禁用
       tableAllData:[],
       showCount:true,
-      isShowReturn:false,
-      returnLoading:false,
-      returnLoadingText:"查询中",
       closeModel:false,
-      isShowIknow:false,
-      tableLoading:false,
       exportLoading:false,
       taxSubIdLoading:false,
+      validAction:"taxPageStore/actionDownloadAddition",
+      selectAction:"taxPageStore/actionDownloadAdditionQuery",
+      validParameter:{
+        checkId:this.$route.query.id,
+        data:"2019-11"
+      },
+      sign:"calc-wages",
     };
   },
   computed:{
@@ -443,6 +443,12 @@ export default {
       })
       //查看工资表状态
      this.getSalaryStatus()
+    },
+    //子组件刷新
+    freshList(data){
+      if(data === this.sign){
+        this.loading()
+      }
     },
     setMinWidth(value){
       if(['序号','工号','姓名'].includes(value)){ return '80px'}
@@ -691,23 +697,24 @@ export default {
     },
     //薪资计算
     handleCalcSalary(){
-      apiSalaryComputes(this.salaryForm.checkId)
-        .then(res=>{
-          if(res.success){
-            if(res.data === "SUCCESS"){
-              this.loading();
-            }
-            if(res.data === "PROCESSING"){
-              this.returnLoadingText ="查询中";
-              this.isShowReturn = true;
-              this.isShowIknow = false;
-              this.returnLoading = true;
-              setTimeout(()=>{
-                this.selectDownLoadFirst()
-              },3000)
-            }
-          }
-        })
+      this.$refs.selectSY.show(true)
+      // apiSalaryComputes(this.salaryForm.checkId)
+      //   .then(res=>{
+      //     if(res.success){
+      //       if(res.data === "SUCCESS"){
+      //         this.loading();
+      //       }
+      //       if(res.data === "PROCESSING"){
+      //         this.returnLoadingText ="查询中";
+      //         this.isShowReturn = true;
+      //         this.isShowIknow = false;
+      //         this.returnLoading = true;
+      //         setTimeout(()=>{
+      //           this.selectDownLoadFirst()
+      //         },3000)
+      //       }
+      //     }
+      //   })
     },
     //查询下载结果
     selectDownLoadFirst(){
