@@ -13,7 +13,7 @@
       <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
         <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary">薪资计算</el-button>
-        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary">薪资计算反馈</el-button>
+        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleReportInfo">薪资计算反馈</el-button>
         <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')">薪资审核</el-button>
         <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')">取消审核</el-button>
       </div>
@@ -254,18 +254,26 @@
     <selectSY ref="selectSY"
               :validParameter = "validParameter"
               :validAction="validAction"
-              :selectAction="selectAction"
+              :querytAction="querytAction"
               :sign="sign"
     >
     </selectSY>
+    <!-- 获取反馈 -->
+    <feedback ref="feedback"
+              :validParameter = "validParameter"
+              :validAction="validAction"
+              :sign="sign">
+    </feedback>
   </div>
 </template>
 <script>
   import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,apiSocialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
   import selectSY from "@/components/tool/selectSY";
+  import feedback from "@/components/tool/feedback";
   export default {
   components:{
-     selectSY
+     selectSY,
+     feedback
   },
   data() {
     return {
@@ -355,11 +363,10 @@
       closeModel:false,
       exportLoading:false,
       taxSubIdLoading:false,
-      validAction:"taxPageStore/actionDownloadAddition",
-      selectAction:"taxPageStore/actionDownloadAdditionQuery",
+      validAction:"salaryCalStore/actionSalaryComputes",
+      querytAction:"salaryCalStore/actionSalaryCheckQuery",
       validParameter:{
         checkId:this.$route.query.id,
-        data:"2019-11"
       },
       sign:"calc-wages",
     };
@@ -381,9 +388,6 @@
     cancelAuditeShow:function(){
       return this.checkStatus === "AUDITED" || this.checkStatus === "PAID" || this.checkStatus === "FINISH"
     },
-    // checkShow:function(){
-    //   return this.checkStatus === "FINISH" || this.checkStatus === "PAID" || this.checkStatus === "PAID"
-    // }
   },
   created(){
     this.loading();
@@ -716,72 +720,9 @@
       //     }
       //   })
     },
-    //查询下载结果
-    selectDownLoadFirst(){
-      this.$store
-        .dispatch("salaryCalStore/actionSalaryCheckQuery",this.selectForm)
-        .then(res=>{
-          if(res.data === "PROCESSING"){
-            setTimeout(()=>{
-              this.returnLoadingText ="查询中";
-              this.selectDownLoadSec()
-            },10000)
-          }
-          if(res.data === "SUCCESS"){
-            this.returnLoadingText = "薪资计算成功。";
-            setTimeout(()=>{
-              this.isShowReturn = false;
-              this.loading()
-            },3000)
-          }
-          if(res.data === "FAIL"){
-            this.returnLoadingText = res.message;
-            this.isShowIknow = true;
-          }
-        })
-    },
-    selectDownLoadSec(){
-      this.$store
-        .dispatch("salaryCalStore/actionSalaryCheckQuery",this.selectForm)
-        .then(res=>{
-          if(res.data === "PROCESSING"){
-            setTimeout(()=>{
-              this.selectDownLoadThird()
-            },15000)
-          }
-          if(res.data === "SUCCESS"){
-            this.returnLoadingText = "薪资计算成功。";
-            setTimeout(()=>{
-              this.isShowReturn = false;
-              this.loading()
-            },3000)
-          }
-          if(res.data === "FAIL"){
-            this.returnLoadingText = res.message;
-            this.isShowIknow = true;
-          }
-        })
-    },
-    selectDownLoadThird(){
-      this.$store
-        .dispatch("salaryCalStore/actionSalaryCheckQuery",this.selectForm)
-        .then(res=>{
-          if(res.data === "PROCESSING"){
-            this.returnLoadingText = "薪资计算局端处理中，请稍后再获取反馈。"
-            this.isShowIknow = true;
-          }
-          if(res.data === "SUCCESS"){
-            this.returnLoadingText = "薪资计算成功。";
-            setTimeout(()=>{
-              this.isShowReturn = false;
-              this.loading()
-            },3000)
-          }
-          if(res.data === "FAIL"){
-            this.returnLoadingText = res.message;
-            this.isShowIknow = true;
-          }
-        })
+    //获取反馈
+    handleReportInfo(){
+      this.$refs.feedback.show(true)
     },
     //关闭加载提示
     closeReturnMsg(){

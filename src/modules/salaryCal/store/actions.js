@@ -1,4 +1,4 @@
-import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryCheckQuery} from './api'
+import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery} from './api'
 
 export const actionGetSalaryStatus = ({ dispatch },id) => {
   return apiGetSalaryStatus(id);
@@ -42,6 +42,10 @@ export const actionSyncLastMonthSocial = ({ dispatch },params) => {
   return apisyncLastMonthSocial(params);
 }
 
+//薪资计算
+export const actionSalaryComputes = ({ dispatch },params) => {
+  return apiSalaryComputes(params);
+}
 //薪资计算  反馈
 export const actionSalaryCheckQuery = ({ dispatch },params) => {
   return apiSalaryCheckQuery(params);

@@ -32,14 +32,6 @@
               </span>
             </span>
             <div class="content-header head-date">
-<!--              <el-date-picker-->
-<!--                v-model="selectMonth"-->
-<!--                @input="changeMonth"-->
-<!--                type="month"-->
-<!--                value-format="yyyy-MM"-->
-<!--                :editable="false"-->
-<!--                :clearable="false"-->
-<!--              ></el-date-picker>-->
             </div>
           </div>
           <div class="staff-table">
@@ -48,6 +40,7 @@
               :data="list"
               class="check-staff_table"
               @selection-change="handleSelectItem"
+              :style="{width:screenWidth-40+'px'}"
             >
               <el-table-column type="selection" width="55" fixed></el-table-column>
               <el-table-column prop="empNo" label="工号" ></el-table-column>
@@ -189,6 +182,7 @@ export default {
       screening: SCR,
       closeModel: false,
       isSave:this.$route.query.isSave,
+      screenWidth: document.body.clientWidth, // 屏幕尺寸
     };
   },
   computed:{
@@ -200,6 +194,12 @@ export default {
   },
   mounted() {
     const that = this;
+    window.onresize = () => {
+      return (() => {
+        window.screenWidth = document.body.clientWidth;
+        this.screenWidth = window.screenWidth;
+      })();
+    };
     that.getList();
   },
   methods: {

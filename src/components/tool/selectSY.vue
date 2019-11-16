@@ -30,7 +30,7 @@ export default {
   props: {
     validParameter: Object, //校验参数
     validAction: String, //校验action
-    selectAction:String, //查询action
+    querytAction:String, //查询action
     sign:String, //页面标识
   },
   data() {
@@ -84,7 +84,7 @@ export default {
       //查询第一次
       setTimeout(()=>{
         this.$store
-          .dispatch(this.selectAction,this.validParameter)
+          .dispatch(this.querytAction,this.validParameter)
           .then(r0 => {
             if(r0.success){
               if(r0.data.status === "SUCCESS"){
@@ -106,7 +106,7 @@ export default {
     selectSec(){
       setTimeout(()=>{
         this.$store
-          .dispatch(this.selectAction,this.validParameter)
+          .dispatch(this.querytAction,this.validParameter)
           .then(r0 => {
             if(r0.data.status === "SUCCESS"){
               this.reportInfoList.push(...r0.data.taxSubList);

@@ -40,6 +40,7 @@
             :data="list"
             class="check-staff_table"
             v-loading="loading"
+            :style="{width:screenWidth-40+'px'}"
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empNo" label="工号"></el-table-column>
@@ -131,7 +132,7 @@ export default {
     };
   },
   mounted() {
-   this.getList()
+    this.getList()
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
