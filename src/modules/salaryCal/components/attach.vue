@@ -105,12 +105,6 @@ export default {
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       list: [],
       total: 0,
-      reportInfoList:[],
-      reportReturnList:[],
-      isShowReturnInfo:false,
-      isShowReportInfo: false,
-      reportInfoLoading:false,
-      isShowIknow:false,
       validAction:"taxPageStore/actionDownloadAddition",
       querytAction:"taxPageStore/actionDownloadAdditionQuery",
       stopTip:"下载",//终止文案

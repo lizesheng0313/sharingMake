@@ -35,15 +35,17 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="320px">
             <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="handlePaid(scope.row.name)">发起缴款</el-button>
-              <el-button type="primary" size="mini" @click="handlePaidReturn(scope.row.name)">缴款反馈</el-button>
+              <el-button type="primary" size="mini" @click="handleTaxPay(scope.row.name)">发起缴款</el-button>
+              <el-button type="primary" size="mini" @click="queryTaxPay(scope.row.name)">缴款反馈</el-button>
+              <el-button type="primary" plain @click="getTripleAgreement(scope.row)">三方协议下载</el-button>
+              <el-button type="primary" plain @click="getTripleAgreementQuery(scope.row)">三方协议下载反馈</el-button>
               <el-popover
                 ref="popMore"
                 placement="right"
                 width="400"
                 trigger="hover">
-                <el-button type="primary" plain >三方协议下载</el-button>
-                <el-button type="primary" plain >三方协议下载反馈</el-button>
+                <el-button type="primary" plain @click="getTripleAgreement(scope.row)">三方协议下载</el-button>
+                <el-button type="primary" plain @click="getTripleAgreementQuery(scope.row)">三方协议下载反馈</el-button>
               </el-popover>
               <span v-popover:popMore class="more-choose">更多 >></span>
             </template>
@@ -51,13 +53,38 @@
         </el-table>
       </div>
     </div>
+<!--    缴款 三方协议-->
+    <selectSY ref="selectSY"
+              :validParameter = "validParameter"
+              :validAction="validAction"
+              :querytAction="querytAction"
+              :stopTip="stopTip"
+              :processingTip="processingTip"
+              :timeObj="timeObj"
+              :sign="sign"
+    >
+    </selectSY>
+    <!--获取反馈 -->
+    <feedback ref="feedback"
+              :validParameter = "validParameter"
+              :querytAction ="querytAction"
+              :stopTip="stopTip"
+              :processingTip="processingTip"
+              :sign="sign"
+    >
+    </feedback>
   </div>
 </template>
 <script>
+ import selectSY from "@/components/tool/selectSY";
+ import feedback from "@/components/tool/feedback";
 import { mapState } from "vuex";
 import  fun from "@/util/fun"
 export default {
-  components: {},
+  components: {
+    selectSY,
+    feedback,
+  },
   data() {
     return {
       currentDate:"",
@@ -68,6 +95,18 @@ export default {
       closeModel: false,
       isShowReturn:false,
       returnMsg:"",
+      validAction:"",
+      validParameter:{},
+      querytAction:"",
+      stopTip:"",//终止文案
+      processingTip:"",//进行中文案
+      timeObj:{
+        first:3000,
+        second:10000,
+        third:15000,
+      },
+      sign:"taxPaidIndex",
+      showSelect:false
     };
   },
   created(){
@@ -93,20 +132,65 @@ export default {
           }
         });
     },
+    //子组件触发刷新
+    freshList(data){
+      if(data === this.sign){
+        this.getList()
+      }
+    },
     changeDate(data){
       this.currentDate = data
     },
-    //立即缴款
-    handlePaid(data){
-      this.$router.push({path:"/taxPaid/paidReport",query:{name:data}})
+    //发起缴款
+    handleTaxPay(data){
+      this.validParameter = {
+        checkId:"17",
+        date:"2019-10"
+      };
+      this.validAction = "taxPaidStore/actionTaxPay";
+      this.querytAction = "taxPaidStore/actionTaxPayQuery";
+      this.stopTip="缴款";
+      this.processingTip="获取反馈中。。。";
+      this.$refs.selectSY.show(true);
     },
     //缴款反馈
-    handlePaidReturn(data){
-      this.$alert('这是一段内容', '提示', {
-        confirmButtonText: '确定',
-        type: 'warning',
-        callback: action => {}
-      });
+    queryTaxPay(data){
+      this.validParameter = {
+        type:"缴款反馈"
+      };
+      this.validAction = "taxPaidStore/actionTaxPay";
+      this.querytAction = "taxPaidStore/actionTaxPayQuery";
+      this.stopTip="缴款反馈";
+      this.processingTip="获取反馈中。。。";
+      this.$refs.feedback.show(true)
+    },
+    tryAgin(){
+      this.getList()
+    },
+    //三方协议下载
+    getTripleAgreement(data){
+      this.$refs.feedback.show(false)
+      this.validParameter = {
+        checkId: "17"
+      }
+      this.validAction = "taxPaidStore/actionGetTripleAgreement";
+      this.validAction = "salaryCalStore/actionSalaryComputes";
+      this.stopTip="三方协议下载";
+      console.log(this.validAction)
+      this.processingTip="获取反馈中。。。";
+      this.$refs.selectSY.show(true);
+    },
+    //三方协议下载查询
+    getTripleAgreementQuery(data){
+      this.$refs.feedback.show(false)
+      this.validParameter = {
+        type:"三方协议下载反馈"
+      }
+      this.validAction = "taxPaidStore/actionGetTripleAgreement"
+      this.querytAction = "taxPaidStore/actionGetTripleAgreementQuery"
+      this.stopTip="三方协议下载"
+      this.processingTip="获取反馈中。。。"
+      this.$refs.feedback.show(true)
     }
   }
 };
