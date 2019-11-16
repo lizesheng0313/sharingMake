@@ -57,13 +57,19 @@
               :validAction="validAction"
               :querytAction="querytAction"
               :sign="sign"
+              :stopTip="stopTip"
+              :processingTip="processingTip"
+              :timeObj="timeObj"
     >
     </selectSY>
     <!-- 获取反馈 -->
     <feedback ref="feedback"
               :validParameter = "downLoadForm"
               :querytAction ="querytAction"
-              :sign="sign">
+              :sign="sign"
+              :stopTip="stopTip"
+              :processingTip="processingTip"
+    >
     </feedback>
     <authorizeTip ref="authorizeTip"></authorizeTip>
   </div>
@@ -107,6 +113,13 @@ export default {
       isShowIknow:false,
       validAction:"taxPageStore/actionDownloadAddition",
       querytAction:"taxPageStore/actionDownloadAdditionQuery",
+      stopTip:"下载",//终止文案
+      processingTip:"数据反馈中。。。",//进行中文案
+      timeObj:{
+        first:3000,
+        second:10000,
+        third:15000,
+      },
       sign:"attch",
       closeModel:false,
     };

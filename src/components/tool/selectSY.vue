@@ -9,9 +9,9 @@
       :close-on-click-modal="closeModel"
     >
       <el-row v-for="(item,index) in reportInfoList" :key="index">
-        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送完成</el-col></div>
-        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">获取反馈中。。。</el-col></div>
-        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送失败，{{item.failReason}}</el-col></div>
+        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ stopTip }}完成</el-col></div>
+        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ processingTip }}</el-col></div>
+        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ stopTip }}失败，{{item.failReason}}</el-col></div>
       </el-row>
       <div v-loading="reportInfoLoading" style="height: 40px"></div>
       <div class="dialog-footer">
@@ -32,6 +32,9 @@ export default {
     validAction: String, //校验action
     querytAction:String, //查询action
     sign:String, //页面标识
+    stopTip:String,//终止文案
+    processingTip:String,//进行中文案
+    timeObj:Object,
   },
   data() {
     return {
@@ -100,7 +103,7 @@ export default {
               }
             }
           })
-      },3000)
+      },this.timeObj.first)
     },
     //第二次查询
     selectSec(){
@@ -119,7 +122,7 @@ export default {
             }else{
             }
           })
-      },10000)
+      },this.timeObj.second)
     },
     //第三次查询
     selectThird(){
@@ -133,7 +136,7 @@ export default {
               this.isShowIknow = true;
             }
           })
-      },15000)
+      },this.timeObj.third)
     },
     onIknow(){
       this.isShowReportInfo = false;

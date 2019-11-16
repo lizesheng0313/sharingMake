@@ -32,12 +32,20 @@
           <el-table-column prop="isThree" label="是否有反方协议"></el-table-column>
           <el-table-column prop="paidStatus" label="缴款状态" width="140"></el-table-column>
           <el-table-column prop="payDate" label="缴款日期" width="140">
-
           </el-table-column>
-          <el-table-column label="操作" fixed="right">
+          <el-table-column label="操作" fixed="right" width="320px">
             <template slot-scope="scope">
-              <el-button size="primary" @click="handlePaid(scope.row.name)">立即缴款</el-button>
-              <el-button size="primary" @click="handlePaidReturn(scope.row.name)">缴款反馈</el-button>
+              <el-button type="primary" size="mini" @click="handlePaid(scope.row.name)">发起缴款</el-button>
+              <el-button type="primary" size="mini" @click="handlePaidReturn(scope.row.name)">缴款反馈</el-button>
+              <el-popover
+                ref="popMore"
+                placement="right"
+                width="400"
+                trigger="hover">
+                <el-button type="primary" plain >三方协议下载</el-button>
+                <el-button type="primary" plain >三方协议下载反馈</el-button>
+              </el-popover>
+              <span v-popover:popMore class="more-choose">更多 >></span>
             </template>
           </el-table-column>
         </el-table>
@@ -118,6 +126,10 @@ export default {
   }
   .tableCon{
     margin-top:40px;
+  }
+  .more-choose{
+    color: #2c7cff;
+    cursor: pointer;
   }
 }
 </style>

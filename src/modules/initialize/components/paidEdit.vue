@@ -32,19 +32,56 @@
         </el-form>
         <span slot="footer" class="con-footer">
           <el-button type="primary" @click="handleNewBody">授权</el-button>
+          <el-button type="primary" @click="queryNewBody">授权反馈</el-button>
           <el-button @click="handleCancel(false)">取消</el-button>
         </span>
+        <!-- 下载-->
+        <selectSY ref="selectSY"
+                  :validParameter = "newBodyFormData"
+                  :validAction="validAction"
+                  :querytAction="querytAction"
+                  :sign="sign"
+                  :stopTip="stopTip"
+                  :processingTip="processingTip"
+                  :timeObj="timeObj"
+        >
+        </selectSY>
+        <!-- 获取反馈 -->
+        <feedback ref="feedback"
+                  :validParameter = "newBodyFormData"
+                  :querytAction ="querytAction"
+                  :sign="sign"
+                  :stopTip="stopTip"
+                  :processingTip="processingTip"
+        >
+        </feedback>
     </div>
 </template>
 <script>
 import { mapState } from "vuex";
+import selectSY from "@/components/tool/selectSY";
+import feedback from "@/components/tool/feedback";
 export default {
   selectItem:{
     type: Object,
     default:{}
   },
+  components: {
+    selectSY,
+    feedback,
+  },
   data() {
     return {
+      validAction:"taxPageStore/actionDealTaxSubject",
+      querytAction:"taxPageStore/actionAccreditQuery",
+      stopTip:"授权",//终止文案
+      processingTip:"授权数据反馈中。。。",//进行中文案
+      timeObj:{
+        first:3000,
+        second:10000,
+        third:15000,
+      },
+      sign:"paidEdit",
       newBodyFormData: {
         legalName: "",
         remark: "",
@@ -95,44 +132,19 @@ export default {
     this.newBodyFormData = { ...this.$parent.$parent.selectItem }
   },
   methods: {
-    //新增
-    handleShowBox() {
-      this.newBodyFormData.taxSubId = "";
-      this.currentTypeName = "新增";
-      this.isShowScreen = true;
-      this.$nextTick(() => {
-        this.$refs.taxListForm.resetFields();
-      });
+    //子组件触发刷新
+    freshList(data){
+      if(data === this.sign){
+        this.handleCancel(true)
+      }
     },
     //授权
     handleNewBody() {
-      this.$refs.taxListForm.validate(valid => {
-        if (valid) {
-          if(!this.checked){
-            this.$message.warning("请勾选授权信息")
-          }else{
-            this.$store
-              .dispatch("taxPageStore/actionDealTaxSubject", this.newBodyFormData)
-              .then(res => {
-                if (res.success) {
-                  // this.$message.success("成功");
-                  this.handleCancel(true)
-                }
-              });
-          }
-        }
-      });
+      this.$refs.selectSY.show(true)
     },
-    getList() {
-      this.loading = true;
-      this.$store
-        .dispatch("taxPageStore/actionTaxSubjectList", this.taxListFormData)
-        .then(res => {
-          if (res.success) {
-            this.loading = false;
-            this.list = res.data;
-          }
-        });
+    //授权反馈
+    queryNewBody(){
+      this.$refs.feedback.show(true)
     },
     handleCancel(data){
       this.$emit("hanleClose",data)

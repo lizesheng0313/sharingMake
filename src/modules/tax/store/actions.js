@@ -1,4 +1,4 @@
-import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList,apiDownloadAddition,apiDownloadAdditionQuery,apiSocialBenefitsList} from './api'
+import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList,apiDownloadAddition,apiDownloadAdditionQuery,apiSocialBenefitsList,apiAccreditQuery} from './api'
 
 /*个税-人员采集*/
 
@@ -109,9 +109,14 @@ export const actionTaxSubjectList = ({ dispatch },taxListFormData) => {
     return apiTaxSubjectList(taxListFormData)
 }
 
-//扣缴义务人-添加/修改
+//扣缴义务人-授权
 export const actionDealTaxSubject = ({ dispatch }, ruleForm) => {
     return apiDealTaxSubject(ruleForm)
+}
+
+//扣缴义务人-授权反馈
+export const actionAccreditQuery = ({ dispatch }, ruleForm) => {
+  return apiAccreditQuery(ruleForm)
 }
 
 //扣缴义务人-删除

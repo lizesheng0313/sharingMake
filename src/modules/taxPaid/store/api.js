@@ -7,3 +7,36 @@ export function apiTripleAgreementList(ruleForm) {
     params: ruleForm
   })
 }
+//发起缴款
+export function apiTaxPay(ruleForm) {
+  return fetch({
+    url: '/api/taxPay/taxPay',
+    method: 'post',
+    params: ruleForm
+  })
+}
+//缴款反馈
+export function apiTaxPayQuery(ruleForm) {
+  return fetch({
+    url: '/api/taxPay/taxPayQuery',
+    method: 'post',
+    params: ruleForm
+  })
+}
+
+//三方协议下载
+export function apiGetTripleAgreement(ruleForm) {
+  return fetch({
+    url: '/api/taxPay/getTripleAgreement',
+    method: 'get',
+    params: ruleForm
+  })
+}
+//下载反馈
+export function apiGetTripleAgreementQuery(ruleForm) {
+  return fetch({
+    url: '/api/taxPay/getTripleAgreementQuery',
+    method: 'get',
+    params: ruleForm
+  })
+}

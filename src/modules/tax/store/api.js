@@ -206,7 +206,7 @@ export function apiTaxSubjectList(taxListFormData) {
   })
 }
 
-//扣缴义务人-添加/修改
+//扣缴义务人-授权
 export function apiDealTaxSubject(ruleForm) {
   return fetch({
     url: '/api/taxSubject/dealTaxSubject',
@@ -215,6 +215,14 @@ export function apiDealTaxSubject(ruleForm) {
   })
 }
 
+//扣缴义务人-授权反馈
+export function apiAccreditQuery(ruleForm) {
+  return fetch({
+    url: '/api/taxSubject/accreditQuery',
+    method: 'post',
+    params: ruleForm
+  })
+}
 //扣缴义务人-添加/修改
 export function apiDelTaxSubject(id) {
   return fetch({
