@@ -155,7 +155,6 @@ export default {
           checkId:"16-Q",
           date:"2019-10"
         },
-        validAction : "taxPaidStore/actionTaxPay",
         querytAction : "taxPaidStore/actionTaxPayQuery",
         stopTip:"缴款",
         processingTip:"获取反馈中。。。",
@@ -181,7 +180,6 @@ export default {
         validParameter :{
           checkId:"17-q",
         },
-        validAction : "taxPaidStore/actionGetTripleAgreement",
         querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
         stopTip:"三方协议下载",
         processingTip:"获取反馈中。。。",

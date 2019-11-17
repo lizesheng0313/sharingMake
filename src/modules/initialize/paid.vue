@@ -43,8 +43,8 @@
               <el-table-column prop="remark" label="经办人姓名"></el-table-column>
               <el-table-column prop="accreditStatus" label="授权状态"></el-table-column>
               <el-table-column prop="failReason" label="未通过原因"></el-table-column>
-              <el-table-column label="操作" fixed="right">
-                <template slot-scope="scope" width="180px">
+              <el-table-column label="操作" fixed="right" width="200px">
+                <template slot-scope="scope" >
                   <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
                   <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
                 </template>

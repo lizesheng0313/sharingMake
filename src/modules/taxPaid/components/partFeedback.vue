@@ -36,7 +36,6 @@ export default {
         stopTip:"",//终止文案
         processingTip:"",//进行中文案
         validParameter: "", //校验参数
-        validAction: "", //校验action
         querytAction:"" ,//查询action
       },
       reportReturnList:[],
@@ -61,7 +60,7 @@ export default {
     //获取反馈
     handleReportInfo(){
       this.$store
-        .dispatch(this.paramsObj.validAction,this.paramsObj.validParameter)
+        .dispatch(this.paramsObj.querytAction,this.paramsObj.validParameter)
         .then(res=>{
         if(res.success){
           // 已授权，有查询结果
