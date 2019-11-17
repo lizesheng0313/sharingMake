@@ -37,8 +37,6 @@
             <template slot-scope="scope">
               <el-button type="primary" size="mini" @click="handleTaxPay(scope.row.name)">发起缴款</el-button>
               <el-button type="primary" size="mini" @click="queryTaxPay(scope.row.name)">缴款反馈</el-button>
-              <el-button type="primary" plain @click="getTripleAgreement(scope.row)">三方协议下载</el-button>
-              <el-button type="primary" plain @click="getTripleAgreementQuery(scope.row)">三方协议下载反馈</el-button>
               <el-popover
                 ref="popMore"
                 placement="right"
@@ -55,11 +53,6 @@
     </div>
 <!--    缴款 三方协议-->
     <selectSY ref="selectSY"
-              :validParameter = "validParameter"
-              :validAction="validAction"
-              :querytAction="querytAction"
-              :stopTip="stopTip"
-              :processingTip="processingTip"
               :timeObj="timeObj"
               :sign="sign"
     >
@@ -76,8 +69,8 @@
   </div>
 </template>
 <script>
- import selectSY from "@/components/tool/selectSY";
- import feedback from "@/components/tool/feedback";
+ import selectSY from "./components/partSelectSY";
+ import feedback from "./components/partFeedback";
 import { mapState } from "vuex";
 import  fun from "@/util/fun"
 export default {
@@ -143,54 +136,57 @@ export default {
     },
     //发起缴款
     handleTaxPay(data){
-      this.validParameter = {
-        checkId:"17",
-        date:"2019-10"
-      };
-      this.validAction = "taxPaidStore/actionTaxPay";
-      this.querytAction = "taxPaidStore/actionTaxPayQuery";
-      this.stopTip="缴款";
-      this.processingTip="获取反馈中。。。";
-      this.$refs.selectSY.show(true);
+     let paramsObj = {
+       validParameter :{
+         checkId:"16-T",
+         date:"2019-10"
+       },
+      validAction : "taxPaidStore/actionTaxPay",
+      querytAction : "taxPaidStore/actionTaxPayQuery",
+      stopTip:"缴款",
+      processingTip:"获取反馈中。。。",
+     }
+      this.$refs.selectSY.show(true,paramsObj)
     },
     //缴款反馈
     queryTaxPay(data){
-      this.validParameter = {
-        type:"缴款反馈"
-      };
-      this.validAction = "taxPaidStore/actionTaxPay";
-      this.querytAction = "taxPaidStore/actionTaxPayQuery";
-      this.stopTip="缴款反馈";
-      this.processingTip="获取反馈中。。。";
-      this.$refs.feedback.show(true)
-    },
-    tryAgin(){
-      this.getList()
+      let paramsObj = {
+        validParameter :{
+          checkId:"16-Q",
+          date:"2019-10"
+        },
+        validAction : "taxPaidStore/actionTaxPay",
+        querytAction : "taxPaidStore/actionTaxPayQuery",
+        stopTip:"缴款",
+        processingTip:"获取反馈中。。。",
+      }
+      this.$refs.feedback.show(true,paramsObj)
     },
     //三方协议下载
     getTripleAgreement(data){
-      this.$refs.feedback.show(false)
-      this.validParameter = {
-        checkId: "17"
+      let paramsObj = {
+        validParameter :{
+          checkId:"17-D",
+        },
+        validAction : "taxPaidStore/actionGetTripleAgreement",
+        querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
+        stopTip:"三方协议下载",
+        processingTip:"获取反馈中。。。",
       }
-      this.validAction = "taxPaidStore/actionGetTripleAgreement";
-      this.validAction = "salaryCalStore/actionSalaryComputes";
-      this.stopTip="三方协议下载";
-      console.log(this.validAction)
-      this.processingTip="获取反馈中。。。";
-      this.$refs.selectSY.show(true);
+      this.$refs.selectSY.show(true,paramsObj);
     },
     //三方协议下载查询
     getTripleAgreementQuery(data){
-      this.$refs.feedback.show(false)
-      this.validParameter = {
-        type:"三方协议下载反馈"
+      let paramsObj = {
+        validParameter :{
+          checkId:"17-q",
+        },
+        validAction : "taxPaidStore/actionGetTripleAgreement",
+        querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
+        stopTip:"三方协议下载",
+        processingTip:"获取反馈中。。。",
       }
-      this.validAction = "taxPaidStore/actionGetTripleAgreement"
-      this.querytAction = "taxPaidStore/actionGetTripleAgreementQuery"
-      this.stopTip="三方协议下载"
-      this.processingTip="获取反馈中。。。"
-      this.$refs.feedback.show(true)
+      this.$refs.feedback.show(true,paramsObj)
     }
   }
 };

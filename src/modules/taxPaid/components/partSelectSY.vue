@@ -9,9 +9,9 @@
       :close-on-click-modal="closeModel"
     >
       <el-row v-for="(item,index) in reportInfoList" :key="index">
-        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ stopTip }}完成</el-col></div>
-        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ processingTip }}</el-col></div>
-        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ stopTip }}失败，{{item.failReason}}</el-col></div>
+        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ paramsObj.stopTip }}完成</el-col></div>
+        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ paramsObj.processingTip }}</el-col></div>
+        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ paramsObj.stopTip }}失败，{{item.failReason}}</el-col></div>
       </el-row>
       <div v-loading="reportInfoLoading" style="height: 40px"></div>
       <div class="dialog-footer">
@@ -28,12 +28,7 @@ export default {
     authorizeTip
   },
   props: {
-    validParameter: Object, //校验参数
-    validAction: String, //校验action
-    querytAction:String, //查询action
     sign:String, //页面标识
-    stopTip:String,//终止文案
-    processingTip:String,//进行中文案
     timeObj:Object,
   },
   data() {
@@ -43,6 +38,13 @@ export default {
       isShowReturnInfo:false,
       isShowReportInfo: false,
       reportInfoLoading:false,
+      paramsObj:{
+        stopTip:"",//终止文案
+        processingTip:"",//进行中文案
+        validParameter: "", //校验参数
+        validAction: "", //校验action
+        querytAction:"" ,//查询action
+      },
       isShowIknow:false,
       closeModel:false
     };
@@ -50,18 +52,21 @@ export default {
   created(){
   },
   methods: {
-    show(data) {
+    show(data,params) {
       if(data) {
         this.reportInfoList=[];
         this.isShowIknow = false;
-        this.handleExport();
+
+        //接口参数赋值
+       this.paramsObj = params;
+       this.handleExport();
       }else{
         this.isShowReportInfo = false;
       }
     },
     handleExport() {
       this.$store
-        .dispatch(this.validAction, this.validParameter)
+        .dispatch(this.paramsObj.validAction, this.paramsObj.validParameter)
         .then(res=>{
           if (res.success) {
             //验证通过
@@ -89,7 +94,7 @@ export default {
       //查询第一次
       setTimeout(()=>{
         this.$store
-          .dispatch(this.querytAction,this.validParameter)
+          .dispatch(this.paramsObj.querytAction,this.paramsObj.validParameter)
           .then(r0 => {
             if(r0.success){
               if(r0.data.status === "SUCCESS"){
@@ -111,7 +116,7 @@ export default {
     selectSec(){
       setTimeout(()=>{
         this.$store
-          .dispatch(this.querytAction,this.validParameter)
+          .dispatch(this.paramsObj.querytAction,this.paramsObj.validParameter)
           .then(r0 => {
             if(r0.data.status === "SUCCESS"){
               this.reportInfoList.push(...r0.data.taxSubList);
@@ -130,7 +135,7 @@ export default {
     selectThird(){
       setTimeout(()=>{
         this.$store
-          .dispatch(this.selectAction,this.validParameter)
+          .dispatch(this.paramsObj.selectAction,this.paramsObj.validParameter)
           .then(re => {
             if(re.success){
               this.reportInfoList.push(...re.data.taxSubList);
