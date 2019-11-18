@@ -25,13 +25,14 @@
         <el-button type="primary" v-if="showUpdate" @click="handleGenerateData('update')">更新申报数据</el-button>
         <el-button type="primary" v-if="showUpdate" @click="handleGenerateDataQ('update')">更新申报数据反馈</el-button>
         <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
-        <el-button
-          type="primary"
-          @click="handleSendReport"
-          v-if="showButton(['未申报','申报失败','作废成功'])"
-        >发送申报</el-button>
-        <el-button type="primary" v-if="showButton(['申报处理中'])" @click="handleGetFeedback">获取反馈</el-button>
-        <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>
+<!--        <el-button type="primary" @click="handleSendReport" v-if="showButton(['未申报','申报失败','作废成功'])">发送申报</el-button>-->
+        <el-button type="primary" @click="handleSendReport">发送申报</el-button>
+        <el-button type="primary" @click="handleSendReportQ">发送申报反馈</el-button>
+<!--        <el-button type="primary" v-if="showButton(['申报处理中'])" @click="handleGetFeedback">获取反馈</el-button>-->
+        <el-button type="primary" @click="handleGetFeedback">获取反馈</el-button>
+<!--        <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>-->
+        <el-button type="primary" @click="handleInvalid">作废申报</el-button>
+        <el-button type="primary" @click="handleInvalidQ">作废申报反馈</el-button>
       </div>
       <!--      <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>-->
       <div class="screening">
@@ -157,16 +158,9 @@
       </span>
     </el-dialog>
     <!-- 验证-->
-    <selectSY ref="selectSY"
-              :timeObj="timeObj"
-              :sign="sign"
-    >
-    </selectSY>
+    <selectSY ref="selectSY" :timeObj="timeObj" :sign="sign"></selectSY>
     <!-- 查询-->
-    <feedback ref="feedback"
-              :sign="sign"
-    >
-    </feedback>
+    <feedback ref="feedback" :sign="sign"></feedback>
   </div>
 </template>
 <script>
@@ -367,10 +361,10 @@ export default {
       selectMonth: "",
       statusType: SCR,
       buttonForm: {
-        captchaId: "",
-        capText: "",
+        // captchaId: "",
+        // capText: "",
+        // password: "",
         date: "",
-        password: "",
         taxSubId: "",
         queryMonth: ""
       },
@@ -378,8 +372,7 @@ export default {
         currPage: 1,
         pageSize: 20,
         queryMonth: "",
-        taxSubjectId: "",
-        nameOrMore: ""
+        taxSubId: "",
       },
       list: [],
       total: 0,
@@ -387,11 +380,11 @@ export default {
         reportStatus: "",
         reportType: ""
       },
-
       taxSubjectInfolist: [],
       currentTaxSubName: "",
       selectDate: defaultDate,
       isShowScreening: false,
+      isShowPassword:false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
       sendReportDisabled:false,
       timeObj:{
@@ -429,8 +422,6 @@ export default {
     },
     //生成申报数据
     handleGenerateData(type) {
-      this.buttonForm.queryMonth = this.reportForm.queryMonth;
-      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
       let paramsObj = {
         validParameter : this.buttonForm,
         validAction : "taxPageStore/postGenerateTaxReportData",
@@ -442,8 +433,6 @@ export default {
     },
     //生成申报数据反馈
     handleGenerateDataQ(type){
-      this.buttonForm.queryMonth = this.reportForm.queryMonth;
-      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
       let paramsObj = {
         validParameter : this.buttonForm,
         querytAction : "taxPageStore/postQueryGenerateTaxReportData",
@@ -455,37 +444,75 @@ export default {
     //发送申报
     handleSendReport() {
       this.isSendReport = true;
-      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
-      this.buttonForm.date = this.reportForm.queryMonth;
-      this.buttonForm.queryMonth = this.reportForm.queryMonth;
-      this.currentPasItem = "send";
+      // this.buttonForm.taxSubId = this.reportForm.taxSubId;
+      // this.buttonForm.date = this.reportForm.queryMonth;
+      // this.buttonForm.queryMonth = this.reportForm.queryMonth;
+      // this.currentPasItem = "send";
       this.$store
-        .dispatch("taxPageStore/postCheckReportData", this.buttonForm)
-        .then(res => {
-          this.isSendReport = false;
-          if (res.success) {
-            if (res.data.length == 0) {
-              this.publicParams();
-            } else {
-              this.abnormalList = res.data;
-              this.isShowAbnormal = true;
-            }
-          }
-        });
+        // .dispatch("taxPageStore/postCheckReportData", this.buttonForm)
+        // .then(res => {
+        //   this.isSendReport = false;
+        //   if (res.success) {
+        //     if (res.data.length == 0) {
+              let paramsObj = {
+                validParameter : this.buttonForm,
+                validAction : "taxPageStore/postSendReport",
+                querytAction : "taxPageStore/postSendReportQuery",
+                stopTip:"发送申报",
+                processingTip:"获取反馈中。。。",
+              }
+              this.$refs.selectSY.show(true,paramsObj)
+            // } else {
+            //   this.abnormalList = res.data;
+            //   this.isShowAbnormal = true;
+            // }
+        //   }
+        // });
+    },
+    handleSendReportQ(){
+      let paramsObj = {
+        validParameter : this.buttonForm,
+        querytAction : "taxPageStore/postSendReportQuery",
+        stopTip:"发送申报",
+        processingTip:"获取反馈中。。。",
+      }
+      this.$refs.feedback.show(true,paramsObj)
     },
     //作废申报
     handleInvalid() {
-      this.currentPasItem = "invalid";
-      this.publicParams();
+      let paramsObj = {
+        validParameter : this.buttonForm,
+        validAction : "taxPageStore/postCancelSubTaxReport",
+        querytAction : "taxPageStore/postCancelSubTaxReportQuery",
+        stopTip:"作废申报",
+        processingTip:"获取反馈中。。。",
+      }
+      this.$refs.selectSY.show(true,paramsObj)
+    },
+    //作废申报反馈
+    handleInvalidQ(){
+      let paramsObj = {
+        validParameter : this.buttonForm,
+        querytAction : "taxPageStore/postCancelSubTaxReportQuery",
+        stopTip:"作废申报",
+        processingTip:"获取反馈中。。。",
+      }
+      this.$refs.feedback.show(true,paramsObj)
     },
     //获取反馈
     handleGetFeedback() {
-      this.currentPasItem = "feedback";
-      this.publicParams();
+      let paramsObj = {
+        validParameter : this.buttonForm,
+        validAction : "taxPageStore/postGetReportBack",
+        querytAction : "taxPageStore/postGetReportBackQuery",
+        stopTip:"申报获取反馈",
+        processingTip:"获取反馈中。。。",
+      }
+      this.$refs.selectSY.show(true,paramsObj)
     },
     //发送申报 获取反馈  作废申报接口公共参数
     publicParams() {
-      this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
+      this.buttonForm.taxSubId = this.reportForm.taxSubId;
       this.buttonForm.date = this.reportForm.queryMonth;
       this.buttonForm.queryMonth = this.reportForm.queryMonth;
       // this.isShowPassword = true;
@@ -560,7 +587,7 @@ export default {
     },
     //导出申请报
     handleExportApplyTable() {
-      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      this.buttonForm.taxSubId = this.reportForm.taxSubId;
       this.buttonForm.date = this.reportForm.queryMonth;
       this.$store.dispatch(
         "taxPageStore/getSubTaxReportExport",
@@ -595,14 +622,21 @@ export default {
     formatQuerymonth(defaultDate) {
       let currentDate = defaultDate.replace("年", "-");
       this.reportForm.queryMonth = currentDate.replace("月", "");
+
+      this.buttonForm.queryMonth = this.reportForm.queryMonth;
+      this.buttonForm.date = this.reportForm.queryMonth;
+
       this.selectMonth = this.reportForm.queryMonth.split('-')[1];
       this.selectYear = this.reportForm.queryMonth.split('-')[0];
     },
+    //扣缴义务人列表
     getTaxSubjectInfoList() {
       this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
         if (res.success) {
           this.taxSubjectInfolist = res.data;
-          this.reportForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
+          this.reportForm.taxSubId = this.taxSubjectInfolist[0].taxSubId;
+          this.buttonForm.taxSubId = this.taxSubjectInfolist[0].taxSubId;
+
           this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
           this.getList();
         }
@@ -610,7 +644,8 @@ export default {
     },
     //切换扣缴义务人
     handleCheckTaxSubject(item) {
-      this.reportForm.taxSubjectId = item.taxSubId;
+      this.reportForm.taxSubId = item.taxSubId;
+      this.buttonForm.taxSubId = item.taxSubId;
       this.currentTaxSubName = item.taxSubName;
       this.reportForm.currPage = 1;
       this.getList();
@@ -638,8 +673,6 @@ export default {
         .then(res => {
           if (res.success) {
             this.loading = false;
-            // this.selectYear = this.reportForm.split('-')[0];
-            // this.selectMonth = this.reportForm.queryMonth.substr(6, 2);
             this.reportObj.reportStatus = this.statusType.declareStatus[
               res.data.reportStatus
             ];

@@ -162,6 +162,15 @@ export function apiCancelSubTaxReport(invalidForm) {
   })
 }
 
+/*综合所得-作废申报反馈*/
+export function apiCancelSubTaxReportQuery(invalidForm) {
+  return fetch({
+    url: '/api/taxReport/cancelSubTaxReportQuery',
+    method: 'post',
+    data: invalidForm
+  })
+}
+
 /*综合所得-获取反馈结果*/
 export function apiGetReportBack(reportForm) {
   return fetch({
@@ -170,7 +179,14 @@ export function apiGetReportBack(reportForm) {
     data: reportForm
   })
 }
-
+/*综合所得-获取反馈结果查询*/
+export function apiGetReportBackQuery(reportForm) {
+  return fetch({
+    url: '/api/taxReport/getReportBackQuery',
+    method: 'post',
+    data: reportForm
+  })
+}
 /*综合所得-发送申报*/
 export function apiSendReport(sendReportForm) {
   return fetch({
@@ -179,7 +195,14 @@ export function apiSendReport(sendReportForm) {
     data: sendReportForm
   })
 }
-
+/*综合所得-发送申报反馈*/
+export function apiSendReportQuery(sendReportForm) {
+  return fetch({
+    url: '/api/taxReport/sendReportQuery',
+    method: 'post',
+    data: sendReportForm
+  })
+}
 /*综合所得-获取人员状态为非正常*/
 export function apiCheckReportData(reportForm) {
   return fetch({
