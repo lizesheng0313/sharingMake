@@ -1,4 +1,4 @@
-import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList,apiDownloadAddition,apiDownloadAdditionQuery,apiSocialBenefitsList,apiAccreditQuery} from './api'
+import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList,apiDownloadAddition,apiDownloadAdditionQuery,apiSocialBenefitsList,apiAccreditQuery,apiQueryGenerateTaxReportData} from './api'
 
 /*个税-人员采集*/
 
@@ -76,6 +76,11 @@ export const actionTaxReportTotalList = ({ dispatch }, reportForm) => {
 //综合申报-生成申报数据
 export const postGenerateTaxReportData = ({ dispatch }, generateForm) => {
     return apiGenerateTaxReportData(generateForm)
+}
+
+//综合申报-生成申报数据反馈
+export const postQueryGenerateTaxReportData = ({ dispatch }, generateForm) => {
+  return apiQueryGenerateTaxReportData(generateForm)
 }
 
 //综合申报-作废申报

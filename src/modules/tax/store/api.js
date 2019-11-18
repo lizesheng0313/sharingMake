@@ -142,6 +142,17 @@ export function apiGenerateTaxReportData(generateForm) {
   })
 }
 
+/*综合所得-生成申报数据反馈*/
+export function apiQueryGenerateTaxReportData(generateForm) {
+  return fetch({
+    url: '/api/taxReport/taxReportDataQuery',
+    method: 'post',
+    params: generateForm
+  })
+}
+
+
+
 /*综合所得-作废申报*/
 export function apiCancelSubTaxReport(invalidForm) {
   return fetch({

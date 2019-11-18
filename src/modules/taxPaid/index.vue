@@ -59,10 +59,6 @@
     </selectSY>
     <!--获取反馈 -->
     <feedback ref="feedback"
-              :validParameter = "validParameter"
-              :querytAction ="querytAction"
-              :stopTip="stopTip"
-              :processingTip="processingTip"
               :sign="sign"
     >
     </feedback>
@@ -146,7 +142,7 @@ export default {
       stopTip:"缴款",
       processingTip:"获取反馈中。。。",
      }
-      this.$refs.selectSY.show(true,paramsObj)
+     this.$refs.selectSY.show(true,paramsObj)
     },
     //缴款反馈
     queryTaxPay(data){

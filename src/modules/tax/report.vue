@@ -21,7 +21,9 @@
       </div>
       <div class="right declare-buttton-groups" style="float: right">
         <el-button type="primary" v-if="showGenerate" @click="handleGenerateData('creat')">生成申报数据</el-button>
+        <el-button type="primary" v-if="showGenerate" @click="handleGenerateDataQ('creat')">生成申报数据反馈</el-button>
         <el-button type="primary" v-if="showUpdate" @click="handleGenerateData('update')">更新申报数据</el-button>
+        <el-button type="primary" v-if="showUpdate" @click="handleGenerateDataQ('update')">更新申报数据反馈</el-button>
         <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
         <el-button
           type="primary"
@@ -154,10 +156,23 @@
         <el-button @click="isShowPassword=false" :disabled="sendReportDisabled">取消</el-button>
       </span>
     </el-dialog>
+    <!-- 验证-->
+    <selectSY ref="selectSY"
+              :timeObj="timeObj"
+              :sign="sign"
+    >
+    </selectSY>
+    <!-- 查询-->
+    <feedback ref="feedback"
+              :sign="sign"
+    >
+    </feedback>
   </div>
 </template>
 <script>
  import { mapState } from "vuex";
+ import selectSY from "./components/partSelectSY";
+ import feedback from "./components/partFeedback";
 import * as SCR from "./util/constData";
 import fun from "@/util/fun";
 let date = fun.headDate();
@@ -166,6 +181,10 @@ let defaultDate =
   date.year + "年" + (date.month >= 10 ? date.month : "0" + date.month) + "月";
 
 export default {
+  components: {
+    selectSY,
+    feedback,
+  },
   computed: {
     //当前日期在15号之前且所选月份是上月或本月以及申报状态为空以及所选年为当年
     //当前日期在15号之后且所选是年月为当年当月以及申报状态为空
@@ -368,13 +387,19 @@ export default {
         reportStatus: "",
         reportType: ""
       },
-      isShowPassword: false,
+
       taxSubjectInfolist: [],
       currentTaxSubName: "",
       selectDate: defaultDate,
       isShowScreening: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
       sendReportDisabled:false,
+      timeObj:{
+        first:3000,
+        second:10000,
+        third:15000,
+      },
+      sign:"taxReport",
     };
   },
   mounted() {
@@ -388,6 +413,12 @@ export default {
     };
   },
   methods: {
+    //子组件触发刷新
+    freshList(data){
+      if(data === this.sign){
+        this.getList()
+      }
+    },
     getCode() {
       this.$store.dispatch("getCode").then(res => {
         this.buttonForm.captchaId = res.data;
@@ -400,16 +431,26 @@ export default {
     handleGenerateData(type) {
       this.buttonForm.queryMonth = this.reportForm.queryMonth;
       this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
-      this.$store
-        .dispatch("taxPageStore/postGenerateTaxReportData", this.buttonForm)
-        .then(res => {
-          if (res.success) {
-            if(type==='update'){
-              this.$message.success('更新申报数据成功');
-            }
-            this.getList(true);
-          }
-        });
+      let paramsObj = {
+        validParameter : this.buttonForm,
+        validAction : "taxPageStore/postGenerateTaxReportData",
+        querytAction : "taxPageStore/postQueryGenerateTaxReportData",
+        stopTip:type === "create" ? "生成申报数据":"更新申报数据",
+        processingTip:"获取反馈中。。。",
+      }
+      this.$refs.selectSY.show(true,paramsObj)
+    },
+    //生成申报数据反馈
+    handleGenerateDataQ(type){
+      this.buttonForm.queryMonth = this.reportForm.queryMonth;
+      this.buttonForm.taxSubjectId = this.reportForm.taxSubjectId;
+      let paramsObj = {
+        validParameter : this.buttonForm,
+        querytAction : "taxPageStore/postQueryGenerateTaxReportData",
+        stopTip:type === "create" ? "生成申报数据":"更新申报数据",
+        processingTip:"获取反馈中。。。",
+      }
+      this.$refs.feedback.show(true,paramsObj)
     },
     //发送申报
     handleSendReport() {
@@ -437,7 +478,7 @@ export default {
       this.currentPasItem = "invalid";
       this.publicParams();
     },
-    // 获取反馈
+    //获取反馈
     handleGetFeedback() {
       this.currentPasItem = "feedback";
       this.publicParams();
@@ -447,8 +488,8 @@ export default {
       this.buttonForm.taxSubId = this.reportForm.taxSubjectId;
       this.buttonForm.date = this.reportForm.queryMonth;
       this.buttonForm.queryMonth = this.reportForm.queryMonth;
-      this.isShowPassword = true;
-      this.getCode();
+      // this.isShowPassword = true;
+      // this.getCode();
       this.$nextTick(() => {
         this.$refs["refPassword"].resetFields();
       });
