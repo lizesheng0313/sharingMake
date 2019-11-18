@@ -9,11 +9,9 @@
       :show-close="false"
       :close-on-click-modal="closeModel"
     >
-      <el-row v-for="(item,index) in reportReturnList" :key="index">
-        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ paramsObj.stopTip }}完成</el-col></div>
-        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ paramsObj.processingTip }}</el-col></div>
-        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ paramsObj.stopTip }}失败，{{item.failReason}}</el-col></div>
-      </el-row>
+        <div v-if="subjectObj.dealStatus === 'SUCCESS'"><i class="el-icon-success"></i>{{stopTip}}成功</div>
+        <div v-if="subjectObj.dealStatus === 'PROCESSING'"><i class="el-icon-warning"></i>获取反馈已接收，局端处理中，请稍后点击获取反馈。</div>
+        <div v-if="subjectObj.dealStatus === 'FAIL'"><i class="el-icon-warning"></i>{{ subjectObj.failReason}}</div>
       <div class="dialog-footer">
         <el-button @click="onIknow" type="primary" plain>我知道了</el-button>
       </div>
@@ -38,17 +36,18 @@ export default {
         validParameter: "", //校验参数
         querytAction:"" ,//查询action
       },
-      reportReturnList:[],
       isShowReturnInfo:false,
       isShowReportInfo: false,
-      closeModel:false
+      closeModel:false,
+      subjectObj:{
+        dealStatus:"",
+        failReason:""
+      },
     };
   },
   methods: {
     show(data,params) {
       if(data) {
-        this.reportReturnList = [];
-
         //接口参数赋值
         this.paramsObj = params;
         this.handleReportInfo()
@@ -65,7 +64,7 @@ export default {
         if(res.success){
           // 已授权，有查询结果
           if(res.data.status === "SUCCESS"){
-            this.reportReturnList = res.data.taxSubList;
+            this.subjectObj = res.data.taxSubList[0];
             this.isShowReturnInfo = true;
           }else{//未授权
             this.isShowReportInfo = false;

@@ -3,16 +3,15 @@
     <el-dialog
       :visible.sync="isShowReportInfo"
       width="550px"
+      title="提示"
       center
       class="diy-el_dialog"
       :show-close="false"
       :close-on-click-modal="closeModel"
     >
-      <el-row v-for="(item,index) in reportInfoList" :key="index">
-        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ paramsObj.stopTip }}完成</el-col></div>
-        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ paramsObj.processingTip }}</el-col></div>
-        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ paramsObj.stopTip }}失败，{{item.failReason}}</el-col></div>
-      </el-row>
+        <div v-if="subjectObj.dealStatus === 'SUCCESS'"><i class="el-icon-success"></i>{{stopTip}}成功</div>
+        <div v-if="subjectObj.dealStatus === 'PROCESSING'"><i class="el-icon-warning"></i>{{stopTip}}已接收，请稍后点击【{{stopTip}}反馈】。</div>
+        <div v-if="subjectObj.dealStatus === 'FAIL'"><i class="el-icon-warning"></i>{{ subjectObj.failReason}}</div>
       <div v-loading="reportInfoLoading" style="height: 40px"></div>
       <div class="dialog-footer">
         <el-button @click="onIknow" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
@@ -33,8 +32,10 @@ export default {
   },
   data() {
     return {
-      reportInfoList:[],
-      reportReturnList:[],
+      subjectObj:{
+        dealStatus:"",
+        failReason:""
+      },
       isShowReturnInfo:false,
       isShowReportInfo: false,
       reportInfoLoading:false,
@@ -54,9 +55,11 @@ export default {
   methods: {
     show(data,params) {
       if(data) {
-        this.reportInfoList=[];
+        this.subjectObj = {
+          dealStatus:"",
+          failReason:""
+        }
         this.isShowIknow = false;
-
         //接口参数赋值
        this.paramsObj = params;
        this.handleExport();
@@ -73,11 +76,10 @@ export default {
             if(res.data.status === "SUCCESS"){
               this.reportInfoLoading = true;
               this.isShowReportInfo = true;
-              this.reportInfoList = res.data.taxSubList;
-              //是否进行下步查询
-              if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+              if(res.data.taxSubList[0].dealStatus === "PROCESSING"){
                 this.selectShuiyou()
               }else{//全部成功或失败
+                this.subjectObj = res.data.taxSubList[0];
                 this.reportInfoLoading = false;
                 this.isShowIknow = true;
               }
@@ -98,10 +100,10 @@ export default {
           .then(r0 => {
             if(r0.success){
               if(r0.data.status === "SUCCESS"){
-                this.reportInfoList.push(...r0.data.taxSubList);
                 if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
                   this.selectSec()
                 } else{
+                  this.subjectObj = r0.data.taxSubList[0];
                   this.reportInfoLoading = false;
                   this.isShowIknow = true;
                 }
@@ -119,10 +121,10 @@ export default {
           .dispatch(this.paramsObj.querytAction,this.paramsObj.validParameter)
           .then(r0 => {
             if(r0.data.status === "SUCCESS"){
-              this.reportInfoList.push(...r0.data.taxSubList);
               if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
                 this.selectThird()
               } else{
+                this.subjectObj = r0.data.taxSubList[0];
                 this.reportInfoLoading = false;
                 this.isShowIknow = true;
               }
@@ -138,9 +140,9 @@ export default {
           .dispatch(this.paramsObj.querytAction,this.paramsObj.validParameter)
           .then(re => {
             if(re.success){
-              this.reportInfoList.push(...re.data.taxSubList);
               this.reportInfoLoading = false;
               this.isShowIknow = true;
+              this.subjectObj = re.data.taxSubList[0];
             }
           })
       },this.timeObj.third)

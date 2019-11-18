@@ -282,13 +282,11 @@ export function apiRefreshStubs(id) {
   })
 }
 //薪资计算
-export function apiSalaryComputes(id) {
+export function apiSalaryComputes(form) {
   return fetch({
     url: '/api/salary/salaryCompute',
     method: 'post',
-    params:{
-      checkId:id
-    }
+    params:form
   })
 }
 
