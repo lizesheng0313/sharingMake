@@ -13,7 +13,7 @@
       <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
         <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary">薪资计算</el-button>
-        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleReportInfo">薪资计算反馈</el-button>
+        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShowQ" @click="handleReportInfo">获取算税结果</el-button>
         <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')">薪资审核</el-button>
         <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')">取消审核</el-button>
       </div>
@@ -376,7 +376,7 @@
       },
       sign:"calc-wages",
       stopTip:"薪资计算",//终止文案
-      processingTip:"数据反馈中。。。",//进行中文案
+      processingTip:"数据反馈中,请稍后点击获取反馈。",//进行中文案
       timeObj:{
         first:3000,
         second:10000,
@@ -394,6 +394,9 @@
     },
     salaryShow:function () {
       return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED" || this.checkStatus==="AUDITED"
+    },
+    salaryShowQ(){
+      return this.checkStatus==="WAIT_BACK"
     },
     auditedShow:function(){
       return this.checkStatus === "COMPUTED"

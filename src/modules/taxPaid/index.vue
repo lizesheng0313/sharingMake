@@ -28,10 +28,10 @@
         >
           <el-table-column  label="序号" type="index"></el-table-column>
           <el-table-column prop="taxSubName" label="扣缴义务人"></el-table-column>
+          <el-table-column prop="taxSubName" label="税款所属期"></el-table-column>
           <el-table-column prop="tableName" label="申报表"></el-table-column>
-          <el-table-column prop="status" label="申报状态"></el-table-column>
-          <el-table-column prop="isThree" label="是否有反方协议"></el-table-column>
-          <el-table-column prop="paidStatus" label="缴款状态" width="140"></el-table-column>
+          <el-table-column prop="status" label="已缴税款"></el-table-column>
+          <el-table-column prop="status" label="缴款状态"></el-table-column>
           <el-table-column prop="payDate" label="缴款日期" width="140">
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="320px">

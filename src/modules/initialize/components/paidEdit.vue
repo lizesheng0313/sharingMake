@@ -135,7 +135,7 @@ export default {
     //子组件触发刷新
     freshList(data){
       if(data === this.sign){
-        this.handleCancel(true)
+        // this.handleCancel(true)
       }
     },
     //授权
