@@ -27,12 +27,10 @@
         <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
 <!--        <el-button type="primary" @click="handleSendReport" v-if="showButton(['未申报','申报失败','作废成功'])">发送申报</el-button>-->
         <el-button type="primary" @click="handleSendReport">发送申报</el-button>
-        <el-button type="primary" @click="handleSendReportQ">发送申报反馈</el-button>
 <!--        <el-button type="primary" v-if="showButton(['申报处理中'])" @click="handleGetFeedback">获取反馈</el-button>-->
         <el-button type="primary" @click="handleGetFeedback">获取反馈</el-button>
 <!--        <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>-->
         <el-button type="primary" @click="handleInvalid">作废申报</el-button>
-        <el-button type="primary" @click="handleInvalidQ">作废申报反馈</el-button>
       </div>
       <!--      <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>-->
       <div class="screening">
@@ -469,15 +467,6 @@ export default {
         //   }
         // });
     },
-    handleSendReportQ(){
-      let paramsObj = {
-        validParameter : this.buttonForm,
-        querytAction : "taxPageStore/postSendReportQuery",
-        stopTip:"发送申报",
-        processingTip:"获取反馈中。。。",
-      }
-      this.$refs.feedback.show(true,paramsObj)
-    },
     //作废申报
     handleInvalid() {
       let paramsObj = {
@@ -488,16 +477,6 @@ export default {
         processingTip:"获取反馈中。。。",
       }
       this.$refs.selectSY.show(true,paramsObj)
-    },
-    //作废申报反馈
-    handleInvalidQ(){
-      let paramsObj = {
-        validParameter : this.buttonForm,
-        querytAction : "taxPageStore/postCancelSubTaxReportQuery",
-        stopTip:"作废申报",
-        processingTip:"获取反馈中。。。",
-      }
-      this.$refs.feedback.show(true,paramsObj)
     },
     //获取反馈
     handleGetFeedback() {

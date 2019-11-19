@@ -10,7 +10,7 @@
       :close-on-click-modal="closeModel"
     >
         <div v-if="subjectObj.dealStatus === 'SUCCESS'"><i class="el-icon-success"></i>{{stopTip}}成功</div>
-        <div v-if="subjectObj.dealStatus === 'PROCESSING'"><i class="el-icon-warning"></i>获取反馈已接收，局端处理中，请稍后点击获取反馈。</div>
+        <div v-if="subjectObj.dealStatus === 'PROCESSING'"><i class="el-icon-warning"></i>{{ paramsObj.stopTip }}已接收，局端处理中，请稍后点击【{{ paramsObj.stopTip }}反馈】。</div>
         <div v-if="subjectObj.dealStatus === 'FAIL'"><i class="el-icon-warning"></i>{{ subjectObj.failReason}}</div>
       <div class="dialog-footer">
         <el-button @click="onIknow" type="primary" plain>我知道了</el-button>
