@@ -41,7 +41,6 @@ export default {
       reportInfoLoading:false,
       paramsObj:{
         stopTip:"",//终止文案
-        processingTip:"",//进行中文案
         validParameter: "", //校验参数
         validAction: "", //校验action
         querytAction:"" ,//查询action
@@ -71,6 +70,7 @@ export default {
       this.$store
         .dispatch(this.paramsObj.validAction, this.paramsObj.validParameter)
         .then(res=>{
+          console.log(res.success)
           if (res.success) {
             //验证通过
             if(res.data.status === "SUCCESS"){

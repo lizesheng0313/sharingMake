@@ -10,7 +10,7 @@
     <div class="taxPaidCon">
       <div class="content-header head-date">
         <el-date-picker
-          v-model="currentDate"
+          v-model="agreementListForm.queryMonth"
           type="month"
           suffix-icon="el-icon-date"
           value-format="yyyy-MM"
@@ -28,10 +28,14 @@
         >
           <el-table-column  label="序号" type="index"></el-table-column>
           <el-table-column prop="taxSubName" label="扣缴义务人"></el-table-column>
-          <el-table-column prop="taxSubName" label="税款所属期"></el-table-column>
-          <el-table-column prop="tableName" label="申报表"></el-table-column>
-          <el-table-column prop="status" label="已缴税款"></el-table-column>
-          <el-table-column prop="status" label="缴款状态"></el-table-column>
+          <el-table-column prop="payDate" label="税款所属期"></el-table-column>
+          <el-table-column  label="申报表">
+            <template slot-scope="scope">{{ subTaxReportType[scope.row.subTaxReportType]}}</template>
+          </el-table-column>
+          <el-table-column prop="taxPaid" label="已缴税款"></el-table-column>
+          <el-table-column  label="缴款状态">
+            <template slot-scope="scope">{{ payStatus[scope.row.payStatus]}}</template>
+          </el-table-column>
           <el-table-column prop="payDate" label="缴款日期" width="140">
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="320px">
@@ -43,13 +47,23 @@
                 placement="right"
                 width="400"
                 trigger="hover">
-                <el-button type="primary" plain @click="getTripleAgreement(scope.row)">三方协议下载</el-button>
-                <el-button type="primary" plain @click="getTripleAgreementQuery(scope.row)">三方协议下载反馈</el-button>
+                <el-button type="primary" plain @click="getTripleAgreement(scope.row)">获取三方协议下载</el-button>
+                <el-button type="primary" plain @click="getTripleAgreementQuery(scope.row)">三方协议反馈</el-button>
+                <span slot="reference" class="more-choose">更多1 >></span>
               </el-popover>
-              <span v-popover:popMore class="more-choose">更多 >></span>
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+          :current-page="agreementListForm.currPage"
+          :page-sizes="[20, 50, 100, 200]"
+          :page-size="agreementListForm.pageSize"
+          layout="total, sizes, prev, pager, next"
+          :total="count"
+          class="paid-page">
+        </el-pagination>
       </div>
     </div>
 <!--    缴款 三方协议-->
@@ -68,8 +82,9 @@
 <script>
  import selectSY from "./components/partSelectSY";
  import feedback from "./components/partFeedback";
+ import * as constData from "./util/constData"
 import { mapState } from "vuex";
-import  fun from "@/util/fun"
+import fun from "@/util/fun"
 export default {
   components: {
     selectSY,
@@ -77,8 +92,9 @@ export default {
   },
   data() {
     return {
-      currentDate:"",
       loading:"",
+      subTaxReportType:constData.subTaxReportType,
+      payStatus:constData.payStatus,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       paidList:[
         { name:"北京懒猫联银科技有限公司",tableName:"综合所得预扣预缴表",status:"申报成功",isThree:"是",paidStatus:"无需缴款",time:"2019-12-12" }
@@ -97,14 +113,21 @@ export default {
         third:15000,
       },
       sign:"taxPaidIndex",
-      showSelect:false
+      showSelect:false,
+      agreementListForm:{
+        currPage:1,
+        pageSize:20,
+        queryMonth:"",
+        taxSubId: 17
+      },
+      count:0
     };
   },
   created(){
     let nowDate = fun.headDate();
     let year = nowDate.year;
     let month = nowDate.month >= 10 ? nowDate.month : "0" + nowDate.month;
-    this.currentDate = year+"-"+month;
+    this.agreementListForm.queryMonth = year+"-"+month;
   },
   mounted(){
     this.getList()
@@ -120,15 +143,22 @@ export default {
     getList(){
       this.$store
         .dispatch(
-          "taxPaidStore/actionTripleAgreementList", {
-            date:this.currentDate
-          }
+          "taxPaidStore/actionTripleAgreementList",this.agreementListForm
         )
         .then(res => {
           if (res.success) {
-            this.paidList = res.data
+            this.paidList = res.data.data;
+            this.count =this.paidList.length;
           }
         });
+    },
+    handleCurrentChange(val){
+      this.agreementListForm.currPage = val;
+      this.getList()
+    },
+    handleSizeChange(val){
+      this.agreementListForm.pageSize = val;
+      this.getList()
     },
     //子组件触发刷新
     freshList(data){
@@ -137,14 +167,15 @@ export default {
       }
     },
     changeDate(data){
-      this.currentDate = data
+      this.agreementListForm.queryMonth = data;
+      this.getList()
     },
     //发起缴款
     handleTaxPay(data){
      let paramsObj = {
        validParameter :{
-         checkId:"16-T",
-         date:"2019-10"
+         taxSubId:data.taxSubId,
+         queryMonth:"2019-10"
        },
       validAction : "taxPaidStore/actionTaxPay",
       querytAction : "taxPaidStore/actionTaxPayQuery",
@@ -157,8 +188,8 @@ export default {
     queryTaxPay(data){
       let paramsObj = {
         validParameter :{
-          checkId:"16-Q",
-          date:"2019-10"
+          taxSubId:data.taxSubId,
+          queryMonth:"2019-10"
         },
         querytAction : "taxPaidStore/actionTaxPayQuery",
         stopTip:"缴款",
@@ -168,14 +199,15 @@ export default {
     },
     //三方协议下载
     getTripleAgreement(data){
+      console.log(data)
       let paramsObj = {
         validParameter :{
-          checkId:"17-D",
+          taxSubId:data.taxSubId,
+          queryMonth:this.agreementListForm.queryMonth
         },
         validAction : "taxPaidStore/actionGetTripleAgreement",
         querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
-        stopTip:"三方协议下载",
-        processingTip:"获取反馈中。。。",
+        stopTip:"获取三方协议",
       }
       this.$refs.selectSY.show(true,paramsObj);
     },
@@ -183,11 +215,11 @@ export default {
     getTripleAgreementQuery(data){
       let paramsObj = {
         validParameter :{
-          checkId:"17-q",
+          taxSubId:data.taxSubId,
+          queryMonth:this.agreementListForm.queryMonth
         },
         querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
-        stopTip:"三方协议下载",
-        processingTip:"获取反馈中。。。",
+        stopTip:"获取三方协议",
       }
       this.$refs.feedback.show(true,paramsObj)
     }
@@ -213,6 +245,10 @@ export default {
   .more-choose{
     color: #2c7cff;
     cursor: pointer;
+  }
+  .paid-page{
+    margin-top: 30px;
+    float:right;
   }
 }
 </style>

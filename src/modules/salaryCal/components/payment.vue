@@ -4,12 +4,22 @@
       <div class="box-con">
         <img src="../../../assets/images/item1.png" alt="" width="49px" height="50px">
         <div class="box-fun">
+          <p class="box-title">银行代发</p>
+          <p class="tip">使用银行代发服务完成在线发薪</p>
+          <div><el-button type="primary">提交代发数据</el-button></div>
+          <div><el-button type="primary">启动代发</el-button></div>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="box-con">
+        <img src="../../../assets/images/item1.png" alt="" width="49px" height="50px">
+        <div class="box-fun">
           <p class="box-title">银行报盘</p>
           <p class="tip">导出姓名、银行卡号、实发工资</p>
           <a :href="'/api/salary/stubs/exportReport/'+checkId" style="color:#fff;"><el-button type="primary">导出</el-button></a>
         </div>
       </div>
-<!--      <i class="el-icon-setting"></i>-->
     </div>
     <div class="box">
       <div class="box-con">
