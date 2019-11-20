@@ -1,4 +1,4 @@
-import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord} from './api'
+import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery} from './api'
 
 export const actionGetSalaryStatus = ({ dispatch },id) => {
   return apiGetSalaryStatus(id);
@@ -23,4 +23,30 @@ export const postMemberErrorRecord = ({ dispatch },uuid) => {
 export const deleteCheckMemberDeleteAll = ({ dispatch },checkId) => {
   return apiCheckMemberDeleteAll(checkId);
 }
+// 社保公积金导入
+export const actionSocialProvident = ({ dispatch },data) => {
+  return apiSocialProvident(data);
+}
+// 社保公积金 下载模板
+export const actionSocialProvidentTemplate = ({ dispatch }) => {
+  return apiSocialProvidentTemplate();
+}
 
+// 社保公积金 下载日志
+export const actionSocialProvidentRecord = ({ dispatch },uuid) => {
+  return apiSocialProvidentRecord(uuid);
+}
+
+//社保公积金  复制上月累计数据
+export const actionSyncLastMonthSocial = ({ dispatch },params) => {
+  return apisyncLastMonthSocial(params);
+}
+
+//薪资计算
+export const actionSalaryComputes = ({ dispatch },params) => {
+  return apiSalaryComputes(params);
+}
+//薪资计算  反馈
+export const actionSalaryCheckQuery = ({ dispatch },params) => {
+  return apiSalaryCheckQuery(params);
+}

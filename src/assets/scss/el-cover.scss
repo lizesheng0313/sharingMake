@@ -45,8 +45,8 @@
 
 .head-date{
   .el-input--prefix .el-input__inner{
-    border:none;
     font-size: 16px;
+    padding-left: 20px;
   }
   .el-input__prefix{
     right:-60px;
@@ -106,8 +106,23 @@
 }
 .cumulative{
   .el-input__suffix{
-    top:-2px;
+    top:2px;
     cursor: pointer;
+  }
+  .el-select{
+    margin-right:20px;
+    width:100px;
+  }
+  .selectCon{
+    .el-select{
+      width:220px;
+    }
+    .el-input--suffix .el-input__inner{
+      border:none;
+    }
+    .el-select__caret{
+      font-weight: bolder;
+    }
   }
 }
 .diy-el_dialog{
@@ -205,10 +220,6 @@
 }
 .search-input .el-input__icon{
    line-height:34px;
-}
-.cumulative .el-select{
-  margin-right:20px;
-  width:100px;
 }
 .collect{
   .search-input{

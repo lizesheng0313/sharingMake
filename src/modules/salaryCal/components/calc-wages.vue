@@ -13,6 +13,7 @@
       <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
         <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary">薪资计算</el-button>
+        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShowQ" @click="handleReportInfo">获取算税结果</el-button>
         <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')">薪资审核</el-button>
         <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')">取消审核</el-button>
       </div>
@@ -25,7 +26,7 @@
         </span>
       </div>
       <div class="right calc-table_menu">
-        <span @click="showImport('social')">社会公积金导入</span>
+<!--        <span @click="showImport('social')">社会公积金导入</span>-->
         <span class="have-border_right" @click="showImport('floatItem')">浮动项导入</span>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
@@ -249,11 +250,37 @@
         <el-button @click="showExportSalaryDetail = false">取消</el-button>
       </span>
     </el-dialog>
+    <!-- 薪资计算-->
+    <selectSY ref="selectSY"
+              :validParameter = "validParameter"
+              :validAction="validAction"
+              :querytAction="querytAction"
+              :sign="sign"
+              :stopTip="stopTip"
+              :processingTip="processingTip"
+              :timeObj="timeObj"
+    >
+    </selectSY>
+    <!-- 获取反馈 -->
+    <feedback ref="feedback"
+              :validParameter = "validParameter"
+              :querytAction="querytAction"
+              :sign="sign"
+              :stopTip="stopTip"
+              :processingTip="processingTip"
+    >
+    </feedback>
   </div>
 </template>
 <script>
-  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,socialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
-export default {
+  import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,apiSocialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
+  import selectSY from "@/components/tool/selectSY";
+  import feedback from "@/components/tool/feedback";
+  export default {
+  components:{
+     selectSY,
+     feedback
+  },
   data() {
     return {
       salaryTableDataAll:[],
@@ -311,6 +338,9 @@ export default {
           enumEmpTypes:[],//用工类型
         },
       },
+      selectForm:{
+        checkId:this.$route.query.id,
+      },
       enumEmpType:[],//用工类型
       noEnumEmpType:null,
       salaryTableData:[],
@@ -336,10 +366,22 @@ export default {
       uploadFileDisabled:true,//导入通过数据禁用
       tableAllData:[],
       showCount:true,
-      tableLoading:false,
       closeModel:false,
       exportLoading:false,
       taxSubIdLoading:false,
+      validAction:"salaryCalStore/actionSalaryComputes",
+      querytAction:"salaryCalStore/actionSalaryCheckQuery",
+      validParameter:{
+        checkId:this.$route.query.id,
+      },
+      sign:"calc-wages",
+      stopTip:"薪资计算",//终止文案
+      processingTip:"数据反馈中,请稍后点击获取反馈。",//进行中文案
+      timeObj:{
+        first:3000,
+        second:10000,
+        third:15000,
+      },
     };
   },
   computed:{
@@ -353,15 +395,15 @@ export default {
     salaryShow:function () {
       return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED" || this.checkStatus==="AUDITED"
     },
+    salaryShowQ(){
+      return this.checkStatus==="WAIT_BACK"
+    },
     auditedShow:function(){
       return this.checkStatus === "COMPUTED"
     },
     cancelAuditeShow:function(){
       return this.checkStatus === "AUDITED" || this.checkStatus === "PAID" || this.checkStatus === "FINISH"
     },
-    // checkShow:function(){
-    //   return this.checkStatus === "FINISH" || this.checkStatus === "PAID" || this.checkStatus === "PAID"
-    // }
   },
   created(){
     this.loading();
@@ -422,6 +464,12 @@ export default {
       //查看工资表状态
      this.getSalaryStatus()
     },
+    //子组件刷新
+    freshList(data){
+      if(data === this.sign){
+        this.loading()
+      }
+    },
     setMinWidth(value){
       if(['序号','工号','姓名'].includes(value)){ return '80px'}
       else if(value === "身份证号"){ return '170px' }
@@ -478,7 +526,6 @@ export default {
             //人员信息
           this.checkedPerson = ['工号', '姓名', '身份证号', '部门'];
           this.isIndeterminate = true;
-          console.log(this.diyOption)
            // 配置项
           this.diyOption.forEach((item,index)=>{
             if(item.title === '个税计算项'){
@@ -563,7 +610,7 @@ export default {
     },
     // 导出通过数据
     uploadFile(){
-      let methods = this.importT == "social"?socialProvident:floatItem;
+      let methods = this.importT == "social"?apiSocialProvident:floatItem;
         methods({
         uuid:this.uuid,
         id:this.salaryForm.checkId,
@@ -670,14 +717,33 @@ export default {
     },
     //薪资计算
     handleCalcSalary(){
-      apiSalaryComputes(this.salaryForm.checkId)
-        .then(res=>{
-          if(res.code === "0000"){
-            //查看状态
-            this.$message.success('薪资计算成功');
-            this.loading()
-          }
-        })
+      this.$refs.selectSY.show(true)
+      // apiSalaryComputes(this.salaryForm.checkId)
+      //   .then(res=>{
+      //     if(res.success){
+      //       if(res.data === "SUCCESS"){
+      //         this.loading();
+      //       }
+      //       if(res.data === "PROCESSING"){
+      //         this.returnLoadingText ="查询中";
+      //         this.isShowReturn = true;
+      //         this.isShowIknow = false;
+      //         this.returnLoading = true;
+      //         setTimeout(()=>{
+      //           this.selectDownLoadFirst()
+      //         },3000)
+      //       }
+      //     }
+      //   })
+    },
+    //获取反馈
+    handleReportInfo(){
+      this.$refs.feedback.show(true)
+    },
+    //关闭加载提示
+    closeReturnMsg(){
+      this.isShowReturn = false;
+      this.loading()
     },
   //  薪资审核
     handleCheckSalary(type){
@@ -851,6 +917,12 @@ export default {
     .avatar-uploader{
       margin-top:20px;
     }
+  }
+  .footer-btn{
+    height: 40px;
+    line-height: 40px;
+    margin-top: 20px;
+    text-align: right;
   }
 }
 </style>

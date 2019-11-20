@@ -15,7 +15,6 @@
     </header>
     <div class="salary-cal-content">
       <div class="content-header head-date">
-        <i class="el-icon-arrow-left"></i>
         <span>{{resetDate}}</span>
         <el-date-picker
           v-model="currentDate"
@@ -26,7 +25,6 @@
           :clearable="false"
           @change="changeDate"
         ></el-date-picker>
-        <i class="el-icon-arrow-right"></i>
       </div>
       <div class="salary-payroll">
         <div class="payroll-box" v-for="(item,index) in salaryRuleUsedList">
@@ -138,7 +136,7 @@ export default {
     }else{
       let nowDate = fun.headDate();
       let year = nowDate.year;
-      let month = nowDate.month > 10 ? nowDate.month : "0" + nowDate.month;
+      let month = nowDate.month >= 10 ? nowDate.month : "0" + nowDate.month;
       this.currentDate = year+"-"+month;
     }
     this.loading();
@@ -197,7 +195,7 @@ export default {
       }).then(res=>{
         if(res.code == "0000"){
           this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
-          this.$router.push({path:"/salaryCheck",query:{id:res.data.checkId,active:1,salaryRuleId:item.salaryRuleId}})
+          this.$router.push({path:"/salaryCheck",query:{id:res.data.checkId,active:0,salaryRuleId:item.salaryRuleId}})
         }else{
           this.$message.error(res.message);
         }
@@ -207,13 +205,13 @@ export default {
     calcSalary(item){
       this.$store.commit("salaryCalStore/SET_BASICINFOFORM",item.salaryRule);
       this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
-      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:2,salaryRuleId:item.salaryRuleId}});
+      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:0,salaryRuleId:item.salaryRuleId}});
     },
     //查看信息
     seeCalcSalary(item){
       this.$store.commit("salaryCalStore/SET_BASICINFOFORM",item.salaryRule);
       this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
-      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:2,salaryRuleId:item.salaryRuleId}})
+      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:4,salaryRuleId:item.salaryRuleId}})
     },
     //切换查看第几次发薪
     changePayth(index,status){

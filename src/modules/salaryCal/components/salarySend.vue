@@ -230,8 +230,8 @@
       },
       //返回
       goBack(){
-        this.$emit("changeActive",3);
-        this.$router.push({path:"/salaryCheck",query:{id:this.salaryForm.checkId,active:2,salaryRuleId:this.$route.query.salaryRuleId}})
+        this.$emit("changeActive",5);
+        this.$router.push({path:"/salaryCheck",query:{id:this.salaryForm.checkId,active:4,salaryRuleId:this.$route.query.salaryRuleId}})
       }
     }
   };

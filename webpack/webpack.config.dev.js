@@ -43,7 +43,12 @@ const config = Object.assign(webpackConfigBase.config, {
     proxy: {
       '/api': {
         target: "http://172.19.60.38:8017",
-        // target:"http://172.19.65.13:9999",
+        //陈莹
+        // target:"http://172.19.63.49:9999",
+        //陈莹2
+        // target:"http://172.19.64.227:9999",
+        //小白
+        // target:" http://172.19.65.31:9999",
         secure: false,
         changeOrigin: true,
         // pathRewrite: {
@@ -57,8 +62,8 @@ const config = Object.assign(webpackConfigBase.config, {
       //   changeOrigin: true
       // }
     },
-    // host: getIP(),
-    host: "0.0.0.0",
+    host: getIP(),
+    // host: "localhost",
     disableHostCheck: true, // 为了手机可以访问
     publicPath: '/',
     // contentBase: webpackConfigBase.resolve('dev'), // 本地服务器所加载的页面所在的目录

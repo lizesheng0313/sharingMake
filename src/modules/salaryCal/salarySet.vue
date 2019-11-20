@@ -207,6 +207,9 @@ export default {
         }, {
           value: 'PERSON_PAY_RULE',
           label: '按劳务报酬所得计算个税'
+        },{
+          value: 'YEAR_END_BONUS',
+          label:" 按全年一次性奖金计算个税"
         }
       ],
       payMonthOptions:[

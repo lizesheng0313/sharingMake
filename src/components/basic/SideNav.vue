@@ -7,9 +7,8 @@
           <span>薪资核算</span>
         </template>
         <el-menu-item index="/salary-cal">薪资核算</el-menu-item>
-        <el-menu-item index="/cumulative">累计应税项</el-menu-item>
       </el-submenu>
-      <el-submenu index>
+      <el-submenu index="report">
         <template slot="title">
           <i class="iconfont iconshenbao"></i>
           <span>个税申报</span>
@@ -17,7 +16,21 @@
         <el-menu-item index="/tax/collect">人员信息采集</el-menu-item>
         <el-menu-item index="/tax/attach">专项附加扣除</el-menu-item>
         <el-menu-item index="/tax/report">综合所得申报</el-menu-item>
-        <el-menu-item index="/tax/paid">扣缴义务人</el-menu-item>
+      </el-submenu>
+      <el-submenu index="taxPaid">
+        <template slot="title">
+          <i class="iconfont iconshenbao"></i>
+          <span>税款缴纳</span>
+        </template>
+        <el-menu-item index="/taxPaid/paid">三方协议缴税</el-menu-item>
+      </el-submenu>
+      <el-submenu index="/initialize">
+        <template slot="title">
+          <i class="iconfont iconshenbao"></i>
+          <span>初始化设置</span>
+        </template>
+        <el-menu-item index="/initialize/paid">扣缴义务人管理</el-menu-item>
+        <el-menu-item index="/initialize/cumulative">累计应税项初始化</el-menu-item>
       </el-submenu>
     </el-menu>
   </div>

@@ -20,23 +20,26 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-
       </div>
       <div slot="fs-container" class="content-st">
-        <div class="step-box" v-if="active!==4" >
+        <div class="step-box" v-if="active!==6">
             <el-steps :active="active" finish-status="success" simple style="margin-top: 20px">
-              <el-step title="开始" class="first-step"></el-step>
-              <el-step title="核对人员" @click.native = "goStep(1)"style="cursor: pointer;"></el-step>
-              <el-step title="核算薪资" @click.native = "goStep(2)" style="cursor: pointer;"></el-step>
-              <el-step title="发放薪资" @click.native = "goStep(3)" style="cursor: pointer;"></el-step>
-              <el-step title="结束" disabled></el-step>
+              <el-step title="核对人员" @click.native = "goStep(0)"style="cursor: pointer;"></el-step>
+              <el-step title="人员信息采集" @click.native = "goStep(1)" style="cursor: pointer;" v-if="salaryItem.taxRule === 'SALARY_PAY_RULE'"></el-step>
+              <el-step title="专项附加扣除" @click.native = "goStep(2)" style="cursor: pointer;"></el-step>
+              <el-step title="社保公积金" @click.native = "goStep(3)" style="cursor: pointer;" v-if="salaryItem.taxRule === 'SALARY_PAY_RULE'"></el-step>
+              <el-step title="核算薪资" @click.native = "goStep(4)" style="cursor: pointer;"></el-step>
+              <el-step title="发放薪资" @click.native = "goStep(5)" style="cursor: pointer;"></el-step>
             </el-steps>
         </div>
         <div class="view-content">
-          <check-staff v-if="active==1"></check-staff>
-          <calc-wages v-if="active==2"></calc-wages>
-          <payment v-if="active==3" @changeActive="changeActive"></payment>
-          <salarySend v-if="active==4" @changeActive="changeActive"></salarySend>
+          <check-staff v-if="active==0"></check-staff>
+          <staff-collect v-if="active==1"></staff-collect>
+          <attach v-if="active==2"></attach>
+          <socialProvident v-if="active==3"></socialProvident>
+          <calc-wages v-if="active==4"></calc-wages>
+          <payment v-if="active==5" @changeActive="changeActive"></payment>
+          <salarySend v-if="active==6" @changeActive="changeActive"></salarySend>
         </div>
       </div>
     </full-screen>
@@ -45,9 +48,13 @@
 <script>
 import fullScreen from "@/components/full-screen/index";
 import checkStaff from "./components/check-staff";
+import staffCollect from "./components/staff-collect"
 import calcWages from "./components/calc-wages";
 import payment from "./components/payment";
-import salarySend from "./components/salarySend"
+import salarySend from "./components/salarySend";
+import attach from "./components/attach";
+import socialProvident from "./components/socialProvident"
+
 import { mapState } from "vuex";
 export default {
   components: {
@@ -55,7 +62,10 @@ export default {
     checkStaff,
     calcWages,
     payment,
-    salarySend
+    salarySend,
+    staffCollect,
+    attach,
+    socialProvident,
   },
   data() {
     return {
@@ -67,12 +77,12 @@ export default {
         salaryItem: "salaryItem",
       }),
     salaryTitle:function(){
-       let dateArr = this.salaryItem.endDate.split("-");
-       return  this.salaryItem.salaryRuleName + " " +dateArr[0]+"-"+dateArr[1]
+       return  this.salaryItem.salaryRuleName + " " +this.salaryItem.date
     }
   },
 
   mounted(){
+    console.log()
   },
   methods: {
     handle(val){
@@ -83,7 +93,8 @@ export default {
     },
     goStep(data){
       this.active = data;
-      this.replaceRoute(data)
+      console.log(this.active)
+      this.replaceRoute(this.active)
     },
     replaceRoute(data){
       this.$router.replace({

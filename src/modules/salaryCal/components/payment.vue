@@ -4,12 +4,22 @@
       <div class="box-con">
         <img src="../../../assets/images/item1.png" alt="" width="49px" height="50px">
         <div class="box-fun">
+          <p class="box-title">银行代发</p>
+          <p class="tip">使用银行代发服务完成在线发薪</p>
+          <div><el-button type="primary">提交代发数据</el-button></div>
+          <div><el-button type="primary">启动代发</el-button></div>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="box-con">
+        <img src="../../../assets/images/item1.png" alt="" width="49px" height="50px">
+        <div class="box-fun">
           <p class="box-title">银行报盘</p>
           <p class="tip">导出姓名、银行卡号、实发工资</p>
           <a :href="'/api/salary/stubs/exportReport/'+checkId" style="color:#fff;"><el-button type="primary">导出</el-button></a>
         </div>
       </div>
-<!--      <i class="el-icon-setting"></i>-->
     </div>
     <div class="box">
       <div class="box-con">
@@ -93,11 +103,12 @@ export default {
     changeSatus(data){
      this.popShow.isshow = data;
     },
+    //发放薪资
     sendSalary(){
       apiProvideStubs(this.checkId).then(res=>{
         if(res.code === "0000"){
-          this.$emit("changeActive",4);
-          this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:3,salaryRuleId:this.$route.query.salaryRuleId}})
+          this.$emit("changeActive",6);
+          this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:6,salaryRuleId:this.$route.query.salaryRuleId}})
         }else{
           this.$message.error(res.message)
         }
@@ -105,8 +116,8 @@ export default {
     },
     //查看记录
     seeRecord(){
-      this.$emit("changeActive",4)
-      this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:4,salaryRuleId:this.$route.query.salaryRuleId}})
+      this.$emit("changeActive",6)
+      this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:6,salaryRuleId:this.$route.query.salaryRuleId}})
     },
     //删除发放
     deleteSalary(){

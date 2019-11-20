@@ -165,17 +165,37 @@ export function apiSalaryItemEnableInfo(id) {
   })
 }
 //公积金导入
-export function socialProvident({uuid,id,importType}) {
+export function apiSocialProvident(params) {
   return fetch({
     url: '/api/salary/socialProvident/import',
     method: 'post',
-    params: {
-      uuid:uuid,
-      checkId:id,
-      importType:importType
-    },
+    params: params
   })
 }
+
+// 公积金导入日志
+export function apiSocialProvidentRecord(data) {
+  return fetchFile({
+    url: '/api/salary/socialProvident/errorRecord/download/'+data.uuid,
+    method: 'get',
+  })
+}
+// 公积金模板下载
+export function apiSocialProvidentTemplate() {
+  return fetchFile({
+    url: '/api/salary/socialProvident/template/download',
+    method: 'get',
+  })
+}
+// 公积金复制上月数据
+export function apisyncLastMonthSocial(params) {
+  return fetch({
+    url: '/api/salary/syncLastMonthSocial',
+    method: 'get',
+    params:params
+  })
+}
+
 //浮动项导入
 export function floatItem({uuid,id,importType}) {
   return fetch({
@@ -262,13 +282,20 @@ export function apiRefreshStubs(id) {
   })
 }
 //薪资计算
-export function apiSalaryComputes(id) {
+export function apiSalaryComputes(form) {
   return fetch({
     url: '/api/salary/salaryCompute',
     method: 'post',
-    params:{
-      checkId:id
-    }
+    params:form
+  })
+}
+
+//薪资计算反馈
+export function apiSalaryCheckQuery(form) {
+  return fetch({
+    url: '/api/salary/salaryCheckQuery',
+    method: 'post',
+    params:form
   })
 }
 //薪资审核
@@ -289,6 +316,8 @@ export function apiMemberErrorRecord(uuid) {
     }
   })
 }
+
+
 
 
 
