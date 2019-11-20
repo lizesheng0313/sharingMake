@@ -187,6 +187,14 @@ export function apiSocialProvidentTemplate() {
     method: 'get',
   })
 }
+// 公积金模板下载
+export function apiSocialProvidentExport(data) {
+  return fetchFile({
+    url: '/api/salary/socialProvident/export',
+    method: 'get',
+    params:data
+  })
+}
 // 公积金复制上月数据
 export function apisyncLastMonthSocial(params) {
   return fetch({

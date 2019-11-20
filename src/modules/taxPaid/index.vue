@@ -150,7 +150,7 @@ export default {
         currPage:1,
         pageSize:20,
         queryMonth:"",
-        taxSubId: 17
+        taxSubId: 40
       },
       count:0,
       isShowTripleAgreementTaxList:false,
