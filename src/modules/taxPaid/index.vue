@@ -83,7 +83,7 @@
         ref="selectTable"
       >
         <el-table-column label=" " width="65">
-          <template scope="scope">
+          <template slot-scope="scope">
             <el-radio :label="scope.row.tripleAgreementNo" v-model="tripleAgreementNo" @change.native="getSelectRow(scope.$index,scope.row)"></el-radio>
           </template>
         </el-table-column>
@@ -229,6 +229,7 @@ export default {
     },
     //缴税
     handleTaxPay(){
+      this.isShowTripleAgreementTaxList = false;
      let paramsObj = {
        validParameter :{
          taxSubId:this.taxSubId,
