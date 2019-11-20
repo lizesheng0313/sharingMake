@@ -95,7 +95,7 @@
       <div class="dialog-foot">
         <span class="moneyStyle">扣款金额：<span class="redTip">{{ deductionAmount ? deductionAmount:0 }}</span>元</span>
         <el-button type="primary" @click="handleTaxPay">扣款</el-button>
-        <el-button type="info">取消</el-button>
+        <el-button type="info" @click="isShowTripleAgreementTaxList = false">取消</el-button>
       </div>
     </el-dialog>
     <!-- 缴款 三方协议-->
@@ -202,6 +202,7 @@ export default {
     },
     //三方协议列表
     getTripleAgreementList(data){
+      this.tripleAgreementNo = "";
       this.isShowTripleAgreementTaxList = true;
       this.tripleAgreementLoading = true;
       this.$store
