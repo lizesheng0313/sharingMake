@@ -81,10 +81,11 @@
         v-loading="tripleAgreementLoading"
         highlight-current-row
         ref="selectTable"
-        @selection-change="handleSelectionChange"
-        @current-change="handleCurrentSelectChange"
       >
-        <el-table-column type="selection" width="55">
+        <el-table-column label=" " width="65">
+          <template scope="scope">
+            <el-radio :label="scope.row.tripleAgreementNo" v-model="tripleAgreementNo" @change.native="getSelectRow(scope.$index,scope.row)"></el-radio>
+          </template>
         </el-table-column>
         <el-table-column prop="tripleAgreementNo" label="三方协议号"></el-table-column>
         <el-table-column prop="accountBankCode" label="开户银行"></el-table-column>
@@ -97,7 +98,7 @@
         <el-button type="info">取消</el-button>
       </div>
     </el-dialog>
-<!--    缴款 三方协议-->
+    <!-- 缴款 三方协议-->
     <selectSY ref="selectSY"
               :timeObj="timeObj"
               :sign="sign"
@@ -221,43 +222,34 @@ export default {
           }
         });
     },
-    handleSelectionChange(val){
-      if (val.length > 1) {
-        this.$refs.selectTable.clearSelection()
-        this.$refs.selectTable.toggleRowSelection(val.pop());
-      }else{
-      }
-      console.log(val)
-    },
-    handleCurrentSelectChange(val){
-      this.$refs.selectTable.toggleRowSelection(val)
-      console.log(val)
+    getSelectRow(index,row){
+      this.taxSubId = row.taxSubId;
+      this.tripleAgreementNo = row.tripleAgreementNo
     },
     //缴税
     handleTaxPay(){
-      console.log(this.tripleAgreementNo,this.taxSubId)
-     // let paramsObj = {
-     //   validParameter :{
-     //     taxSubId:this.taxSubId,
-     //     queryMonth:this.agreementListForm.queryMonth,
-     //     tripleAgreementNo:this.tripleAgreementNo
-     //   },
-     //  validAction : "taxPaidStore/actionTaxPay",
-     //  querytAction : "taxPaidStore/actionTaxPayQuery",
-     //  stopTip:"扣款",
-     // }
-     console.log(paramsObj)
-     // this.$refs.selectSY.show(true,paramsObj)
+     let paramsObj = {
+       validParameter :{
+         taxSubId:this.taxSubId,
+         queryMonth:this.agreementListForm.queryMonth,
+         tripleAgreementNo:this.tripleAgreementNo
+       },
+      validAction : "taxPaidStore/actionTaxPay",
+      querytAction : "taxPaidStore/actionTaxPayQuery",
+      stopTip:"扣款",
+     }
+     this.$refs.selectSY.show(true,paramsObj)
     },
     //缴款反馈
-    queryTaxPay(data){
+    queryTaxPay(){
       let paramsObj = {
         validParameter :{
-          taxSubId:data.taxSubId,
-          queryMonth:"2019-10"
+          taxSubId:this.taxSubId,
+          queryMonth:this.agreementListForm.queryMonth,
+          tripleAgreementNo:this.tripleAgreementNo
         },
         querytAction : "taxPaidStore/actionTaxPayQuery",
-        stopTip:"缴款",
+        stopTip:"扣款",
         processingTip:"获取反馈中。。。",
       }
       this.$refs.feedback.show(true,paramsObj)

@@ -12,7 +12,7 @@ export function apiTaxPay(ruleForm) {
   return fetch({
     url: '/api/taxPay/taxPay',
     method: 'post',
-    params: ruleForm
+    data: ruleForm
   })
 }
 //缴款反馈
@@ -20,7 +20,7 @@ export function apiTaxPayQuery(ruleForm) {
   return fetch({
     url: '/api/taxPay/taxPayQuery',
     method: 'post',
-    params: ruleForm
+    data: ruleForm
   })
 }
 
