@@ -45,7 +45,7 @@
               <el-popover
                 ref="popMore"
                 placement="right"
-                width="400"
+                width="300"
                 trigger="hover">
                 <el-button type="primary" plain @click="getTripleAgreement(scope.row)">获取三方协议下载</el-button>
                 <el-button type="primary" plain @click="getTripleAgreementQuery(scope.row)">三方协议反馈</el-button>
@@ -311,6 +311,8 @@ export default {
   .more-choose{
     color: #2c7cff;
     cursor: pointer;
+    display: inline-block;
+    margin-left:10px;
   }
   .paid-page{
     margin-top: 30px;
