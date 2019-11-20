@@ -40,8 +40,8 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="320px">
             <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="handleTaxPay(scope.row.name)">发起缴款</el-button>
-              <el-button type="primary" size="mini" @click="queryTaxPay(scope.row.name)">缴款反馈</el-button>
+              <el-button type="primary" size="mini" @click="getTripleAgreementList(scope.row)">发起缴款</el-button>
+              <el-button type="primary" size="mini" @click="queryTaxPay(scope.row)">缴款反馈</el-button>
               <el-popover
                 ref="popMore"
                 placement="right"
@@ -49,7 +49,7 @@
                 trigger="hover">
                 <el-button type="primary" plain @click="getTripleAgreement(scope.row)">获取三方协议下载</el-button>
                 <el-button type="primary" plain @click="getTripleAgreementQuery(scope.row)">三方协议反馈</el-button>
-                <span slot="reference" class="more-choose">更多1 >></span>
+                <span slot="reference" class="more-choose">更多>></span>
               </el-popover>
             </template>
           </el-table-column>
@@ -66,6 +66,37 @@
         </el-pagination>
       </div>
     </div>
+<!-- 三方协议列表-->
+    <el-dialog
+      :visible.sync="isShowTripleAgreementTaxList"
+      width="550px"
+      title="请选择三方协议"
+      center
+      class="diy-el_dialog"
+      :close-on-click-modal="closeModel"
+    >
+      <el-table
+        :data="tripleAgreementTaxList"
+        class="check-staff_table"
+        v-loading="tripleAgreementLoading"
+        highlight-current-row
+        ref="selectTable"
+        @selection-change="handleSelectionChange"
+        @current-change="handleCurrentSelectChange"
+      >
+        <el-table-column type="selection" width="55">
+        </el-table-column>
+        <el-table-column prop="tripleAgreementNo" label="三方协议号"></el-table-column>
+        <el-table-column prop="accountBankCode" label="开户银行"></el-table-column>
+        <el-table-column prop="payAccountName" label="账户名称"></el-table-column>
+        <el-table-column prop="payAccount" label="缴款账户"></el-table-column>
+      </el-table>
+      <div class="dialog-foot">
+        <span class="moneyStyle">扣款金额：<span class="redTip">{{ deductionAmount ? deductionAmount:0 }}</span>元</span>
+        <el-button type="primary" @click="handleTaxPay">扣款</el-button>
+        <el-button type="info">取消</el-button>
+      </div>
+    </el-dialog>
 <!--    缴款 三方协议-->
     <selectSY ref="selectSY"
               :timeObj="timeObj"
@@ -120,7 +151,13 @@ export default {
         queryMonth:"",
         taxSubId: 17
       },
-      count:0
+      count:0,
+      isShowTripleAgreementTaxList:false,
+      tripleAgreementTaxList:[],
+      tripleAgreementLoading:false,
+      deductionAmount:0,//扣款金额
+      tripleAgreementNo:"",//三方协议号
+      taxSubId:"",//税号
     };
   },
   created(){
@@ -143,7 +180,7 @@ export default {
     getList(){
       this.$store
         .dispatch(
-          "taxPaidStore/actionTripleAgreementList",this.agreementListForm
+          "taxPaidStore/actionTripleAgreementTaxList",this.agreementListForm
         )
         .then(res => {
           if (res.success) {
@@ -151,14 +188,6 @@ export default {
             this.count =this.paidList.length;
           }
         });
-    },
-    handleCurrentChange(val){
-      this.agreementListForm.currPage = val;
-      this.getList()
-    },
-    handleSizeChange(val){
-      this.agreementListForm.pageSize = val;
-      this.getList()
     },
     //子组件触发刷新
     freshList(data){
@@ -170,19 +199,55 @@ export default {
       this.agreementListForm.queryMonth = data;
       this.getList()
     },
-    //发起缴款
-    handleTaxPay(data){
-     let paramsObj = {
-       validParameter :{
-         taxSubId:data.taxSubId,
-         queryMonth:"2019-10"
-       },
-      validAction : "taxPaidStore/actionTaxPay",
-      querytAction : "taxPaidStore/actionTaxPayQuery",
-      stopTip:"缴款",
-      processingTip:"获取反馈中。。。",
-     }
-     this.$refs.selectSY.show(true,paramsObj)
+    //三方协议列表
+    getTripleAgreementList(data){
+      this.isShowTripleAgreementTaxList = true;
+      this.tripleAgreementLoading = true;
+      this.$store
+        .dispatch(
+          "taxPaidStore/actionTripleAgreementList",{
+            // taxSubId:data.taxSubId,
+            taxSubId:40,
+            queryMonth:this.agreementListForm.queryMonth
+          }
+        )
+        .then(res => {
+          if(res.success){
+            this.tripleAgreementTaxList = res.data.tripleAgreementListVoList;
+            this.deductionAmount = res.data.deductionAmount;
+            this.tripleAgreementLoading = false;
+          }else{
+            // this.$message.warning(res.message)
+          }
+        });
+    },
+    handleSelectionChange(val){
+      if (val.length > 1) {
+        this.$refs.selectTable.clearSelection()
+        this.$refs.selectTable.toggleRowSelection(val.pop());
+      }else{
+      }
+      console.log(val)
+    },
+    handleCurrentSelectChange(val){
+      this.$refs.selectTable.toggleRowSelection(val)
+      console.log(val)
+    },
+    //缴税
+    handleTaxPay(){
+      console.log(this.tripleAgreementNo,this.taxSubId)
+     // let paramsObj = {
+     //   validParameter :{
+     //     taxSubId:this.taxSubId,
+     //     queryMonth:this.agreementListForm.queryMonth,
+     //     tripleAgreementNo:this.tripleAgreementNo
+     //   },
+     //  validAction : "taxPaidStore/actionTaxPay",
+     //  querytAction : "taxPaidStore/actionTaxPayQuery",
+     //  stopTip:"扣款",
+     // }
+     console.log(paramsObj)
+     // this.$refs.selectSY.show(true,paramsObj)
     },
     //缴款反馈
     queryTaxPay(data){
@@ -222,7 +287,15 @@ export default {
         stopTip:"获取三方协议",
       }
       this.$refs.feedback.show(true,paramsObj)
-    }
+    },
+    handleCurrentChange(val){
+      this.agreementListForm.currPage = val;
+      this.getList()
+    },
+    handleSizeChange(val){
+      this.agreementListForm.pageSize = val;
+      this.getList()
+    },
   }
 };
 </script>
@@ -249,6 +322,17 @@ export default {
   .paid-page{
     margin-top: 30px;
     float:right;
+  }
+  .redTip{
+    color:red;
+  }
+  .moneyStyle{
+    position: absolute;
+    left:20px;
+  }
+  .dialog-foot{
+    text-align: center;
+    margin-top: 20px;
   }
 }
 </style>

@@ -25,12 +25,9 @@
         <el-button type="primary" v-if="showUpdate" @click="handleGenerateData('update')">更新申报数据</el-button>
         <el-button type="primary" v-if="showUpdate" @click="handleGenerateDataQ('update')">更新申报数据反馈</el-button>
         <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
-<!--        <el-button type="primary" @click="handleSendReport" v-if="showButton(['未申报','申报失败','作废成功'])">发送申报</el-button>-->
-        <el-button type="primary" @click="handleSendReport">发送申报</el-button>
-<!--        <el-button type="primary" v-if="showButton(['申报处理中'])" @click="handleGetFeedback">获取反馈</el-button>-->
-        <el-button type="primary" @click="handleGetFeedback">获取反馈</el-button>
-<!--        <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>-->
-        <el-button type="primary" @click="handleInvalid">作废申报</el-button>
+        <el-button type="primary" v-if="showButton(['未申报','申报失败','作废成功'])"> @click="handleSendReport">发送申报</el-button>
+        <el-button type="primary" v-if="showButton(['申报处理中'])" @click="handleGetFeedback">获取反馈</el-button>
+        <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>
       </div>
       <!--      <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>-->
       <div class="screening">
@@ -441,12 +438,12 @@ export default {
     },
     //发送申报
     handleSendReport() {
-      this.isSendReport = true;
+      // this.isSendReport = true;
       // this.buttonForm.taxSubId = this.reportForm.taxSubId;
       // this.buttonForm.date = this.reportForm.queryMonth;
       // this.buttonForm.queryMonth = this.reportForm.queryMonth;
       // this.currentPasItem = "send";
-      this.$store
+      // this.$store
         // .dispatch("taxPageStore/postCheckReportData", this.buttonForm)
         // .then(res => {
         //   this.isSendReport = false;

@@ -1,6 +1,6 @@
 import { fetch } from 'request/fetch'
 //三方协议缴税列表
-export function apiTripleAgreementList(ruleForm) {
+export function apiTripleAgreementTaxList(ruleForm) {
   return fetch({
     url: '/api/taxPay/tripleAgreementTaxList',
     method: 'post',
@@ -24,6 +24,14 @@ export function apiTaxPayQuery(ruleForm) {
   })
 }
 
+//三方协议展示列表
+export function apiTripleAgreementList(ruleForm) {
+  return fetch({
+    url: '/api/taxPay/tripleAgreementList',
+    method: 'get',
+    params: ruleForm
+  })
+}
 //三方协议下载
 export function apiGetTripleAgreement(ruleForm) {
   return fetch({
