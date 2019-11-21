@@ -44,7 +44,7 @@
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empNo" label="工号"></el-table-column>
-            <el-table-column prop="idNo" label="姓名"></el-table-column>
+            <el-table-column prop="empName" label="姓名"></el-table-column>
             <el-table-column label="证件号码" prop="idNo"></el-table-column>
             <el-table-column label="扣缴义务人名称" prop="taxSubName"></el-table-column>
             <el-table-column prop="pensionInsurancePerson" label="养老个人"></el-table-column>
