@@ -187,7 +187,7 @@ export function apiSocialProvidentTemplate() {
     method: 'get',
   })
 }
-// 公积金模板下载
+// 公积金导出
 export function apiSocialProvidentExport(data) {
   return fetchFile({
     url: '/api/salary/socialProvident/export',
