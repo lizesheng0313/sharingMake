@@ -150,7 +150,7 @@ export default {
         currPage:1,
         pageSize:20,
         queryMonth:"",
-        taxSubId: 40
+        taxSubId:"",
       },
       count:0,
       isShowTripleAgreementTaxList:false,
@@ -208,8 +208,7 @@ export default {
       this.$store
         .dispatch(
           "taxPaidStore/actionTripleAgreementList",{
-            // taxSubId:data.taxSubId,
-            taxSubId:40,
+            taxSubId:data.taxSubId,
             queryMonth:this.agreementListForm.queryMonth
           }
         )
