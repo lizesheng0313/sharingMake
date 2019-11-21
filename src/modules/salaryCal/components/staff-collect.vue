@@ -117,7 +117,7 @@
         </el-row>
         <div v-loading="reportInfoLoading" style="height: 40px"></div>
         <div class="dialog-footer">
-          <el-button @click="isShowReportInfo=false" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
+          <el-button @click="onIKnow" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
         </div>
       </el-dialog>
       <!-- 获取反馈 -->
@@ -347,6 +347,10 @@ export default {
           this.$message.warning(res.message)
         }
       })
+    },
+    onIKnow(){
+      this.isShowReportInfo = false;
+      this.getList()
     },
     //表格选中事件
     handleSelectItem(row) {

@@ -130,7 +130,7 @@ export default {
     selectThird(){
       setTimeout(()=>{
         this.$store
-          .dispatch(this.selectAction,this.validParameter)
+          .dispatch(this.querytAction,this.validParameter)
           .then(re => {
             if(re.success){
               this.reportInfoList.push(...re.data.taxSubList);
