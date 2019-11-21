@@ -155,8 +155,7 @@ export default {
     },
     handleExport() {
       this.$store.dispatch(
-        "taxPageStore/actionOtherTotalExport",
-        this.totalListForm
+        "salaryCalStore/actionSocialProvidentExport",this.totalListForm
       );
     },
     changeRadioValue(val) {

@@ -83,7 +83,7 @@
         ref="selectTable"
       >
         <el-table-column label=" " width="65">
-          <template scope="scope">
+          <template slot-scope="scope">
             <el-radio :label="scope.row.tripleAgreementNo" v-model="tripleAgreementNo" @change.native="getSelectRow(scope.$index,scope.row)"></el-radio>
           </template>
         </el-table-column>
@@ -150,7 +150,7 @@ export default {
         currPage:1,
         pageSize:20,
         queryMonth:"",
-        taxSubId: 17
+        taxSubId:"",
       },
       count:0,
       isShowTripleAgreementTaxList:false,
@@ -208,8 +208,7 @@ export default {
       this.$store
         .dispatch(
           "taxPaidStore/actionTripleAgreementList",{
-            // taxSubId:data.taxSubId,
-            taxSubId:40,
+            taxSubId:data.taxSubId,
             queryMonth:this.agreementListForm.queryMonth
           }
         )
@@ -229,6 +228,7 @@ export default {
     },
     //缴税
     handleTaxPay(){
+      this.isShowTripleAgreementTaxList = false;
      let paramsObj = {
        validParameter :{
          taxSubId:this.taxSubId,
