@@ -168,6 +168,7 @@ export default {
       submitLoading: false,
       ruleForm: {
         "checkId":this.$route.query.id,
+        "enumReportStatus":"",
         "currPage": 1,
         "key": "",
         "pageSize":20 ,
@@ -227,26 +228,26 @@ export default {
         });
     },
     selectNum(type){
-      switch(type){
-        case 'all': {
+      if(type === "all"){
            this.allActive = true;
            this.waitActive = false;
            this.errorActive = false;
-           break;
+           this.ruleForm.enumReportStatus = "";
         }
-        case 'wait': {
+      if(type==="wait"){
           this.allActive = false;
           this.waitActive = true;
           this.errorActive = false;
-          break;
+          this.ruleForm.enumReportStatus = "AWAIT_REPORT";
         }
-        case 'error': {
+      if(type==="error"){
           this.allActive = false;
           this.waitActive = false;
           this.errorActive = true;
+          this.ruleForm.enumReportStatus = "REPORT_ERROR";
         }
-      }
-    },
+        this.getList()
+      },
     //报送
     handleReport() {
       let ids = this.ids.length > 0 ? this.ids:[];
