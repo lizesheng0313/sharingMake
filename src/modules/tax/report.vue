@@ -20,16 +20,14 @@
         ></el-date-picker>
       </div>
       <div class="right declare-buttton-groups" style="float: right">
-        <el-button type="primary" v-if="showGenerate" @click="handleGenerateData('creat')">生成申报数据</el-button>
-        <el-button type="primary" v-if="showGenerate" @click="handleGenerateDataQ('creat')">生成申报数据反馈</el-button>
-        <el-button type="primary" v-if="showUpdate" @click="handleGenerateData('update')">更新申报数据</el-button>
-        <el-button type="primary" v-if="showUpdate" @click="handleGenerateDataQ('update')">更新申报数据反馈</el-button>
+        <el-button type="primary" v-if="showCreate" @click="handleGenerateData('creat')">生成申报数据</el-button>
+        <el-button type="primary" v-if="showCreateReturn" @click="handleGenerateDataQ">获取申报数据</el-button>
+        <el-button type="primary" v-if="showSend" @click="handleGenerateData('update')">更新申报数据</el-button>
+        <el-button type="primary" v-if="showSend" @click="handleSendReport">发送申报</el-button>
         <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
-        <el-button type="primary" v-if="showButton(['未申报','申报失败','作废成功'])"> @click="handleSendReport">发送申报</el-button>
-        <el-button type="primary" v-if="showButton(['申报处理中'])" @click="handleGetFeedback">获取反馈</el-button>
-        <el-button type="primary" v-if="showButton(['申报成功'])" @click="handleInvalid">作废申报</el-button>
+        <el-button type="primary" v-if="showFeedback" @click="handleGetFeedback">获取反馈</el-button>
+        <el-button type="primary" v-if="showInvalid" @click="handleInvalid">作废申报</el-button>
       </div>
-      <!--      <p class="tax-attach-tips">请在每月1-15号之间完成上月的申报表报送</p>-->
       <div class="screening">
         <div class="clearfix">
           <div class="select_tax-payer left">
@@ -50,11 +48,11 @@
             </el-dropdown>
             <span class="staff-total">
               申报类型：
-              <i>{{reportObj.reportType || '-'}}</i>
+              <i>{{reportTypeObj[reportType] }}</i>
             </span>
             <span class="staff-total">
               申报状态：
-              <i>{{reportObj.reportStatus|| '-'}}</i>
+              <i>{{ reportStatusObj[reportStatus] }}</i>
             </span>
           </div>
         </div>
@@ -70,13 +68,13 @@
                 <span>{{reportSubTaxReportType(scope.row.subTaxReportType)}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="taxEmpCounts" label="纳税人数" width="170"></el-table-column>
-            <el-table-column prop="currentTotalIncome" label="本期收入" width="180"></el-table-column>
-            <el-table-column prop="hisTotalIncome" label="累计收入" width="180"></el-table-column>
-            <el-table-column prop="calculateTaxTotal" label="应扣缴税额" width="180"></el-table-column>
-            <el-table-column prop="realTaxTotal" label="已缴税额" width="180"></el-table-column>
-            <el-table-column prop="taxDiffTotal" label="应补(退)税额" width="180"></el-table-column>
-            <el-table-column  label="是否可申报" width="140">
+            <el-table-column prop="taxEmpCounts" label="纳税人数"></el-table-column>
+            <el-table-column prop="currentTotalIncome" label="本期收入"></el-table-column>
+            <el-table-column prop="hisTotalIncome" label="累计收入"></el-table-column>
+            <el-table-column prop="calculateTaxTotal" label="应扣缴税额"></el-table-column>
+            <el-table-column prop="realTaxTotal" label="已缴税额"></el-table-column>
+            <el-table-column prop="taxDiffTotal" label="应补(退)税额"></el-table-column>
+            <el-table-column  label="是否可申报">
               <template slot-scope="scope">
                 <span>{{scope.row.idReport?'是':'否'}}</span>
               </template>
@@ -174,158 +172,10 @@ export default {
     selectSY,
     feedback,
   },
-  computed: {
-    //当前日期在15号之前且所选月份是上月或本月以及申报状态为空以及所选年为当年
-    //当前日期在15号之后且所选是年月为当年当月以及申报状态为空
-    //生成申报数据按钮
-    showGenerate() {
-      if (this.currentDay < 16) {
-        //所选为上月且不是1月份
-        if (
-          this.currentMonth != 1 &&
-          this.selectMonth == this.currentMonth - 1 &&
-          this.selectYear == this.currentYear
-        ) {
-          if (!this.reportObj.reportStatus) {
-            return true;
-          }
-        }
-        //所选月为上月且是1月
-        else if (
-          this.currentMonth == 1 &&
-          this.selectMonth == 12 &&
-          this.selectYear == this.currentYear - 1
-        ) {
-          if (!this.reportObj.reportStatus) {
-            return true;
-          }
-        }
-        //所选月为本月
-        else if (
-          this.currentMonth == this.selectMonth &&
-          this.selectYear == this.currentYear
-        ) {
-          if (!this.reportObj.reportStatus) {
-            return true;
-          }
-        }
-      } else if (
-        this.selectMonth == this.currentMonth &&
-        this.list.length == 0 &&
-        this.selectYear == this.currentYear
-      ) {
-        return true;
-      }
-    },
-    //当前日期在15号之前且所选月份是上月或本月以及申报状态为未申报以及所选年为今年
-    //当前日期在15号之后且所选是年月为当年当月以及已生成数据
-    //更新申报数据按钮
-    showUpdate() {
-      if (this.currentDay < 16) {
-        //所选为上月且不是1月份
-        if (
-          this.currentMonth != 1 &&
-          this.selectMonth == this.currentMonth - 1 &&
-          this.selectYear == this.currentYear
-        ) {
-          if (
-            this.reportObj.reportStatus == "未申报" ||
-            this.reportObj.reportStatus == "申报失败" ||
-            this.reportObj.reportStatus == "作废成功"
-          ) {
-            return true;
-          }
-        }
-        //所选月为上月且是1月
-        else if (
-          this.currentMonth == 1 &&
-          this.selectMonth == 12 &&
-          this.selectYear == this.currentYear - 1
-        ) {
-          if (
-            this.reportObj.reportStatus == "未申报" ||
-            this.reportObj.reportStatus == "申报失败" ||
-            this.reportObj.reportStatus == "作废成功"
-          ) {
-            return true;
-          }
-        }
-        //所选月为本月
-        else if (
-          this.currentMonth == this.selectMonth &&
-          this.selectYear == this.currentYear
-        ) {
-          if (this.reportObj.reportStatus == "未申报") {
-            return true;
-          }
-        }
-      } else if (
-        this.selectMonth == this.currentMonth &&
-        this.list.length > 0 &&
-        this.selectYear == this.currentYear
-      ) {
-        return true;
-      }
-    },
-    //当前日期在15号之前且所选月份是上月或本月以及申报状态为未申报以及所选年为今年
-    //当前日期在15号之前且不是当年当月且不是当年上月以及已生成数据
-    //当前日期在15号之后且所选年是当年当月且已生成数据
-    //当前日期在15号之后且不是本月且已生成数据
-    //导出申请报按钮
-    showExport() {
-      if (this.currentDay < 16) {
-        //所选为上月且不是1月份
-        if (
-          this.currentMonth != 1 &&
-          this.selectMonth == this.currentMonth - 1 &&
-          this.selectYear == this.currentYear
-        ) {
-          if (
-            this.reportObj.reportStatus == "未申报" ||
-            this.reportObj.reportStatus == "申报成功" ||
-            this.reportObj.reportStatus == "申报失败" ||
-            this.reportObj.reportStatus == "作废成功"
-          ) {
-            return true;
-          }
-        }
-        //所选月为上月且是1月
-        else if (
-          this.currentMonth == 1 &&
-          this.selectMonth == 12 &&
-          this.selectYear == this.currentYear - 1
-        ) {
-          if (
-            this.reportObj.reportStatus == "未申报" ||
-            this.reportObj.reportStatus == "申报成功" ||
-            this.reportObj.reportStatus == "申报失败" ||
-            this.reportObj.reportStatus == "作废成功"
-          ) {
-            return true;
-          }
-        }
-        //所选月为本月
-        else if (
-          this.currentMonth == this.selectMonth &&
-          this.selectYear == this.currentYear
-        ) {
-          if (this.reportObj.reportStatus == "未申报") {
-            return true;
-          }
-        }
-        //其它月份
-        else if (this.list.length > 0) {
-          return true;
-        }
-      } else if (this.list.length > 0) {
-        return true;
-      }
-      return false;
-    }
-  },
   data() {
     return {
       submitLoading: false,
+      listStatus:"",
       abnormalList: [],
       isShowAbnormal: false,
       currentPasItem: "",
@@ -354,11 +204,9 @@ export default {
       currentMonth: month,
       selectYear: "",
       selectMonth: "",
-      statusType: SCR,
+      reportTypeObj: SCR.reportType,
+      reportStatusObj:SCR.declareStatus,
       buttonForm: {
-        // captchaId: "",
-        // capText: "",
-        // password: "",
         date: "",
         taxSubId: "",
         queryMonth: ""
@@ -371,10 +219,8 @@ export default {
       },
       list: [],
       total: 0,
-      reportObj: {
-        reportStatus: "",
-        reportType: ""
-      },
+      reportStatus: "",
+      reportType: "",
       taxSubjectInfolist: [],
       currentTaxSubName: "",
       selectDate: defaultDate,
@@ -390,6 +236,31 @@ export default {
       sign:"taxReport",
     };
   },
+  computed: {
+    //生成申报
+    showCreate:function(){
+      return ["INIT"].includes(this.reportStatus)
+    },
+    //生成申报反馈
+    showCreateReturn:function(){
+      return ["GENERATE_REPORT_WAIT"].includes(this.reportStatus)
+    },
+    showExport:function(){
+      return this.reportStatus !== "INIT" && this.reportStatus
+    },
+    //发送申报
+    showSend:function(){
+      return ["AWAIT_REPORT","CANCEL_SUCCESS","REPORT_ERROR"].includes(this.reportStatus)
+    },
+    //作废申报
+    showInvalid:function(){
+      return ["REPORT_SUCCESS","REPORT_SUCCESS_OTHER"].includes(this.reportStatus)
+    },
+    //获取反馈
+    showFeedback:function(){
+      return ['REPORT_WAIT_BACK'].includes(this.reportStatus)
+    }
+  },
   mounted() {
     this.getTaxSubjectInfoList();
     this.formatQuerymonth(this.selectDate);
@@ -401,6 +272,26 @@ export default {
     };
   },
   methods: {
+    getList(flag) {
+      this.loading = true;
+      this.$store
+        .dispatch("taxPageStore/actionTaxReportTotalList", this.reportForm)
+        .then(res => {
+          if (res.success) {
+            this.loading = false;
+            this.reportStatus = res.data.reportStatus;
+            this.reportType = res.data.reportType;
+            this.total = res.data.count;
+            this.list = res.data.data;
+            if (this.list.length == 0 && flag) {
+              this.$message({
+                message: "暂无申报数据",
+                type: "warning"
+              });
+            }
+          }
+        });
+    },
     //子组件触发刷新
     freshList(data){
       if(data === this.sign){
@@ -426,43 +317,26 @@ export default {
       }
       this.$refs.selectSY.show(true,paramsObj)
     },
+    //发送申报
+    handleSendReport() {
+        let paramsObj = {
+          validParameter : this.buttonForm,
+          validAction : "taxPageStore/postSendReport",
+          querytAction : "taxPageStore/postSendReportQuery",
+          stopTip:"发送申报",
+          processingTip:"获取反馈中。。。",
+        }
+        this.$refs.selectSY.show(true,paramsObj)
+    },
     //生成申报数据反馈
-    handleGenerateDataQ(type){
+    handleGenerateDataQ(){
       let paramsObj = {
         validParameter : this.buttonForm,
         querytAction : "taxPageStore/postQueryGenerateTaxReportData",
-        stopTip:type === "create" ? "生成申报数据":"更新申报数据",
+        stopTip:"生成申报数据",
         processingTip:"获取反馈中。。。",
       }
       this.$refs.feedback.show(true,paramsObj)
-    },
-    //发送申报
-    handleSendReport() {
-      // this.isSendReport = true;
-      // this.buttonForm.taxSubId = this.reportForm.taxSubId;
-      // this.buttonForm.date = this.reportForm.queryMonth;
-      // this.buttonForm.queryMonth = this.reportForm.queryMonth;
-      // this.currentPasItem = "send";
-      // this.$store
-        // .dispatch("taxPageStore/postCheckReportData", this.buttonForm)
-        // .then(res => {
-        //   this.isSendReport = false;
-        //   if (res.success) {
-        //     if (res.data.length == 0) {
-              let paramsObj = {
-                validParameter : this.buttonForm,
-                validAction : "taxPageStore/postSendReport",
-                querytAction : "taxPageStore/postSendReportQuery",
-                stopTip:"发送申报",
-                processingTip:"获取反馈中。。。",
-              }
-              this.$refs.selectSY.show(true,paramsObj)
-            // } else {
-            //   this.abnormalList = res.data;
-            //   this.isShowAbnormal = true;
-            // }
-        //   }
-        // });
     },
     //作废申报
     handleInvalid() {
@@ -485,17 +359,6 @@ export default {
         processingTip:"获取反馈中。。。",
       }
       this.$refs.selectSY.show(true,paramsObj)
-    },
-    //发送申报 获取反馈  作废申报接口公共参数
-    publicParams() {
-      this.buttonForm.taxSubId = this.reportForm.taxSubId;
-      this.buttonForm.date = this.reportForm.queryMonth;
-      this.buttonForm.queryMonth = this.reportForm.queryMonth;
-      // this.isShowPassword = true;
-      // this.getCode();
-      this.$nextTick(() => {
-        this.$refs["refPassword"].resetFields();
-      });
     },
     //密码提交
     handleSubmitPassword() {
@@ -570,31 +433,6 @@ export default {
         this.buttonForm
       );
     },
-    showButton(arr) {
-      if (this.currentDay < 16) {
-        //所选为上月且不是1月份
-        if (
-          this.currentMonth != 1 &&
-          this.selectMonth == this.currentMonth - 1 &&
-          this.selectYear == this.currentYear
-        ) {
-          if (arr.indexOf(this.reportObj.reportStatus) > -1) {
-            return true;
-          }
-        }
-        //所选月为上月且是1月
-        else if (
-          this.currentMonth == 1 &&
-          this.selectMonth == 12 &&
-          this.selectYear == this.currentYear - 1
-        ) {
-          if (arr.indexOf(this.reportObj.reportStatus) > -1) {
-            return true;
-          }
-        }
-      }
-      return false;
-    },
     formatQuerymonth(defaultDate) {
       let currentDate = defaultDate.replace("年", "-");
       this.reportForm.queryMonth = currentDate.replace("月", "");
@@ -642,30 +480,6 @@ export default {
       this.reportForm.currPage = 1;
       this.getList();
     },
-    getList(flag) {
-      this.loading = true;
-      this.$store
-        .dispatch("taxPageStore/actionTaxReportTotalList", this.reportForm)
-        .then(res => {
-          if (res.success) {
-            this.loading = false;
-            this.reportObj.reportStatus = this.statusType.declareStatus[
-              res.data.reportStatus
-            ];
-            this.reportObj.reportType = this.statusType.declareType[
-              res.data.reportType
-            ];
-            this.total = res.data.count;
-            this.list = res.data.data;
-            if (this.list.length == 0 && flag) {
-              this.$message({
-                message: "暂无申报数据",
-                type: "warning"
-              });
-            }
-          }
-        });
-    }
   }
 };
 </script>

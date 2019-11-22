@@ -51,18 +51,24 @@ export const idType = {
 }
 
 //申报类型
-export const declareType = {
+export const reportType = {
   "NORMAL": "正常申报",
   "CORRECT": "更正申报"
 }
 
 //申报状态
 export const declareStatus = {
-  'AWAIT_REPORT': "未申报",
-  'REPORTING': "申报处理中",
-  'REPORT_ERROR': "申报失败",
-  'REPORT_SUCCESS': "申报成功",
-  'CANCEL_SUCCESS': '作废成功'
+  "INIT":"_",
+  "GENERATE_REPORT_WAIT":"申报表生成中",
+  "AWAIT_REPORT":"未申报",
+  "REPORTING":"_",
+  "REPORT_WAIT_BACK":"申报处理中",
+  "REPORT_BACK_WAIT_BACK":"_",
+  "REPORT_ERROR":"申报失败",
+  "REPORT_SUCCESS":"申报成功",
+  "REPORT_SUCCESS_OTHER":"申报成功未接受处罚",
+  "CANCEL_SUCCESS":"作废成功",
+  "CANCEL_WAIT_BACK":"_"
 }
 
 export const subTaxReportType = {

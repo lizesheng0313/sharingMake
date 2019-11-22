@@ -6,7 +6,7 @@
         <div class="box-fun">
           <p class="box-title">银行代发</p>
           <p class="tip">使用银行代发服务完成在线发薪</p>
-          <div><el-button type="primary">提交代发数据</el-button></div>
+<!--          <div><el-button type="primary">提交代发数据</el-button></div>-->
           <div><el-button type="primary">启动代发</el-button></div>
         </div>
       </div>
