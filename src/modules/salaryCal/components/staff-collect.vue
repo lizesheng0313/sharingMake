@@ -24,11 +24,17 @@
           </div>
           <div class="staff-situation">
             <span class="staff-total">
-              全部
-              <i>{{ total }}</i>人
-              <span class="wait-report">
+              <span class="part" @click="selectNum('all')">
+               全部
+               <i :class="['num', allActive?'active':'']">{{ total }}</i>人
+              </span>
+              <span class="part" @click="selectNum('wait')">
                 待报送
-                <i>{{ awaitReportCount }}</i>人
+                 <i :class="['num', waitActive?'active':'']">{{ awaitReportCount }}</i>人
+              </span>
+               <span class="part" @click="selectNum('error')">
+                报送失败
+                <i :class="['num', errorActive?'active':'']" >{{ awaitReportCount }}</i>人
               </span>
             </span>
             <div class="content-header head-date">
@@ -183,6 +189,9 @@ export default {
       closeModel: false,
       isSave:this.$route.query.isSave,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      allActive:true,
+      waitActive:false,
+      errorActive:false
     };
   },
   computed:{
@@ -216,6 +225,27 @@ export default {
             this.awaitReportCount = res.data.awaitReportCount;
           }
         });
+    },
+    selectNum(type){
+      switch(type){
+        case 'all': {
+           this.allActive = true;
+           this.waitActive = false;
+           this.errorActive = false;
+           break;
+        }
+        case 'wait': {
+          this.allActive = false;
+          this.waitActive = true;
+          this.errorActive = false;
+          break;
+        }
+        case 'error': {
+          this.allActive = false;
+          this.waitActive = false;
+          this.errorActive = true;
+        }
+      }
     },
     //报送
     handleReport() {
@@ -337,7 +367,6 @@ export default {
           // 已授权，有查询结果
           if(res.data.status === "SUCCESS"){
             this.reportReturnList = res.data.taxSubList;
-            console.log(res.data.taxSubList)
             this.isShowReturnInfo = true;
           }else{//未授权
             this.isShowReportInfo = false;
@@ -452,9 +481,19 @@ export default {
     }
     .staff-situation {
       .staff-total {
-        border-right: 1px solid #e6e6e6;
-        padding-right: 15px;
-        margin-right: 15px;
+        margin-left: 15px;
+        .part{
+          display:inline-block;
+          margin-right: 20px;
+          font-size: 13px;
+          cursor:pointer;
+          .num{
+            font-weight: bold;
+          }
+          .active{
+            color:#e6a23c;
+          }
+        }
       }
       margin-top: 20px;
       color: #999;
