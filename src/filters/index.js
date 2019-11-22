@@ -15,6 +15,9 @@ const texRule = (val) => {
     case 'PERSON_PAY_RULE': {
       return '按劳务报酬所得计算个税';
     }
+    case 'YEAR_END_BONUS': {
+      return '按全年一次性奖金计算个税';
+    }
   }
 };
 //薪资核算状态

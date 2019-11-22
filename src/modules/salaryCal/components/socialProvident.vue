@@ -27,8 +27,8 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
-            <el-button type="primary" plain @click="handleCopyData">复制上月数据</el-button>
-            <el-button type="primary" plain @click="handleImport">导入</el-button>
+            <el-button type="primary" plain v-if="showCopy" @click="handleCopyData">复制上月数据</el-button>
+            <el-button type="primary" plain @click="handleImport" v-if="showCopy">导入</el-button>
             <el-button type="warning" plain class="export-button" @click="handleExport">导出</el-button>
           </div>
         </div>
@@ -131,6 +131,12 @@ export default {
         },
     };
   },
+  computed:{
+    showCopy:function(){
+      let noCopyArr = ["CHECKED_SALARY","PAID","FINISH"];
+      return !noCopyArr.includes(this.checkStatus)
+    }
+  },
   mounted() {
     this.getList()
     window.onresize = () => {
@@ -152,6 +158,15 @@ export default {
             this.list = res.data.data;
           }
         });
+      this.getSalaryStatus();
+    },
+    //查看工资表状态
+    getSalaryStatus(){
+      this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.totalListForm.checkId).then(res=>{
+        if(res.code === "0000"){
+          this.checkStatus = res.data.checkStatus;
+        }
+      })
     },
     handleExport() {
       this.$store.dispatch(
@@ -185,6 +200,7 @@ export default {
                   type: 'success',
                   message: '复制成功'+res.data+'条数据!'
                 });
+                this.getList()
               }
             })
       }).catch(() => {

@@ -28,12 +28,12 @@
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empName" label="姓名"></el-table-column>
             <el-table-column prop="idNo" label="身份证号"></el-table-column>
-            <el-table-column label="入职日期">
-              <template slot-scope="scope">
-                <span>{{ scope.row.empDay.split(' ')[0] }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="taxSubName" label="纳税主体名称" width="170"></el-table-column>
+<!--            <el-table-column label="入职日期">-->
+<!--              <template slot-scope="scope">-->
+<!--                <span>{{ scope.row.empDay.split(' ')[0] }}</span>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
+            <el-table-column prop="taxSubName" label="扣缴义务人名称" width="170"></el-table-column>
             <el-table-column prop="totalChildrenEdu" label="累计子女教育"></el-table-column>
             <el-table-column prop="totalFurtherEdu" label="累计继续教育"></el-table-column>
             <el-table-column prop="totalHomeLoads" label="累计住房贷款利息"></el-table-column>

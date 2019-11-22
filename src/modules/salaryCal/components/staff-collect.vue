@@ -49,26 +49,23 @@
               :style="{width:screenWidth-40+'px'}"
             >
               <el-table-column type="selection" width="55" fixed></el-table-column>
-              <el-table-column prop="empNo" label="工号" ></el-table-column>
+              <el-table-column prop="empNo" label="工号"></el-table-column>
               <el-table-column prop="empName" label="姓名">
                 <template slot-scope="scope">
-                  <span
-                    class="table-name"
-                    @click="handleCollectionName(scope.row)"
-                  >{{scope.row.empName }}</span>
+                  <span class="table-name" @click="handleCollectionName(scope.row)">{{scope.row.empName }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="idType" label="证件类型">
                 <template slot-scope="scope">{{scope.row.idType | idType}}</template>
               </el-table-column>
               <el-table-column prop="idNo" label="证件号码" width="170"></el-table-column>
-              <el-table-column prop="empSex" label="性别">
-                <template slot-scope="scope">{{returnStatus('empSex',scope.row.empSex)}}</template>
-              </el-table-column>
+<!--              <el-table-column prop="empSex" label="性别">-->
+<!--                <template slot-scope="scope">{{returnStatus('empSex',scope.row.empSex)}}</template>-->
+<!--              </el-table-column>-->
               <el-table-column prop="workerStatus" label="人员状态" >
                 <template slot-scope="scope">{{returnStatus("empStatus",scope.row.workerStatus)}}</template>
               </el-table-column>
-              <el-table-column prop="taxSubName" label="纳税主体名称" width="170"></el-table-column>
+              <el-table-column prop="taxSubName" label="扣缴义务人名称" width="170"></el-table-column>
               <el-table-column prop="reportStatus" label="报送状态" width="140">
                 <template slot-scope="scope">{{returnStatus('reportStatus',scope.row.reportStatus)}}</template>
               </el-table-column>
@@ -77,24 +74,27 @@
                   slot-scope="scope"
                 >{{returnStatus('idValidStatus',scope.row.idValidStatus)}}</template>
               </el-table-column>
-              <el-table-column prop="mobile" label="手机号码" width="140"></el-table-column>
-              <el-table-column prop="iscgl" label="是否残疾" width="80">
-                <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>
-              </el-table-column>
-              <el-table-column prop="martyrFamilyYn" label="是否烈属" width="80">
-                <template slot-scope="scope">{{returnYesOrNo(scope.row.martyrFamilyYn)}}</template>
-              </el-table-column>
+<!--              <el-table-column prop="mobile" label="手机号码" width="140"></el-table-column>-->
+<!--              <el-table-column prop="iscgl" label="是否残疾" width="80">-->
+<!--                <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>-->
+<!--              </el-table-column>-->
+<!--              <el-table-column prop="martyrFamilyYn" label="是否烈属" width="80">-->
+<!--                <template slot-scope="scope">{{returnYesOrNo(scope.row.martyrFamilyYn)}}</template>-->
+<!--              </el-table-column>-->
               <el-table-column prop="lonelyOldYn" label="是否孤老" width="80">
                 <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>
               </el-table-column>
               <el-table-column prop="workerType" label="任职受雇从业类型" width="140">
                 <template slot-scope="scope">{{returnStatus('workerType',scope.row.workerType)}}</template>
               </el-table-column>
+              <el-table-column prop="empDay" label="任职受雇从业日期" width="140">
+              </el-table-column>
+
               <el-table-column label="国籍" width="100">
                 <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
               </el-table-column>
-              <el-table-column prop="reportFinishTime" label="更新时间" width="110"></el-table-column>
-              <el-table-column prop="updateTime" label="最近操作时间" width="110"></el-table-column>
+<!--              <el-table-column prop="reportFinishTime" label="更新时间" width="110"></el-table-column>-->
+<!--              <el-table-column prop="updateTime" label="最近操作时间" width="110"></el-table-column>-->
             </el-table>
             <el-pagination
               @current-change="handleSelectionChange"
