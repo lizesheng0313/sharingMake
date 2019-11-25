@@ -32,35 +32,15 @@
         </el-form>
         <span slot="footer" class="con-footer">
           <el-button type="primary" @click="handleNewBody">授权</el-button>
-          <el-button type="primary" @click="queryNewBody">授权反馈</el-button>
           <el-button @click="handleCancel(false)">取消</el-button>
         </span>
         <!-- 下载-->
-        <selectSY ref="selectSY"
-                  :validParameter = "newBodyFormData"
-                  :validAction="validAction"
-                  :querytAction="querytAction"
-                  :sign="sign"
-                  :stopTip="stopTip"
-                  :processingTip="processingTip"
-                  :timeObj="timeObj"
-        >
-        </selectSY>
-        <!-- 获取反馈 -->
-        <feedback ref="feedback"
-                  :validParameter = "newBodyFormData"
-                  :querytAction ="querytAction"
-                  :sign="sign"
-                  :stopTip="stopTip"
-                  :processingTip="processingTip"
-        >
-        </feedback>
+        <selectSY ref="selectSY" :sign="sign" :timeObj="timeObj"></selectSY>
     </div>
 </template>
 <script>
 import { mapState } from "vuex";
-import selectSY from "@/components/tool/selectSY";
-import feedback from "@/components/tool/feedback";
+import selectSY from "./tool/partSelectSY";
 export default {
   selectItem:{
     type: Object,
@@ -68,14 +48,9 @@ export default {
   },
   components: {
     selectSY,
-    feedback,
   },
   data() {
     return {
-      validAction:"taxPageStore/actionDealTaxSubject",
-      querytAction:"taxPageStore/actionAccreditQuery",
-      stopTip:"授权",//终止文案
-      processingTip:"授权数据反馈中。。。",//进行中文案
       timeObj:{
         first:3000,
         second:10000,
@@ -108,7 +83,7 @@ export default {
         remark: [
           {
             required: true,
-            message: "请输入办税人员姓名",
+            message: "请输入经办人姓名",
             trigger: "blur"
           }
         ],
@@ -133,18 +108,20 @@ export default {
   },
   methods: {
     //子组件触发刷新
-    freshList(data){
-      if(data === this.sign){
-        // this.handleCancel(true)
+    freshList(data,isClose){
+      if((data === this.sign) && isClose){
+        this.handleCancel(true)
       }
     },
     //授权
     handleNewBody() {
-      this.$refs.selectSY.show(true)
-    },
-    //授权反馈
-    queryNewBody(){
-      this.$refs.feedback.show(true)
+      let paramsObj = {
+        validParameter : this.newBodyFormData,
+        querytAction : "taxPageStore/actionAccreditQuery",
+        validAction : "taxPageStore/actionDealTaxSubject",
+        stopTip:"授权",
+      }
+      this.$refs.selectSY.show(true,paramsObj)
     },
     handleCancel(data){
       this.$emit("hanleClose",data)
