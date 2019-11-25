@@ -83,6 +83,7 @@
         :apiDownloadLog="'salaryCalStore/actionSocialProvidentRecord'"
         :apiDownloadTemplate="'salaryCalStore/actionSocialProvidentTemplate'"
         :parameterData="parameterData"
+        sendRadio="BY_EMP_NO"
         @changeRadioValue="changeRadioValue"
         :impoartAction="'salaryCalStore/actionSocialProvident'"
         @getLoading="refresh"

@@ -20,6 +20,7 @@
                 <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
               </el-tooltip>
               <el-button type="primary" class="add-import" @click="handleReportInfo">获取反馈</el-button>
+              <el-button type="primary" class="add-import" @click="handleExport">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -168,6 +169,7 @@ export default {
       submitLoading: false,
       ruleForm: {
         "checkId":this.$route.query.id,
+        "enumReportStatus":"",
         "currPage": 1,
         "key": "",
         "pageSize":20 ,
@@ -226,27 +228,32 @@ export default {
           }
         });
     },
+    //导出
+    handleExport(){
+      this.$store
+        .dispatch("taxPageStore/actionEmpCollectNewListExport", this.ruleForm)
+    },
     selectNum(type){
-      switch(type){
-        case 'all': {
+      if(type === "all"){
            this.allActive = true;
            this.waitActive = false;
            this.errorActive = false;
-           break;
+           this.ruleForm.enumReportStatus = "";
         }
-        case 'wait': {
+      if(type==="wait"){
           this.allActive = false;
           this.waitActive = true;
           this.errorActive = false;
-          break;
+          this.ruleForm.enumReportStatus = "AWAIT_REPORT";
         }
-        case 'error': {
+      if(type==="error"){
           this.allActive = false;
           this.waitActive = false;
           this.errorActive = true;
+          this.ruleForm.enumReportStatus = "REPORT_ERROR";
         }
-      }
-    },
+        this.getList()
+      },
     //报送
     handleReport() {
       let ids = this.ids.length > 0 ? this.ids:[];

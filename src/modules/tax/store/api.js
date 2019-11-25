@@ -35,6 +35,26 @@ export function apiReport(reportForm) {
     data: reportForm
   })
 }
+
+//人员信息采集导出(薪资计算)
+export function apiEmpCollectNewListExport(exportForm) {
+  return fetchFile({
+    url: '/api/salary/getEmpCollectNewList/export',
+    method: 'get',
+    params: exportForm
+  })
+}
+
+//人员信息采集导出(个税申报)
+export function apiTaxEmpCollectNewListExport(exportForm) {
+  return fetchFile({
+    url: '/api/taxReport/getEmpCollectNewList/export',
+    method: 'get',
+    params: exportForm
+  })
+}
+
+
 //个税申报-人员信息采集--报送
 export function apiTaxReport(reportForm) {
   return fetch({
