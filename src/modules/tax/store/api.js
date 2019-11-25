@@ -45,7 +45,7 @@ export function apiEmpCollectNewListExport(exportForm) {
   })
 }
 
-//人员信息采集导出(薪资计算)
+//人员信息采集导出(个税申报)
 export function apiTaxEmpCollectNewListExport(exportForm) {
   return fetchFile({
     url: '/api/taxReport/getEmpCollectNewList/export',
