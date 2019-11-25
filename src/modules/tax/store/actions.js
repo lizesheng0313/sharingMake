@@ -1,4 +1,5 @@
-import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList,apiDownloadAddition,apiDownloadAdditionQuery,apiSocialBenefitsList,apiAccreditQuery,apiQueryGenerateTaxReportData,apiCancelSubTaxReportQuery,apiGetReportBackQuery,apiSendReportQuery} from './api'
+import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList,apiDownloadAddition,apiDownloadAdditionQuery,apiSocialBenefitsList,apiAccreditQuery,apiQueryGenerateTaxReportData,apiCancelSubTaxReportQuery,apiGetReportBackQuery,apiSendReportQuery,apiEmpCollectNewListExport,apiTaxEmpCollectNewListExport
+} from './api'
 
 /*个税-人员采集*/
 
@@ -29,6 +30,14 @@ export const actionGetFeedback = ({ dispatch }, feedbackForm) => {
 //人员采集-报送反馈
 export const actionPostReportInfo = ({ dispatch }, reportInfoForm) => {
   return apiPostReportInfo(reportInfoForm)
+}
+//人员信息采集导出(薪资计算)
+export const actionEmpCollectNewListExport = ({ dispatch }, reportInfoForm) => {
+  return apiEmpCollectNewListExport(reportInfoForm)
+}
+//人员信息采集导出（个税申报）
+export const actionTaxEmpCollectNewListExport = ({ dispatch }, reportInfoForm) => {
+  return apiTaxEmpCollectNewListExport(reportInfoForm)
 }
 /*个税-专项附加扣除列表*/
 export const actionOtherTotalList = ({ dispatch }, totalListForm) => {

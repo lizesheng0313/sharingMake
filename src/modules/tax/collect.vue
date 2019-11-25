@@ -28,6 +28,7 @@
             <div class="right">
               <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
               <el-button type="primary" class="add-import" @click="handleReportInfo">获取反馈</el-button>
+              <el-button type="primary" class="add-import" @click="handleExport">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -387,6 +388,11 @@ export default {
             this.normalCount = res.data.normalCount;
           }
         });
+    },
+    //导出
+    handleExport(){
+      this.$store
+        .dispatch("taxPageStore/actionTaxEmpCollectNewListExport", this.ruleForm)
     },
     //报送
     handleReport() {

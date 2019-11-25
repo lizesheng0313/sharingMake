@@ -20,6 +20,7 @@
                 <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
               </el-tooltip>
               <el-button type="primary" class="add-import" @click="handleReportInfo">获取反馈</el-button>
+              <el-button type="primary" class="add-import" @click="handleExport">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -226,6 +227,11 @@ export default {
             this.awaitReportCount = res.data.awaitReportCount;
           }
         });
+    },
+    //导出
+    handleExport(){
+      this.$store
+        .dispatch("taxPageStore/actionEmpCollectNewListExport", this.ruleForm)
     },
     selectNum(type){
       if(type === "all"){

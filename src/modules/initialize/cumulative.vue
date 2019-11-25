@@ -88,6 +88,7 @@
       :apiDownloadLog="'cumulativePageStore/getExportErrorRecord'"
       :apiDownloadTemplate="'cumulativePageStore/actionDownloadTemplate'"
       :parameterData="parameterData"
+      sendRadio="1"
       @changeRadioValue="changeRadioValue"
       :impoartAction="'cumulativePageStore/actionImportTaxTotalBaseSuccess'"
       @getLoading="refresh"

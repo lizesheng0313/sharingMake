@@ -13,7 +13,7 @@
         <div class="diy-el_radio">
           <el-radio-group v-model="radio">
             <div v-for="(item,index) in radioList" :key="index">
-              <el-radio :label="index+1" @change="handleRadioValue">{{item.title}}</el-radio>
+              <el-radio :label="item.lable" @change="handleRadioValue">{{item.title}}</el-radio>
             </div>
           </el-radio-group>
         </div>
@@ -87,6 +87,7 @@ export default {
     parameterData: Object, //校验参数
     impoartAction: String, //导入通过数据接口  需为action
     title: String, //标题,
+    sendRadio:String,
     uploadFileData: Object, //导入通过数据参数
     tips:String,
   },
@@ -94,11 +95,11 @@ export default {
     return {
       myHeaders: { Authorization: this.$store.state.token },
       isShowIncrease: false,
-      radio: 1,
       importFinishForm: {
         failCount: "",
         successCount: ""
       },
+      radio:"",
       isShowIncreaseFinish: false,
       failCount: 0,
       fileList: [],
@@ -106,6 +107,9 @@ export default {
       uuid: "",
       closeModel:false
     };
+  },
+  created(){
+    this.radio = this.sendRadio;
   },
   methods: {
     handleTemplate() {
@@ -156,10 +160,15 @@ export default {
       return isxls && isLt5M;
     },
     handleSuccess(res, file) {
-      let data = res.data;
-      this.successCount = data.successCount;
-      this.failCount = data.failCount;
-      this.uuid = data.uuid;
+      if(res.success){
+        let data = res.data;
+        this.successCount = data.successCount;
+        this.failCount = data.failCount;
+        this.uuid = data.uuid;
+      }else{
+        this.$message.warning(res.message)
+      }
+
     },
     importMemberFinish() {
       this.isShowIncrease = false;
