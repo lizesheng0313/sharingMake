@@ -73,7 +73,7 @@
                   </el-option>
                 </el-select></span>
               </el-form-item>
-              <el-form-item label="启动单月多次算发薪">
+              <el-form-item label="启动单月多次算发薪" v-if="basicInfoForm.taxRule !== 'YEAR_END_BONUS'">
                 <el-switch
                   v-model="basicInfoForm.enableMiltSalary"
                   active-text=""
