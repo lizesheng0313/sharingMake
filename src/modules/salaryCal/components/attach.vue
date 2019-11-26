@@ -147,6 +147,14 @@ export default {
             this.list = res.data.data;
           }
         });
+      //校验人员状态
+      this.$store
+        .dispatch("salaryCalStore/actionCheckEmpReportStatus", this.totalListForm)
+        .then(res => {
+          if (res.success) {
+           console.log(res.data)
+          }
+        });
     },
     //子组件触发刷新
     freshList(data){

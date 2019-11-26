@@ -8,7 +8,7 @@
         <span class="refresh" @click="refresh">
           <i class="iconshuaxin iconfont"></i>刷新
         </span>
-        <div class="more-operation" v-if="active==2">
+        <div class="more-operation" v-if="active==4">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
             更多  <i>...</i>

@@ -63,6 +63,15 @@ export function apiInitSalaryCheck(form) {
     data:form
   })
 }
+
+//校验人员报送状态
+export function apiCheckEmpReportStatus(form) {
+  return fetch({
+    url: '/api/salary/checkEmpReportStatus',
+    method: 'get',
+    params:form
+  })
+}
 //获取核对人员列表
 export function apiCheckMember(form) {
   return fetch({
