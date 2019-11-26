@@ -9,8 +9,8 @@
       :show-close="false"
       :close-on-click-modal="closeModel"
     >
-        <div v-if="subjectObj.dealStatus === 'SUCCESS'"><i class="el-icon-success"></i>{{stopTip}}成功</div>
-        <div v-if="subjectObj.dealStatus === 'PROCESSING'" ><i class="el-icon-warning"></i>{{stopTip}}已接收，请稍后点击【{{stopTip}}反馈】。</div>
+        <div v-if="subjectObj.dealStatus === 'SUCCESS'"><i class="el-icon-success"></i>{{paramsObj.stopTip}}成功</div>
+        <div v-if="subjectObj.dealStatus === 'PROCESSING'"><i class="el-icon-warning"></i>授权请求正在处理中，请稍后再试。</div>
         <div v-if="subjectObj.dealStatus === 'FAIL'"><i class="el-icon-warning"></i>{{ subjectObj.failReason}}</div>
       <div v-loading="reportInfoLoading" style="height: 40px"></div>
       <div class="dialog-footer">
@@ -41,6 +41,7 @@ export default {
       reportInfoLoading:false,
       paramsObj:{
         stopTip:"",//终止文案
+        processingTip:"",//进行中文案
         validParameter: "", //校验参数
         validAction: "", //校验action
         querytAction:"" ,//查询action
@@ -70,7 +71,6 @@ export default {
       this.$store
         .dispatch(this.paramsObj.validAction, this.paramsObj.validParameter)
         .then(res=>{
-          console.log(res.success)
           if (res.success) {
             //验证通过
             if(res.data.status === "SUCCESS"){
@@ -106,6 +106,8 @@ export default {
                   this.subjectObj = r0.data.taxSubList[0];
                   this.reportInfoLoading = false;
                   this.isShowIknow = true;
+                  //关闭右侧划窗
+                  this.isClose = r0.data.taxSubList[0].dealStatus === "SUCCESS";
                 }
               }else{
 
@@ -127,6 +129,8 @@ export default {
                 this.subjectObj = r0.data.taxSubList[0];
                 this.reportInfoLoading = false;
                 this.isShowIknow = true;
+                //关闭右侧划窗
+                this.isClose = r0.data.taxSubList[0].dealStatus === "SUCCESS";
               }
             }else{
             }
@@ -143,13 +147,14 @@ export default {
               this.reportInfoLoading = false;
               this.isShowIknow = true;
               this.subjectObj = re.data.taxSubList[0];
+              this.isClose = ["PROCESSING",'SUCCESS'].includes(re.data.taxSubList[0].dealStatus);
             }
           })
       },this.timeObj.third)
     },
     onIknow(){
       this.isShowReportInfo = false;
-      this.$parent.freshList(this.sign)
+      this.$parent.freshList(this.sign,this.isClose)
     },
   }
 };

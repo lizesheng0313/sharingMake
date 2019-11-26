@@ -307,7 +307,8 @@ export default {
               )
               .then(res => {
                 if (res.success) {
-                  this.$router.push({path:"/tax/collect",query:{isSave:true}})
+                  // this.$router.push({path:"/tax/collect",query:{isSave:true}})
+                 this.$router.go(-1)
                 }
               });
           }

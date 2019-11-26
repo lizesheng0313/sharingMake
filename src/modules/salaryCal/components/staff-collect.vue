@@ -35,7 +35,7 @@
               </span>
                <span class="part" @click="selectNum('error')">
                 报送失败
-                <i :class="['num', errorActive?'active':'']" >{{ awaitReportCount }}</i>人
+                <i :class="['num', errorActive?'active':'']" >{{ failReportCount }}</i>人
               </span>
             </span>
             <div class="content-header head-date">
@@ -178,6 +178,7 @@ export default {
       isShowScreening:false,
       ids: [],
       awaitReportCount:"",
+      failReportCount:"",
       reportInfoList:[],
       reportReturnList:[],
       isShowReturnInfo:false,
@@ -225,6 +226,7 @@ export default {
             this.total = res.data.count;
             this.list = res.data.data;
             this.awaitReportCount = res.data.awaitReportCount;
+            this.failReportCount = res.data.failReportCount;
           }
         });
     },

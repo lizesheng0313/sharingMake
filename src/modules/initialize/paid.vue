@@ -41,12 +41,17 @@
               <el-table-column prop="taxPayerNo" label="纳税人识别号"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
               <el-table-column prop="remark" label="经办人姓名"></el-table-column>
-              <el-table-column prop="accreditStatus" label="授权状态"></el-table-column>
+              <el-table-column prop="accreditStatus" label="授权状态">
+                <template slot-scope="scope">
+                  <span>{{scope.row.accreditStatus | accreditStatus}}</span>
+                </template>
+              </el-table-column>
               <el-table-column prop="failReason" label="未通过原因"></el-table-column>
-              <el-table-column label="操作" fixed="right" width="200px">
-                <template slot-scope="scope" >
+              <el-table-column label="操作" fixed="right" min-width="200px">
+                <template slot-scope="scope">
                   <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
                   <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
+                  <el-button size="mini" type="primary" @click="handleQuery(scope.row)" v-if="scope.row.dealStatus==='PROCESSING'">获取反馈</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -59,16 +64,20 @@
         <paidEdit @hanleClose="hanleClose" :selectItem="selectItem"></paidEdit>
       </div>
     </right-pop>
+    <!-- 查询-->
+    <feedback ref="feedback" :sign="sign"></feedback>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import rightPop from '@/components/basic/rightPop'
 import paidEdit from './components/paidEdit'
+import feedback from './components/tool/partFeedback'
 export default {
   components:{
     rightPop,
-    paidEdit
+    paidEdit,
+    feedback
   },
   data() {
     return {
@@ -108,6 +117,7 @@ export default {
       },
       currentTypeName: "",
       list: [],
+      sign:"paid",
       isShowScreen: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
       closeModel:false,
@@ -134,6 +144,22 @@ export default {
     handleEditor(row) {
       this.selectItem = row;
       this.popShow.isshow = true;
+    },
+    //获取反馈
+    handleQuery(obj){
+      let paramsObj = {
+        validParameter : {
+          legalName: obj.legalName,
+          remark: obj.remark,
+          taxPayerNo:obj.taxPayerNo,
+          taxSubId: obj.taxSubId,
+          taxSubName: obj.taxSubName,
+          pwd:obj.reportPwd
+        },
+        querytAction : "taxPageStore/actionAccreditQuery",
+        stopTip:"授权",
+      }
+      this.$refs.feedback.show(true,paramsObj)
     },
     hanleClose(data){
       this.popShow.isshow = false;

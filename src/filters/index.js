@@ -119,6 +119,19 @@ const getDay = (val) => {
       }
   }
 };
+const accreditStatus = (val) => {
+  switch (val) {//仲裁类别
+    case 'SUCCESS': {
+      return '授权成功';
+    }
+    case 'FAIL': {
+      return '授权失败';
+    }
+    case 'WAIT_ACCREDIT': {
+      return '待反馈';
+    }
+  }
+};
 const filtersSalaryType = (val) => {
   switch (val) {
     case 'NO_PROVIDE': {
@@ -154,4 +167,5 @@ export default {
   filterEmpType,
   idType,
   countryType,
+  accreditStatus
 }

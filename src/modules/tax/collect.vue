@@ -350,7 +350,7 @@ export default {
       screenWidth: document.body.clientWidth,// 屏幕尺寸
       list: [],
       closeModel: false,
-      isSave:this.$route.query.isSave,
+      // isSave:this.$route.query.isSave,
     };
   },
   components:{

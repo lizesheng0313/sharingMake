@@ -121,6 +121,7 @@ export default {
     //改变radio
     show() {
       this.isShowIncrease = true;
+      this.fileList = [];
     },
     handleRadioValue(value) {
       this.$emit("changeRadioValue", value);
