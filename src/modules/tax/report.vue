@@ -20,7 +20,7 @@
         ></el-date-picker>
       </div>
       <div class="right declare-buttton-groups" style="float: right">
-        <el-button type="primary" v-if="showCreate" @click="handleGenerateData('creat')">生成申报数据</el-button>
+        <el-button type="primary" v-if="showCreate" @click="handleGenerateData('create')">生成申报数据</el-button>
         <el-button type="primary" v-if="showCreateReturn" @click="handleGenerateDataQ">获取申报数据</el-button>
         <el-button type="primary" v-if="showSend" @click="handleGenerateData('update')">更新申报数据</el-button>
         <el-button type="primary" v-if="showSend" @click="handleSendReport">发送申报</el-button>
@@ -239,7 +239,7 @@ export default {
   computed: {
     //生成申报
     showCreate:function(){
-      return ["INIT"].includes(this.reportStatus)
+      return ["INIT",null].includes(this.reportStatus)
     },
     //生成申报反馈
     showCreateReturn:function(){
