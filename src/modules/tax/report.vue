@@ -24,6 +24,7 @@
         <el-button type="primary" v-if="showCreateReturn" @click="handleGenerateDataQ">获取申报数据</el-button>
         <el-button type="primary" v-if="showSend" @click="handleGenerateData('update')">更新申报数据</el-button>
         <el-button type="primary" v-if="showSend" @click="handleSendReport">发送申报</el-button>
+        <el-button type="primary" v-if="showSendQ" @click="handleSendReportQ">发送申报反馈</el-button>
         <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
         <el-button type="primary" v-if="showFeedback" @click="handleGetFeedback">获取反馈</el-button>
         <el-button type="primary" v-if="showInvalid" @click="handleInvalid">作废申报</el-button>
@@ -68,11 +69,24 @@
                 <span>{{reportSubTaxReportType(scope.row.subTaxReportType)}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="taxEmpCounts" label="纳税人数"></el-table-column>
-            <el-table-column prop="currentTotalIncome" label="本期收入"></el-table-column>
-            <el-table-column prop="hisTotalIncome" label="累计收入"></el-table-column>
+            <el-table-column prop="taxEmpCounts" label="纳税人数">
+              <template slot-scope="scope">
+                <span>{{ scope.row.subTaxReportType === "TOTAL_RULE"? "--":scope.row.taxEmpCounts }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="currentTotalIncome" label="本期收入">
+            </el-table-column>
+            <el-table-column prop="hisTotalIncome" label="累计收入">
+              <template slot-scope="scope">
+                <span>{{ scope.row.subTaxReportType === "SALARY_PAY_RULE"? scope.row.hisTotalIncome:"--"}}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="calculateTaxTotal" label="应扣缴税额"></el-table-column>
-            <el-table-column prop="realTaxTotal" label="已缴税额"></el-table-column>
+            <el-table-column prop="realTaxTotal" label="已缴税额">
+              <template slot-scope="scope">
+                <span>{{ scope.row.subTaxReportType === "SALARY_PAY_RULE" ? scope.row.realTaxTotal:"--"}}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="taxDiffTotal" label="应补(退)税额"></el-table-column>
             <el-table-column  label="是否可申报">
               <template slot-scope="scope">
@@ -230,8 +244,9 @@ export default {
       sendReportDisabled:false,
       timeObj:{
         first:3000,
-        second:10000,
-        third:15000,
+        second:8000,
+        third:12000,
+        fourth:22000,
       },
       sign:"taxReport",
     };
@@ -251,6 +266,10 @@ export default {
     //发送申报
     showSend:function(){
       return ["AWAIT_REPORT","CANCEL_SUCCESS","REPORT_ERROR"].includes(this.reportStatus)
+    },
+    //发送申报反馈
+    showSendQ:function(){
+      return ["REPORTING"].includes(this.reportStatus)
     },
     //作废申报
     showInvalid:function(){
@@ -327,6 +346,16 @@ export default {
           processingTip:"获取反馈中。。。",
         }
         this.$refs.selectSY.show(true,paramsObj)
+    },
+    //发送申报反馈
+    handleSendReportQ(){
+      let paramsObj = {
+        validParameter : this.buttonForm,
+        querytAction : "taxPageStore/postSendReportQuery",
+        stopTip:"发送申报",
+        processingTip:"获取反馈中。。。",
+      }
+      this.$refs.feedback.show(true,paramsObj)
     },
     //生成申报数据反馈
     handleGenerateDataQ(){

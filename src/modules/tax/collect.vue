@@ -350,6 +350,7 @@ export default {
       screenWidth: document.body.clientWidth,// 屏幕尺寸
       list: [],
       closeModel: false,
+      unNormalIds:[],
       // isSave:this.$route.query.isSave,
     };
   },
@@ -436,7 +437,12 @@ export default {
             });
         }).catch(() => {});
       }else{
-        this.$message.warning("请选择报送人员。。。")
+        //如果未点击数据
+        if(this.unNormalIds.length === 0){
+          this.$message.warning("请选择待报送数据")
+        }else{//选择成功或失败的
+          this.$message.warning("未检测到报送状态为“待报送”的数据。")
+        }
       }
     },
     selectShuiyou(){
@@ -503,26 +509,30 @@ export default {
     },
     //获取反馈
     handleReportInfo(){
-      this.reportReturnList = [];
-      this.$store
-        .dispatch("taxPageStore/actionPostReportInfo", {
-          date: this.salaryItem.date,
-          checkId:this.$route.query.id,
-        }).then(res=>{
-        if(res.success){
-          // 已授权，有查询结果
-          if(res.data.status === "SUCCESS"){
-            this.reportReturnList = res.data.taxSubList;
-            console.log(res.data.taxSubList)
-            this.isShowReportInfo = true;
-          }else{//未授权
-            this.isShowReportInfo = false;
-            this.$refs.authorizeTip.show()
+      if( this.reportForm.ids.length > 0){
+        this.reportReturnList = [];
+        this.$store
+          .dispatch("taxPageStore/actionPostReportInfo", {
+            date: this.salaryItem.date,
+            checkId:this.$route.query.id,
+          }).then(res=>{
+          if(res.success){
+            // 已授权，有查询结果
+            if(res.data.status === "SUCCESS"){
+              this.reportReturnList = res.data.taxSubList;
+              this.isShowReportInfo = true;
+            }else{//未授权
+              this.isShowReportInfo = false;
+              this.$refs.authorizeTip.show()
+            }
+          }else{
+            this.$message.warning(res.message)
           }
-        }else{
-          this.$message.warning(res.message)
-        }
-      })
+        })
+      }else{
+          this.$message.warning("不存在待反馈的数据")
+      }
+
     },
     //表格选中事件
     handleSelectItem(row) {
@@ -530,6 +540,9 @@ export default {
       row.forEach(element => {
         if (element.reportStatus == "AWAIT_REPORT") {
           this.reportForm.ids.push(element.id);
+        }
+        if(element.reportStatus != "AWAIT_REPORT"){
+          this.unNormalIds.push(element.id)
         }
       });
     },
