@@ -196,7 +196,8 @@ export default {
       waitActive:false,
       errorActive:false,
       checkStatus:"",
-      setWarning:""
+      setWarning:"",
+      allIds:[],
     };
   },
   computed:{
@@ -274,48 +275,52 @@ export default {
         this.$message.warning("工资表已审核，不允许操作。")
       }else{
         let ids = this.ids.length > 0 ? this.ids:[];
-        let reportCount = this.ids.length > 0 ? this.ids.length:this.awaitReportCount;
-        this.$confirm(
-          "系统共检测到有" +
-          reportCount +
-          "位人员需要进行信息提交，请确认是否现在提交 ?",
-          {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning",
-            center: false
-          }
-        ).then(() => {
-          this.reportInfoList = [];
-          //报送
-          this.$store
-            .dispatch("taxPageStore/actionReport", {
-              ids,
-              date:this.salaryItem.date,
-              checkId:this.ruleForm.checkId
-            })
-            .then(res => {
-              if (res.success) {
-                //验证通过
-                if(res.data.status === "SUCCESS"){
-                  this.isShowReportInfo = true;
-                  this.reportInfoLoading = true;
-                  this.reportInfoList = res.data.taxSubList;
-                  //是否进行下步查询
-                  if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
-                    this.selectShuiyou()
-                  }else{//报送全部成功或失败
-                    this.reportInfoLoading = false;
-                    this.isShowIknow = true;
+        if(ids.length>0 || this.allIds.length === 0){
+          let reportCount = this.ids.length > 0 ? this.ids.length:this.awaitReportCount;
+          this.$confirm(
+            "系统共检测到有" +
+            reportCount +
+            "位人员需要进行信息提交，请确认是否现在提交 ?",
+            {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning",
+              center: false
+            }
+          ).then(() => {
+            this.reportInfoList = [];
+            //报送
+            this.$store
+              .dispatch("taxPageStore/actionReport", {
+                ids,
+                date:this.salaryItem.date,
+                checkId:this.ruleForm.checkId
+              })
+              .then(res => {
+                if (res.success) {
+                  //验证通过
+                  if(res.data.status === "SUCCESS"){
+                    this.isShowReportInfo = true;
+                    this.reportInfoLoading = true;
+                    this.reportInfoList = res.data.taxSubList;
+                    //是否进行下步查询
+                    if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+                      this.selectShuiyou()
+                    }else{//报送全部成功或失败
+                      this.reportInfoLoading = false;
+                      this.isShowIknow = true;
+                    }
+                  }else{//授权失败
+                    this.$refs.authorizeTip.show()
                   }
-                }else{//授权失败
-                  this.$refs.authorizeTip.show()
+                }else{
+                  this.$message.warning(res.message)
                 }
-              }else{
-                this.$message.warning(res.message)
-              }
-            });
-        }).catch(() => {});
+              });
+          }).catch(() => {});
+        }else{
+          this.$message.warning("未检测到报送状态为“待报送”的数据。")
+        }
       }
 
     },
@@ -338,7 +343,6 @@ export default {
                 this.isShowIknow = true;
               }
             }else{
-
             }
           }
         })
@@ -386,25 +390,30 @@ export default {
       if(this.setWarning){
         this.$message.warning("工资表已审核，不允许操作。")
       }else{
-        this.reportReturnList = [];
-        this.$store
-          .dispatch("taxPageStore/actionPostReportInfo", {
-            date: this.salaryItem.date,
-            checkId:this.$route.query.id,
-          }).then(res=>{
-          if(res.success){
-            // 已授权，有查询结果
-            if(res.data.status === "SUCCESS"){
-              this.reportReturnList = res.data.taxSubList;
-              this.isShowReturnInfo = true;
-            }else{//未授权
-              this.isShowReportInfo = false;
-              this.$refs.authorizeTip.show()
+        if(this.ids.length>0 || this.allIds.length === 0){
+          this.reportReturnList = [];
+          this.$store
+            .dispatch("taxPageStore/actionPostReportInfo", {
+              date: this.salaryItem.date,
+              checkId:this.$route.query.id,
+            }).then(res=>{
+            if(res.success){
+              // 已授权，有查询结果
+              if(res.data.status === "SUCCESS"){
+                this.reportReturnList = res.data.taxSubList;
+                this.isShowReturnInfo = true;
+              }else{//未授权
+                this.isShowReportInfo = false;
+                this.$refs.authorizeTip.show()
+              }
+            }else{
+              this.$message.warning(res.message)
             }
-          }else{
-            this.$message.warning(res.message)
-          }
-        })
+          })
+        }else{
+          this.$message.warning("不存在待反馈的数据")
+        }
+
       }
     },
     onIKnow(){
@@ -415,6 +424,7 @@ export default {
     handleSelectItem(row) {
       this.ids = [];
       row.forEach(element => {
+        this.allIds.push(element.id);
         if (element.reportStatus == "AWAIT_REPORT") {
           this.ids.push(element.id);
         }
