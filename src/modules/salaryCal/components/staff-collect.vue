@@ -63,10 +63,10 @@
 <!--              <el-table-column prop="empSex" label="性别">-->
 <!--                <template slot-scope="scope">{{returnStatus('empSex',scope.row.empSex)}}</template>-->
 <!--              </el-table-column>-->
+              <el-table-column prop="taxSubName" label="扣缴义务人名称" width="170"></el-table-column>
               <el-table-column prop="workerStatus" label="人员状态" >
                 <template slot-scope="scope">{{returnStatus("empStatus",scope.row.workerStatus)}}</template>
               </el-table-column>
-              <el-table-column prop="taxSubName" label="扣缴义务人名称" width="170"></el-table-column>
               <el-table-column prop="reportStatus" label="报送状态" width="140">
                 <template slot-scope="scope">{{returnStatus('reportStatus',scope.row.reportStatus)}}</template>
               </el-table-column>
@@ -82,9 +82,9 @@
 <!--              <el-table-column prop="martyrFamilyYn" label="是否烈属" width="80">-->
 <!--                <template slot-scope="scope">{{returnYesOrNo(scope.row.martyrFamilyYn)}}</template>-->
 <!--              </el-table-column>-->
-              <el-table-column prop="lonelyOldYn" label="是否孤老" width="80">
-                <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>
-              </el-table-column>
+<!--              <el-table-column prop="lonelyOldYn" label="是否孤老" width="80">-->
+<!--                <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>-->
+<!--              </el-table-column>-->
               <el-table-column prop="workerType" label="任职受雇从业类型" width="140">
                 <template slot-scope="scope">{{returnStatus('workerType',scope.row.workerType)}}</template>
               </el-table-column>
