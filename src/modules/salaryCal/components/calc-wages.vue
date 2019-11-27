@@ -1,5 +1,8 @@
 <template>
   <div class="calc-wages">
+    <div class="waitReport" v-if="showWaitReport">存在“待报送”的人员 <span class="bold">{{ waitReportCount }}</span> 人，待报送人员无法参与个税计算，如需计算，请在“人员采集报送”界面中先完成报送！
+      <i class="el-icon-close close-style" @click="showWaitReport=false"></i>
+    </div>
     <div class="clearfix check-staff-menu">
       <el-button class="screen" size="small" @click="showScreen">筛选</el-button>
       <el-input
@@ -383,6 +386,7 @@
         third:15000,
       },
       setWarning:false,
+      showWaitReport:false,
     };
   },
   computed:{
@@ -463,7 +467,22 @@
        }
       })
       //查看工资表状态
-     this.getSalaryStatus()
+      this.getSalaryStatus()
+      //校验人员状态
+      this.checkEmpReportStatus()
+    },
+    //校验人员状态
+    checkEmpReportStatus(){
+      this.$store
+        .dispatch("salaryCalStore/actionCheckEmpReportStatus", {
+          checkId:this.salaryForm.checkId
+        })
+        .then(res => {
+          if (res.success) {
+            this.waitReportCount = res.data;
+            this.showWaitReport = this.waitReportCount != 0;
+          }
+        });
     },
     //子组件刷新
     freshList(data){
@@ -775,6 +794,25 @@
 .calc-wages {
   padding: 0 20px;
   box-sizing: border-box;
+  .waitReport{
+    height: 50px;
+    line-height: 50px;
+    margin-top: 20px;
+    color:#909399;
+    border-left:4px solid #E6A23C;
+    padding-left: 20px;
+    position: relative;
+    .bold{
+      color:#E6A23C;
+      font-weight: bold;
+    }
+    .close-style{
+      position: absolute;
+      top:0px;
+      right:0px;
+      cursor: pointer;
+    }
+  }
   .search{
     display: inline-block;
     margin-left: 20px;

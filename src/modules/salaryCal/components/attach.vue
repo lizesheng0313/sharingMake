@@ -1,6 +1,9 @@
 <template>
   <div class="calc-attach el-diy-month">
     <div class="tax-content">
+      <div class="waitReport" v-if="showWaitReport">存在“待报送”的人员 <span class="bold">{{ waitReportCount }}</span> 人，待报送人员无法下载累计专项附加扣除数据，如需下载，请在“人员采集报送”界面中先完成报送！
+        <i class="el-icon-close close-style" @click="showWaitReport=false"></i>
+      </div>
       <div class="screening">
         <div class="clearfix check-staff-menu">
           <el-input
@@ -117,6 +120,8 @@ export default {
       sign:"attch",
       closeModel:false,
       setWarning:false,
+      waitReportCount:0,
+      showWaitReport:false,
     };
   },
   computed:{
@@ -159,7 +164,8 @@ export default {
         .dispatch("salaryCalStore/actionCheckEmpReportStatus", this.totalListForm)
         .then(res => {
           if (res.success) {
-            console.log(res.data)
+            this.waitReportCount = res.data;
+            this.showWaitReport = this.waitReportCount != 0;
           }
         });
     },
@@ -225,6 +231,25 @@ export default {
 @import "../../../assets/scss/helpers.scss";
 .calc-attach {
   padding:0 22px;
+  .waitReport{
+    height: 50px;
+    line-height: 50px;
+    margin-top: 20px;
+    color:#909399;
+    border-left:4px solid #E6A23C;
+    padding-left: 20px;
+    position: relative;
+    .bold{
+      color:#E6A23C;
+      font-weight: bold;
+    }
+    .close-style{
+      position: absolute;
+      top:0px;
+      right:0px;
+      cursor: pointer;
+    }
+  }
   .footer-btn{
     height: 40px;
     line-height: 40px;
