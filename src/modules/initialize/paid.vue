@@ -47,11 +47,11 @@
                 </template>
               </el-table-column>
               <el-table-column prop="failReason" label="未通过原因"></el-table-column>
-              <el-table-column label="操作" fixed="right" min-width="200px">
+              <el-table-column label="操作" fixed="right" min-width="220px">
                 <template slot-scope="scope">
                   <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
                   <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
-                  <el-button size="mini" type="primary" @click="handleQuery(scope.row)" v-if="scope.row.dealStatus==='PROCESSING'">获取反馈</el-button>
+                  <el-button size="mini" type="primary" @click="handleQuery(scope.row)" v-if="scope.row.accreditStatus==='WAIT_ACCREDIT'">获取反馈</el-button>
                 </template>
               </el-table-column>
             </el-table>
