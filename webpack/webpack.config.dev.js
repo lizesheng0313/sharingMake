@@ -42,7 +42,7 @@ const config = Object.assign(webpackConfigBase.config, {
   devServer: {
     proxy: {
       '/api': {
-        // target: "http://172.19.60.38:8017",
+        target: "http://172.19.60.38:8017",
         //陈莹
         // target:"http://172.19.63.49:9999",
         //陈莹2
@@ -50,7 +50,7 @@ const config = Object.assign(webpackConfigBase.config, {
         //小白
         // target:" http://172.19.65.31:9999",
         //苏宇
-        target:" http://172.19.64.66:9999",
+        // target:" http://172.19.64.66:9999",
         secure: false,
         changeOrigin: true,
         // pathRewrite: {

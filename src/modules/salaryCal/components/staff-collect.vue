@@ -194,13 +194,15 @@ export default {
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       allActive:true,
       waitActive:false,
-      errorActive:false
+      errorActive:false,
+      checkStatus:"",
+      setWarning:""
     };
   },
   computed:{
     ...mapState("salaryCalStore", {
       salaryItem:"salaryItem"
-    })
+    }),
   },
   created(){
   },
@@ -229,6 +231,16 @@ export default {
             this.failReportCount = res.data.failReportCount;
           }
         });
+    this.getSalaryStatus()
+    },
+    //查看工资表状态
+    getSalaryStatus(){
+      this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.ruleForm.checkId).then(res=>{
+        if(res.code === "0000"){
+          this.checkStatus = res.data.checkStatus;
+          this.setWarning = (this.checkStatus ==='CHECKED_SALARY' || this.checkStatus ==='PAID' || this.checkStatus ==='FINISH');
+        }
+      })
     },
     //导出
     handleExport(){
@@ -258,49 +270,54 @@ export default {
       },
     //报送
     handleReport() {
-      let ids = this.ids.length > 0 ? this.ids:[];
-      let reportCount = this.ids.length > 0 ? this.ids.length:this.awaitReportCount;
-      this.$confirm(
-        "系统共检测到有" +
-        reportCount +
-        "位人员需要进行信息提交，请确认是否现在提交 ?",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-          center: false
-        }
-      ).then(() => {
-        this.reportInfoList = [];
-        //报送
-        this.$store
-          .dispatch("taxPageStore/actionReport", {
-            ids,
-            date:this.salaryItem.date,
-            checkId:this.ruleForm.checkId
-          })
-          .then(res => {
-            if (res.success) {
-              //验证通过
-              if(res.data.status === "SUCCESS"){
-                this.isShowReportInfo = true;
-                this.reportInfoLoading = true;
-                this.reportInfoList = res.data.taxSubList;
-                //是否进行下步查询
-                if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
-                  this.selectShuiyou()
-                }else{//报送全部成功或失败
-                  this.reportInfoLoading = false;
-                  this.isShowIknow = true;
+      if(this.setWarning){
+        this.$message.warning("工资表已审核，不允许操作。")
+      }else{
+        let ids = this.ids.length > 0 ? this.ids:[];
+        let reportCount = this.ids.length > 0 ? this.ids.length:this.awaitReportCount;
+        this.$confirm(
+          "系统共检测到有" +
+          reportCount +
+          "位人员需要进行信息提交，请确认是否现在提交 ?",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+            center: false
+          }
+        ).then(() => {
+          this.reportInfoList = [];
+          //报送
+          this.$store
+            .dispatch("taxPageStore/actionReport", {
+              ids,
+              date:this.salaryItem.date,
+              checkId:this.ruleForm.checkId
+            })
+            .then(res => {
+              if (res.success) {
+                //验证通过
+                if(res.data.status === "SUCCESS"){
+                  this.isShowReportInfo = true;
+                  this.reportInfoLoading = true;
+                  this.reportInfoList = res.data.taxSubList;
+                  //是否进行下步查询
+                  if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+                    this.selectShuiyou()
+                  }else{//报送全部成功或失败
+                    this.reportInfoLoading = false;
+                    this.isShowIknow = true;
+                  }
+                }else{//授权失败
+                  this.$refs.authorizeTip.show()
                 }
-              }else{//授权失败
-                this.$refs.authorizeTip.show()
+              }else{
+                this.$message.warning(res.message)
               }
-            }else{
-              this.$message.warning(res.message)
-            }
-          });
-      }).catch(() => {});
+            });
+        }).catch(() => {});
+      }
+
     },
     selectShuiyou(){
       this.isShowIknow = false;
@@ -366,25 +383,29 @@ export default {
     },
     //获取反馈
     handleReportInfo(){
-      this.reportReturnList = [];
-      this.$store
-        .dispatch("taxPageStore/actionPostReportInfo", {
-          date: this.salaryItem.date,
-          checkId:this.$route.query.id,
-        }).then(res=>{
-        if(res.success){
-          // 已授权，有查询结果
-          if(res.data.status === "SUCCESS"){
-            this.reportReturnList = res.data.taxSubList;
-            this.isShowReturnInfo = true;
-          }else{//未授权
-            this.isShowReportInfo = false;
-            this.$refs.authorizeTip.show()
+      if(this.setWarning){
+        this.$message.warning("工资表已审核，不允许操作。")
+      }else{
+        this.reportReturnList = [];
+        this.$store
+          .dispatch("taxPageStore/actionPostReportInfo", {
+            date: this.salaryItem.date,
+            checkId:this.$route.query.id,
+          }).then(res=>{
+          if(res.success){
+            // 已授权，有查询结果
+            if(res.data.status === "SUCCESS"){
+              this.reportReturnList = res.data.taxSubList;
+              this.isShowReturnInfo = true;
+            }else{//未授权
+              this.isShowReportInfo = false;
+              this.$refs.authorizeTip.show()
+            }
+          }else{
+            this.$message.warning(res.message)
           }
-        }else{
-          this.$message.warning(res.message)
-        }
-      })
+        })
+      }
     },
     onIKnow(){
       this.isShowReportInfo = false;
@@ -423,8 +444,12 @@ export default {
     },
     //点击姓名跳转
     handleCollectionName(row) {
-      this.$store.commit("taxPageStore/" + AT.PERSONNELCOLLECTION, row);
-      this.$router.push("/tax/info-collection");
+      if(this.setWarning){
+        this.$message.warning("工资表已审核，不允许操作。")
+      }else{
+        this.$store.commit("taxPageStore/" + AT.PERSONNELCOLLECTION, row);
+        this.$router.push("/tax/info-collection");
+      }
     },
     //翻页
     handleSelectionChange(val) {

@@ -382,6 +382,7 @@
         second:10000,
         third:15000,
       },
+      setWarning:false,
     };
   },
   computed:{
@@ -481,6 +482,7 @@
         if(res.code === "0000"){
           this.checkStatus = res.data.checkStatus;
           this.salaryDisabled = this.checkStatus ==='AUDITED'
+          this.setWarning = (this.checkStatus ==='CHECKED_SALARY' || this.checkStatus ==='PAID' || this.checkStatus ==='FINISH');
         }
       })
     },
@@ -560,8 +562,9 @@
     },
     //导入页面展示
     showImport(type){
-      //未计算、已计算状态可导入
-      if(this.checkStatus ==="INIT" || this.checkStatus ==="COMPUTED"){
+      if(this.setWarning){
+        this.$message.warning('工资表已审核，不允许操作。');
+      }else{
         this.successCount = 0;
         this.failCount = 0;
         this.uuid = "";
@@ -570,10 +573,7 @@
         this.importT = type;
         this.actionUrl = type == "social"?"/api/salary/socialProvident/verify":"/api/salary/floatItem/verify";
         this.isShowImport = true;
-      }else{
-        this.$message.warning('本期工资数据已审核');
       }
-
     },
     //文件上传前校验
     beforeAvatarUpload(file) {
@@ -717,24 +717,11 @@
     },
     //薪资计算
     handleCalcSalary(){
-      this.$refs.selectSY.show(true)
-      // apiSalaryComputes(this.salaryForm.checkId)
-      //   .then(res=>{
-      //     if(res.success){
-      //       if(res.data === "SUCCESS"){
-      //         this.loading();
-      //       }
-      //       if(res.data === "PROCESSING"){
-      //         this.returnLoadingText ="查询中";
-      //         this.isShowReturn = true;
-      //         this.isShowIknow = false;
-      //         this.returnLoading = true;
-      //         setTimeout(()=>{
-      //           this.selectDownLoadFirst()
-      //         },3000)
-      //       }
-      //     }
-      //   })
+      if(this.setWarning){
+        this.$message.warning("工资表已审核，不允许操作。")
+      }else{
+        this.$refs.selectSY.show(true)
+      }
     },
     //获取反馈
     handleReportInfo(){

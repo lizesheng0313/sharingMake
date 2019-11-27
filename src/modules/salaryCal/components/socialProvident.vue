@@ -27,8 +27,8 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
-            <el-button type="primary" plain v-if="showCopy" @click="handleCopyData">复制上月数据</el-button>
-            <el-button type="primary" plain @click="handleImport" v-if="showCopy">导入</el-button>
+            <el-button type="primary" plain @click="handleCopyData">复制上月数据</el-button>
+            <el-button type="primary" plain @click="handleImport">导入</el-button>
             <el-button type="warning" plain class="export-button" @click="handleExport">导出</el-button>
           </div>
         </div>
@@ -130,13 +130,11 @@ export default {
           checkId:this.$route.query.id,
           importType:"BY_EMP_NO"
         },
+        setWarning:false,
     };
   },
   computed:{
-    showCopy:function(){
-      let noCopyArr = ["CHECKED_SALARY","PAID","FINISH"];
-      return !noCopyArr.includes(this.checkStatus)
-    }
+
   },
   mounted() {
     this.getList()
@@ -166,6 +164,7 @@ export default {
       this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.totalListForm.checkId).then(res=>{
         if(res.code === "0000"){
           this.checkStatus = res.data.checkStatus;
+          this.setWarning = (this.checkStatus ==='CHECKED_SALARY' || this.checkStatus ==='PAID' || this.checkStatus ==='FINISH');
         }
       })
     },
@@ -181,16 +180,24 @@ export default {
     refresh(data) {
       this.getList();
     },
+    //导入
     handleImport() {
-      this.$refs.import.show();
+      if(this.setWarning){
+        this.$message.warning("工资表已审核，不允许操作。")
+      }else{
+        this.$refs.import.show();
+      }
     },
     //复制上月数据
     handleCopyData(){
-      this.$confirm('您确定复制上月的社保公积金数据，复制后将覆盖本月相同人员的社保公积金数据', '复制确认', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }).then(() => {
+      if(this.setWarning){
+        this.$message.warning("工资表已审核，不允许操作。")
+      }else{
+        this.$confirm('您确定复制上月的社保公积金数据，复制后将覆盖本月相同人员的社保公积金数据', '复制确认', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(() => {
           this.$store
             .dispatch("salaryCalStore/actionSyncLastMonthSocial", {
               checkId:this.$route.query.id
@@ -204,8 +211,9 @@ export default {
                 this.getList()
               }
             })
-      }).catch(() => {
-      });
+        }).catch(() => {
+        });
+      }
     },
     handleSearch() {
       this.totalListForm.currPage = 1;
