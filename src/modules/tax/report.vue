@@ -68,11 +68,24 @@
                 <span>{{reportSubTaxReportType(scope.row.subTaxReportType)}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="taxEmpCounts" label="纳税人数"></el-table-column>
-            <el-table-column prop="currentTotalIncome" label="本期收入"></el-table-column>
-            <el-table-column prop="hisTotalIncome" label="累计收入"></el-table-column>
+            <el-table-column prop="taxEmpCounts" label="纳税人数">
+              <template slot-scope="scope">
+                <span>{{ scope.row.subTaxReportType === "TOTAL_RULE"? "--":scope.row.taxEmpCounts }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="currentTotalIncome" label="本期收入">
+            </el-table-column>
+            <el-table-column prop="hisTotalIncome" label="累计收入">
+              <template slot-scope="scope">
+                <span>{{ scope.row.subTaxReportType === "SALARY_PAY_RULE"? scope.row.hisTotalIncome:"--"}}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="calculateTaxTotal" label="应扣缴税额"></el-table-column>
-            <el-table-column prop="realTaxTotal" label="已缴税额"></el-table-column>
+            <el-table-column prop="realTaxTotal" label="已缴税额">
+              <template slot-scope="scope">
+                <span>{{ scope.row.subTaxReportType === "SALARY_PAY_RULE" ? scope.row.realTaxTotal:"--"}}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="taxDiffTotal" label="应补(退)税额"></el-table-column>
             <el-table-column  label="是否可申报">
               <template slot-scope="scope">

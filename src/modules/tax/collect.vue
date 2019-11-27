@@ -436,7 +436,7 @@ export default {
             });
         }).catch(() => {});
       }else{
-        this.$message.warning("请选择报送人员。。。")
+        this.$message.warning("请选择待报送数据")
       }
     },
     selectShuiyou(){
