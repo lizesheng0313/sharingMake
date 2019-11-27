@@ -138,6 +138,25 @@ export default {
       setTimeout(()=>{
         this.$store
           .dispatch(this.paramsObj.querytAction,this.paramsObj.validParameter)
+          .then(r0 => {
+            if(r0.data.status === "SUCCESS"){
+              if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+                this.selectFour()
+              } else{
+                this.subjectObj = r0.data.taxSubList[0];
+                this.reportInfoLoading = false;
+                this.isShowIknow = true;
+              }
+            }else{
+            }
+          })
+      },this.timeObj.third)
+    },
+    //第四次次查询
+    selectFour(){
+      setTimeout(()=>{
+        this.$store
+          .dispatch(this.paramsObj.querytAction,this.paramsObj.validParameter)
           .then(re => {
             if(re.success){
               this.reportInfoLoading = false;
@@ -145,7 +164,7 @@ export default {
               this.subjectObj = re.data.taxSubList[0];
             }
           })
-      },this.timeObj.third)
+      },this.timeObj.fourth)
     },
     onIknow(){
       this.isShowReportInfo = false;
