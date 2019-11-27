@@ -386,6 +386,7 @@
         third:15000,
       },
       setWarning:false,
+      waitReportCount:0,
       showWaitReport:false,
     };
   },
