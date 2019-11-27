@@ -116,6 +116,7 @@ export default {
       },
       sign:"attch",
       closeModel:false,
+      setWarning:false,
     };
   },
   computed:{
@@ -148,13 +149,28 @@ export default {
           }
         });
       //校验人员状态
+        this.checkEmpReportStatus();
+      //校验工资表状态
+        this.getSalaryStatus();
+    },
+    //校验人员状态
+    checkEmpReportStatus(){
       this.$store
         .dispatch("salaryCalStore/actionCheckEmpReportStatus", this.totalListForm)
         .then(res => {
           if (res.success) {
-           console.log(res.data)
+            console.log(res.data)
           }
         });
+    },
+    //校验工资表状态
+    getSalaryStatus(){
+      this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.totalListForm.checkId).then(res=>{
+        if(res.code === "0000"){
+          this.checkStatus = res.data.checkStatus;
+          this.setWarning = (this.checkStatus ==='CHECKED_SALARY' || this.checkStatus ==='PAID' || this.checkStatus ==='FINISH');
+        }
+      })
     },
     //子组件触发刷新
     freshList(data){
@@ -164,11 +180,20 @@ export default {
     },
   //下载
     handleExport() {
-       this.$refs.selectSY.show(true)
+      if(this.setWarning){
+        this.$message.warning("工资表已审核，不允许操作。")
+      }else{
+        this.$refs.selectSY.show(true)
+      }
     },
     //获取反馈
     handleReportInfo(){
-      this.$refs.feedback.show(true)
+      if(this.setWarning){
+        this.$message.warning("工资表已审核，不允许操作。")
+      }else{
+        this.$refs.feedback.show(true)
+      }
+
     },
     //关闭加载提示
     closeReturnMsg(){
