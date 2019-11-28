@@ -431,8 +431,8 @@ export default {
       });
     },
     handleSizeChange(val) {
-      this.totalListForm.pageSize = val;
-      this.totalListForm.currPage = 1;
+      this.ruleForm.pageSize = val;
+      this.ruleForm.currPage = 1;
       this.getList();
     },
     changeMonth(month) {
