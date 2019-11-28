@@ -115,13 +115,18 @@ export default {
     },
     //授权
     handleNewBody() {
-      let paramsObj = {
-        validParameter : this.newBodyFormData,
-        querytAction : "taxPageStore/actionAccreditQuery",
-        validAction : "taxPageStore/actionDealTaxSubject",
-        stopTip:"授权",
-      }
-      this.$refs.selectSY.show(true,paramsObj)
+      this.$refs.taxListForm.validate(valid => {
+        if(valid){
+          let paramsObj = {
+            validParameter : this.newBodyFormData,
+            querytAction : "taxPageStore/actionAccreditQuery",
+            validAction : "taxPageStore/actionDealTaxSubject",
+            stopTip:"授权",
+          }
+          this.$refs.selectSY.show(true,paramsObj)
+        }
+      })
+
     },
     handleCancel(data){
       this.$emit("hanleClose",data)
