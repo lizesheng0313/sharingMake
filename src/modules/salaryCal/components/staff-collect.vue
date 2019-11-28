@@ -5,7 +5,7 @@
         <div class="screening">
           <div class="clearfix check-staff-menu">
             <el-input
-              placeholder="请输入姓名\工号\身份证号"
+              placeholder="请输入姓名\工号\证件号码"
               v-model="ruleForm.key"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               @keyup.enter.native="handleSearch"
@@ -35,7 +35,7 @@
               </span>
                <span class="part" @click="selectNum('error')">
                 报送失败
-                <i :class="['num', errorActive?'active':'']" >{{ failReportCount }}</i>人
+                <i :class="['num', errorActive?'active':'']">{{ failReportCount }}</i>人
               </span>
             </span>
             <div class="content-header head-date">

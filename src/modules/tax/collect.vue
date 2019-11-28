@@ -108,19 +108,17 @@
                 <template slot-scope="scope">{{returnStatus('reportStatus',scope.row.reportStatus)}}</template>
               </el-table-column>
               <el-table-column prop="idValidStatus" label="身份证验证状态" width="140">
-                <template
-                  slot-scope="scope"
-                >{{returnStatus('idValidStatus',scope.row.idValidStatus)}}</template>
+                <template slot-scope="scope">{{returnStatus('idValidStatus',scope.row.idValidStatus)}}</template>
               </el-table-column>
               <el-table-column prop="mobile" label="手机号码" width="140"></el-table-column>
               <el-table-column prop="iscgl" label="是否残疾" width="140">
-                <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>
+                <template slot-scope="scope">{{returnYesOrNo(scope.row.disabilityYn)}}</template>
               </el-table-column>
               <el-table-column prop="martyrFamilyYn" label="是否烈属" width="140">
                 <template slot-scope="scope">{{returnYesOrNo(scope.row.martyrFamilyYn)}}</template>
               </el-table-column>
               <el-table-column prop="lonelyOldYn" label="是否孤老" width="140">
-                <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>
+                <template slot-scope="scope">{{returnYesOrNo(scope.row.lonelyOldYn)}}</template>
               </el-table-column>
               <el-table-column prop="workerType" label="任职受雇从业类型" width="140">
                 <template slot-scope="scope">{{returnStatus('workerType',scope.row.workerType)}}</template>

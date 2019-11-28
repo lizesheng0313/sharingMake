@@ -9,7 +9,7 @@
       :show-close="false"
       :close-on-click-modal="closeModel"
     >
-        <div v-if="subjectObj.dealStatus === 'SUCCESS'"><i class="el-icon-success"></i>{{stopTip}}成功</div>
+        <div v-if="subjectObj.dealStatus === 'SUCCESS'"><i class="el-icon-success"></i>{{ paramsObj.stopTip }}成功</div>
         <div v-if="subjectObj.dealStatus === 'PROCESSING'"><i class="el-icon-warning"></i>授权请求正在处理中，请稍后再试。</div>
         <div v-if="subjectObj.dealStatus === 'FAIL'"><i class="el-icon-warning"></i>{{ subjectObj.failReason}}</div>
       <div class="dialog-footer">

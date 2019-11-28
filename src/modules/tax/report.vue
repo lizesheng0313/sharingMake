@@ -78,13 +78,13 @@
             </el-table-column>
             <el-table-column prop="hisTotalIncome" label="累计收入">
               <template slot-scope="scope">
-                <span>{{ scope.row.subTaxReportType === "SALARY_PAY_RULE"? scope.row.hisTotalIncome:"--"}}</span>
+                <span>{{ showSalary(scope.row.subTaxReportType,scope.row.hisTotalIncome) }}</span>
               </template>
             </el-table-column>
             <el-table-column prop="calculateTaxTotal" label="应扣缴税额"></el-table-column>
             <el-table-column prop="realTaxTotal" label="已缴税额">
               <template slot-scope="scope">
-                <span>{{ scope.row.subTaxReportType === "SALARY_PAY_RULE" ? scope.row.realTaxTotal:"--"}}</span>
+                <span>{{ showSalary(scope.row.subTaxReportType,scope.row.realTaxTotal)}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="taxDiffTotal" label="应补(退)税额"></el-table-column>
@@ -310,6 +310,10 @@ export default {
             }
           }
         });
+    },
+    //展示收入，已缴税额
+    showSalary(subTaxReportType,data){
+      return subTaxReportType === "SALARY_PAY_RULE" || subTaxReportType === "TOTAL_RULE" ? data:"--"
     },
     //子组件触发刷新
     freshList(data){

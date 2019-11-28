@@ -242,10 +242,10 @@ export default {
      this.$refs.selectSY.show(true,paramsObj)
     },
     //缴款反馈
-    queryTaxPay(){
+    queryTaxPay(row){
       let paramsObj = {
         validParameter :{
-          taxSubId:this.taxSubId,
+          taxSubId:row.taxSubId,
           queryMonth:this.agreementListForm.queryMonth,
           tripleAgreementNo:this.tripleAgreementNo
         },
