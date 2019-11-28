@@ -51,8 +51,10 @@
           :show-overflow-tooltip="col.col === '部门' || col.col === '岗位' || col.col === '工号' || col.col === '姓名'"
           :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="[0,1,2,3].includes(index)">
           <template slot-scope="scope">
-            <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>
-<!--            <span v-else> <el-switch v-model="showCount"></el-switch> </span>-->
+            <span>
+<!--              <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>-->
+              {{ filterVal(scope['row'][index]) }}
+            </span>
           </template>
         </el-table-column>
       </el-table>
@@ -495,6 +497,16 @@
       if(['序号','工号','姓名'].includes(value)){ return '80px'}
       else if(value === "身份证号"){ return '170px' }
       else {return '100px'}
+    },
+    filterVal(val){
+      if(val){
+        if(val['col'==="算薪状态"]){
+          return
+        }
+        return val['val']
+      }else{
+        return "--"
+      }
     },
     //查看工资表状态
     getSalaryStatus(){

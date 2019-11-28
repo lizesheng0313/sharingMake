@@ -35,6 +35,9 @@ const salaryCheckStatus = (val) => {
     case 'CHECKED_SALARY': {
       return '薪资已核对';
     }
+    case 'WAIT_BACK': {
+      return '待反馈';
+    }
     case 'AUDIT_REJECT': {
       return '审核拒绝';
     }

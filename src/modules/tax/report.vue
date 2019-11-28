@@ -27,7 +27,9 @@
         <el-button type="primary" v-if="showSendQ" @click="handleSendReportQ">发送申报反馈</el-button>
         <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
         <el-button type="primary" v-if="showFeedback" @click="handleGetFeedback">获取反馈</el-button>
+        <el-button type="primary" v-if="showFeedbackQ" @click="handleGetFeedbackQ">获取反馈查询</el-button>
         <el-button type="primary" v-if="showInvalid" @click="handleInvalid">作废申报</el-button>
+        <el-button type="primary" v-if="showInvalidQ" @click="handleInvalidQ">作废申报反馈</el-button>
       </div>
       <div class="screening">
         <div class="clearfix">
@@ -64,7 +66,7 @@
             :style="{width:screenWidth-285+'px'}"
             v-loading="loading"
           >
-            <el-table-column prop="subTaxReportType" label="报表名称" width="180">
+            <el-table-column prop="subTaxReportType" label="报表名称" width="200">
               <template slot-scope="scope">
                 <span>{{reportSubTaxReportType(scope.row.subTaxReportType)}}</span>
               </template>
@@ -275,9 +277,17 @@ export default {
     showInvalid:function(){
       return ["REPORT_SUCCESS","REPORT_SUCCESS_OTHER"].includes(this.reportStatus)
     },
+    //作废申报反馈
+    showInvalidQ:function(){
+      return ["REPORT_SUCCESS_OTHER"].includes(this.reportStatus)
+    },
     //获取反馈
     showFeedback:function(){
       return ['REPORT_WAIT_BACK'].includes(this.reportStatus)
+    },
+    //获取反馈
+    showFeedbackQ:function(){
+      return ['REPORT_BACK_WAIT_BACK'].includes(this.reportStatus)
     }
   },
   mounted() {
@@ -382,6 +392,16 @@ export default {
       }
       this.$refs.selectSY.show(true,paramsObj)
     },
+    //作废申报反馈
+    handleInvalidQ(){
+      let paramsObj = {
+        validParameter : this.buttonForm,
+        querytAction : "taxPageStore/postCancelSubTaxReportQuery",
+        stopTip:"作废申报",
+        processingTip:"获取反馈中。。。",
+      }
+      this.$refs.feedback.show(true,paramsObj)
+    },
     //获取反馈
     handleGetFeedback() {
       let paramsObj = {
@@ -392,6 +412,16 @@ export default {
         processingTip:"获取反馈中。。。",
       }
       this.$refs.selectSY.show(true,paramsObj)
+    },
+    //获取反馈查询
+    handleGetFeedbackQ(){
+      let paramsObj = {
+        validParameter : this.buttonForm,
+        querytAction : "taxPageStore/postGetReportBackQuery",
+        stopTip:"申报获取反馈",
+        processingTip:"获取反馈中。。。",
+      }
+      this.$refs.feedback.show(true,paramsObj)
     },
     //密码提交
     handleSubmitPassword() {
@@ -483,7 +513,6 @@ export default {
           this.taxSubjectInfolist = res.data;
           this.reportForm.taxSubId = this.taxSubjectInfolist[0].taxSubId;
           this.buttonForm.taxSubId = this.taxSubjectInfolist[0].taxSubId;
-
           this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
           this.getList();
         }
