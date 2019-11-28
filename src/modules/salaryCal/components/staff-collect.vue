@@ -35,7 +35,7 @@
               </span>
                <span class="part" @click="selectNum('error')">
                 报送失败
-                <i :class="['num', errorActive?'active':'']" >{{ failReportCount }}</i>人
+                <i :class="['num', errorActive?'active':'']">{{ failReportCount }}</i>人
               </span>
             </span>
             <div class="content-header head-date">
