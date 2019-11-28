@@ -24,7 +24,13 @@
       <div slot="fs-container" class="content-st">
         <div class="step-box" v-if="active!==6">
             <el-steps :active="active" finish-status="success" simple style="margin-top: 20px">
-              <el-step v-for="(item,index) in salaryItem.taxRule === 'SALARY_PAY_RULE' ? normalStepArr : salaryStepArr" :key="index" :title="item" @click.native = "goStep(index)" style="cursor: pointer;"></el-step>
+              <el-step title="核对人员" @click.native = "goStep(0)" style="cursor: pointer;"></el-step>
+              <el-step title="人员信息采集" @click.native = "goStep(1)" style="cursor: pointer;"></el-step>
+              <el-step title="专项附加扣除" @click.native = "goStep(2)" style="cursor: pointer;" v-if="salaryItem.taxRule === 'SALARY_PAY_RULE'"></el-step>
+              <el-step title="社保公积金" @click.native = "goStep(3)" style="cursor: pointer;" v-if="salaryItem.taxRule === 'SALARY_PAY_RULE'"></el-step>
+              <el-step title="核算薪资" @click.native = "goStep(4)" style="cursor: pointer;"></el-step>
+              <el-step title="发放薪资" @click.native = "goStep(5)" style="cursor: pointer;"></el-step>
+<!--              <el-step v-for="(item,index) in salaryItem.taxRule === 'SALARY_PAY_RULE' ? normalStepArr : salaryStepArr" :key="index" :title="item" @click.native = "goStep(index)" style="cursor: pointer;"></el-step>-->
             </el-steps>
         </div>
         <div class="view-content">
