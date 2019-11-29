@@ -381,7 +381,7 @@
       },
       sign:"calc-wages",
       stopTip:"薪资计算",//终止文案
-      processingTip:"数据反馈中,请稍后点击获取反馈。",//进行中文案
+      processingTip:"数据反馈中。。。",//进行中文案
       timeObj:{
         first:3000,
         second:10000,

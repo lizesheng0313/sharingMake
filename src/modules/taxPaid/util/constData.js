@@ -10,9 +10,12 @@
     "REMOVE_CONTRACT_RULE":"解除劳动合同一次性补偿金申报",
   }
 export const payStatus = {
-  "AWAIT_RAY": "待缴款",
-  "REPORTING": "未扣款",
-  "RAY_SUCCESS": "缴款成功",
-  "RAY_ERROR":"缴款失败",
+  "NOT_PAY":"未扣款",
+  "PAY_SUCCESS":"扣款成功",
+  "FEED_FAILED":"反馈失败",
+  "NOT_NEED_PAY":"无需扣款",
+  "PAY_FREEZE":"扣款已冻结",
+  "PAY_NOT_FEED":"已扣款未反馈",
+  "PAY_UNKOWN":"扣款状态不明",
 }
 

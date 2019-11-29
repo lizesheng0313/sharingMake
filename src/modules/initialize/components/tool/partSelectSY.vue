@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-  import authorizeTip from "@/components/tool/authorizeTip"
+import authorizeTip from "@/components/tool/authorizeTip"
 export default {
   components:{
     authorizeTip
@@ -45,6 +45,7 @@ export default {
         validParameter: "", //校验参数
         validAction: "", //校验action
         querytAction:"" ,//查询action
+        isGetSubjectId:false
       },
       isShowIknow:false,
       closeModel:false
@@ -77,6 +78,10 @@ export default {
               this.reportInfoLoading = true;
               this.isShowReportInfo = true;
               if(res.data.taxSubList[0].dealStatus === "PROCESSING"){
+                //如果是授权接口 新增时添加 taxSubId
+                if(this.isGetSubjectId){
+                  this.paramsObj.validParameter.taxSubId = res.data.taxSubList[0].taxSubId;
+                }
                 this.selectShuiyou()
               }else{//全部成功或失败
                 this.subjectObj = res.data.taxSubList[0];
