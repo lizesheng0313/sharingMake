@@ -347,6 +347,7 @@ export default {
         querytAction : "taxPageStore/postQueryGenerateTaxReportData",
         stopTip:type === "create" ? "生成申报数据":"更新申报数据",
         processingTip:"获取反馈中。。。",
+        showFailReason:true,
       }
       this.$refs.selectSY.show(true,paramsObj)
     },

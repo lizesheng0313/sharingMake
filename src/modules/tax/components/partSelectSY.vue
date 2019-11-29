@@ -18,6 +18,27 @@
       </div>
     </el-dialog>
     <authorizeTip ref="authorizeTip"></authorizeTip>
+   <!-- 失败原因   -->
+    <el-dialog
+      :visible.sync="isShowFailReason"
+      width="550px"
+      title="失败列表"
+      center
+      class="diy-el_dialog"
+      :show-close="false"
+      :close-on-click-modal="closeModel"
+    >
+      <el-table :data="failReasonData">
+        <el-table-column prop="name" label="姓名"></el-table-column>
+        <el-table-column prop="idNo" label="证件号码"></el-table-column>
+        <el-table-column prop="status" label="状态"></el-table-column>
+        <el-table-column prop="subTaxReportType" label="报表名称"></el-table-column>
+        <el-table-column prop="failReason" label="失败原因"></el-table-column>
+      </el-table>
+      <div class="dialog-footer">
+        <el-button @click="onIknow"  type="primary" plain>我知道了</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -45,9 +66,12 @@ export default {
         validParameter: "", //校验参数
         validAction: "", //校验action
         querytAction:"" ,//查询action
+        showFailReason:false,//是否显示失败原因
       },
       isShowIknow:false,
-      closeModel:false
+      closeModel:false,
+      failReasonData:[],
+      isShowFailReason:false,
     };
   },
   created(){
@@ -83,8 +107,15 @@ export default {
                 this.reportInfoLoading = false;
                 this.isShowIknow = true;
               }
-            }else{//授权失败
-              this.$refs.authorizeTip.show()
+            }else{
+              //是否显示失败原因
+              if(this.paramsObj.showFailReason && res.data.dataList){
+                this.failReasonData = res.data.dataList;
+                this.isShowFailReason = true;
+              }else{
+                //授权失败
+                this.$refs.authorizeTip.show()
+              }
             }
           }else{
             this.$message.warning(res.message)

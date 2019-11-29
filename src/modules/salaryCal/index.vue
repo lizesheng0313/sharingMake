@@ -207,11 +207,12 @@ export default {
       this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
       this.$router.push({path:"/salaryCheck",query:{id:item.id,active:0,salaryRuleId:item.salaryRuleId}});
     },
-    //查看信息
+    //查看薪资
     seeCalcSalary(item){
+      let sendActive = item.taxRule === 'SALARY_PAY_RULE' ?4:2;
       this.$store.commit("salaryCalStore/SET_BASICINFOFORM",item.salaryRule);
       this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
-      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:4,salaryRuleId:item.salaryRuleId}})
+      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:sendActive,salaryRuleId:item.salaryRuleId}})
     },
     //切换查看第几次发薪
     changePayth(index,status){

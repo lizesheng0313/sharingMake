@@ -90,7 +90,6 @@
               </el-table-column>
               <el-table-column prop="empDay" label="任职受雇从业日期" width="140">
               </el-table-column>
-
               <el-table-column label="国籍" width="100">
                 <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
               </el-table-column>
