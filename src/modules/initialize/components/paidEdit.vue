@@ -122,6 +122,7 @@ export default {
             querytAction : "taxPageStore/actionAccreditQuery",
             validAction : "taxPageStore/actionDealTaxSubject",
             stopTip:"授权",
+            isGetSubjectId:false,
           }
           this.$refs.selectSY.show(true,paramsObj)
         }
