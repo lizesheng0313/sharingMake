@@ -42,7 +42,7 @@ export default {
       paramsObj:{
         stopTip:"",//终止文案
         processingTip:"",//进行中文案
-        validParameter: "", //校验参数
+        validParameter: {}, //校验参数
         validAction: "", //校验action
         querytAction:"" ,//查询action
         isGetSubjectId:false
