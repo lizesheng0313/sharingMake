@@ -45,7 +45,6 @@ export default {
         validParameter: {}, //校验参数
         validAction: "", //校验action
         querytAction:"" ,//查询action
-        isGetSubjectId:false
       },
       isShowIknow:false,
       closeModel:false
@@ -79,7 +78,7 @@ export default {
               this.isShowReportInfo = true;
               if(res.data.taxSubList[0].dealStatus === "PROCESSING"){
                 //如果是授权接口 新增时添加 taxSubId
-                if(this.isGetSubjectId){
+                if(res.data.taxSubList[0].taxSubId){
                   this.paramsObj.validParameter.taxSubId = res.data.taxSubList[0].taxSubId;
                 }
                 this.selectShuiyou()
