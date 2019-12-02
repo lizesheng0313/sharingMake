@@ -55,10 +55,17 @@
           @selection-change="handleSelectItem"
         >
           <el-table-column type="selection" width="55" fixed></el-table-column>
-          <el-table-column prop="taxSubName" label="扣缴义务人" width="140"></el-table-column>
+          <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
+              <template slot-scope="scope">
+                <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
+                  <span class="hidenCon">{{ scope.row.taxSubName }}</span>
+                </el-tooltip>
+                <span v-else>{{ scope.row.taxSubName }}</span>
+              </template>
+          </el-table-column>
           <el-table-column prop="empName" label="姓名" width="140"></el-table-column>
           <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
-          <el-table-column prop="idNo" label="证件号码" width="140"></el-table-column>
+          <el-table-column prop="idNo" label="证件号码" width="170"></el-table-column>
           <el-table-column prop="endMonth" label="截止月份" width="140"></el-table-column>
           <el-table-column prop="totalIncome" label="累计收入" width="140"></el-table-column>
           <el-table-column prop="spectialDeduction" label="累计专项扣除" width="140"></el-table-column>
@@ -68,7 +75,7 @@
           <el-table-column prop="taxTotal" label="累计已预缴税额" width="140"></el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
+              <span @click="handleDelete(scope.row.id)" class="funStyle">删除</span>
             </template>
           </el-table-column>
         </el-table>
@@ -319,7 +326,7 @@ export default {
     font-size: 12px;
   }
   .staff-situation {
-    .staff-total {
+  .staff-total {
       border-right: 1px solid #e6e6e6;
       padding-right: 15px;
       margin-right: 15px;
@@ -342,6 +349,14 @@ export default {
       margin-top: 20px;
       text-align: right;
     }
+  }
+  .hidenCon{
+    width:150px;
+    overflow: hidden;
+    word-break: keep-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor:pointer;
   }
 }
 </style>

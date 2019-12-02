@@ -37,8 +37,15 @@
               v-loading="loading"
             >
               <el-table-column label="序号" type="index"></el-table-column>
-              <el-table-column prop="taxSubName" label="扣缴义务人名称"></el-table-column>
-              <el-table-column prop="taxPayerNo" label="纳税人识别号"></el-table-column>
+              <el-table-column prop="taxSubName" label="扣缴义务人名称" width="200px" align="left">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>12">
+                    <span class="hidenCon">{{ scope.row.taxSubName }}</span>
+                  </el-tooltip>
+                  <span v-else>{{ scope.row.taxSubName }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="taxPayerNo" label="纳税人识别号" width="180px" align="left"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
               <el-table-column prop="remark" label="经办人姓名"></el-table-column>
               <el-table-column prop="accreditStatus" label="授权状态">
@@ -46,12 +53,21 @@
                   <span>{{scope.row.accreditStatus | accreditStatus}}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="failReason" label="未通过原因"></el-table-column>
-              <el-table-column label="操作" fixed="right" min-width="220px">
+              <el-table-column prop="failReason" label="未通过原因" width="170px">
                 <template slot-scope="scope">
-                  <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
-                  <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
-                  <el-button size="mini" type="primary" @click="handleQuery(scope.row)" v-if="scope.row.accreditStatus==='WAIT_ACCREDIT'">获取反馈</el-button>
+                  <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
+                    <span class="hidenCon">{{ scope.row.failReason }}</span>
+                  </el-tooltip>
+                  <span v-else>{{ scope.row.failReason }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" fixed="right" width="160px">
+                <template slot-scope="scope">
+                  <span @click="handleQuery(scope.row)" v-if="scope.row.accreditStatus==='WAIT_ACCREDIT'" class="funStyle">获取反馈</span>
+                  <span v-else>
+                     <span @click="handleEditor(scope.row)" class="funStyle">编辑</span>
+                     <span @click="handleDelete(scope.row.taxSubId)" class="funStyle">删除</span>
+                  </span>
                 </template>
               </el-table-column>
             </el-table>
@@ -228,7 +244,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px;
+    padding: 30px 0px;
     .content-header {
       position: relative;
       font-size: 18px;
@@ -296,37 +312,6 @@ export default {
         cursor: pointer;
       }
     }
-  }
-}
-.screen-dialog {
-  .screening-box {
-    margin-bottom: 20px;
-    .el-col-6 {
-      text-align: right;
-    }
-    .el-col-24 {
-      margin-left: 15px;
-    }
-    span {
-      display: inline-block;
-      text-align: center;
-      border: 1px solid #bdbdbd;
-      border-radius: 5px;
-      margin-right: 10px;
-      padding: 5px 15px;
-      cursor: pointer;
-    }
-    .active {
-      color: $lineBorderPointer;
-      border: 1px solid $lineBorderPointer;
-    }
-  }
-  .el-diy-date .el-date-editor {
-    opacity: 1;
-    width: auto;
-  }
-  .el-input__inner {
-    height: auto;
   }
 }
 </style>
