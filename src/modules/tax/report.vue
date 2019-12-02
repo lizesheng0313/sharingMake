@@ -25,7 +25,7 @@
         <el-button type="primary" v-if="showSend" @click="handleGenerateData('update')">更新申报数据</el-button>
         <el-button type="primary" v-if="showSend" @click="handleSendReport">发送申报</el-button>
         <el-button type="primary" v-if="showSendQ" @click="handleSendReportQ">发送申报反馈</el-button>
-        <el-button type="primary" v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
+        <el-button  v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
         <el-button type="primary" v-if="showFeedback" @click="handleGetFeedback">获取反馈</el-button>
         <el-button type="primary" v-if="showFeedbackQ" @click="handleGetFeedbackQ">获取反馈查询</el-button>
         <el-button type="primary" v-if="showInvalid" @click="handleInvalid">作废申报</el-button>
@@ -68,7 +68,7 @@
           >
             <el-table-column prop="subTaxReportType" label="报表名称" width="200">
               <template slot-scope="scope">
-                <span>{{reportSubTaxReportType(scope.row.subTaxReportType)}}</span>
+                <b>{{reportSubTaxReportType(scope.row.subTaxReportType)}}</b>
               </template>
             </el-table-column>
             <el-table-column prop="taxEmpCounts" label="纳税人数">
