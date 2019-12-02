@@ -51,6 +51,7 @@
           :data="list"
           class="check-staff_table"
           :style="{width:screenWidth-285+'px'}"
+          height="380"
           @selection-change="handleSelectItem"
         >
           <el-table-column type="selection" width="55" fixed></el-table-column>
