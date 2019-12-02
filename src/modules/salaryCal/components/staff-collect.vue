@@ -19,8 +19,8 @@
               <el-tooltip class="item" effect="dark" content="若未选择人员，抓取工资表全部待报送人员；若选择了人员，抓取所选人员中待报送人员报送。" placement="top">
                 <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
               </el-tooltip>
-              <el-button type="primary" class="add-import" @click="handleReportInfo">获取反馈</el-button>
-              <el-button type="primary" class="add-import" @click="handleExport">导出</el-button>
+              <el-button class="add-import" @click="handleReportInfo">获取反馈</el-button>
+              <el-button class="add-import" @click="handleExport">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -56,14 +56,21 @@
                   <span class="table-name" @click="handleCollectionName(scope.row)">{{scope.row.empName }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="idType" label="证件类型">
+              <el-table-column prop="idType" label="证件类型" width="150">
                 <template slot-scope="scope">{{scope.row.idType | idType}}</template>
               </el-table-column>
-              <el-table-column prop="idNo" label="证件号码" width="170"></el-table-column>
+              <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
 <!--              <el-table-column prop="empSex" label="性别">-->
 <!--                <template slot-scope="scope">{{returnStatus('empSex',scope.row.empSex)}}</template>-->
 <!--              </el-table-column>-->
-              <el-table-column prop="taxSubName" label="扣缴义务人名称" width="170"></el-table-column>
+              <el-table-column prop="taxSubName" label="扣缴义务人名称" width="200">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
+                    <span class="hidenCon">{{ scope.row.taxSubName }}</span>
+                  </el-tooltip>
+                  <span v-else>{{ scope.row.taxSubName }}</span>
+                </template>
+              </el-table-column>
               <el-table-column prop="workerStatus" label="人员状态" >
                 <template slot-scope="scope">{{returnStatus("empStatus",scope.row.workerStatus)}}</template>
               </el-table-column>
@@ -486,7 +493,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px 0 40px 22px;
+    padding: 30px 22px 40px 22px;
     .content-header {
       display: inline-block;
       font-size: 16px;
@@ -516,9 +523,9 @@ export default {
         width: 205px;
       }
     }
-    .add-import {
-      margin-right: 10px;
-    }
+    /*.add-import {*/
+    /*  margin-right: 10px;*/
+    /*}*/
     .iconiconfonticonfontsousuo1 {
       font-size: 12px;
     }
