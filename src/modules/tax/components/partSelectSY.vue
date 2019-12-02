@@ -36,7 +36,7 @@
         <el-table-column prop="failReason" label="失败原因"></el-table-column>
       </el-table>
       <div class="dialog-footer">
-        <el-button @click="onIknow"  type="primary" plain>我知道了</el-button>
+        <el-button @click="onIknow" type="primary" plain>我知道了</el-button>
       </div>
     </el-dialog>
   </div>
@@ -108,14 +108,8 @@ export default {
                 this.isShowIknow = true;
               }
             }else{
-              //是否显示失败原因
-              if(this.paramsObj.showFailReason && res.data.dataList){
-                this.failReasonData = res.data.dataList;
-                this.isShowFailReason = true;
-              }else{
                 //授权失败
                 this.$refs.authorizeTip.show()
-              }
             }
           }else{
             this.$message.warning(res.message)
@@ -133,14 +127,20 @@ export default {
               if(r0.data.status === "SUCCESS"){
                 if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
                   this.selectSec()
-                } else{
-                  this.subjectObj = r0.data.taxSubList[0];
-                  this.reportInfoLoading = false;
-                  this.isShowIknow = true;
+                }else{
+                  //如果有人员失败原因
+                  if(this.paramsObj.showFailReason && r0.data.dataList && r0.data.dataList.length>0){
+                    this.reportInfoLoading = false;
+                    this.isShowReportInfo = false;
+                    this.failReasonData = r0.data.dataList;
+                    this.isShowFailReason = true;
+                  }else{
+                    this.subjectObj = r0.data.taxSubList[0];
+                    this.reportInfoLoading = false;
+                    this.isShowIknow = true;
+                  }
                 }
-              }else{
-
-              }
+              }else{}
             }
           })
       },this.timeObj.first)
@@ -155,9 +155,17 @@ export default {
               if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
                 this.selectThird()
               } else{
-                this.subjectObj = r0.data.taxSubList[0];
-                this.reportInfoLoading = false;
-                this.isShowIknow = true;
+                //如果有人员失败原因
+                if(this.paramsObj.showFailReason && r0.data.dataList && r0.data.dataList.length>0){
+                  this.reportInfoLoading = false;
+                  this.isShowReportInfo = false;
+                  this.failReasonData = r0.data.dataList;
+                  this.isShowFailReason = true;
+                }else{
+                  this.subjectObj = r0.data.taxSubList[0];
+                  this.reportInfoLoading = false;
+                  this.isShowIknow = true;
+                }
               }
             }else{
             }
@@ -174,9 +182,17 @@ export default {
               if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
                 this.selectFour()
               } else{
-                this.subjectObj = r0.data.taxSubList[0];
-                this.reportInfoLoading = false;
-                this.isShowIknow = true;
+                //如果有人员失败原因
+                if(this.paramsObj.showFailReason && r0.data.dataList && r0.data.dataList.length>0){
+                  this.reportInfoLoading = false;
+                  this.isShowReportInfo = false;
+                  this.failReasonData = r0.data.dataList;
+                  this.isShowFailReason = true;
+                }else{
+                  this.subjectObj = r0.data.taxSubList[0];
+                  this.reportInfoLoading = false;
+                  this.isShowIknow = true;
+                }
               }
             }else{
             }
@@ -190,9 +206,17 @@ export default {
           .dispatch(this.paramsObj.querytAction,this.paramsObj.validParameter)
           .then(re => {
             if(re.success){
-              this.reportInfoLoading = false;
-              this.isShowIknow = true;
-              this.subjectObj = re.data.taxSubList[0];
+              //如果有人员失败原因
+              if(this.paramsObj.showFailReason && re.data.dataList && re.data.dataList.length>0){
+                this.reportInfoLoading = false;
+                this.isShowReportInfo = false;
+                this.failReasonData = re.data.dataList;
+                this.isShowFailReason = true;
+              }else{
+                this.reportInfoLoading = false;
+                this.isShowIknow = true;
+                this.subjectObj = re.data.taxSubList[0];
+              }
             }
           })
       },this.timeObj.fourth)
