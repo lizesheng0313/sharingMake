@@ -35,7 +35,7 @@
               <span v-else>{{ scope.row.taxSubName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="payDate" label="税款所属期">
+          <el-table-column prop="payDate" label="税款所属期" width="160px">
             <template slot-scope="scope">
               {{ scope.row.payDate | dateStyle}}
             </template>
@@ -54,7 +54,7 @@
               <span>{{ payStatus[scope.row.payStatus] }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="payDate" label="缴款日期" width="160">
+          <el-table-column prop="payDate" label="缴款日期" width="160px">
             <template slot-scope="scope">
               {{ scope.row.payDate | dateStyle}}
             </template>
