@@ -495,7 +495,7 @@
     },
     setMinWidth(value){
       if(['序号','工号','姓名'].includes(value)){ return '80px'}
-      else if(value === "身份证号"){ return '170px' }
+      else if(["身份证号","累计住房贷款利息","社保公积金个人合计","累计准予扣除的捐赠","累计应纳税所得额","累计应扣缴税额","累计已预缴税额","补偿金免税收入","补偿金应纳税所得额"].includes(value)){ return '170px' }
       else {return '100px'}
     },
     filterVal(val){
