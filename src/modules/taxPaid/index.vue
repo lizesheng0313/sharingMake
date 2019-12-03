@@ -156,7 +156,7 @@ export default {
       },
       payStatus:constData.payStatus,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 360,
+      screenHeight: document.body.clientHeight - 310,
       paidList:[
         { name:"北京懒猫联银科技有限公司",tableName:"综合所得预扣预缴表",status:"申报成功",isThree:"是",paidStatus:"无需缴款",time:"2019-12-12" }
       ],
@@ -203,7 +203,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 360;
+        this.screenHeight = document.body.clientHeight - 310;
       })();
     };
   },
@@ -348,7 +348,7 @@ export default {
     margin-left:10px;
   }
   .paid-page{
-    margin-top: 30px;
+    margin-top: 10px;
     float:right;
   }
   .redTip{

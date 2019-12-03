@@ -125,7 +125,7 @@ export default {
       selectMonth: defaultDate,
       isShowUpdate: false,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 360,
+      screenHeight: document.body.clientHeight - 336,
       list: [],
       total: 0,
       updateRules: {
@@ -364,7 +364,7 @@ export default {
       position: relative;
       margin-top: 10px;
       .staff-page {
-        margin-top: 20px;
+        margin-top: 10px;
         text-align: right;
       }
     }

@@ -137,7 +137,7 @@ export default {
       sign:"paid",
       isShowScreen: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
-      screenHeight:document.body.clientHeight - 320,
+      screenHeight:document.body.clientHeight - 270,
       closeModel:false,
       popShow:{isshow:false},
       selectItem:{}
@@ -148,7 +148,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 320;
+        this.screenHeight = document.body.clientHeight - 270;
       })();
     };
     this.getList();
@@ -247,7 +247,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px 0px;
+    padding: 30px 0px 0px 0px;
     .content-header {
       position: relative;
       font-size: 18px;

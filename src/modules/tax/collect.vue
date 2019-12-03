@@ -347,7 +347,7 @@ export default {
       isShowInfoColl: true,
       isShowScreening: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
-      screenHeight: document.body.clientHeight - 364,
+      screenHeight: document.body.clientHeight - 320,
       list: [],
       closeModel: false,
       unNormalIds:[],
@@ -370,7 +370,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 364;
+        this.screenHeight = document.body.clientHeight - 320;
       })();
     };
   },
@@ -704,7 +704,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 22px 0px 40px 22px;
+    padding: 10px 0px 0px 22px;
     .content-header {
       display: inline-block;
       font-size: 16px;
@@ -765,7 +765,7 @@ export default {
       }
       position: relative;
       .staff-page {
-        margin-top: 20px;
+        margin-top: 10px;
         text-align: right;
       }
       .table-name {
