@@ -400,6 +400,7 @@
       let day = date.getDate();
       return year+"-"+month+"-"+day+ " 00:00:00";
     },
+
     salaryShow:function () {
       return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED" || this.checkStatus==="AUDITED"
     },
@@ -409,6 +410,7 @@
     auditedShow:function(){
       return this.checkStatus === "COMPUTED"
     },
+    //取消审核
     cancelAuditeShow:function(){
       return this.checkStatus === "AUDITED" || this.checkStatus === "PAID" || this.checkStatus === "FINISH"
     },

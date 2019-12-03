@@ -9,40 +9,45 @@
     </header>
     <!-- <p class="tax-collect-tips">自动获取工资表当月的增减员名单，您只需选择人员“报送”即可，报送后系统会在个税系统中完成人员信息采集</p> -->
     <div class="table-content">
-      <div class="clearfix check-staff-menu">
-        <div class="left">
-          <el-select v-model="ruleForm.queryYear" placeholder="请选择" @change="handleChange">
-            <el-option v-for="(item,index) in selectYear" :key="index" :value="item"></el-option>
-          </el-select>
+        <div v-show="showFilter">
+          <div class="clearfix check-staff-menu">
+            <div class="left">
+              <el-select v-model="ruleForm.queryYear" placeholder="请选择" @change="handleChange">
+                <el-option v-for="(item,index) in selectYear" :key="index" :value="item"></el-option>
+              </el-select>
+            </div>
+            <el-input
+              placeholder="请输入姓名\工号"
+              v-model="ruleForm.nameOrEmpNo"
+              prefix-icon="iconiconfonticonfontsousuo1 iconfont"
+              @keyup.enter.native="handleSearch"
+              clearable
+              class="search-input left"
+            ></el-input>
+            <div class="left">
+              <el-button type="primary" class="check-search" @click="handleSearch">查询</el-button>
+            </div>
+            <div class="right">
+    <!--          <el-button type="primary" @click="handledDownload" class="add-import">局端在线下载</el-button>-->
+              <el-button type="primary" @click="handleImport" class="add-import">导入</el-button>
+            </div>
+          </div>
+          <div class="selectCon">
+            扣缴义务人：
+            <el-select v-model="ruleForm.taxSubId" placeholder="请选择" @change="selectSubject">
+              <el-option
+                v-for="item in taxSubjectInfolist"
+                :key="item.taxSubId"
+                :label="item.taxSubName"
+                :value="item.taxSubId">
+              </el-option>
+            </el-select>
+          </div>
         </div>
-        <el-input
-          placeholder="请输入姓名\工号"
-          v-model="ruleForm.nameOrEmpNo"
-          prefix-icon="iconiconfonticonfontsousuo1 iconfont"
-          @keyup.enter.native="handleSearch"
-          clearable
-          class="search-input left"
-        ></el-input>
-        <div class="left">
-          <el-button type="primary" class="check-search" @click="handleSearch">查询</el-button>
-        </div>
-        <div class="right">
-<!--          <el-button type="primary" @click="handledDownload" class="add-import">局端在线下载</el-button>-->
-          <el-button type="primary" @click="handleImport" class="add-import">导入</el-button>
-        </div>
-      </div>
-      <div class="selectCon">
-        扣缴义务人：
-        <el-select v-model="ruleForm.taxSubId" placeholder="请选择" @change="selectSubject">
-          <el-option
-            v-for="item in taxSubjectInfolist"
-            :key="item.taxSubId"
-            :label="item.taxSubName"
-            :value="item.taxSubId">
-          </el-option>
-        </el-select>
-      </div>
-      <div class="staff-table">
+<!--        <div class="page-component-up">-->
+<!--          <i class="el-icon-caret-top"></i>-->
+<!--        </div>-->
+      <div class="staff-table" ref="tableCon">
         <div class="floating-menu" v-if="deleteIdsForm.ids.length>0">
           <span>已选中{{deleteIdsForm.ids.length}}人</span>
           <el-button size="mini" class="button-mini" @click="handleDeleteItem">批量删除</el-button>
@@ -51,8 +56,9 @@
           :data="list"
           class="check-staff_table"
           :style="{width:screenWidth-285+'px'}"
-          height="380"
           @selection-change="handleSelectItem"
+          :height = "screenHeight"
+          ref="table"
         >
           <el-table-column type="selection" width="55" fixed></el-table-column>
           <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
@@ -143,8 +149,10 @@ export default {
       total: 0,
       fileList: [],
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenHeight: document.body.clientHeight-360,
       list: [],
-      taxSubjectInfolist:[]
+      taxSubjectInfolist:[],
+      showFilter:true,
     };
   },
   mounted() {
@@ -153,8 +161,11 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
+        // this.$refs.tableCon.offsetTop-60
+        this.screenHeight = document.body.clientHeight - 360;
       })();
     };
+    // this.screenHeight = document.body.clientHeight-this.$refs.tableCon.offsetTop-60;
     this.getTaxSubjectInfoList();
     this.getList();
   },
@@ -357,6 +368,26 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
     cursor:pointer;
+  }
+ .page-component-up {
+    background-color: #fff;
+    /*position: fixed;*/
+    /*right: 100px;*/
+    /*bottom: 150px;*/
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: .3s;
+    box-shadow: 0 0 6px rgba(0,0,0,.12);
+    z-index: 5;
+  }
+  .page-component-up i {
+    color: #409eff;
+    display: block;
+    line-height: 40px;
+    text-align: center;
+    font-size: 18px;
   }
 }
 </style>

@@ -34,6 +34,7 @@
               :data="list"
               class="check-staff_table"
               :style="{width:screenWidth-285+'px'}"
+              :height="screenHeight"
               v-loading="loading"
             >
               <el-table-column label="序号" type="index"></el-table-column>
@@ -136,6 +137,7 @@ export default {
       sign:"paid",
       isShowScreen: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
+      screenHeight:document.body.clientHeight - 280,
       closeModel:false,
       popShow:{isshow:false},
       selectItem:{}
@@ -146,6 +148,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 280;
       })();
     };
     this.getList();
