@@ -38,8 +38,6 @@
                 <i :class="['num', errorActive?'active':'']">{{ failReportCount }}</i>人
               </span>
             </span>
-            <div class="content-header head-date">
-            </div>
           </div>
           <div class="staff-table">
             <el-table
@@ -199,7 +197,7 @@ export default {
       closeModel: false,
       isSave:this.$route.query.isSave,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 340,
+      screenHeight: document.body.clientHeight - 330,
       allActive:true,
       waitActive:false,
       errorActive:false,
@@ -221,7 +219,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 340;
+        this.screenHeight = document.body.clientHeight - 330;
       })();
     };
     that.getList();

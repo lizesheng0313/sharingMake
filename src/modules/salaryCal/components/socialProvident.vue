@@ -41,6 +41,7 @@
             class="check-staff_table"
             v-loading="loading"
             :style="{width:screenWidth-40+'px'}"
+            :height="screenHeight"
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empNo" label="工号"></el-table-column>
@@ -122,6 +123,7 @@ export default {
         key: "",
       },
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenHeight: document.body.clientHeight - 320,
       list: [],
       total: 0,
       radioList: [
@@ -149,6 +151,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 320
       })();
     };
   },

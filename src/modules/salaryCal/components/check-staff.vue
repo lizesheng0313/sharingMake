@@ -210,7 +210,7 @@ export default {
       fileList: [],
       myHeaders:{Authorization:this.$store.state.token},
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 350,
+      screenHeight: document.body.clientHeight - 330,
       input: "",
       isShowIncrease: false,
       tableData: [
@@ -255,7 +255,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        that.screenHeight = document.body.clientHeight - 350;
+        that.screenHeight = document.body.clientHeight - 330;
       })();
     };
     this.loading();
@@ -464,7 +464,7 @@ export default {
       padding-right: 15px;
       margin-right: 15px;
     }
-    margin-top: 25px;
+    margin-top: 20px;
     color: #999;
     font-size: 12px;
     i {
@@ -478,7 +478,6 @@ export default {
       overflow-x: auto;
     }
     position: relative;
-    margin-top: 27px;
     .staff-page {
       margin-top: 20px;
       text-align: right;

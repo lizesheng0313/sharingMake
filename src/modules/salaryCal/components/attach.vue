@@ -37,14 +37,13 @@
                 <i :class="['num', errorActive?'active':'']">{{ failReportCount?failReportCount:0 }}</i>人
               </span>
             </span>
-          <div class="content-header head-date">
-          </div>
         </div>
         <div class="staff-table">
           <el-table
             :data="list"
             class="check-staff_table"
             v-loading="loading"
+            :height="screenHeight"
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empName" label="姓名"></el-table-column>
@@ -132,6 +131,7 @@ export default {
         "date":""
       },
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenHeight: document.body.clientHeight - 400,
       list: [],
       total: 0,
       validAction:"taxPageStore/actionDownloadAddition",
@@ -169,6 +169,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 400;
       })();
     };
   },
@@ -452,7 +453,6 @@ export default {
         overflow-x: auto;
       }
       position: relative;
-      margin-top: 27px;
       .staff-page {
         margin-top: 20px;
         text-align: right;
