@@ -158,7 +158,7 @@ const idType = (val) => {
 
 const dateStyle = (val) => {
   if(val){
-    return val.split('')[0]
+    return val.split(' ')[0]
   }
 }
 

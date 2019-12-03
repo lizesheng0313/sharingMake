@@ -38,7 +38,7 @@
           </el-table-column>
           <el-table-column prop="reportMouth" label="税款所属期" width="160px">
             <template slot-scope="scope">
-              {{ scope.row.reportMouth | dateStyle}}
+              {{ scope.row.reportMouth|dateStyle}}
             </template>
           </el-table-column>
           <el-table-column  label="申报表" width="150px">
