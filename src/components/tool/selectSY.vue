@@ -69,8 +69,6 @@ export default {
           if (res.success) {
             //验证通过
             if(res.data.status === "SUCCESS"){
-              this.reportInfoLoading = true;
-              this.isShowReportInfo = true;
               this.reportInfoList = res.data.taxSubList;
               //是否进行下步查询
               if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
