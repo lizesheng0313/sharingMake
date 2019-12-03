@@ -64,6 +64,7 @@
             class="check-staff_table"
             :style="{width:screenWidth-285+'px'}"
             v-loading="loading"
+            :height="screenHeight"
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empName" label="姓名" width="130"></el-table-column>
@@ -73,11 +74,11 @@
                 <span>{{ scope.row.empDay.split(' ')[0] }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="140"></el-table-column>
-            <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="140"></el-table-column>
-            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="累计住房租金" width="140"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="累计赡养老人" width="140"></el-table-column>
+            <el-table-column prop="totalChildrenEdu" label="累计子女教育"></el-table-column>
+            <el-table-column prop="totalFurtherEdu" label="累计继续教育"></el-table-column>
+            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息"></el-table-column>
+            <el-table-column prop="totalHouseRent" label="累计住房租金"></el-table-column>
+            <el-table-column prop="totalSupportParents" label="累计赡养老人"></el-table-column>
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
@@ -124,6 +125,7 @@ export default {
       selectMonth: defaultDate,
       isShowUpdate: false,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenHeight: document.body.clientHeight - 360,
       list: [],
       total: 0,
       updateRules: {
@@ -152,6 +154,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 360;
       })();
     };
     this.getTaxSubjectInfoList();

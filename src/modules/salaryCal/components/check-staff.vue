@@ -46,7 +46,13 @@
         <span>已选中{{selectUserIdList.length}}人</span>
         <el-button size="mini" class="button-mini" @click="handleDelete(selectUserIdList)">批量删除</el-button>
       </div>
-      <el-table :data="userList" class="check-staff_table" :style="{width:screenWidth-40+'px'}" v-loading="userLoading"  @selection-change="handleSelectionChange">
+      <el-table :data="userList"
+                class="check-staff_table"
+                :style="{width:screenWidth-40+'px'}"
+                v-loading="userLoading"
+                @selection-change="handleSelectionChange"
+                :height="screenHeight"
+      >
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column label="姓名" width="104px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
@@ -116,6 +122,7 @@
       </el-table>
       <el-pagination
         @current-change="handleCurrentChange"
+        class="page-style"
         @size-change="handleSizeChange"
         :current-page="userForm.currPage"
         :page-sizes="[20, 50, 100, 200]"
@@ -203,6 +210,7 @@ export default {
       fileList: [],
       myHeaders:{Authorization:this.$store.state.token},
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenHeight: document.body.clientHeight - 350,
       input: "",
       isShowIncrease: false,
       tableData: [
@@ -247,6 +255,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
+        that.screenHeight = document.body.clientHeight - 350;
       })();
     };
     this.loading();
@@ -477,6 +486,7 @@ export default {
   }
   .el-pagination{
     text-align: right;
+    margin: 10px 0px;
   }
   .importFinishDialog{
     .title{

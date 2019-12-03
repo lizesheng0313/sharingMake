@@ -36,14 +36,14 @@
               <span v-else>{{ scope.row.taxSubName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="payDate" label="税款所属期" width="160px">
+          <el-table-column prop="reportMouth" label="税款所属期" width="160px">
             <template slot-scope="scope">
-              {{ scope.row.payDate | dateStyle}}
+              {{ scope.row.reportMouth | dateStyle}}
             </template>
           </el-table-column>
           <el-table-column  label="申报表" width="150px">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" :content="subTaxReportType[scope.row.subTaxReportType]" placement="top-start" v-if="scope.row.subTaxReportType && subTaxReportType[scope.row.subTaxReportType].length>10">
+              <el-tooltip class="item" effect="dark" :content="subTaxReportType[scope.row.subTaxReportType]" placement="top-start" v-if="scope.row.subTaxReportType">
                 <span class="hidenCon">{{ subTaxReportType[scope.row.subTaxReportType] }}</span>
               </el-tooltip>
               <span v-else>{{ subTaxReportType[scope.row.subTaxReportType]}}</span>
@@ -191,7 +191,7 @@ export default {
     this.agreementListForm.queryMonth = year+"-"+month;
   },
   mounted(){
-    this.getList()
+    this.getList();
     let that = this;
     window.onresize = () => {
       return (() => {
@@ -227,6 +227,7 @@ export default {
     //三方协议列表
     getTripleAgreementList(data){
       this.tripleAgreementNo = "";
+      this.subTaxReportType = data.subTaxReportType;
       this.isShowTripleAgreementTaxList = true;
       this.tripleAgreementLoading = true;
       this.$store
@@ -257,7 +258,8 @@ export default {
        validParameter :{
          taxSubId:this.taxSubId,
          queryMonth:this.agreementListForm.queryMonth,
-         tripleAgreementNo:this.tripleAgreementNo
+         tripleAgreementNo:this.tripleAgreementNo,
+         subTaxReportType:this.subTaxReportType
        },
       validAction : "taxPaidStore/actionTaxPay",
       querytAction : "taxPaidStore/actionTaxPayQuery",
@@ -271,7 +273,7 @@ export default {
         validParameter :{
           taxSubId:row.taxSubId,
           queryMonth:this.agreementListForm.queryMonth,
-          tripleAgreementNo:this.tripleAgreementNo
+          subTaxReportType:row.subTaxReportType
         },
         querytAction : "taxPaidStore/actionTaxPayQuery",
         stopTip:"扣款",
