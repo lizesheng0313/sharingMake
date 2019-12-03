@@ -274,3 +274,7 @@
     border-color: #606266;
   }
 }
+.el-step.is-simple:not(:last-of-type) .el-step__title{
+  max-width: 60%;
+  word-break: break-all;
+}

@@ -92,14 +92,14 @@ export default {
       }
     },
     handleExport() {
+      this.reportInfoLoading = true;
+      this.isShowReportInfo = true;
       this.$store
         .dispatch(this.paramsObj.validAction, this.paramsObj.validParameter)
         .then(res=>{
           if (res.success) {
             //验证通过
             if(res.data.status === "SUCCESS"){
-              this.reportInfoLoading = true;
-              this.isShowReportInfo = true;
               if(res.data.taxSubList[0].dealStatus === "PROCESSING"){
                 this.selectShuiyou()
               }else{//全部成功或失败
@@ -109,9 +109,13 @@ export default {
               }
             }else{
                 //授权失败
+                this.reportInfoLoading = false;
+                this.isShowReportInfo = false;
                 this.$refs.authorizeTip.show()
             }
           }else{
+            this.reportInfoLoading = false;
+            this.isShowReportInfo = false;
             this.$message.warning(res.message)
           }
         })

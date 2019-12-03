@@ -27,9 +27,9 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
-            <el-button type="primary" plain @click="handleCopyData">复制上月数据</el-button>
-            <el-button type="primary" plain @click="handleImport">导入</el-button>
-            <el-button type="warning" plain class="export-button" @click="handleExport">导出</el-button>
+            <el-button type="primary" @click="handleCopyData">复制上月数据</el-button>
+            <el-button @click="handleImport">导入</el-button>
+            <el-button @click="handleExport">导出</el-button>
           </div>
         </div>
         <div class="staff-table">
