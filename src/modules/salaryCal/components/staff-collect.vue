@@ -38,8 +38,6 @@
                 <i :class="['num', errorActive?'active':'']">{{ failReportCount }}</i>人
               </span>
             </span>
-            <div class="content-header head-date">
-            </div>
           </div>
           <div class="staff-table">
             <el-table
@@ -48,6 +46,7 @@
               class="check-staff_table"
               @selection-change="handleSelectItem"
               :style="{width:screenWidth-40+'px'}"
+              :height="screenHeight"
             >
               <el-table-column type="selection" width="55" fixed></el-table-column>
               <el-table-column prop="empNo" label="工号"></el-table-column>
@@ -198,6 +197,7 @@ export default {
       closeModel: false,
       isSave:this.$route.query.isSave,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenHeight: document.body.clientHeight - 330,
       allActive:true,
       waitActive:false,
       errorActive:false,
@@ -219,6 +219,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 330;
       })();
     };
     that.getList();
@@ -370,7 +371,6 @@ export default {
               this.isShowIknow = true;
             }
           }else{
-
           }
         })
       },10000)
@@ -478,6 +478,7 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/scss/helpers.scss";
 .collect {
+  margin: 0px 10px;
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
@@ -493,7 +494,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px 22px 40px 22px;
+    padding: 30px 0px 0px 0px;
     .content-header {
       display: inline-block;
       font-size: 16px;
@@ -564,7 +565,7 @@ export default {
       }
       position: relative;
       .staff-page {
-        margin-top: 20px;
+        margin: 10px 0px;
         text-align: right;
       }
       .table-name {

@@ -25,6 +25,7 @@
           class="check-staff_table"
           v-loading="loading"
           :style="{width:screenWidth-300+'px'}"
+          :height="screenHeight"
         >
           <el-table-column  label="序号" type="index"></el-table-column>
           <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
@@ -35,14 +36,14 @@
               <span v-else>{{ scope.row.taxSubName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="payDate" label="税款所属期" width="160px">
+          <el-table-column prop="reportMouth" label="税款所属期" width="160px">
             <template slot-scope="scope">
-              {{ scope.row.payDate | dateStyle}}
+              {{ scope.row.reportMouth | dateStyle}}
             </template>
           </el-table-column>
           <el-table-column  label="申报表" width="150px">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" :content="subTaxReportType[scope.row.subTaxReportType]" placement="top-start" v-if="scope.row.subTaxReportType && subTaxReportType[scope.row.subTaxReportType].length>10">
+              <el-tooltip class="item" effect="dark" :content="subTaxReportType[scope.row.subTaxReportType]" placement="top-start" v-if="scope.row.subTaxReportType">
                 <span class="hidenCon">{{ subTaxReportType[scope.row.subTaxReportType] }}</span>
               </el-tooltip>
               <span v-else>{{ subTaxReportType[scope.row.subTaxReportType]}}</span>
@@ -149,6 +150,7 @@ export default {
       subTaxReportType:constData.subTaxReportType,
       payStatus:constData.payStatus,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenHeight: document.body.clientHeight - 360,
       paidList:[
         { name:"北京懒猫联银科技有限公司",tableName:"综合所得预扣预缴表",status:"申报成功",isThree:"是",paidStatus:"无需缴款",time:"2019-12-12" }
       ],
@@ -189,12 +191,13 @@ export default {
     this.agreementListForm.queryMonth = year+"-"+month;
   },
   mounted(){
-    this.getList()
+    this.getList();
     let that = this;
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 360;
       })();
     };
   },
@@ -224,6 +227,7 @@ export default {
     //三方协议列表
     getTripleAgreementList(data){
       this.tripleAgreementNo = "";
+      this.subTaxReportType = data.subTaxReportType;
       this.isShowTripleAgreementTaxList = true;
       this.tripleAgreementLoading = true;
       this.$store
@@ -254,7 +258,8 @@ export default {
        validParameter :{
          taxSubId:this.taxSubId,
          queryMonth:this.agreementListForm.queryMonth,
-         tripleAgreementNo:this.tripleAgreementNo
+         tripleAgreementNo:this.tripleAgreementNo,
+         subTaxReportType:this.subTaxReportType
        },
       validAction : "taxPaidStore/actionTaxPay",
       querytAction : "taxPaidStore/actionTaxPayQuery",
@@ -268,7 +273,7 @@ export default {
         validParameter :{
           taxSubId:row.taxSubId,
           queryMonth:this.agreementListForm.queryMonth,
-          tripleAgreementNo:this.tripleAgreementNo
+          subTaxReportType:row.subTaxReportType
         },
         querytAction : "taxPaidStore/actionTaxPayQuery",
         stopTip:"扣款",

@@ -150,7 +150,7 @@ export default {
   }
   .content-st{
     background: #fff;
-    width:96%;
+    width:98%;
     margin:0 auto;
     padding-top: 10px;
     overflow: hidden;

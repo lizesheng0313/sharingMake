@@ -44,7 +44,14 @@
       </div>
     </div>
     <div class="staff-table">
-      <el-table :data="salaryTableDataAll" class="check-staff_table" :style="{width:screenWidth-40+'px'}" :cell-style="cellStyle"  width="100%" v-loading="tableLoading"  border>
+      <el-table :data="salaryTableDataAll"
+                class="check-staff_table"
+                :style="{width:screenWidth-40+'px'}"
+                :cell-style="cellStyle"
+                width="100%"
+                :height="screenHeight"
+                v-loading="tableLoading"
+                border>
         <el-table-column
           v-for="(col,index) in salaryTableDataAll[0]"
           :min-width="setMinWidth(col.col)"
@@ -305,6 +312,7 @@
         successCount:""
       },
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenHeight: document.body.clientHeight - 430,
       fileList:[],
       isShowScreen:false,
       screenOption:[
@@ -400,6 +408,7 @@
       let day = date.getDate();
       return year+"-"+month+"-"+day+ " 00:00:00";
     },
+
     salaryShow:function () {
       return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED" || this.checkStatus==="AUDITED"
     },
@@ -409,6 +418,7 @@
     auditedShow:function(){
       return this.checkStatus === "COMPUTED"
     },
+    //取消审核
     cancelAuditeShow:function(){
       return this.checkStatus === "AUDITED" || this.checkStatus === "PAID" || this.checkStatus === "FINISH"
     },
@@ -429,6 +439,7 @@
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 430;
       })();
     };
     this.$store.commit("salaryCalStore/SET_ROULEID", this.salaryRuleId);
