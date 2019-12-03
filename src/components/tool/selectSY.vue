@@ -61,8 +61,8 @@ export default {
       }
     },
     handleExport() {
-      this.reportInfoLoading = false;
-      this.isShowReportInfo = false;
+      this.reportInfoLoading = true;
+      this.isShowReportInfo = true;
       this.$store
         .dispatch(this.validAction, this.validParameter)
         .then(res=>{
