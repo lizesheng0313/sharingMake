@@ -43,10 +43,10 @@
           </el-table-column>
           <el-table-column  label="申报表" width="150px">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" :content="subTaxReportType[scope.row.subTaxReportType]" placement="top-start" v-if="scope.row.subTaxReportType">
-                <span class="hidenCon">{{ subTaxReportType[scope.row.subTaxReportType] }}</span>
+              <el-tooltip class="item" effect="dark" :content="subTaxReportTypeObj[scope.row.subTaxReportType]" placement="top-start" v-if="scope.row.subTaxReportType">
+                <span class="hidenCon">{{ subTaxReportTypeObj[scope.row.subTaxReportType] }}</span>
               </el-tooltip>
-              <span v-else>{{ subTaxReportType[scope.row.subTaxReportType]}}</span>
+              <span v-else>{{ subTaxReportTypeObj[scope.row.subTaxReportType]}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="taxPaid" label="已缴税款"></el-table-column>
@@ -147,7 +147,13 @@ export default {
   data() {
     return {
       loading:"",
-      subTaxReportType:constData.subTaxReportType,
+      subTaxReportTypeObj :{
+        "SALARY_PAY_RULE": "正常工资薪金所得申报",
+        "PERSON_PAY_RULE": "劳务报酬所得申报",
+        "TOTAL_RULE": "综合所得预扣预缴表",
+        "BONUS_PAY_RULE":"全年一次性奖金收入申报",
+        "REMOVE_CONTRACT_RULE":"解除劳动合同一次性补偿金申报",
+      },
       payStatus:constData.payStatus,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       screenHeight: document.body.clientHeight - 360,
