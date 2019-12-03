@@ -18,8 +18,26 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
-            <el-button type="warning" plain class="export-button" @click="handleExport">全部下载</el-button>
-            <el-button type="primary" plain class="add-import" @click="handleReportInfo">获取反馈</el-button>
+            <el-button type="primary" @click="handleExport">全部下载</el-button>
+            <el-button   @click="handleReportInfo">获取反馈</el-button>
+          </div>
+        </div>
+        <div class="staff-situation">
+            <span class="staff-total">
+              <span class="part" @click="selectNum('all')">
+               全部
+               <i :class="['num', allActive?'active':'']">{{ total?total:0 }}</i>人
+              </span>
+              <span class="part" @click="selectNum('wait')">
+                待报送
+                 <i :class="['num', waitActive?'active':'']">{{ awaitReportCount?awaitReportCount:0 }}</i>人
+              </span>
+               <span class="part" @click="selectNum('error')">
+                报送失败
+                <i :class="['num', errorActive?'active':'']">{{ failReportCount?failReportCount:0 }}</i>人
+              </span>
+            </span>
+          <div class="content-header head-date">
           </div>
         </div>
         <div class="staff-table">
@@ -30,13 +48,20 @@
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empName" label="姓名"></el-table-column>
-            <el-table-column prop="idNo" label="身份证号"></el-table-column>
+            <el-table-column prop="idNo" label="身份证号" width="180"></el-table-column>
 <!--            <el-table-column label="入职日期">-->
 <!--              <template slot-scope="scope">-->
 <!--                <span>{{ scope.row.empDay.split(' ')[0] }}</span>-->
 <!--              </template>-->
 <!--            </el-table-column>-->
-            <el-table-column prop="taxSubName" label="扣缴义务人名称" width="170"></el-table-column>
+            <el-table-column prop="taxSubName" label="扣缴义务人名称" width="200">
+              <template slot-scope="scope">
+                <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
+                  <span class="hidenCon">{{ scope.row.taxSubName }}</span>
+                </el-tooltip>
+                <span v-else>{{ scope.row.taxSubName }}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="totalChildrenEdu" label="累计子女教育"></el-table-column>
             <el-table-column prop="totalFurtherEdu" label="累计继续教育"></el-table-column>
             <el-table-column prop="totalHomeLoads" label="累计住房贷款利息"></el-table-column>
@@ -98,6 +123,7 @@ export default {
       totalListForm: {
         "checkId":this.$route.query.id,
         "currPage": 1,
+        "enumReportStatus":"",
         "key": "",
         "pageSize":20 ,
       },
@@ -122,6 +148,11 @@ export default {
       setWarning:false,
       waitReportCount:0,
       showWaitReport:false,
+      awaitReportCount:"",
+      failReportCount:"",
+      allActive:true,
+      waitActive:false,
+      errorActive:false,
     };
   },
   computed:{
@@ -178,6 +209,28 @@ export default {
         }
       })
     },
+    //点击数字切换
+    selectNum(type){
+      if(type === "all"){
+        this.allActive = true;
+        this.waitActive = false;
+        this.errorActive = false;
+        this.totalListForm.enumReportStatus = "";
+      }
+      if(type==="wait"){
+        this.allActive = false;
+        this.waitActive = true;
+        this.errorActive = false;
+        this.totalListForm.enumReportStatus = "AWAIT_REPORT";
+      }
+      if(type==="error"){
+        this.allActive = false;
+        this.waitActive = false;
+        this.errorActive = true;
+        this.totalListForm.enumReportStatus = "REPORT_ERROR";
+      }
+      this.getList()
+    },
     //子组件触发刷新
     freshList(data){
       if(data === this.sign){
@@ -199,7 +252,6 @@ export default {
       }else{
         this.$refs.feedback.show(true)
       }
-
     },
     //关闭加载提示
     closeReturnMsg(){
@@ -231,6 +283,35 @@ export default {
 @import "../../../assets/scss/helpers.scss";
 .calc-attach {
   padding:0 22px;
+  .staff-situation {
+    .staff-total {
+      margin-left: 15px;
+      .part{
+        display:inline-block;
+        margin-right: 20px;
+        font-size: 13px;
+        cursor:pointer;
+        .num{
+          font-weight: bold;
+        }
+        .active{
+          color:#e6a23c;
+        }
+      }
+    }
+    margin-top: 20px;
+    color: #999;
+    font-size: 12px;
+    i {
+      color: $mainColor;
+      font-style: normal;
+      padding: 0 3px;
+    }
+    em {
+      color: #333;
+      font-style: normal;
+    }
+  }
   .waitReport{
     height: 50px;
     line-height: 50px;

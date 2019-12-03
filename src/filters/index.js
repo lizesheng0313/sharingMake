@@ -156,6 +156,12 @@ const idType = (val) => {
   }
 };
 
+const dateStyle = (val) => {
+  if(val){
+    return val.split('')[0]
+  }
+}
+
 const countryType = (val) => {
   switch (val) {
     case 'CHINA': {
@@ -170,5 +176,6 @@ export default {
   filterEmpType,
   idType,
   countryType,
-  accreditStatus
+  accreditStatus,
+  dateStyle
 }

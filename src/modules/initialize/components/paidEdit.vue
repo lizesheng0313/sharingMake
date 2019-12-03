@@ -137,18 +137,19 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/scss/helpers.scss";
 .paid-eidt {
+  padding:0px 30px;
   .secTitle{
-    margin:30px auto;
+    margin:20px auto;
     font-size: 16px;
   }
   .tip{
     font-size: 12px;
-    color:#333;
+    color:#C0C4CC;
     padding-left: 130px;
     margin-top:-5px;
   }
   .checkStyle{
-    margin-top: 40px;
+    margin: 20px 0px 10px 0px;
   }
   .con-footer{
     position: absolute;

@@ -27,28 +27,49 @@
           :style="{width:screenWidth-300+'px'}"
         >
           <el-table-column  label="序号" type="index"></el-table-column>
-          <el-table-column prop="taxSubName" label="扣缴义务人"></el-table-column>
-          <el-table-column prop="payDate" label="税款所属期"></el-table-column>
-          <el-table-column  label="申报表">
-            <template slot-scope="scope">{{ subTaxReportType[scope.row.subTaxReportType]}}</template>
+          <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
+            <template slot-scope="scope">
+              <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName && scope.row.taxSubName.length>10">
+                <span class="hidenCon">{{ scope.row.taxSubName }}</span>
+              </el-tooltip>
+              <span v-else>{{ scope.row.taxSubName }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="payDate" label="税款所属期" width="160px">
+            <template slot-scope="scope">
+              {{ scope.row.payDate | dateStyle}}
+            </template>
+          </el-table-column>
+          <el-table-column  label="申报表" width="150px">
+            <template slot-scope="scope">
+              <el-tooltip class="item" effect="dark" :content="subTaxReportType[scope.row.subTaxReportType]" placement="top-start" v-if="scope.row.subTaxReportType && subTaxReportType[scope.row.subTaxReportType].length>10">
+                <span class="hidenCon">{{ subTaxReportType[scope.row.subTaxReportType] }}</span>
+              </el-tooltip>
+              <span v-else>{{ subTaxReportType[scope.row.subTaxReportType]}}</span>
+            </template>
           </el-table-column>
           <el-table-column prop="taxPaid" label="已缴税款"></el-table-column>
           <el-table-column  label="缴款状态">
-            <template slot-scope="scope">{{ payStatus[scope.row.payStatus]}}</template>
-          </el-table-column>
-          <el-table-column prop="payDate" label="缴款日期" width="140">
-          </el-table-column>
-          <el-table-column label="操作" fixed="right" width="320px">
             <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="getTripleAgreementList(scope.row)">发起缴款</el-button>
-              <el-button type="primary" size="mini" @click="queryTaxPay(scope.row)">缴款反馈</el-button>
+              <span>{{ payStatus[scope.row.payStatus] }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="payDate" label="缴款日期" width="160px">
+            <template slot-scope="scope">
+              {{ scope.row.payDate | dateStyle}}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" fixed="right" width="280px">
+            <template slot-scope="scope">
+              <span class="funStyle" @click="getTripleAgreementList(scope.row)">发起缴款</span>
+              <span class="funStyle" @click="queryTaxPay(scope.row)">缴款反馈</span>
               <el-popover
                 ref="popMore"
-                placement="right"
-                width="300"
+                placement="bottom-end"
+                width="250"
                 trigger="hover">
-                <el-button type="primary" plain @click="getTripleAgreement(scope.row)">获取三方协议下载</el-button>
-                <el-button type="primary" plain @click="getTripleAgreementQuery(scope.row)">三方协议反馈</el-button>
+                <span class="funStyle" @click="getTripleAgreement(scope.row)">获取三方协议下载</span>
+                <span class="funStyle" @click="getTripleAgreementQuery(scope.row)">三方协议反馈</span>
                 <span slot="reference" class="more-choose">更多>></span>
               </el-popover>
             </template>

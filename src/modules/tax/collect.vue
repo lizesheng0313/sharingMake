@@ -27,8 +27,8 @@
             </div>
             <div class="right">
               <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
-              <el-button type="primary" class="add-import" @click="handleReportInfo">获取反馈</el-button>
-              <el-button type="primary" class="add-import" @click="handleExport">导出</el-button>
+              <el-button  class="add-import" @click="handleReportInfo">获取反馈</el-button>
+              <el-button  class="add-import" @click="handleExport">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -97,7 +97,7 @@
               <el-table-column prop="idType" label="证件类型" width="140">
                 <template slot-scope="scope">{{scope.row.idType | idType}}</template>
               </el-table-column>
-              <el-table-column prop="idNo" label="证件号码" width="140"></el-table-column>
+              <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
               <el-table-column prop="empSex" label="性别" width="140">
                 <template slot-scope="scope">{{returnStatus('empSex',scope.row.empSex)}}</template>
               </el-table-column>
@@ -126,8 +126,8 @@
               <el-table-column label="国籍" width="140">
                 <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
               </el-table-column>
-              <el-table-column prop="reportFinishTime" label="更新时间" width="140"></el-table-column>
-              <el-table-column prop="updateTime" label="最近操作时间" width="140"></el-table-column>
+              <el-table-column prop="reportFinishTime" label="更新时间" width="180"></el-table-column>
+              <el-table-column prop="updateTime" label="最近操作时间" width="180"></el-table-column>
             </el-table>
             <el-pagination
               @current-change="handleSelectionChange"
@@ -701,7 +701,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px 0 40px 22px;
+    padding: 22px 22px 40px 22px;
     .content-header {
       display: inline-block;
       font-size: 16px;
@@ -732,7 +732,7 @@ export default {
       }
     }
     .add-import {
-      margin-right: 10px;
+      /*margin-right: 10px;*/
     }
     .iconiconfonticonfontsousuo1 {
       font-size: 12px;

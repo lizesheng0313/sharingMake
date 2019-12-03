@@ -34,7 +34,7 @@
           <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
         </div>
         <div class="right">
-          <el-button type="warning" plain class="export-button" @click="handleExport">导出</el-button>
+          <el-button  class="export-button" @click="handleExport">导出</el-button>
         </div>
       </div>
       <div class="screening">
@@ -322,7 +322,6 @@ export default {
       }
     }
     .select_tax-payer {
-      margin-top: 18px;
       font-size: 14px;
       color: #999;
       em {
@@ -341,7 +340,7 @@ export default {
     }
   }
   .check-staff-menu {
-    margin-top: 30px;
+    /*margin-top: 30px;*/
     .search-input {
       width: 250px;
     }
@@ -360,7 +359,7 @@ export default {
         overflow-x: auto;
       }
       position: relative;
-      margin-top: 27px;
+      margin-top: 10px;
       .staff-page {
         margin-top: 20px;
         text-align: right;

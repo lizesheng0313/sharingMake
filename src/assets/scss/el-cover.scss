@@ -250,3 +250,31 @@
     color: #303133 !important;
   }
 }
+//超出部分隐藏
+.hidenCon{
+  width:200px;
+  overflow: hidden;
+  word-break: keep-all;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor:pointer;
+}
+.funStyle{
+  color:$mainColor;
+  cursor: pointer;
+  padding:0px 10px;
+  font-size: 14px;
+}
+.paid-eidt{
+  .el-checkbox__input.is-checked + .el-checkbox__label{
+    color:#606266;
+  }
+  .el-checkbox__input.is-checked .el-checkbox__inner{
+    background-color: #606266;
+    border-color: #606266;
+  }
+}
+.el-step.is-simple:not(:last-of-type) .el-step__title{
+  max-width: 60%;
+  word-break: break-all;
+}
