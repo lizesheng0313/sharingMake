@@ -61,6 +61,8 @@ export default {
       }
     },
     handleExport() {
+      this.reportInfoLoading = false;
+      this.isShowReportInfo = false;
       this.$store
         .dispatch(this.validAction, this.validParameter)
         .then(res=>{
@@ -78,9 +80,13 @@ export default {
                 this.isShowIknow = true;
               }
             }else{//授权失败
+              this.reportInfoLoading = false;
+              this.isShowReportInfo = false;
               this.$refs.authorizeTip.show()
             }
           }else{
+            this.reportInfoLoading = false;
+            this.isShowReportInfo = false;
             this.$message.warning(res.message)
           }
         })

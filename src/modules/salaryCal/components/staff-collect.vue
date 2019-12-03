@@ -296,6 +296,8 @@ export default {
             }
           ).then(() => {
             this.reportInfoList = [];
+            this.isShowReportInfo = true;
+            this.reportInfoLoading = true;
             //报送
             this.$store
               .dispatch("taxPageStore/actionReport", {
@@ -307,8 +309,6 @@ export default {
                 if (res.success) {
                   //验证通过
                   if(res.data.status === "SUCCESS"){
-                    this.isShowReportInfo = true;
-                    this.reportInfoLoading = true;
                     this.reportInfoList = res.data.taxSubList;
                     //是否进行下步查询
                     if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
@@ -318,9 +318,13 @@ export default {
                       this.isShowIknow = true;
                     }
                   }else{//授权失败
+                    this.isShowReportInfo = false;
+                    this.reportInfoLoading = false;
                     this.$refs.authorizeTip.show()
                   }
                 }else{
+                  this.isShowReportInfo = false;
+                  this.reportInfoLoading = false;
                   this.$message.warning(res.message)
                 }
               });

@@ -319,6 +319,7 @@ export default {
     margin-top: 20px;
     color:#909399;
     border-left:4px solid #E6A23C;
+    background:#FDF7E9;
     padding-left: 20px;
     position: relative;
     .bold{
@@ -327,8 +328,8 @@ export default {
     }
     .close-style{
       position: absolute;
-      top:0px;
-      right:0px;
+      top:10px;
+      right:10px;
       cursor: pointer;
     }
   }
@@ -356,6 +357,7 @@ export default {
     font-size: 12px;
     color: #666;
     margin-bottom: 20px;
+    background: #FDF7E9;
   }
   .tax-content {
     .company-collection {

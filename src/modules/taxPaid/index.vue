@@ -234,7 +234,8 @@ export default {
         .dispatch(
           "taxPaidStore/actionTripleAgreementList",{
             taxSubId:data.taxSubId,
-            queryMonth:this.agreementListForm.queryMonth
+            queryMonth:this.agreementListForm.queryMonth,
+            subTaxReportType:this.subTaxReportType
           }
         )
         .then(res => {
