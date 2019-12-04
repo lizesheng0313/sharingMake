@@ -131,7 +131,7 @@ export default {
         "date":""
       },
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 400,
+      screenHeight: document.body.clientHeight - 334,
       list: [],
       total: 0,
       validAction:"taxPageStore/actionDownloadAddition",
@@ -169,7 +169,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 400;
+        this.screenHeight = document.body.clientHeight - 334;
       })();
     };
   },
@@ -198,6 +198,7 @@ export default {
           if (res.success) {
             this.waitReportCount = res.data;
             this.showWaitReport = this.waitReportCount != 0;
+            if(this.waitReportCount == 0) {this.screenHeight+=60}
           }
         });
     },
@@ -314,8 +315,8 @@ export default {
     }
   }
   .waitReport{
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     margin-top: 20px;
     color:#909399;
     border-left:4px solid #E6A23C;
@@ -436,7 +437,7 @@ export default {
     }
   }
   .check-staff-menu {
-    margin-top: 30px;
+    margin-top: 20px;
     .search-input {
       width: 250px;
     }
@@ -456,7 +457,7 @@ export default {
       }
       position: relative;
       .staff-page {
-        margin-top: 20px;
+        margin: 12px 0px;
         text-align: right;
       }
     }

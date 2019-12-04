@@ -347,7 +347,7 @@ export default {
       isShowInfoColl: true,
       isShowScreening: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
-      screenHeight: document.body.clientHeight - 364,
+      screenHeight: document.body.clientHeight - 316,
       list: [],
       closeModel: false,
       unNormalIds:[],
@@ -370,7 +370,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 364;
+        this.screenHeight = document.body.clientHeight - 316;
       })();
     };
   },
@@ -688,7 +688,6 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
 .collect {
-  margin-right: 22px;
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
@@ -704,7 +703,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 22px 0px 40px 22px;
+    padding: 10px 20px 0px 20px;
     .content-header {
       display: inline-block;
       font-size: 16px;
@@ -765,7 +764,7 @@ export default {
       }
       position: relative;
       .staff-page {
-        margin-top: 20px;
+        margin-top: 10px;
         text-align: right;
       }
       .table-name {

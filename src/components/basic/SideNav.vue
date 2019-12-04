@@ -10,7 +10,7 @@
       </el-submenu>
       <el-submenu index="report">
         <template slot="title">
-          <i class="iconfont iconshenbao"></i>
+          <i class="iconfont icongeshuishenbao"></i>
           <span>个税申报</span>
         </template>
         <el-menu-item index="/tax/collect">人员信息采集</el-menu-item>
@@ -19,14 +19,14 @@
       </el-submenu>
       <el-submenu index="taxPaid">
         <template slot="title">
-          <i class="iconfont iconshenbao"></i>
+          <i class="iconfont iconshuikuanjiaona"></i>
           <span>税款缴纳</span>
         </template>
         <el-menu-item index="/taxPaid/paid">三方协议缴税</el-menu-item>
       </el-submenu>
       <el-submenu index="/initialize">
         <template slot="title">
-          <i class="iconfont iconshenbao"></i>
+          <i class="iconfont iconchushihuashezhi"></i>
           <span>初始化设置</span>
         </template>
         <el-menu-item index="/initialize/paid">扣缴义务人管理</el-menu-item>

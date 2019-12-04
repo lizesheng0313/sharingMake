@@ -197,7 +197,7 @@ export default {
       closeModel: false,
       isSave:this.$route.query.isSave,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 330,
+      screenHeight: document.body.clientHeight - 280,
       allActive:true,
       waitActive:false,
       errorActive:false,
@@ -219,7 +219,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 330;
+        this.screenHeight = document.body.clientHeight - 280;
       })();
     };
     that.getList();
@@ -482,7 +482,6 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/scss/helpers.scss";
 .collect {
-  margin: 0px 10px;
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
@@ -498,7 +497,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px 0px 0px 0px;
+    padding: 30px 20px 0px 20px;
     .content-header {
       display: inline-block;
       font-size: 16px;
@@ -524,7 +523,6 @@ export default {
   .screening {
     .check-staff-menu {
       .search-input {
-        margin-left: 10px;
         width: 205px;
       }
     }
@@ -536,7 +534,6 @@ export default {
     }
     .staff-situation {
       .staff-total {
-        margin-left: 15px;
         .part{
           display:inline-block;
           margin-right: 20px;

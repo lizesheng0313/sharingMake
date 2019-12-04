@@ -312,7 +312,7 @@
         successCount:""
       },
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 430,
+      screenHeight: document.body.clientHeight - 340,
       fileList:[],
       isShowScreen:false,
       screenOption:[
@@ -495,6 +495,7 @@
           if (res.success) {
             this.waitReportCount = res.data;
             this.showWaitReport = this.waitReportCount != 0;
+            if(this.waitReportCount == 0) {this.screenHeight+=60}
           }
         });
     },
@@ -819,11 +820,12 @@
   padding: 0 20px;
   box-sizing: border-box;
   .waitReport{
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     margin-top: 20px;
     color:#909399;
     border-left:4px solid #E6A23C;
+    background:#FDF7E9;
     padding-left: 20px;
     position: relative;
     .bold{
@@ -832,8 +834,8 @@
     }
     .close-style{
       position: absolute;
-      top:0px;
-      right:0px;
+      top:10px;
+      right:10px;
       cursor: pointer;
     }
   }
@@ -859,14 +861,14 @@
     margin-left:26px;
   }
   .check-staff-menu {
-    margin-top: 30px;
+    margin-top: 20px;
     .search-input {
       width: 215px;
     }
   }
   .iconiconfonticonfontsousuo1 {font-size: 12px;}
   .staff-situation {
-    margin-top: 25px;
+    margin-top: 10px;
     font-size: 12px;
     .staff-total {
       color: #999;
@@ -898,7 +900,7 @@
       overflow-x: auto;
     }
     position: relative;
-    margin-top: 20px;
+    margin-top: 10px;
     .floating-menu {
       position: absolute;
       left: 100px;
@@ -915,7 +917,7 @@
       }
     }
     .staff-page {
-      margin-top: 20px;
+      margin:12px 0px;
       text-align: right;
     }
   }
