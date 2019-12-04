@@ -495,6 +495,7 @@
           if (res.success) {
             this.waitReportCount = res.data;
             this.showWaitReport = this.waitReportCount != 0;
+            if(this.waitReportCount == 0) {this.screenHeight+=60}
           }
         });
     },

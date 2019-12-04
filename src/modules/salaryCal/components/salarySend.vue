@@ -88,6 +88,7 @@
           "key": "",
           "pageSize":20 ,
         },
+        active:this.$route.query.active,
         screenWidth: document.body.clientWidth, // 屏幕尺寸
         isShowIncrease: false,
         count:0,
@@ -230,8 +231,8 @@
       },
       //返回
       goBack(){
-        this.$emit("changeActive",5);
-        this.$router.push({path:"/salaryCheck",query:{id:this.salaryForm.checkId,active:4,salaryRuleId:this.$route.query.salaryRuleId}})
+        this.$emit("changeActive",this.active-1);
+        this.$router.push({path:"/salaryCheck",query:{id:this.salaryForm.checkId,active:this.active-1,salaryRuleId:this.$route.query.salaryRuleId}})
       }
     }
   };
@@ -263,7 +264,7 @@
       }
     }
     .check-staff-menu {
-      margin-top: 66.5px;
+      margin-top: 0px;
       .search-input {
         width: 215px;
       }

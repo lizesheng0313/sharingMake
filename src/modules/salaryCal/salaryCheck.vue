@@ -22,7 +22,7 @@
         </div>
       </div>
       <div slot="fs-container" class="content-st">
-        <div class="step-box" v-if="active!==6">
+        <div class="step-box" v-if="active != StepArr.length">
             <el-steps :active="active" finish-status="success" simple style="margin-top: 20px">
 <!--              <el-step title="核对人员" @click.native = "goStep(0)" style="cursor: pointer;"></el-step>-->
 <!--              <el-step title="人员信息采集" @click.native = "goStep(1)" style="cursor: pointer;"></el-step>-->
@@ -83,6 +83,7 @@ export default {
       active: typeof (this.$route.query.active) == "string" ? this.$route.query.active-0 : this.$route.query.active-0,
       normalStepArr:['核对人员','人员信息采集',"专项附加扣除","社保公积金","核算薪资","发放薪资"],
       salaryStepArr:['核对人员','人员信息采集',"核算薪资","发放薪资"],
+      StepArr:[],
       //     'title':'核对对人员',
       //     'title':'人员信息采集',
       //     'title':'核对对人员',
@@ -100,9 +101,11 @@ export default {
        return  this.salaryItem.salaryRuleName + " " +this.salaryItem.date
     }
   },
-
+  created(){
+    this.StepArr = this.salaryItem.taxRule === 'SALARY_PAY_RULE' ? this.normalStepArr : this.salaryStepArr
+    console.log(this.StepArr.length)
+  },
   mounted(){
-    console.log()
   },
   methods: {
     handle(val){
