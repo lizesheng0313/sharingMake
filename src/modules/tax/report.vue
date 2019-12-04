@@ -603,7 +603,7 @@ export default {
       }
       span {
         position: absolute;
-        left: 32px;
+        /*left: 32px;*/
         top: 3px;
         z-index: 0;
       }

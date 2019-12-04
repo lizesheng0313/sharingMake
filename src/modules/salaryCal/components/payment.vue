@@ -2,7 +2,7 @@
   <div class="payment">
     <div class="box">
       <div class="box-con">
-        <img src="../../../assets/images/item1.png" alt="" width="49px" height="50px">
+        <img src="../../../assets/images/bank.png" alt="" width="49px" height="50px">
         <div class="box-fun">
           <p class="box-title">银行代发</p>
           <p class="tip">使用银行代发服务完成在线发薪</p>
