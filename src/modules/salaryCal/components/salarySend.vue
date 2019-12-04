@@ -47,7 +47,14 @@
         <el-button size="mini" class="button-mini" @click="handleBatchSend" v-if="selectUserStatusList.includes('已发放')">批量发放</el-button>
         <el-button size="mini" class="button-mini" @click="handleBatchCancel" v-if="selectUserStatusList.includes('未发放')">批量撤回</el-button>
       </div>
-      <el-table :data="salaryList" class="check-staff_table" :style="{width:screenWidth-40+'px'}" v-loading="salaryLoading"  @selection-change="handleSelectionChange" :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}">
+      <el-table :data="salaryList"
+                class="check-staff_table"
+                :style="{width:screenWidth-40+'px'}"
+                v-loading="salaryLoading"
+                @selection-change="handleSelectionChange"
+                :header-cell-style="{'background-color': '#F7F7F7','color':'#333333'}"
+                :height="screenHeight"
+      >
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column
           min-width="180"
@@ -90,6 +97,7 @@
         },
         active:this.$route.query.active,
         screenWidth: document.body.clientWidth, // 屏幕尺寸
+        screenHeight: document.body.clientHeight - 270,
         isShowIncrease: false,
         count:0,
         selectUserIdList:[],
@@ -107,6 +115,7 @@
         return (() => {
           window.screenWidth = document.body.clientWidth;
           that.screenWidth = window.screenWidth;
+          this.screenHeight = document.body.clientHeight - 270
         })();
       };
       this.loading();
@@ -199,7 +208,6 @@
            }
          })
        })
-      console.log(this.selectUserIdList)
       },
       //批量发放
       handleBatchSend(){
@@ -292,6 +300,7 @@
     }
     .el-pagination{
       text-align: right;
+      padding:12px 0px;
     }
     .search{
       display: inline-block;
