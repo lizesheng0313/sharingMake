@@ -210,7 +210,7 @@ export default {
       fileList: [],
       myHeaders:{Authorization:this.$store.state.token},
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 330,
+      screenHeight: document.body.clientHeight - 280,
       input: "",
       isShowIncrease: false,
       tableData: [

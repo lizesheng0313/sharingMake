@@ -299,7 +299,7 @@ export default {
     margin:20px 0px;
   }
   .table-content{
-    padding-left:22px;
+    padding:0px 20px;
   }
   .check-search {
     margin-left: 20px;

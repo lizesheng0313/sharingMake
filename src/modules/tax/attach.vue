@@ -125,7 +125,7 @@ export default {
       selectMonth: defaultDate,
       isShowUpdate: false,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 336,
+      screenHeight: document.body.clientHeight - 326,
       list: [],
       total: 0,
       updateRules: {
@@ -154,7 +154,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 360;
+        this.screenHeight = document.body.clientHeight - 326;
       })();
     };
     this.getTaxSubjectInfoList();
@@ -267,7 +267,7 @@ export default {
     margin-bottom: 20px;
   }
   .tax-content {
-    padding: 22px;
+    padding: 20px 20px 0px 20px;
     .company-collection {
       height: 80px;
       padding: 20px 0;

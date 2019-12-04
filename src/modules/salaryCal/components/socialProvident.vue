@@ -123,7 +123,7 @@ export default {
         key: "",
       },
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 320,
+      screenHeight: document.body.clientHeight - 256,
       list: [],
       total: 0,
       radioList: [
@@ -151,7 +151,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 320
+        this.screenHeight = document.body.clientHeight - 256
       })();
     };
   },
@@ -358,14 +358,15 @@ export default {
   }
   .screening {
     .staff-table {
+      position: relative;
+      margin-top: 10px;
       .check-staff_table {
         overflow-x: auto;
       }
-      position: relative;
-      margin-top: 27px;
       .staff-page {
-        margin-top: 20px;
+        margin: 12px 0px;
         text-align: right;
+
       }
     }
   }
