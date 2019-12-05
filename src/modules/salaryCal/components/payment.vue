@@ -6,8 +6,8 @@
         <div class="box-fun">
           <p class="box-title">银行代发</p>
           <p class="tip">使用银行代发服务完成在线发薪</p>
-<!--          <div><el-button type="primary">提交代发数据</el-button></div>-->
-          <div><el-button type="primary">启动代发</el-button></div>
+          <div><el-button type="primary" v-if="payrollStatus" @click="sendData">提交代发数据</el-button></div>
+          <div><el-button type="primary" v-else>启动代发</el-button></div>
         </div>
       </div>
     </div>
@@ -65,6 +65,7 @@ export default {
       checkId:this.$route.query.id,
       active:this.$route.query.active,
       checkStatus:"",
+      payrollStatus:""
     };
   },
   created(){
@@ -95,6 +96,7 @@ export default {
         .then(res=>{
           if(res.code ==="0000"){
             this.checkStatus = res.data.checkStatus;
+            this.payrollStatus = res.data.payrollStatus
           }
         })
     },
@@ -114,6 +116,25 @@ export default {
           this.$message.error(res.message)
         }
       })
+    },
+    //提交代发数据
+    sendData(){
+      if(['AUDITED','PAID' ,'FINISH'].includes(this.checkStatus)){
+        this.$confirm(
+          "提交发薪数据成功后，不允许再修改发薪数据，您可前往银行代发，是否确定提交。",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+            center: false
+          }
+        ).then(() => {
+
+        }).catch(() => {});
+      }else{
+        this.$message.warning("工资数据未审核，请先审核再提交发薪数据.")
+
+      }
     },
     //查看记录
     seeRecord(){
