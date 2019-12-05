@@ -334,6 +334,14 @@ export function apiMemberErrorRecord(uuid) {
   })
 }
 
+// 核对人员下载日志
+export function apiPayrollCredit(id) {
+  return fetch({
+    url: '/api/salary/stubs/payrollCredit/'+id,
+    method: 'post',
+  })
+}
+
 
 
 

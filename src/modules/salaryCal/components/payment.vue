@@ -65,7 +65,9 @@ export default {
       checkId:this.$route.query.id,
       active:this.$route.query.active,
       checkStatus:"",
-      payrollStatus:""
+      payrollStatus:"",
+      noCardListShow:false.
+        noCardList:[]
     };
   },
   created(){
@@ -129,7 +131,14 @@ export default {
             center: false
           }
         ).then(() => {
-
+          this.$store.dispatch('salaryCalStore/actionPayrollCredit',this.checkId).then(res=>{
+            if(res.data.success){
+              this.$message.success("银行代发成功")
+            }else{
+              this.noCardListShow = true;
+              this.noCardList = res.data.list.PayrollCreditDto
+            }
+          })
         }).catch(() => {});
       }else{
         this.$message.warning("工资数据未审核，请先审核再提交发薪数据.")
