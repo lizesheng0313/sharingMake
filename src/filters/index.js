@@ -15,6 +15,9 @@ const texRule = (val) => {
     case 'PERSON_PAY_RULE': {
       return '按劳务报酬所得计算个税';
     }
+    case 'YEAR_END_BONUS': {
+      return '按全年一次性奖金计算个税';
+    }
   }
 };
 //薪资核算状态
@@ -31,6 +34,9 @@ const salaryCheckStatus = (val) => {
     }
     case 'CHECKED_SALARY': {
       return '薪资已核对';
+    }
+    case 'WAIT_BACK': {
+      return '待反馈';
     }
     case 'AUDIT_REJECT': {
       return '审核拒绝';
@@ -116,6 +122,19 @@ const getDay = (val) => {
       }
   }
 };
+const accreditStatus = (val) => {
+  switch (val) {//仲裁类别
+    case 'SUCCESS': {
+      return '授权成功';
+    }
+    case 'FAIL': {
+      return '授权失败';
+    }
+    case 'WAIT_ACCREDIT': {
+      return '待反馈';
+    }
+  }
+};
 const filtersSalaryType = (val) => {
   switch (val) {
     case 'NO_PROVIDE': {
@@ -137,6 +156,12 @@ const idType = (val) => {
   }
 };
 
+const dateStyle = (val) => {
+  if(val){
+    return val.split(' ')[0]
+  }
+}
+
 const countryType = (val) => {
   switch (val) {
     case 'CHINA': {
@@ -151,4 +176,6 @@ export default {
   filterEmpType,
   idType,
   countryType,
+  accreditStatus,
+  dateStyle
 }

@@ -18,7 +18,7 @@
             <i class="iconsanjiao iconfont"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="delete" :disabled="deleteDisabled">全部删除</el-dropdown-item>
+            <el-dropdown-item command="delete">全部删除</el-dropdown-item>
             <el-dropdown-item command="export">导出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -44,9 +44,15 @@
       </div>-->
       <div class="floating-menu" v-if="selectUserIdList.length>0">
         <span>已选中{{selectUserIdList.length}}人</span>
-        <el-button size="mini" class="button-mini" @click="handleDelete(selectUserIdList)" :disabled="deleteDisabled">批量删除</el-button>
+        <el-button size="mini" class="button-mini" @click="handleDelete(selectUserIdList)">批量删除</el-button>
       </div>
-      <el-table :data="userList" class="check-staff_table" :style="{width:screenWidth-40+'px'}" v-loading="userLoading"  @selection-change="handleSelectionChange">
+      <el-table :data="userList"
+                class="check-staff_table"
+                :style="{width:screenWidth-40+'px'}"
+                v-loading="userLoading"
+                @selection-change="handleSelectionChange"
+                :height="screenHeight"
+      >
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column label="姓名" width="104px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
@@ -110,12 +116,13 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleDelete([scope.row.id])" :disabled="deleteDisabled">删除</el-button>
+            <el-button size="mini" @click="handleDelete([scope.row.id])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
         @current-change="handleCurrentChange"
+        class="page-style"
         @size-change="handleSizeChange"
         :current-page="userForm.currPage"
         :page-sizes="[20, 50, 100, 200]"
@@ -203,6 +210,7 @@ export default {
       fileList: [],
       myHeaders:{Authorization:this.$store.state.token},
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenHeight: document.body.clientHeight - 280,
       input: "",
       isShowIncrease: false,
       tableData: [
@@ -220,7 +228,6 @@ export default {
       },
       userList:[],
       count:0,
-      fileList:[],
       userLoading:false,
       imgFlag:false,
       percent:0,
@@ -238,6 +245,7 @@ export default {
         successCount:""
       },
       deleteDisabled:false,
+      setWarning:false,
       closeModel:false,
     };
   },
@@ -247,6 +255,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
+        that.screenHeight = document.body.clientHeight - 330;
       })();
     };
     this.loading();
@@ -265,7 +274,9 @@ export default {
         }
       })
       //总计
-      this.summary()
+      this.summary();
+      //检测工资状态
+      this.getSalaryStatus();
     },
     summary(){
       apiCheckMemberSummary(this.userForm.checkId)
@@ -282,7 +293,7 @@ export default {
       this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.userForm.checkId).then(res=>{
         if(res.code === "0000"){
           this.checkStatus = res.data.checkStatus;
-          this.deleteDisabled = !(this.checkStatus ==='INIT' || this.checkStatus ==='COMPUTED');
+          this.setWarning = (this.checkStatus ==='AUDITED' || this.checkStatus ==='PAID' || this.checkStatus ==='FINISH');
         }
       })
     },
@@ -293,24 +304,29 @@ export default {
         }
       })
     },
+    //单个删除
     handleDelete(id) {
-      this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center:false
-      })
-        .then(() => {
-          apiCheckMemberdelete(id,this.userForm.checkId).then(res=>{
-            if(res.code === "0000"){
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
-              this.loading()
-            }
-          })
-        }).catch(() => {});
+      if(this.setWarning){
+        this.$message.warning("工资表已审核，不允许操作。")
+      }else{
+        this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+          center:false
+        })
+          .then(() => {
+            apiCheckMemberdelete(id,this.userForm.checkId).then(res=>{
+              if(res.code === "0000"){
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+                this.loading()
+              }
+            })
+          }).catch(() => {});
+      }
     },
     // 下载导入人员日志
     downloadLog(){
@@ -386,29 +402,37 @@ export default {
     },
     handleDropdown(val){
       if(val === 'delete'){
-        this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-          center:false
-        })
-          .then(() => {
-            this.$store.dispatch('salaryCalStore/deleteCheckMemberDeleteAll',this.userForm.checkId).then(res=>{
-              if(res.code === "0000"){
-                this.loading();
-                this.$message.success("删除成功")
-              }
-            })
-          }).catch(() => {});
-
+        if(this.setWarning){
+          this.$message.warning("工资表已审核，不允许操作。")
+        }else{
+          this.$confirm("您确定要删除数据，如果是，请点击“确定”，如果否，请点击“取消”", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+            center:false
+          })
+            .then(() => {
+              this.$store.dispatch('salaryCalStore/deleteCheckMemberDeleteAll',this.userForm.checkId).then(res=>{
+                if(res.code === "0000"){
+                  this.loading();
+                  this.$message.success("删除成功")
+                }
+              })
+            }).catch(() => {});
+        }
       }else{
         window.location.href = "/api/salary/checkMember/export?checkId="+this.userForm.checkId+"&"+"key="+this.userForm.key
       }
     },
+    //增员导入
     showIncrease(){
-      this.isShowIncrease = true;
-      this.fileList = [];
-      this.uuid = ""
+      if(this.setWarning){
+        this.$message.warning("工资表已审核，不允许操作。")
+      }else{
+        this.isShowIncrease = true;
+        this.fileList = [];
+        this.uuid = ""
+      }
     },
     importMemberFinish(){
       this.loading();
@@ -440,7 +464,7 @@ export default {
       padding-right: 15px;
       margin-right: 15px;
     }
-    margin-top: 25px;
+    margin-top: 20px;
     color: #999;
     font-size: 12px;
     i {
@@ -454,7 +478,6 @@ export default {
       overflow-x: auto;
     }
     position: relative;
-    margin-top: 27px;
     .staff-page {
       margin-top: 20px;
       text-align: right;
@@ -462,6 +485,7 @@ export default {
   }
   .el-pagination{
     text-align: right;
+    margin: 10px 0px;
   }
   .importFinishDialog{
     .title{

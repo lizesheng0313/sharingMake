@@ -4,7 +4,7 @@
       :fsTitle="'人员信息'"
       :bgColor="'#fff'"
       class="info-collection"
-      :goUrl="'/tax/collect'"
+      :goUrl="'-1'"
     >
       <span slot="fs-button">关闭</span>
       <div slot="fs-container">
@@ -307,7 +307,8 @@ export default {
               )
               .then(res => {
                 if (res.success) {
-                  this.$router.push({path:"/tax/collect",query:{isSave:true}})
+                  // this.$router.push({path:"/tax/collect",query:{isSave:true}})
+                 this.$router.go(-1)
                 }
               });
           }

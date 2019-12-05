@@ -13,7 +13,7 @@
         <div class="diy-el_radio">
           <el-radio-group v-model="radio">
             <div v-for="(item,index) in radioList" :key="index">
-              <el-radio :label="index+1" @change="handleRadioValue">{{item.title}}</el-radio>
+              <el-radio :label="item.lable" @change="handleRadioValue">{{item.title}}</el-radio>
             </div>
           </el-radio-group>
         </div>
@@ -42,7 +42,7 @@
           </span>
           <span v-else-if="successCount === 0">数据全部未通过校验</span>
           <span>
-            <a @click="handleDownload" v-if="failCount !== 0" classs="download">下载日志</a>
+            <a @click="handleDownload" v-if="failCount !== 0" class="download">下载日志</a>
           </span>
         </div>
         <p>
@@ -62,10 +62,10 @@
       <div class="title">
         <i class="el-icon-success"></i>导入完成
       </div>
-      <div>
+      <div class="importCount">
         导入成功
-        <span style="color:#06B806">{{importFinishForm.successCount}}</span>条数据,
-        <span style="color:red">{{importFinishForm.failCount}}</span>条数据导入未通过，忽略导入
+        <span style="color:#06B806">{{importFinishForm.successCount}}</span> 条数据,
+        <span style="color:red">{{importFinishForm.failCount}}</span> 条数据导入未通过，忽略导入
       </div>
       <div>
         <a @click="handleDownload" v-if="importFinishForm.failCount !== 0" class="download">下载日志</a>
@@ -87,6 +87,7 @@ export default {
     parameterData: Object, //校验参数
     impoartAction: String, //导入通过数据接口  需为action
     title: String, //标题,
+    sendRadio:String,
     uploadFileData: Object, //导入通过数据参数
     tips:String,
   },
@@ -94,11 +95,11 @@ export default {
     return {
       myHeaders: { Authorization: this.$store.state.token },
       isShowIncrease: false,
-      radio: 1,
       importFinishForm: {
         failCount: "",
         successCount: ""
       },
+      radio:"",
       isShowIncreaseFinish: false,
       failCount: 0,
       fileList: [],
@@ -106,6 +107,9 @@ export default {
       uuid: "",
       closeModel:false
     };
+  },
+  created(){
+    this.radio = this.sendRadio;
   },
   methods: {
     handleTemplate() {
@@ -117,6 +121,7 @@ export default {
     //改变radio
     show() {
       this.isShowIncrease = true;
+      this.fileList = [];
     },
     handleRadioValue(value) {
       this.$emit("changeRadioValue", value);
@@ -156,10 +161,15 @@ export default {
       return isxls && isLt5M;
     },
     handleSuccess(res, file) {
-      let data = res.data;
-      this.successCount = data.successCount;
-      this.failCount = data.failCount;
-      this.uuid = data.uuid;
+      if(res.success){
+        let data = res.data;
+        this.successCount = data.successCount;
+        this.failCount = data.failCount;
+        this.uuid = data.uuid;
+      }else{
+        this.$message.warning(res.message)
+      }
+
     },
     importMemberFinish() {
       this.isShowIncrease = false;
@@ -173,6 +183,9 @@ export default {
 .import-data {
   .download {
     cursor: pointer;
+  }
+  .importCount{
+    margin:10px auto;
   }
 }
 </style>

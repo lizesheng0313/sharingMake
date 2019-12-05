@@ -5,7 +5,9 @@ import { routerConfig } from './routerConfig'
 //router
 import salaryCal from 'modules/salaryCal/router'
 import tax from 'modules/tax/router'
-import cumulative from 'modules/cumulative/router'
+import taxPaid from 'modules/taxPaid/router'
+import initialize from 'modules/initialize/router'
+
 
 
 Vue.use(Router)
@@ -23,7 +25,8 @@ let router = new Router({
     },
     ...salaryCal,
     ...tax,
-    ...cumulative
+    ...taxPaid,
+    ...initialize
   ]
 })
 routerConfig(router)

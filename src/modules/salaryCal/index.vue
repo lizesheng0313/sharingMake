@@ -15,7 +15,6 @@
     </header>
     <div class="salary-cal-content">
       <div class="content-header head-date">
-        <i class="el-icon-arrow-left"></i>
         <span>{{resetDate}}</span>
         <el-date-picker
           v-model="currentDate"
@@ -26,7 +25,6 @@
           :clearable="false"
           @change="changeDate"
         ></el-date-picker>
-        <i class="el-icon-arrow-right"></i>
       </div>
       <div class="salary-payroll">
         <div class="payroll-box" v-for="(item,index) in salaryRuleUsedList">
@@ -60,7 +58,7 @@
                 </el-select>
                 <el-button type="primary" @click="InitCalcSalary(item)" v-show="item.salaryCheckStatus === 'NONE'">启动算薪</el-button>
 <!--                <p v-show="item.salaryCheckStatus === 'NONE'">启动算薪时，系统根据算薪范围生成本月计薪人员</p>-->
-                <el-button type="primary" @click="calcSalary(item)" v-show="item.salaryCheckStatus === 'INIT'">计算薪资</el-button>
+                <el-button type="primary" @click="calcSalary(item)" v-show="['INIT','WAIT_BACK'].includes(item.salaryCheckStatus)">计算薪资</el-button>
                 <el-button type="primary" @click="seeCalcSalary(item)" v-show="item.salaryCheckStatus === 'COMPUTED' || item.salaryCheckStatus === 'AUDITED' || item.salaryCheckStatus === 'FINISH' || item.salaryCheckStatus === 'PAID'">查看薪资</el-button>
               </div>
             </el-col>
@@ -138,7 +136,7 @@ export default {
     }else{
       let nowDate = fun.headDate();
       let year = nowDate.year;
-      let month = nowDate.month > 10 ? nowDate.month : "0" + nowDate.month;
+      let month = nowDate.month >= 10 ? nowDate.month : "0" + nowDate.month;
       this.currentDate = year+"-"+month;
     }
     this.loading();
@@ -197,7 +195,7 @@ export default {
       }).then(res=>{
         if(res.code == "0000"){
           this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
-          this.$router.push({path:"/salaryCheck",query:{id:res.data.checkId,active:1,salaryRuleId:item.salaryRuleId}})
+          this.$router.push({path:"/salaryCheck",query:{id:res.data.checkId,active:0,salaryRuleId:item.salaryRuleId}})
         }else{
           this.$message.error(res.message);
         }
@@ -207,13 +205,14 @@ export default {
     calcSalary(item){
       this.$store.commit("salaryCalStore/SET_BASICINFOFORM",item.salaryRule);
       this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
-      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:2,salaryRuleId:item.salaryRuleId}});
+      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:0,salaryRuleId:item.salaryRuleId}});
     },
-    //查看信息
+    //查看薪资
     seeCalcSalary(item){
+      let sendActive = item.taxRule === 'SALARY_PAY_RULE' ?4:2;
       this.$store.commit("salaryCalStore/SET_BASICINFOFORM",item.salaryRule);
       this.$store.commit("salaryCalStore/SET_SALARYITEM",item);
-      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:2,salaryRuleId:item.salaryRuleId}})
+      this.$router.push({path:"/salaryCheck",query:{id:item.id,active:sendActive,salaryRuleId:item.salaryRuleId}})
     },
     //切换查看第几次发薪
     changePayth(index,status){

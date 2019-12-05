@@ -4,7 +4,7 @@
   width: 223px;
   height: auto;
   background: #4a535e;
-  min-height: 87vh;
+  min-height: 85.2vh;
   overflow: hidden;
   .el-menu {
     border: none;
@@ -45,11 +45,11 @@
 
 .head-date{
   .el-input--prefix .el-input__inner{
-    border:none;
     font-size: 16px;
+    padding-left: 14px;
   }
   .el-input__prefix{
-    right:-60px;
+    right:-74px;
     top:-1px;
     color: #2C7CFF;
     .el-input__icon{
@@ -65,7 +65,7 @@
   }
 }
 .el-date-editor.el-input{
-  width: 180px;
+  width: 130px;
 }
 .sflary-el-step{
   .el-step__main {
@@ -94,6 +94,9 @@
       color: #C0C4CC;
     }
   }
+  .el-steps--simple{
+    padding: 13px 4%;
+  }
 }
 .check-staff{
   .el-input__suffix{
@@ -106,8 +109,23 @@
 }
 .cumulative{
   .el-input__suffix{
-    top:-2px;
+    top:2px;
     cursor: pointer;
+  }
+  .el-select{
+    margin-right:20px;
+    width:100px;
+  }
+  .selectCon{
+    .el-select{
+      width:220px;
+    }
+    .el-input--suffix .el-input__inner{
+      border:none;
+    }
+    .el-select__caret{
+      font-weight: bolder;
+    }
   }
 }
 .diy-el_dialog{
@@ -206,10 +224,6 @@
 .search-input .el-input__icon{
    line-height:34px;
 }
-.cumulative .el-select{
-  margin-right:20px;
-  width:100px;
-}
 .collect{
   .search-input{
     .el-input__inner{
@@ -235,4 +249,32 @@
   .el-step__title.is-finish{
     color: #303133 !important;
   }
+}
+//超出部分隐藏
+.hidenCon{
+  width:200px;
+  overflow: hidden;
+  word-break: keep-all;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor:pointer;
+}
+.funStyle{
+  color:$mainColor;
+  cursor: pointer;
+  padding:0px 10px;
+  font-size: 14px;
+}
+.paid-eidt{
+  .el-checkbox__input.is-checked + .el-checkbox__label{
+    color:#606266;
+  }
+  .el-checkbox__input.is-checked .el-checkbox__inner{
+    background-color: #606266;
+    border-color: #606266;
+  }
+}
+.el-step.is-simple:not(:last-of-type) .el-step__title{
+  max-width: 60%;
+  word-break: break-all;
 }

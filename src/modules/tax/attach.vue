@@ -8,8 +8,7 @@
       </el-row>
     </header>
     <div class="tax-content">
-      <div class="content-header head-date">
-        <i class="el-icon-arrow-left"></i>
+      <div class="content-header head-date" style="display: inline-block">
         <span>{{selectMonth}}</span>
         <el-date-picker
           v-model="selectMonth"
@@ -19,23 +18,9 @@
           :editable="false"
           :clearable="false"
         ></el-date-picker>
-        <i class="el-icon-arrow-right"></i>
       </div>
-      <div class="screening">
-        <div class="company-collection">
-          <div
-            v-for="(item,index) in taxSubjectInfolist"
-            :key="index"
-            class="company-item clearfix"
-          >
-            <span class="company-name left">{{item.taxSubName}}</span>
-            <span
-              class="download-total left"
-            >已下载 {{item.downloadCount||0}} 人的数据 {{item.downloadDate}}</span>
-            <span class="update-value right" @click="handleShowUpdated(item)">更新累计值</span>
-          </div>
-        </div>
-        <div class="clearfix check-staff-menu">
+      <div class="input-" style="float: right;width: 80%">
+        <div style="width: 200px">
           <el-input
             placeholder="请输入姓名\证件号码"
             v-model="totalListForm.nameOrMore"
@@ -44,13 +29,15 @@
             @keyup.enter.native="handleSearch"
             class="search-input left"
           ></el-input>
-          <div class="left">
-            <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
-          </div>
-          <div class="right">
-            <el-button type="warning" plain class="export-button" @click="handleExport">导出</el-button>
-          </div>
         </div>
+        <div class="left">
+          <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
+        </div>
+        <div class="right">
+          <el-button  class="export-button" @click="handleExport">导出</el-button>
+        </div>
+      </div>
+      <div class="screening">
         <div class="select_tax-payer">
           扣缴义务人：
           <el-dropdown trigger="click">
@@ -77,6 +64,7 @@
             class="check-staff_table"
             :style="{width:screenWidth-285+'px'}"
             v-loading="loading"
+            :height="screenHeight"
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empName" label="姓名" width="130"></el-table-column>
@@ -86,11 +74,11 @@
                 <span>{{ scope.row.empDay.split(' ')[0] }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="140"></el-table-column>
-            <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="140"></el-table-column>
-            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="累计住房租金" width="140"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="累计赡养老人" width="140"></el-table-column>
+            <el-table-column prop="totalChildrenEdu" label="累计子女教育"></el-table-column>
+            <el-table-column prop="totalFurtherEdu" label="累计继续教育"></el-table-column>
+            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息"></el-table-column>
+            <el-table-column prop="totalHouseRent" label="累计住房租金"></el-table-column>
+            <el-table-column prop="totalSupportParents" label="累计赡养老人"></el-table-column>
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
@@ -103,36 +91,6 @@
         </div>
       </div>
     </div>
-    <el-dialog title="输入密码" :visible.sync="isShowUpdate" width="450px" center class="diy-el_dialog">
-      <el-form
-        :rules="updateRules"
-        label-width="140px"
-        ref="updatedForm"
-        class
-        :model="updatedFormData"
-        :close-on-click-modal="closeModel"
-      >
-        <el-form-item label="扣缴义务人：">
-          <span class="company-name">{{currenCompanyName}}</span>
-        </el-form-item>
-        <el-form-item label="输入密码：" prop="password">
-          <el-input type="password" v-model="updatedFormData.password"></el-input>
-        </el-form-item>
-        <el-form-item label="输入验证码：" prop="capText">
-          <el-input type="text" v-model="updatedFormData.capText" style="width:90px"></el-input>
-          <img
-            :src="`/api/taxReport/getCaptcha/${updatedFormData.captchaId}/captcha`"
-            alt
-            class="dialog-cap_test"
-            @click="getCode"
-          />
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleUpdateValue" :loading="submitLoading">确定</el-button>
-        <el-button @click="isShowUpdate=false" :disabled="updateDisabled">取消</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -140,8 +98,7 @@ import { mapState } from "vuex";
 import fun from "@/util/fun"
 let date = fun.headDate();
 let defaultDate =
-  date.year + "年" + (date.month > 10 ? date.month : "0" + date.month) + "月";
-
+  date.year + "年" + (date.month >= 10 ? date.month : "0" + date.month) + "月";
 export default {
   components: {},
   data() {
@@ -168,6 +125,7 @@ export default {
       selectMonth: defaultDate,
       isShowUpdate: false,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
+      screenHeight: document.body.clientHeight - 326,
       list: [],
       total: 0,
       updateRules: {
@@ -196,6 +154,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 326;
       })();
     };
     this.getTaxSubjectInfoList();
@@ -253,29 +212,6 @@ export default {
       this.totalListForm.currPage = 1;
       this.getList();
     },
-    handleUpdateValue() {
-      this.updateDisabled = true;
-      this.$refs.updatedForm.validate(valid => {
-        if (valid) {
-          this.submitLoading = true;
-          this.$store
-            .dispatch(
-              "taxPageStore/actionDownloadOtherTotal",
-              this.updatedFormData
-            )
-            .then(res => {
-              this.submitLoading = false;
-              this.updateDisabled = false;
-              if (res.success) {
-                this.isShowUpdate = false;
-                this.$message.success("更新累计值成功");
-                this.getList();
-                this.getTaxSubjectInfoList();
-              }
-            });
-        }
-      });
-    },
     getList() {
       this.loading = true;
       this.$store
@@ -331,7 +267,7 @@ export default {
     margin-bottom: 20px;
   }
   .tax-content {
-    padding: 22px;
+    padding: 20px 20px 0px 20px;
     .company-collection {
       height: 80px;
       padding: 20px 0;
@@ -383,13 +319,12 @@ export default {
       }
       span {
         position: absolute;
-        left: 32px;
+        /*left: 32px;*/
         top: 3px;
         z-index: 0;
       }
     }
     .select_tax-payer {
-      margin-top: 18px;
       font-size: 14px;
       color: #999;
       em {
@@ -408,7 +343,7 @@ export default {
     }
   }
   .check-staff-menu {
-    margin-top: 30px;
+    /*margin-top: 30px;*/
     .search-input {
       width: 250px;
     }
@@ -427,9 +362,9 @@ export default {
         overflow-x: auto;
       }
       position: relative;
-      margin-top: 27px;
+      margin-top: 10px;
       .staff-page {
-        margin-top: 20px;
+        margin-top: 10px;
         text-align: right;
       }
     }

@@ -39,14 +39,16 @@
               <el-table-column label="序号" type="index"></el-table-column>
               <el-table-column prop="taxSubName" label="扣缴义务人名称"></el-table-column>
               <el-table-column prop="taxPayerNo" label="纳税人识别号"></el-table-column>
-              <el-table-column prop="remark" label="办税人员姓名"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
+              <el-table-column prop="remark" label="经办人姓名"></el-table-column>
+              <el-table-column prop="accreditStatus" label="授权状态"></el-table-column>
+              <el-table-column prop="failReason" label="未通过原因"></el-table-column>
               <el-table-column label="操作" fixed="right">
-                <template slot-scope="scope">
-                  <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
-                  <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
-                </template>
-              </el-table-column>
+              <template slot-scope="scope">
+                <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
+                <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
+              </template>
+            </el-table-column>
             </el-table>
           </div>
         </div>
@@ -89,7 +91,9 @@
 </template>
 <script>
 import { mapState } from "vuex";
+
 export default {
+
   data() {
     return {
       loading: false,
@@ -130,7 +134,8 @@ export default {
       list: [],
       isShowScreen: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
-      closeModel:false
+      closeModel:false,
+      popShow:false,
     };
   },
   mounted() {
@@ -145,21 +150,21 @@ export default {
   methods: {
     //新增
     handleShowBox() {
-      this.newBodyFormData.taxSubId = "";
-      this.currentTypeName = "新增";
-      this.isShowScreen = true;
-      this.$nextTick(() => {
-        this.$refs.taxListForm.resetFields();
-      });
+      this.popShow = true;
+      // this.newBodyFormData.taxSubId = "";
+      // this.currentTypeName = "新增";
+      // this.isShowScreen = true;
+      // this.$nextTick(() => {
+      //   this.$refs.taxListForm.resetFields();
+      // });
     },
     //编辑
     handleEditor(row) {
-      this.isShowScreen = true;
-      this.currentTypeName = "修改";
-      this.$nextTick(() => {
-        this.newBodyFormData = { ...row };
-        this.$refs.taxListForm.clearValidate();
-      });
+      this.popShow = true
+      // this.$nextTick(() => {
+      //   this.newBodyFormData = { ...row };
+      //   this.$refs.taxListForm.clearValidate();
+      // });
     },
     handleNewBody() {
       this.$refs.taxListForm.validate(valid => {

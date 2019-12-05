@@ -30,7 +30,7 @@
                 <el-input v-model="basicInfoForm.name"></el-input>
               </el-form-item>
               <el-form-item label="计税规则" prop="taxRule" class="taxRule">
-                <el-select v-model="basicInfoForm.taxRule" placeholder="请选择" @change="selectMonth">
+                <el-select v-model="basicInfoForm.taxRule" placeholder="请选择" @change="selectMonth" :disabled="isEdit">
                   <el-option v-for="item in taxRuleOptions"
                              :key="item.value"
                              :label="item.label"
@@ -73,7 +73,7 @@
                   </el-option>
                 </el-select></span>
               </el-form-item>
-              <el-form-item label="启动单月多次算发薪">
+              <el-form-item label="启动单月多次算发薪" v-if="basicInfoForm.taxRule !== 'YEAR_END_BONUS'">
                 <el-switch
                   v-model="basicInfoForm.enableMiltSalary"
                   active-text=""
@@ -207,6 +207,9 @@ export default {
         }, {
           value: 'PERSON_PAY_RULE',
           label: '按劳务报酬所得计算个税'
+        },{
+          value: 'YEAR_END_BONUS',
+          label:" 按全年一次性奖金计算个税"
         }
       ],
       payMonthOptions:[
