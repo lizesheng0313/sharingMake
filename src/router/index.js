@@ -13,6 +13,7 @@ import initialize from 'modules/initialize/router'
 Vue.use(Router)
 
 let router = new Router({
+  // base:'/pSalary',
   mode: 'history',
   saveScrollPosition: true,
   scrollBehavior: () => ({

@@ -33,6 +33,10 @@
                 待报送
                  <i :class="['num', waitActive?'active':'']">{{ awaitReportCount }}</i>人
               </span>
+               <span class="part" @click="selectNum('back')">
+                待反馈
+                 <i :class="['num', backActive?'active':'']">{{ awaitFeedBackCount }}</i>人
+              </span>
                <span class="part" @click="selectNum('error')">
                 报送失败
                 <i :class="['num', errorActive?'active':'']">{{ failReportCount }}</i>人
@@ -99,7 +103,14 @@
               <el-table-column label="国籍" width="100">
                 <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
               </el-table-column>
-<!--              <el-table-column prop="reportFinishTime" label="更新时间" width="110"></el-table-column>-->
+              <el-table-column  label="反馈信息" width="110">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason.length>10">
+                    <span class="hidenCon">{{ scope.row.failReason }}</span>
+                  </el-tooltip>
+                  <span v-else>{{ scope.row.failReason }}</span>
+                </template>
+              </el-table-column>
 <!--              <el-table-column prop="updateTime" label="最近操作时间" width="110"></el-table-column>-->
             </el-table>
             <el-pagination
@@ -182,8 +193,9 @@ export default {
       loading: false,
       isShowScreening:false,
       ids: [],
-      awaitReportCount:"",
-      failReportCount:"",
+      awaitReportCount:0,
+      failReportCount:0,
+      awaitFeedBackCount:0,
       reportInfoList:[],
       reportReturnList:[],
       isShowReturnInfo:false,
@@ -201,6 +213,7 @@ export default {
       allActive:true,
       waitActive:false,
       errorActive:false,
+      backActive:"",
       checkStatus:"",
       setWarning:"",
       allIds:[],
@@ -237,6 +250,7 @@ export default {
             this.list = res.data.data;
             this.awaitReportCount = res.data.awaitReportCount;
             this.failReportCount = res.data.failReportCount;
+            this.awaitFeedBackCount = res.data.awaitFeedBackCount;
           }
         });
     this.getSalaryStatus()
@@ -257,23 +271,33 @@ export default {
     },
     selectNum(type){
       if(type === "all"){
-           this.allActive = true;
-           this.waitActive = false;
-           this.errorActive = false;
-           this.ruleForm.enumReportStatus = "";
+        this.allActive = true;
+        this.waitActive = false;
+        this.errorActive = false;
+        this.backActive = false;
+        this.ruleForm.enumReportStatus = "";
         }
       if(type==="wait"){
-          this.allActive = false;
-          this.waitActive = true;
-          this.errorActive = false;
+        this.allActive = false;
+        this.waitActive = true;
+        this.errorActive = false;
+        this.backActive = false;
           this.ruleForm.enumReportStatus = "AWAIT_REPORT";
-        }
+      }
+      if(type==="back"){
+        this.allActive = false;
+        this.waitActive = false;
+        this.backActive = true;
+        this.errorActive = false;
+        this.ruleForm.enumReportStatus = "REPORTING";
+      }
       if(type==="error"){
           this.allActive = false;
           this.waitActive = false;
+          this.backActive = false;
           this.errorActive = true;
           this.ruleForm.enumReportStatus = "REPORT_ERROR";
-        }
+       }
         this.getList()
       },
     //报送
@@ -641,6 +665,14 @@ export default {
       display: inline-block;
     }
   }
-}
+}  //超出部分隐藏
+.hidenCon{
+    width:200px;
+    overflow: hidden;
+    word-break: keep-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor:pointer;
+  }
 </style>
 

@@ -50,11 +50,21 @@
               </el-dropdown>
             </span>
             <span class="staff-total">
-              正常
-              <i>{{normalCount}}</i>人
-              <span class="wait-report">
+              <span class="wait-report" @click="selectNum('REPORT_SUCCESS')">
+                正常
+                <i :class="['num', successActive?'active':'']">{{ normalCount }}</i>人
+              </span>
+              <span class="wait-report" @click="selectNum('AWAIT_REPORT')">
                 待报送
-                <i>{{awaitReportCount}}</i>人
+                <i :class="['num', waitActive?'active':'']">{{ awaitReportCount }}</i>人
+              </span>
+              <span class="wait-report" @click="selectNum('REPORTING')">
+                待反馈
+                <i :class="['num', backActive?'active':'']">{{ awaitFeedBackCount }}</i>人
+              </span>
+               <span class="wait-report" @click="selectNum('REPORT_ERROR')">
+                报送失败
+                <i :class="['num', errorActive?'active':'']">{{ failReportCount }}</i>人
               </span>
             </span>
             <span>
@@ -129,6 +139,14 @@
               </el-table-column>
               <el-table-column prop="reportFinishTime" label="更新时间" width="180"></el-table-column>
               <el-table-column prop="updateTime" label="最近操作时间" width="180"></el-table-column>
+              <el-table-column prop="updateTime" label="反馈信息" width="120">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason.length>10">
+                    <span class="hidenCon">{{ scope.row.failReason }}</span>
+                  </el-tooltip>
+                  <span v-else>{{ scope.row.failReason }}</span>
+                </template>
+              </el-table-column>
             </el-table>
             <el-pagination
               @current-change="handleSelectionChange"
@@ -316,7 +334,7 @@ export default {
         reportFinishTimeStart: "",
         reportStatus: [],
         workerType: [],
-        taxSubjectId: ""
+        taxSubjectId: "",
       },
       loading: false,
       reportForm: {
@@ -335,7 +353,13 @@ export default {
       increaseCount: 0,
       decreaseCount: 0,
       awaitReportCount: 0,
+      awaitFeedBackCount:0,
       normalCount: 0,
+      failReportCount:0,
+      successActive:false,
+      backActive:false,
+      waitActive:false,
+      errorActive:false,
       total: 0,
       idValidStatus: true,
       reportStatus: true,
@@ -352,6 +376,12 @@ export default {
       closeModel: false,
       unNormalIds:[],
       // isSave:this.$route.query.isSave,
+      reportNumList:[
+        {
+          "title":"正常",
+          "val":this.total
+        }
+      ],
     };
   },
   components:{
@@ -361,6 +391,9 @@ export default {
     ...mapState("salaryCalStore", {
       salaryItem:"salaryItem"
     })
+  },
+  created(){
+
   },
   mounted() {
     this.getTaxSubjectInfoList();
@@ -375,6 +408,18 @@ export default {
     };
   },
   methods: {
+    selectNum(type){
+      //正常
+      if(type === "REPORT_SUCCESS"){ this.successActive = true; this.waitActive = false; this.backActive = false ; this.errorActive = false;}
+      //待报送
+      if(type === "AWAIT_REPORT"){  this.successActive = false; this.waitActive = true; this.backActive = false ; this.errorActive = false;}
+      //待反馈
+      if(type==="REPORTING"){  this.successActive = false; this.waitActive = false; this.backActive = true ; this.errorActive = false;}
+      //报送失败
+      if(type==="REPORT_ERROR"){  this.successActive = false;  this.waitActive = false; this.backActive = false ; this.errorActive = true; }
+      this.ruleForm.reportStatus = type;
+      this.getList()
+    },
     getList() {
       this.loading = true;
       this.$store
@@ -388,6 +433,8 @@ export default {
             this.decreaseCount = res.data.decreaseCount;
             this.awaitReportCount = res.data.awaitReportCount;
             this.normalCount = res.data.normalCount;
+            this.failReportCount = res.data.failReportCount;
+            this.awaitFeedBackCount = res.data.awaitFeedBackCount;
           }
         });
     },
@@ -749,7 +796,6 @@ export default {
       color: #999;
       font-size: 12px;
       i {
-        color: $mainColor;
         font-style: normal;
         padding: 0 3px;
       }
@@ -781,6 +827,17 @@ export default {
   .dialog-footer{
     text-align: right;
     margin-top: 20px;
+  }
+  .wait-report{
+    margin-right:20px;
+    cursor: pointer;
+    .num{
+      font-weight: bold;
+      color: $mainColor;
+    }
+    .active{
+      color:#e6a23c;
+    }
   }
 }
 .screen-dialog {
