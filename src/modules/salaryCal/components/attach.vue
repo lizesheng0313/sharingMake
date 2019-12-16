@@ -81,7 +81,7 @@
             <el-table-column prop="totalSupportParents" label="累计赡养老人"></el-table-column>
             <el-table-column  label="反馈信息" width="110">
               <template slot-scope="scope">
-                <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason.length>10">
+                <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
                   <span class="hidenCon">{{ scope.row.failReason }}</span>
                 </el-tooltip>
                 <span v-else>{{ scope.row.failReason }}</span>

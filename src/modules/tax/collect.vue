@@ -56,15 +56,15 @@
               </span>
               <span class="wait-report" @click="selectNum('AWAIT_REPORT')">
                 待报送
-                <i :class="['num', waitActive?'active':'']">{{ awaitReportCount }}</i>人
+                <i :class="['num', waitActive?'active':'']">{{ awaitReportCount?awaitReportCount:0 }}</i>人
               </span>
               <span class="wait-report" @click="selectNum('REPORTING')">
                 待反馈
-                <i :class="['num', backActive?'active':'']">{{ awaitFeedBackCount }}</i>人
+                <i :class="['num', backActive?'active':'']">{{ awaitFeedBackCount ? awaitFeedBackCount:0 }}</i>人
               </span>
                <span class="wait-report" @click="selectNum('REPORT_ERROR')">
                 报送失败
-                <i :class="['num', errorActive?'active':'']">{{ failReportCount }}</i>人
+                <i :class="['num', errorActive?'active':'']">{{ failReportCount ? failReportCount:0 }}</i>人
               </span>
             </span>
             <span>
@@ -141,7 +141,7 @@
               <el-table-column prop="updateTime" label="最近操作时间" width="180"></el-table-column>
               <el-table-column prop="updateTime" label="反馈信息" width="120">
                 <template slot-scope="scope">
-                  <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason.length>10">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
                     <span class="hidenCon">{{ scope.row.failReason }}</span>
                   </el-tooltip>
                   <span v-else>{{ scope.row.failReason }}</span>
@@ -376,12 +376,6 @@ export default {
       closeModel: false,
       unNormalIds:[],
       // isSave:this.$route.query.isSave,
-      reportNumList:[
-        {
-          "title":"正常",
-          "val":this.total
-        }
-      ],
     };
   },
   components:{
