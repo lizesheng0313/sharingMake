@@ -50,6 +50,10 @@
               </el-dropdown>
             </span>
             <span class="staff-total">
+              <span class="wait-report" @click="selectNum('')">
+                全部
+                <i :class="['num', allActive?'active':'']">{{ total }}</i>人
+              </span>
               <span class="wait-report" @click="selectNum('REPORT_SUCCESS')">
                 正常
                 <i :class="['num', successActive?'active':'']">{{ normalCount }}</i>人
@@ -356,6 +360,7 @@ export default {
       awaitFeedBackCount:0,
       normalCount: 0,
       failReportCount:0,
+      allActive:true,
       successActive:false,
       backActive:false,
       waitActive:false,
@@ -403,14 +408,16 @@ export default {
   },
   methods: {
     selectNum(type){
+      //全部
+      if(type===""){this.allActive = true;this.successActive = false;  this.waitActive = false;this.backActive = false ; this.errorActive = false; }
       //正常
-      if(type === "REPORT_SUCCESS"){ this.successActive = true; this.waitActive = false; this.backActive = false ; this.errorActive = false;}
+      if(type === "REPORT_SUCCESS"){this.allActive = false;this.successActive = true; this.waitActive = false; this.backActive = false ; this.errorActive = false;}
       //待报送
-      if(type === "AWAIT_REPORT"){  this.successActive = false; this.waitActive = true; this.backActive = false ; this.errorActive = false;}
+      if(type === "AWAIT_REPORT"){this.allActive = false;this.successActive = false; this.waitActive = true; this.backActive = false ; this.errorActive = false;}
       //待反馈
-      if(type==="REPORTING"){  this.successActive = false; this.waitActive = false; this.backActive = true ; this.errorActive = false;}
+      if(type==="REPORTING"){this.allActive = false;this.successActive = false; this.waitActive = false; this.backActive = true ; this.errorActive = false;}
       //报送失败
-      if(type==="REPORT_ERROR"){  this.successActive = false;  this.waitActive = false; this.backActive = false ; this.errorActive = true; }
+      if(type==="REPORT_ERROR"){this.allActive = false;this.successActive = false;  this.waitActive = false; this.backActive = false ; this.errorActive = true; }
       this.ruleForm.reportStatus = type;
       this.getList()
     },

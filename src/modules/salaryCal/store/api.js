@@ -135,6 +135,16 @@ export function apiSalaryList(form) {
     data:form
   })
 }
+
+//薪资计算失败记录
+export function apiSalaryCheckFailRecord(form) {
+  return fetch({
+    url: '/api/salary/salaryCheckFailRecord',
+    method: 'post',
+    data:form
+  })
+}
+
 //薪资核算合计
 export function apiSalarySum(form) {
   return fetch({

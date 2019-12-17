@@ -7,6 +7,11 @@
         </el-col>
       </el-row>
     </header>
+    <div class="waitReport">
+      <div>存在“计算失败”的人员 <span class="failStyle bold" @click="showFail">{{ failReportCount }}</span> 人，点击数字可查看计算失败名单和原因</div>
+      <div v-if="showWaitReport">存在“待报送”的人员 <span class="bold">{{ waitReportCount }}</span> 人，待报送人员无法参与个税计算，如需计算，请在“人员采集报送”界面中先完成报送！</div>
+      <i class="el-icon-close close-style" @click="showWaitReport=false"></i>
+    </div>
     <div class="tax-content">
       <div class="content-header head-date" style="display: inline-block">
         <span>{{selectDate}}</span>
@@ -25,7 +30,7 @@
         <el-button type="primary" v-if="showSend" @click="handleGenerateData('update')">更新申报数据</el-button>
         <el-button type="primary" v-if="showSend" @click="handleSendReport">发送申报</el-button>
         <el-button type="primary" v-if="showSendQ" @click="handleSendReportQ">发送申报反馈</el-button>
-        <el-button  v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
+        <el-button v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
         <el-button type="primary" v-if="showFeedback" @click="handleGetFeedback">获取反馈</el-button>
         <el-button type="primary" v-if="showFeedbackQ" @click="handleGetFeedbackQ">获取反馈查询</el-button>
         <el-button type="primary" v-if="showInvalid" @click="handleInvalid">作废申报</el-button>
@@ -170,6 +175,27 @@
     <selectSY ref="selectSY" :timeObj="timeObj" :sign="sign"></selectSY>
     <!-- 查询-->
     <feedback ref="feedback" :sign="sign"></feedback>
+    <!--计算失败记录-->
+    <el-dialog
+      title="计算失败记录"
+      :visible.sync="isShowFail"
+      width="600px"
+      center
+      :close-on-click-modal="closeModel"
+    >
+      <div class="failTip">生成申报表失败，以下员工数据存在问题，请参考错误信息处理后更新申报数据</div>
+      <el-table :data="failList">
+        <el-table-column prop="name" label="姓名"></el-table-column>
+        <el-table-column prop="empName" label="证件号码"></el-table-column>
+        <el-table-column prop="empName" label="扣缴义务人"></el-table-column>
+        <el-table-column prop="empName" label="计算状态"></el-table-column>
+        <el-table-column prop="empName" label="反馈信息"></el-table-column>
+      </el-table>
+      <div style="text-align: center;margin-top: 20px;">
+        <el-button type="primary">导出</el-button>
+        <el-button @click="isShowFail = false">关闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -251,6 +277,11 @@ export default {
         fourth:22000,
       },
       sign:"taxReport",
+      failList:[],
+      isShowFail:false,
+      waitReportCount:0,
+      failReportCount:0,
+      showWaitReport:false,
     };
   },
   computed: {
@@ -312,6 +343,9 @@ export default {
             this.reportType = res.data.reportType;
             this.total = res.data.count;
             this.list = res.data.data;
+            this.failReportCount = res.data.failReportCount;
+            this.awaitReportCount = res.data.awaitReportCount;
+
             if (this.list.length == 0 && flag) {
               this.$message({
                 message: "暂无申报数据",
@@ -320,6 +354,15 @@ export default {
             }
           }
         });
+    },
+    //失败原因
+    showFail(){
+      this.isShowFail = true
+      this.$store
+        .dispatch("salaryCalStore/actionSalaryCheckFailRecord", this.salaryForm)
+        .then(res => {
+          console.log(res)
+        })
     },
     //展示收入，已缴税额
     showSalary(subTaxReportType,data){
@@ -567,6 +610,29 @@ export default {
     font-size: 12px;
     color: #666;
     margin-bottom: 20px;
+  }
+  .waitReport{
+    height: 40px;
+    line-height: 40px;
+    margin-top: 20px;
+    color:#909399;
+    border-left:4px solid #E6A23C;
+    background:#FDF7E9;
+    padding-left: 20px;
+    position: relative;
+    .bold{
+      color:#E6A23C;
+      font-weight: bold;
+    }
+    .failStyle{
+      cursor: pointer;
+    }
+    .close-style{
+      position: absolute;
+      top:10px;
+      right:10px;
+      cursor: pointer;
+    }
   }
   .tax-content {
     padding: 22px;
