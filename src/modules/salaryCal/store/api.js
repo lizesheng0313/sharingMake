@@ -144,6 +144,14 @@ export function apiSalaryCheckFailRecord(form) {
     data:form
   })
 }
+//薪资计算导出
+export function apiSalaryCheckFailRecordExport(form) {
+  return fetchFile({
+    url: '/api/salary/salaryCheckFailRecordExport',
+    method: 'post',
+    data:form
+  })
+}
 
 //薪资核算合计
 export function apiSalarySum(form) {
@@ -344,16 +352,20 @@ export function apiMemberErrorRecord(uuid) {
   })
 }
 
-// 核对人员下载日志
+// 银行代发状态
 export function apiPayrollCredit(id) {
   return fetch({
     url: '/api/salary/stubs/payrollCredit/'+id,
     method: 'post',
   })
 }
-
-
-
+//撤销银行代发
+export function apiPayrollCreditCancel(id) {
+  return fetch({
+    url: '/api/salary/stubs/payrollCreditCancel/'+id,
+    method: 'post',
+  })
+}
 
 
 
