@@ -136,8 +136,11 @@ export default {
         type: 'warning',
       }).then(() => {
         this.$store.dispatch('salaryCalStore/actionPayrollCreditCancel',this.checkId).then(res=>{
-          if(res.success){
-            this.$message.success("撤销成功")
+          if(res.payrollStatus === "SUCCESS"){
+            this.$message.success("撤销成功");
+            this._loading()
+          }else{
+            this.$message.warning(res.message);
           }
         })
       })

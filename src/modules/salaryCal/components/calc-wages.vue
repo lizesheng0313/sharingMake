@@ -21,6 +21,7 @@
         <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShowQ" @click="handleReportInfo">获取算税结果</el-button>
         <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')">薪资审核</el-button>
         <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')">取消审核</el-button>
+        <el-button @click="handleBigTable">放大</el-button>
       </div>
     </div>
     <div class="staff-situation clearfix">
@@ -324,6 +325,47 @@
         <el-button @click="isShowFail = false">关闭</el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      :visible.sync="isShowBigTable"
+      width="100%"
+      height="100%"
+      :close-on-click-modal="closeModel"
+      class="big-table"
+    >
+      <div class="staff-table">
+        <el-table :data="salaryTableDataAll"
+                  class="check-staff_table"
+                  :style="{width:screenWidth-40+'px'}"
+                  :cell-style="cellStyle"
+                  width="100%"
+                  :height="screenHeight"
+                  v-loading="tableLoading"
+                  border>
+          <el-table-column
+            v-for="(col,index) in salaryTableDataAll[0]"
+            :min-width="setMinWidth(col.col)"
+            :show-overflow-tooltip="col.col === '部门' || col.col === '岗位' || col.col === '工号' || col.col === '姓名'"
+            :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="[0,1,2,3].includes(index)">
+            <template slot-scope="scope">
+            <span>
+<!--              <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>-->
+              {{ filterVal(scope['row'][index]) }}
+            </span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+          :current-page="salaryForm.currPage"
+          :page-sizes="[20, 50, 100, 200]"
+          :page-size="salaryForm.pageSize"
+          layout="total, sizes, prev, pager, next"
+          :total="count"
+          class="staff-page">
+        </el-pagination>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -453,6 +495,7 @@
       failList:[],
       isShowFail:false,
       isShowWaitReport:false,
+      isShowBigTable:false
     };
   },
   computed:{
@@ -555,6 +598,9 @@
         .then(res => {
           this.failList = res.data;
         })
+    },
+    handleBigTable(){
+      this.isShowBigTable = true
     },
     handleExport(){
       this.$store

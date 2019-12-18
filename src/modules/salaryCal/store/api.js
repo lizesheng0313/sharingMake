@@ -251,15 +251,11 @@ export function apiGetStubs(id) {
   })
 }
 //工资表设置
-export function apiEditStubs({salaryId,stubsMsg,itemIds}) {
+export function apiEditStubs(data) {
   return fetch({
     url: '/api/salary/stubs/editStubs',
     method: 'post',
-    data: {
-      salaryId:salaryId,
-      stubsMsg:stubsMsg,
-      itemIds:itemIds
-    },
+    data: data,
   })
 }
 //获取核算状态
