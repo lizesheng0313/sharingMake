@@ -9,7 +9,7 @@
           <side-nav></side-nav>
         </div>
         <div class="flex1 div-content" :class="{'no-margin':!isShowApp}">
-          <router-view></router-view>
+          <router-view class="router-view"></router-view>
         </div>
       </div>
     </div>
@@ -37,22 +37,34 @@ export default {
 </script>
 <style lang="scss" scoped>
 .app-page {
-  .div-content {
-    background: #fff;
-    margin-left: 17px;
-    margin-right: 24px;
-    border-radius: 7px;
+  height: 100%;
+  background-size: 100% 100%;
+  background-position: center center;
+  .router-view {
+    box-sizing: border-box;
+    padding: 15px 0 0 15px;
   }
   .no-margin {
     margin: 0;
   }
-}
-.side-nav {
-  width: 223px;
-  flex-grow: 0;
-  background: #4a535e;
-  box-shadow: 0 0 56px 0 #f1f1f1;
+
+  .side-nav {
+    width: 223px;
+    flex-grow: 0;
+    background: #4a535e;
+    box-shadow: 0 0 56px 0 #f1f1f1;
+  }
+  .div-content {
+    margin-left: 17px;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 3px 5px 15px #dae2ea;
+  }
+  .bottom {
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    bottom: 40px;
+  }
 }
 </style>
-
-

@@ -32,11 +32,39 @@
         <el-menu-item index="/initialize/paid">扣缴义务人管理</el-menu-item>
         <el-menu-item index="/initialize/cumulative">累计应税项初始化</el-menu-item>
       </el-submenu>
+      <template v-for="first in menuList">
+          <el-submenu :key="first.key" v-if="first.children" :index="first.key">
+            <template slot="title">
+              <i :class="['iconfont',first.icon]"></i>
+              <span>{{first.title}}</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item v-for="second in first.children" :key="second.key" :index="second.url">{{second.title}}</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-menu-item :key="first.key" v-else :index="first.url">
+            <template slot="title">
+              <i :class="['iconfont',first.icon]"></i>
+              <span>{{first.title}}</span>
+            </template>
+          </el-menu-item>
+        </template>
     </el-menu>
   </div>
 </template>
 <script>
+import menus from "./menus";
 export default {
+  data() {
+    return {
+      startUrl: "",
+      menuList: []
+    };
+  },
+  mounted(){
+    this.startUrl = this.$route.path;
+    this.menuList = menus;
+  },
   methods: {
     handleSelect(key, keyPath) {
       this.$router.push(key);

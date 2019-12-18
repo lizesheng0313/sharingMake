@@ -7,6 +7,10 @@ import salaryCal from 'modules/salaryCal/router'
 import tax from 'modules/tax/router'
 import taxPaid from 'modules/taxPaid/router'
 import initialize from 'modules/initialize/router'
+import accountPageRouter from 'modules/account/router'
+import payManageRouter from 'modules/payManage/router'
+import withdrawal from 'modules/withdrawal/router'
+import resultRouter from 'modules/result/router'
 
 
 
@@ -26,7 +30,11 @@ let router = new Router({
     ...salaryCal,
     ...tax,
     ...taxPaid,
-    ...initialize
+    ...initialize,
+    ...accountPageRouter,
+    ...payManageRouter,
+    ...withdrawal,
+    ...resultRouter
   ]
 })
 routerConfig(router)

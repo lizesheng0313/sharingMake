@@ -25,6 +25,7 @@ if(location.href.includes('?')){
   if(location.href.split('?')[1].split('=')[0] === "token"){
     let token =location.href.includes('?')? location.href.split('?')[1].split('=')[1]:"";
     store.commit("SET_TOKEN",token);
+    sessionStorage.setItem("token",token)
   }
 }
 
