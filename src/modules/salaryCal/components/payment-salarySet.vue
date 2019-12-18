@@ -65,6 +65,7 @@ export default {
       if(res.code === "0000"){
         this.stubsItems = res.data.stubsItems;
         this.stubsMsgForm.stubsMsg = res.data.stubsMsg;
+        this.stubsItemsShowRules = res.data.stubsItemsShowRules;
         //  初始化导出配置项数据、
         let allId = [];
         let checkedId = [];
