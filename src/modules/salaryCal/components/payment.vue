@@ -5,9 +5,12 @@
         <img src="../../../assets/images/bank.png" alt="" width="49px" height="50px">
         <div class="box-fun">
           <p class="box-title">银行代发</p>
-          <p class="tip">使用银行代发服务完成在线发薪</p>
-          <div><el-button type="primary" v-if="payrollStatus" @click="sendData">提交代发数据</el-button></div>
-          <div><el-button type="primary" v-else>启动代发</el-button></div>
+          <p class="tip">使用银行代发服务完成在线发薪{{ payrollStatus }}</p>
+          <div v-if="!payrollStatus || payrollStatus ==='INIT'"><el-button type="primary" @click="sendData">提交代发数据</el-button></div>
+          <div v-else>
+            <el-button type="primary">启动代发</el-button>
+            <el-button type="primary" @click="cancelPayroll">撤销代发</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -48,6 +51,23 @@
         <paymentSalarySet @changeSatus="changeSatus"></paymentSalarySet>
       </div>
     </right-pop>
+    <el-dialog
+      title="银行卡为空"
+      :visible.sync="noCardListShow"
+      width="760px"
+      :show-close="false"
+    >
+     <el-table :data="noCardList" class="check-staff_table">
+        <el-table-column prop="empName" label="姓名"></el-table-column>
+        <el-table-column prop="idNo" label="证件号码"></el-table-column>
+        <el-table-column prop="empNo" label="员工工号"></el-table-column>
+        <el-table-column prop="empName" label="扣缴义务人"></el-table-column>
+      </el-table>
+      <div style="text-align:center;margin-top: 10px">
+        <el-button type="primary" @click="downLoadData">下载数据</el-button>
+        <el-button type="primary" @click="noCardListShow=false">关闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -65,7 +85,9 @@ export default {
       checkId:this.$route.query.id,
       active:this.$route.query.active,
       checkStatus:"",
-      payrollStatus:""
+      payrollStatus:"",
+      noCardListShow:false,
+      noCardList:[],
     };
   },
   created(){
@@ -106,6 +128,23 @@ export default {
     changeSatus(data){
      this.popShow.isshow = data;
     },
+    // 撤销代发
+    cancelPayroll(){
+      this.$confirm('您确定撤销代发吗', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.$store.dispatch('salaryCalStore/actionPayrollCreditCancel',this.checkId).then(res=>{
+          if(res.payrollStatus === "SUCCESS"){
+            this.$message.success("撤销成功");
+            this._loading()
+          }else{
+            this.$message.warning(res.message);
+          }
+        })
+      })
+    },
     //发放薪资
     sendSalary(){
       apiProvideStubs(this.checkId).then(res=>{
@@ -129,17 +168,26 @@ export default {
             center: false
           }
         ).then(() => {
-
+          this.$store.dispatch('salaryCalStore/actionPayrollCredit',this.checkId).then(res=>{
+            if(res.data.list.length == 0){
+              this.$message.success("银行代发成功")
+            }else{
+              this.noCardListShow = true;
+              this.noCardList = res.data.list;
+            }
+          })
         }).catch(() => {});
       }else{
-        this.$message.warning("工资数据未审核，请先审核再提交发薪数据.")
-
+        this.$message.warning("工资数据未审核，请先审核再提交发薪数据。")
       }
     },
     //查看记录
     seeRecord(){
       this.$emit("changeActive",this.active-(-1))
       this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:this.active-(-1),salaryRuleId:this.$route.query.salaryRuleId}})
+    },
+    downLoadData(){
+
     },
     //删除发放
     deleteSalary(){

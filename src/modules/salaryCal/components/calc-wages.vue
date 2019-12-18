@@ -1,7 +1,9 @@
 <template>
   <div class="calc-wages">
-    <div class="waitReport" v-if="showWaitReport">存在“待报送”的人员 <span class="bold">{{ waitReportCount }}</span> 人，待报送人员无法参与个税计算，如需计算，请在“人员采集报送”界面中先完成报送！
-      <i class="el-icon-close close-style" @click="showWaitReport=false"></i>
+    <div class="waitReport" v-if="isShowWaitReport">
+      <div v-if="computeErrorCount">存在“计算失败”的人员 <span class="failStyle" @click="showFail">{{ computeErrorCount }}</span> 人，点击数字可查看计算失败名单和原因</div>
+      <div v-if="awaitReportCount">存在“待报送”的人员 <span class="bold">{{ awaitReportCount }}</span> 人，待报送人员无法参与个税计算，如需计算，请在“人员采集报送”界面中先完成报送！</div>
+      <i class="el-icon-close close-style" @click="isShowWaitReport=false"></i>
     </div>
     <div class="clearfix check-staff-menu">
       <el-button class="screen" size="small" @click="showScreen">筛选</el-button>
@@ -19,13 +21,30 @@
         <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShowQ" @click="handleReportInfo">获取算税结果</el-button>
         <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')">薪资审核</el-button>
         <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')">取消审核</el-button>
+        <el-button @click="handleBigTable">放大</el-button>
       </div>
     </div>
     <div class="staff-situation clearfix">
       <div class="left">
-        <span class="staff-total">
+        <span class="staff-total" @click="selectNum('')">
           人员总数
-          <i class="tatal-number">{{count}}</i>人
+          <i :class="['tatal-number', allActive?'active':'']">{{ count }}</i>人
+        </span>
+        <span class="staff-total" @click="selectNum('FINISH')">
+          已计算
+          <i :class="['tatal-number', computedActive? 'active' : '']">{{ computedCount }}</i>人
+        </span>
+        <span class="staff-total" @click="selectNum('INIT')">
+          未计算
+          <i :class="['tatal-number', unComputedActive? 'active' : '']">{{ unComputedCount }}</i>人
+        </span>
+        <span class="staff-total" @click="selectNum('PROCESSING')">
+          计算中
+          <i :class="['tatal-number', computingActive? 'active' : '']">{{ computingCount }}</i>人
+        </span>
+        <span class="staff-total" @click="selectNum('FAIL')">
+          计算失败
+          <i :class="['tatal-number', errorComputedActive? 'active' : '']">{{ computeErrorCount }}</i>人
         </span>
       </div>
       <div class="right calc-table_menu">
@@ -282,6 +301,71 @@
               :processingTip="processingTip"
     >
     </feedback>
+    <!--计算失败记录-->
+    <el-dialog
+      title="计算失败记录"
+      :visible.sync="isShowFail"
+      width="600px"
+      :close-on-click-modal="closeModel"
+    >
+      <div class="failTip">生成申报表失败，以下员工数据存在问题，请参考错误信息处理后更新申报数据</div>
+      <el-table :data="failList">
+        <el-table-column prop="empName" label="姓名"></el-table-column>
+        <el-table-column prop="idNo" label="证件号码"></el-table-column>
+        <el-table-column prop="taxSubName" label="扣缴义务人"></el-table-column>
+        <el-table-column prop="empName" label="计算状态">
+          <template slot-scope="scope">
+            <span>{{scope.row.checkStatus | reportType}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="failReason" label="反馈信息"></el-table-column>
+      </el-table>
+      <div style="text-align: center;margin-top: 20px;">
+        <el-button type="primary" @click="handleExport">导出</el-button>
+        <el-button @click="isShowFail = false">关闭</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      :visible.sync="isShowBigTable"
+      width="100%"
+      height="100%"
+      :close-on-click-modal="closeModel"
+      class="big-table"
+    >
+      <div class="staff-table">
+        <el-table :data="salaryTableDataAll"
+                  class="check-staff_table"
+                  :style="{width:screenWidth-40+'px'}"
+                  :cell-style="cellStyle"
+                  width="100%"
+                  :height="screenHeight"
+                  v-loading="tableLoading"
+                  border>
+          <el-table-column
+            v-for="(col,index) in salaryTableDataAll[0]"
+            :min-width="setMinWidth(col.col)"
+            :show-overflow-tooltip="col.col === '部门' || col.col === '岗位' || col.col === '工号' || col.col === '姓名'"
+            :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="[0,1,2,3].includes(index)">
+            <template slot-scope="scope">
+            <span>
+<!--              <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>-->
+              {{ filterVal(scope['row'][index]) }}
+            </span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+          :current-page="salaryForm.currPage"
+          :page-sizes="[20, 50, 100, 200]"
+          :page-size="salaryForm.pageSize"
+          layout="total, sizes, prev, pager, next"
+          :total="count"
+          class="staff-page">
+        </el-pagination>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -339,6 +423,7 @@
         key:"",
         currPage:1,
         pageSize:20,
+        enumComputeStatus:"",
         queryFilterParam:{
           taxSubId:"",
           departName:"",//部门
@@ -396,8 +481,21 @@
         third:15000,
       },
       setWarning:false,
-      waitReportCount:0,
+      awaitReportCount:0,
       showWaitReport:false,
+      computedCount:0,
+      unComputedCount:0,
+      computingCount:0,
+      computeErrorCount:0,
+      allActive:true,
+      computedActive:false,
+      computingActive:false,
+      unComputedActive:false,
+      errorComputedActive:false,
+      failList:[],
+      isShowFail:false,
+      isShowWaitReport:false,
+      isShowBigTable:false
     };
   },
   computed:{
@@ -451,6 +549,14 @@
        if(res.code === "0000"){
          let salaryData = res.data;
          this.count = salaryData.count;
+         this.computedCount = salaryData.computedCount ? salaryData.computedCount : 0;
+         this.unComputedCount = salaryData.unComputedCount ? salaryData.unComputedCount :0;
+         this.computingCount = salaryData.computingCount ? salaryData.computingCount:0;
+         this.computeErrorCount = salaryData.computeErrorCount?salaryData.computeErrorCount:0;
+         this.awaitReportCount = salaryData.awaitReportCount?salaryData.awaitReportCount:0;
+         this.isShowWaitReport = this.awaitReportCount || this.computeErrorCount
+         console.log(this.awaitReportCount)
+         console.log(this.computeErrorCount)
          this.tableValue = [];
          this.salaryTableData = salaryData.tableData;
          this.salaryTableDataAll = this.salaryTableData.map(item=>item.diyrow);
@@ -485,6 +591,44 @@
       //校验人员状态
       this.checkEmpReportStatus()
     },
+    showFail(){
+      this.isShowFail = true
+      this.$store
+        .dispatch("salaryCalStore/actionSalaryCheckFailRecord", this.salaryForm)
+        .then(res => {
+          this.failList = res.data;
+        })
+    },
+    handleBigTable(){
+      this.isShowBigTable = true
+    },
+    handleExport(){
+      this.$store
+        .dispatch("salaryCalStore/actionSalaryCheckFailRecordExport", this.salaryForm)
+        .then(res => {
+          console.log(res)
+        })
+    },
+    //点击数字切换
+    selectNum(type){
+      if(type === ""){
+        this.allActive=true;this.computedActive=false;this.unComputedActive=false;this.computingActive=false;this.errorComputedActive=false;
+      }
+      if(type==="FINISH"){
+        this.allActive=false;this.computedActive=true;this.unComputedActive=false;this.computingActive=false;this.errorComputedActive=false;
+      }
+      if(type==="INIT"){
+        this.allActive=false;this.computedActive=false;this.unComputedActive=true;this.computingActive=false;this.errorComputedActive=false;
+      }
+      if(type==="PROCESSING"){
+        this.allActive=false;this.computedActive=false;this.unComputedActive=false;this.computingActive=true;this.errorComputedActive=false;
+      }
+      if(type==="FAIL") {
+        this.allActive=false;this.computedActive=false;this.unComputedActive=false;this.computingActive=false;this.errorComputedActive=true;
+      }
+      this.salaryForm.enumComputeStatus = type;
+      this.loading()
+    },
     //校验人员状态
     checkEmpReportStatus(){
       this.$store
@@ -495,7 +639,7 @@
           if (res.success) {
             this.waitReportCount = res.data;
             this.showWaitReport = this.waitReportCount != 0;
-            if(this.waitReportCount == 0) {this.screenHeight+=60}
+            if(this.waitReportCount == 0) {this.screenHeight += 60}
           }
         });
     },
@@ -820,8 +964,8 @@
   padding: 0 20px;
   box-sizing: border-box;
   .waitReport{
-    height: 40px;
-    line-height: 40px;
+    padding:10px 0px;
+    line-height: 30px;
     margin-top: 20px;
     color:#909399;
     border-left:4px solid #E6A23C;
@@ -883,6 +1027,11 @@
       color: $mainColor;
       font-style: normal;
       padding: 0 3px;
+      cursor: pointer;
+    }
+    .active {
+      color:#e6a23c;
+      font-weight: bold;
     }
     .calc-table_menu {
       span {

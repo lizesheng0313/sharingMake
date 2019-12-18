@@ -169,6 +169,14 @@ const countryType = (val) => {
     }
   }
 };
+
+const reportType = (val) => {
+  switch (val) {
+    case 'FAIL': {
+      return '失败';
+    }
+  }
+};
 export default {
   resetDate,
   texRule,
@@ -177,5 +185,6 @@ export default {
   idType,
   countryType,
   accreditStatus,
-  dateStyle
+  dateStyle,
+  reportType
 }

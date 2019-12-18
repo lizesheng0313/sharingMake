@@ -83,7 +83,7 @@
   </div>
 </template>
 <script>
-  import {apiCheckMemberSummary,apiSalaryStubsStatusAlter,apiSalaryStubsStatusBatchAlter,apiRefreshStubs} from '../store/api'
+  import { apiCheckMemberSummary,apiSalaryStubsStatusAlter,apiSalaryStubsStatusBatchAlter,apiRefreshStubs } from '../store/api'
   export default {
     data() {
       return {
@@ -94,6 +94,7 @@
           "currPage": 1,
           "key": "",
           "pageSize":20 ,
+          "enumComputeStatus":"",
         },
         active:this.$route.query.active,
         screenWidth: document.body.clientWidth, // 屏幕尺寸
