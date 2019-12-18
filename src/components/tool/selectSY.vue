@@ -2,7 +2,7 @@
   <div class="selectSY">
     <el-dialog
       :visible.sync="isShowReportInfo"
-      title="反馈信息"
+      :title="returnTip"
       width="550px"
       center
       class="diy-el_dialog"
@@ -10,11 +10,12 @@
       :close-on-click-modal="closeModel"
     >
       <el-row v-for="(item,index) in reportInfoList" :key="index">
-        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ stopTip }}完成</el-col></div>
-        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ processingTip }}</el-col></div>
+        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ stopTip }}任务完成</el-col></div>
+        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">任务处理中…</el-col></div>
         <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ stopTip }}失败，{{item.failReason}}</el-col></div>
       </el-row>
       <div v-loading="reportInfoLoading" style="height: 40px"></div>
+      <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击【获取反馈】查询结果</div>
       <div class="dialog-footer">
         <el-button @click="onIknow" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
       </div>
@@ -45,7 +46,9 @@ export default {
       isShowReportInfo: false,
       reportInfoLoading:false,
       isShowIknow:false,
-      closeModel:false
+      closeModel:false,
+      returnTip:"",
+      showReturn:false,
     };
   },
   created(){
@@ -63,6 +66,7 @@ export default {
     handleExport() {
       this.reportInfoLoading = true;
       this.isShowReportInfo = true;
+      this.returnTip = "";
       this.$store
         .dispatch(this.validAction, this.validParameter)
         .then(res=>{
@@ -76,6 +80,7 @@ export default {
               }else{//全部成功或失败
                 this.reportInfoLoading = false;
                 this.isShowIknow = true;
+                this.returnTip = "反馈信息";
               }
             }else{//授权失败
               this.reportInfoLoading = false;
@@ -98,11 +103,18 @@ export default {
           .then(r0 => {
             if(r0.success){
               if(r0.data.status === "SUCCESS"){
-                this.reportInfoList.push(...r0.data.taxSubList);
+                this.reportInfoList.forEach((item,index)=>{
+                  r0.data.taxSubList.forEach(it=>{
+                    if(item.taxSubId == it.taxSubId){
+                      this.reportInfoList[index] = it
+                    }
+                  })
+                })
                 if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
                   this.selectSec()
                 } else{
                   this.reportInfoLoading = false;
+                  this.returnTip = "反馈信息";
                   this.isShowIknow = true;
                 }
               }else{
@@ -119,11 +131,18 @@ export default {
           .dispatch(this.querytAction,this.validParameter)
           .then(r0 => {
             if(r0.data.status === "SUCCESS"){
-              this.reportInfoList.push(...r0.data.taxSubList);
+              this.reportInfoList.forEach((item,index)=>{
+                r0.data.taxSubList.forEach(it=>{
+                  if(item.taxSubId == it.taxSubId){
+                    this.reportInfoList[index] = it
+                  }
+                })
+              })
               if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
                 this.selectThird()
               } else{
                 this.reportInfoLoading = false;
+                this.returnTip = "反馈信息";
                 this.isShowIknow = true;
               }
             }else{
@@ -138,8 +157,19 @@ export default {
           .dispatch(this.querytAction,this.validParameter)
           .then(re => {
             if(re.success){
-              this.reportInfoList.push(...re.data.taxSubList);
+              this.reportInfoList.forEach((item,index)=>{
+                re.data.taxSubList.forEach(it=>{
+                  if(item.taxSubId == it.taxSubId){
+                    this.reportInfoList[index] = it
+                  }
+                })
+              })
+              //反馈信息
+              if(re.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+                this.showReturn = true;
+              }
               this.reportInfoLoading = false;
+              this.returnTip = "反馈信息";
               this.isShowIknow = true;
             }
           })
