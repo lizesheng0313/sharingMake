@@ -42,7 +42,10 @@ const config = Object.assign(webpackConfigBase.config, {
   devServer: {
     proxy: {
       '/api': {
-        target: "http://172.19.60.38:8017",
+        //公共
+        target: "https://webapi-qa.lanmaoly.com",
+        //38
+        // target: "http://172.19.60.38:8017",
         //陈莹
         // target:"http://172.19.63.49:9999",
         //陈莹2
