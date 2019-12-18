@@ -17,7 +17,7 @@
         <div class="box-fun">
           <p class="box-title">银行报盘</p>
           <p class="tip">导出姓名、银行卡号、实发工资</p>
-          <a :href="'/api/salary/stubs/exportReport/'+checkId" style="color:#fff;"><el-button type="primary">导出</el-button></a>
+          <a :href="'/api/xsalary//salary/stubs/exportReport/'+checkId" style="color:#fff;"><el-button type="primary">导出</el-button></a>
         </div>
       </div>
     </div>
