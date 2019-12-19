@@ -27,7 +27,7 @@
                     <el-form-item>
                         <el-button type="primary" @click="handleSearchForm">查询</el-button>
                         <el-button @click="resetForm('refSearchFrom')">重置</el-button>
-                        <el-button @click="handleExport">导出</el-button>
+                        <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.psalaryIssuing.batchRecord.export')">导出</el-button>
                     </el-form-item>
                 </div>
             </el-form>
@@ -44,9 +44,12 @@
                 <el-table-column label="支付时间" prop="payTime" min-width="170"></el-table-column>
                 <el-table-column label="操作" min-width="120">
                     <template slot-scope="scope">
-                        <el-button type="text" @click="handleDetail(scope.row.id)" v-if="['PAID','CLOSED'].includes(scope.row.status)">查看</el-button>
-                        <el-button type="text" @click="handleDeleteBatch(scope.row.id)" v-if="scope.row.status != 'PAID'">删除</el-button>
-                        <el-button type="text" @click="handleContinuePay(scope.row)" v-if="['CHECK_ALL_SUCCESS','CHECK_PART_SUCCESS','CHECK_ALL_FAIL'].includes(scope.row.status)">继续代发</el-button>
+                        <el-button type="text" @click="handleDetail(scope.row.id)" v-if="['PAID','CLOSED'].includes(scope.row.status) && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.select')">查看</el-button>
+                        <el-button type="text" @click="handleDeleteBatch(scope.row.id)" v-if="scope.row.status != 'PAID' && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.delete')">删除</el-button>
+                        <el-button type="text" @click="handleContinuePay(scope.row)"
+                                   v-if="['CHECK_ALL_SUCCESS','CHECK_PART_SUCCESS','CHECK_ALL_FAIL'].includes(scope.row.status)&&
+                                   privilegeVoList.includes('salary.psalaryIssuing.batchRecord.continue')
+                          ">继续代发</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -82,7 +85,10 @@ export default {
         ...mapState("payManageStore", {
             recordList: "recordList",
             recordListTotal: "recordListTotal"
-        })
+        }),
+      ...mapState({
+        privilegeVoList:state=>state.privilegeVoList
+      }),
     },
     mounted() {
         this.fetchTableList();

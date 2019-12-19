@@ -53,7 +53,7 @@
         <el-form-item>
           <el-button type="primary" @click="handleSearchForm">查询</el-button>
           <el-button @click="handleResetForm('refSearchForm')">重置</el-button>
-          <el-button @click="handleExport">导出</el-button>
+          <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.recharge.export')">导出</el-button>
         </el-form-item>
       </p>
     </el-form>
@@ -120,6 +120,9 @@ export default {
   computed: {
     ...mapState({
       agentInfoObj: state => state.agentInfoObj
+    }),
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
     })
   },
   mounted() {

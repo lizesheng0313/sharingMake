@@ -9,19 +9,22 @@ export default [
 		path: '/pay-batch',
 		name: 'payBatch',
 		component: payBatch,
-		meta: { title: "批量代发" }
+		meta: {
+      businessCode: "salary.psalaryIssuing.batch",
+      icon:"iconshenbao"
+    }
 	},
 	{
 		path: '/pay-record',
 		name: 'payRecord',
 		component: payRecord,
-		meta: { title: "批量代发记录" }
+		meta: { title: "批量代发记录", businessCode: "salary.psalaryIssuing.batchRecord",}
 	},
 	{
 		path: '/pay-order',
 		name: 'payOrder',
 		component: payOrder,
-		meta: { title: "代发订单" }
+		meta: { title: "代发订单",businessCode: "salary.psalaryIssuing.order",}
 	},
 	{
 		path: '/batch-edite',

@@ -147,7 +147,7 @@ export default {
   computed:{
     ...mapState({
         privilegeVoList:state=>state.privilegeVoList
-      })
+    })
   },
   data() {
     return {

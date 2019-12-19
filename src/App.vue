@@ -7,7 +7,7 @@
       <div class="display-flex">
         <div class="side-nav flex1" v-if="isShowApp">
           <old-side-nav :routerList="routerList" :mainMenu="mainMenu"></old-side-nav>
-        </div>
+      </div>
         <div class="flex1 div-content" :class="{'no-margin':!isShowApp}">
           <router-view class="router-view"></router-view>
         </div>
@@ -28,7 +28,7 @@ export default {
     return {
       //整个路由列表
       routerList: router.options.routes,
-      mainMenu: {}
+      mainMenu: []
     };
   },
   computed: {

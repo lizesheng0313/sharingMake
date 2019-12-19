@@ -44,9 +44,11 @@
                         <el-table-column label="创建时间" prop="createTime"></el-table-column>
                         <el-table-column label="操作">
                             <template slot-scope="scope">
-                                <el-button type="text" @click="handleEdite('edite',scope.row)" v-if="scope.row.status == 'CHECK_FAIL'">编辑</el-button>
-                                <el-button type="text" @click="handleEdite('resend',scope.row)" v-if="['BACK_SUCCESS','ROLL_BACK_SUCCESS','CHECK_SUCCESS'].includes(scope.row.status)">重发</el-button>
-                                <el-button type="text" @click="handleCloseOrder(scope.row.id)" v-if="['CHECK_FAIL','BACK_SUCCESS','ROLL_BACK_SUCCESS'].includes(scope.row.status)">关闭订单</el-button>
+                                <el-button type="text" @click="handleEdite('edite',scope.row)" v-if="scope.row.status == 'CHECK_FAIL' && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.detailsEdit')">编辑</el-button>
+                                <el-button type="text" @click="handleEdite('resend',scope.row)"
+                                           v-if="['BACK_SUCCESS','ROLL_BACK_SUCCESS','CHECK_SUCCESS'].includes(scope.row.status) &&
+                                           privilegeVoList.includes('salary.psalaryIssuing.batchRecord.detailsContinue')">重发</el-button>
+                                <el-button type="text" @click="handleCloseOrder(scope.row.id)" v-if="['CHECK_FAIL','BACK_SUCCESS','ROLL_BACK_SUCCESS'].includes(scope.row.status) && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.close')">关闭订单</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -150,7 +152,10 @@ export default {
             recordInfo: "recordInfo",
             orderList: "orderList",
             orderListTotal: "orderListTotal"
-        })
+        }),
+      ...mapState({
+        privilegeVoList:state=>state.privilegeVoList
+      }),
     },
     mounted() {
         const { batchId } = this.$route.query;
