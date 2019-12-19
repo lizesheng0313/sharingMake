@@ -2,10 +2,16 @@ import 'assets/scss/base.scss'
 import 'assets/scss/element-variables.scss'
 import 'assets/font/iconfont.css';
 import 'assets/scss/el-cover.scss'
+
 import Vue from 'vue'
 
 import ElementUI from 'element-ui'
 Vue.use(ElementUI)
+
+import oldUI from "olading-ui"
+import "olading-ui/lib/theme-chalk/index.css"
+Vue.use(oldUI)
+
 
 import router from './router'
 import App from './App'
