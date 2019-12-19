@@ -20,16 +20,16 @@
         ></el-date-picker>
       </div>
       <div class="right declare-buttton-groups" style="float: right">
-        <el-button type="primary" v-if="showCreate" @click="handleGenerateData('create')">生成申报数据</el-button>
-        <el-button type="primary" v-if="showCreateReturn" @click="handleGenerateDataQ">获取申报数据</el-button>
-        <el-button type="primary" v-if="showSend" @click="handleGenerateData('update')">更新申报数据</el-button>
-        <el-button type="primary" v-if="showSend" @click="handleSendReport">发送申报</el-button>
-        <el-button type="primary" v-if="showSendQ" @click="handleSendReportQ">发送申报反馈</el-button>
-        <el-button  v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
-        <el-button type="primary" v-if="showFeedback" @click="handleGetFeedback">获取反馈</el-button>
-        <el-button type="primary" v-if="showFeedbackQ" @click="handleGetFeedbackQ">获取反馈查询</el-button>
-        <el-button type="primary" v-if="showInvalid" @click="handleInvalid">作废申报</el-button>
-        <el-button type="primary" v-if="showInvalidQ" @click="handleInvalidQ">作废申报反馈</el-button>
+        <el-button type="primary" v-if="showCreate && privilegeVoList.includes('salary.report.taxReport.generateReport')" @click="handleGenerateData('create')">生成申报数据</el-button>
+        <el-button type="primary" v-if="showCreateReturn && privilegeVoList.includes('salary.report.taxReport.generateReport')" @click="handleGenerateDataQ">获取申报数据</el-button>
+        <el-button type="primary" v-if="showSend && privilegeVoList.includes('salary.report.taxReport.generateReport')" @click="handleGenerateData('update')">更新申报数据</el-button>
+        <el-button type="primary" v-if="showSend && privilegeVoList.includes('salary.report.taxReport.sendReport')" @click="handleSendReport">发送申报</el-button>
+        <el-button type="primary" v-if="showSendQ && privilegeVoList.includes('salary.report.taxReport.sendReport')" @click="handleSendReportQ">发送申报反馈</el-button>
+        <el-button v-if="showExport && privilegeVoList.includes('salary.report.taxReport.export')" @click="handleExportApplyTable">导出申请表</el-button>
+        <el-button type="primary" v-if="showFeedback && privilegeVoList.includes('salary.report.taxReport.reportBack')" @click="handleGetFeedback">获取反馈</el-button>
+        <el-button type="primary" v-if="showFeedbackQ && privilegeVoList.includes('salary.report.taxReport.reportBack')" @click="handleGetFeedbackQ">获取反馈查询</el-button>
+        <el-button type="primary" v-if="showInvalid && privilegeVoList.includes('salary.report.taxReport.cancelReport')" @click="handleInvalid">作废申报</el-button>
+        <el-button type="primary" v-if="showInvalidQ && privilegeVoList.includes('salary.report.taxReport.cancelReport')" @click="handleInvalidQ">作废申报反馈</el-button>
       </div>
       <div class="screening">
         <div class="clearfix">
@@ -288,7 +288,10 @@ export default {
     //获取反馈
     showFeedbackQ:function(){
       return ['REPORT_BACK_WAIT_BACK'].includes(this.reportStatus)
-    }
+    },
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     this.getTaxSubjectInfoList();

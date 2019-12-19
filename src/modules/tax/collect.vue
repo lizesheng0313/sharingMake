@@ -26,9 +26,12 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
-              <el-button  class="add-import" @click="handleReportInfo">获取反馈</el-button>
-              <el-button  class="add-import" @click="handleExport">导出</el-button>
+              <el-button type="primary" class="add-import" @click="handleReport"
+                         v-if="privilegeVoList.includes('salary.report.personReport.sendReport')">报送</el-button>
+              <el-button class="add-import" @click="handleReportInfo"
+                         v-if="privilegeVoList.includes('salary.report.personReport.sendReport')">获取反馈</el-button>
+              <el-button class="add-import" @click="handleExport"
+                         v-if="privilegeVoList.includes('salary.report.personReport.export')">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -89,10 +92,8 @@
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
               <el-table-column prop="empName" label="姓名" width="140">
                 <template slot-scope="scope">
-                  <span
-                    class="table-name"
-                    @click="handleCollectionName(scope.row)"
-                  >{{scope.row.empName }}</span>
+                  <span class="table-name" @click="handleCollectionName(scope.row)" v-if="privilegeVoList.includes('salary.report.personReport.edit')">{{ scope.row.empName }}</span>
+                  <span class="table-name" v-else>{{ scope.row.empName }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="idType" label="证件类型" width="140">
@@ -360,7 +361,10 @@ export default {
   computed:{
     ...mapState("salaryCalStore", {
       salaryItem:"salaryItem"
-    })
+    }),
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     this.getTaxSubjectInfoList();

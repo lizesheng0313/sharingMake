@@ -29,7 +29,7 @@
             </div>
             <div class="right">
     <!--          <el-button type="primary" @click="handledDownload" class="add-import">局端在线下载</el-button>-->
-              <el-button type="primary" @click="handleImport" class="add-import">导入</el-button>
+              <el-button type="primary" @click="handleImport" class="add-import" v-if="privilegeVoList.includes('salary.init.taxTotalBase.import')">导入</el-button>
             </div>
           </div>
           <div class="selectCon">
@@ -118,6 +118,7 @@ for (let i = maxYear; i >= 2019; i--) {
   year.push(i);
 }
 import importData from "@/components/tool/importData";
+import { mapState } from "vuex";
 export default {
   components: {
     importData
@@ -154,6 +155,11 @@ export default {
       taxSubjectInfolist:[],
       showFilter:true,
     };
+  },
+  computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     const that = this;
