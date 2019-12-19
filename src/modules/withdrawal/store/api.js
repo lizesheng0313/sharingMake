@@ -2,7 +2,7 @@ import fetch from 'request/oldFetch'
 
 export const apiWithdrawList = (listForm) => {
   return fetch({
-    url: 'withdraw/list',
+    url: 'psalary/withdraw/list',
     method: "post",
     data: listForm
   })
@@ -10,7 +10,7 @@ export const apiWithdrawList = (listForm) => {
 
 export const apiRecordslist = (listForm) => {
   return fetch({
-    url: 'rechargeRecords/list',
+    url: 'psalary/rechargeRecords/list',
     method: "post",
     data: listForm
   })
@@ -18,7 +18,7 @@ export const apiRecordslist = (listForm) => {
 
 export const apiGetMerchantComb = (listForm) => {
   return fetch({
-    url: 'rechargeRecords/getMerchantComb',
+    url: 'psalary/rechargeRecords/getMerchantComb',
     method: "post",
     data: listForm
   })
@@ -26,7 +26,7 @@ export const apiGetMerchantComb = (listForm) => {
 
 export const apiRechargeStatusComb = (listForm) => {
   return fetch({
-    url: 'rechargeRecords/getRechargeStatusComb',
+    url: 'psalary/rechargeRecords/getRechargeStatusComb',
     method: "post",
     data: listForm
   })
@@ -34,7 +34,7 @@ export const apiRechargeStatusComb = (listForm) => {
 
 export const apiWithdrawExport = (listForm) => {
   return fetch({
-    url: 'withdraw/withdrawExport',
+    url: 'psalary/withdraw/withdrawExport',
     method: "post",
     data: listForm,
     responseType: 'blob'
@@ -43,7 +43,7 @@ export const apiWithdrawExport = (listForm) => {
 
 export const apiWithdrawStatusComb = (listForm) => {
   return fetch({
-    url: 'withdraw/getWithdrawStatusComb',
+    url: 'psalary/withdraw/getWithdrawStatusComb',
     method: "post",
     data: listForm
   })
@@ -51,7 +51,7 @@ export const apiWithdrawStatusComb = (listForm) => {
 
 export const apiRechargeExport = (listForm) => {
   return fetch({
-    url: 'rechargeRecords/rechargeExport',
+    url: 'psalary/rechargeRecords/rechargeExport',
     method: "post",
     data: listForm,
     responseType: 'blob'

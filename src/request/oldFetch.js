@@ -35,7 +35,7 @@ const options = {
   // }
 }
 const fetch = createFetch({
-  baseURL: '/api/psalary/',
+  baseURL: '/api/',
 }, options);
 export default fetch
 

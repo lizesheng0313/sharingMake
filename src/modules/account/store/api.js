@@ -2,21 +2,21 @@ import fetch from 'request/oldFetch'
 
 export const apiAllAcount = () => {
   return fetch({
-    url: 'account/getAllAcount',
+    url: 'psalary/account/getAllAcount',
     method: "post"
   })
 }
 
 export const apiBankAndType = () => {
   return fetch({
-    url: 'account/getBankAndType',
+    url: 'psalary/account/getBankAndType',
     method: "post"
   })
 }
 
 export const apiCreateAccount = (accountForm) => {
   return fetch({
-    url: 'account/createAccount',
+    url: 'psalary/account/createAccount',
     method: "post",
     data: accountForm
   })
@@ -24,7 +24,7 @@ export const apiCreateAccount = (accountForm) => {
 
 export const apiAccountInfo = (accountInfoForm) => {
   return fetch({
-    url: 'account/getAccountInfo',
+    url: 'psalary/account/getAccountInfo',
     method: "post",
     data: accountInfoForm
   })
@@ -32,7 +32,7 @@ export const apiAccountInfo = (accountInfoForm) => {
 
 export const apiUpdateTradePassWord = (changeForm) => {
   return fetch({
-    url: '/account/updateTradePassWord',
+    url: 'psalary//account/updateTradePassWord',
     method: "post",
     data: changeForm
   })
@@ -40,7 +40,7 @@ export const apiUpdateTradePassWord = (changeForm) => {
 
 export const apiGetMerchantBase = (merchantForm) => {
   return fetch({
-    url: 'account/getMerchantBase',
+    url: 'psalary/account/getMerchantBase',
     method: "post",
     data: merchantForm
   })
@@ -48,7 +48,7 @@ export const apiGetMerchantBase = (merchantForm) => {
 
 export const apiGetMerchantInfo = (merchantForm) => {
   return fetch({
-    url: 'account/getMerchantInfo',
+    url: 'psalary/account/getMerchantInfo',
     method: "post",
     data: merchantForm
   })
@@ -56,7 +56,7 @@ export const apiGetMerchantInfo = (merchantForm) => {
 
 export const apiActivate = (activateForm) => {
   return fetch({
-    url: 'account/activate',
+    url: 'psalary/account/activate',
     method: "post",
     data: activateForm
   })
@@ -64,7 +64,7 @@ export const apiActivate = (activateForm) => {
 
 export const apiWithdrawAmount = (activateForm) => {
   return fetch({
-    url: 'withdraw/checkBhaPassword',
+    url: 'psalary/withdraw/checkBhaPassword',
     method: "post",
     data: activateForm
   })

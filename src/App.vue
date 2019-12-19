@@ -25,14 +25,31 @@ export default {
     topHeader,
     sideNav
   },
-  created() {
-    this.$store.commit(AT.SHOWAPP, true); //如用户手动改变路由， 需将full-screeen关闭
-  },
   computed: {
     ...mapState({
       isShowApp: state => state.isShowApp
     })
-  }
+  },
+  data() {
+    return {
+      //整个路由列表
+      // routerList: router.options.routes,
+      mainMenu: {}
+    };
+  },
+  created() {
+    this.$store.commit(AT.SHOWAPP, true); //如用户手动改变路由， 需将full-screeen关闭
+  },
+  mounted() {
+    //权限列表
+    this.$store.dispatch("actionUserPrivilege").then(res => {
+      this.mainMenu = res.data.privilegeGroupTreeVO.children[0].children;
+      console.log(this.mainMenu)
+    });
+  },
+  methods:{
+
+  },
 };
 </script>
 <style lang="scss" scoped>
