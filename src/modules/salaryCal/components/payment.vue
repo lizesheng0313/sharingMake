@@ -7,7 +7,7 @@
           <p class="box-title">银行代发</p>
           <p class="tip">使用银行代发服务完成在线发薪</p>
 <!--          <div><el-button type="primary">提交代发数据</el-button></div>-->
-          <div><el-button type="primary">启动代发</el-button></div>
+          <div><el-button type="primary" v-if="privilegeVoList.includes('salary.compute.salaryCheck.payroll')">启动代发</el-button></div>
         </div>
       </div>
     </div>
@@ -17,7 +17,7 @@
         <div class="box-fun">
           <p class="box-title">银行报盘</p>
           <p class="tip">导出姓名、银行卡号、实发工资</p>
-          <a :href="'/api/xsalary//salary/stubs/exportReport/'+checkId" style="color:#fff;"><el-button type="primary">导出</el-button></a>
+          <a :href="'/api/xsalary/salary/stubs/exportReport/'+checkId" style="color:#fff;" v-if="privilegeVoList.includes('salary.compute.salaryCheck.bankOffer')"><el-button type="primary">导出</el-button></a>
         </div>
       </div>
     </div>
@@ -34,14 +34,14 @@
             trigger="click">
             <img src="../../../assets/images/salary.png" width="200px" alt="">
           </el-popover>
-          <el-button type="warning" @click="sendSalary" v-if="checkStatus === 'AUDITED'">发放</el-button>
-          <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH'">
+          <el-button type="warning" @click="sendSalary" v-if="checkStatus === 'AUDITED' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">发放</el-button>
+          <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">
             <el-button type="warning" @click="seeRecord">查看发放记录</el-button>
             <el-button type="info" @click="deleteSalary">删除发放</el-button>
           </div>
         </div>
       </div>
-      <i class="el-icon-setting" @click="showSalarySet"></i>
+      <i class="el-icon-setting" @click="showSalarySet" v-if="privilegeVoList.includes('salary.compute.salaryCheck.providStubs')"></i>
     </div>
     <right-pop :pop-show="popShow" :has-footer="false" popTitle="工资条设置" :popWidth="600">
       <div slot="pop-content">
@@ -54,6 +54,7 @@
   import { apiDeleteStubs,apiProvideStubs} from '../store/api'
   import rightPop from '../../../components/basic/rightPop'
   import paymentSalarySet from './payment-salarySet'
+  import { mapState } from "vuex";
 export default {
   components: {
     rightPop,
@@ -86,7 +87,10 @@ export default {
       let month = date.getMonth()+1<10 ? "0"+(date.getMonth()+1):date.getMonth()+1;
       let day = date.getDate();
       return year+"-"+month+"-"+day+ " 00:00:00";
-    }
+    },
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   methods: {
     _loading(){

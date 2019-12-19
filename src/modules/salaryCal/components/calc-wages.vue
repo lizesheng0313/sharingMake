@@ -15,10 +15,14 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary">薪资计算</el-button>
-        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShowQ" @click="handleReportInfo">获取算税结果</el-button>
-        <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')">薪资审核</el-button>
-        <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')">取消审核</el-button>
+        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary"
+                   v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryCompute')">薪资计算</el-button>
+        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShowQ" @click="handleReportInfo"
+                   v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryCompute')">获取算税结果</el-button>
+        <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')"
+                   v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryReview')">薪资审核</el-button>
+        <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')"
+                   v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryReview')">取消审核</el-button>
       </div>
     </div>
     <div class="staff-situation clearfix">
@@ -30,15 +34,17 @@
       </div>
       <div class="right calc-table_menu">
 <!--        <span @click="showImport('social')">社会公积金导入</span>-->
-        <span class="have-border_right" @click="showImport('floatItem')">浮动项导入</span>
+        <span class="have-border_right" @click="showImport('floatItem')" v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryImport')">浮动项导入</span>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             更多功能
             <i class="iconsanjiao iconfont"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="exportSalaryDetail('salaryDetail')">导出工资明细</el-dropdown-item>
-            <el-dropdown-item @click.native="exportDepartTotal('summy')">导出部门汇总</el-dropdown-item>
+            <el-dropdown-item @click.native="exportSalaryDetail('salaryDetail')"
+                              v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryExport')">导出工资明细</el-dropdown-item>
+            <el-dropdown-item @click.native="exportDepartTotal('summy')"
+                              v-if="privilegeVoList.includes('salary.compute.salaryCheck.depExport')">导出部门汇总</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -288,6 +294,7 @@
   import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,apiSocialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
   import selectSY from "@/components/tool/selectSY";
   import feedback from "@/components/tool/feedback";
+  import { mapState } from "vuex";
   export default {
   components:{
      selectSY,
@@ -401,6 +408,9 @@
     };
   },
   computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
     nowDate:function () {
       let date = new Date();
       let year = date.getFullYear();
@@ -408,7 +418,6 @@
       let day = date.getDate();
       return year+"-"+month+"-"+day+ " 00:00:00";
     },
-
     salaryShow:function () {
       return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED" || this.checkStatus==="AUDITED"
     },

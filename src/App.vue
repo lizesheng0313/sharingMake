@@ -44,7 +44,8 @@ export default {
     //权限列表
     this.$store.dispatch("actionUserPrivilege").then(res => {
       this.mainMenu = res.data.privilegeGroupTreeVO.children[0].children;
-      console.log(this.mainMenu)
+      this.privilegeVOList = res.data.privilegeVOList.map(it=>it.code);
+      this.$store.commit(AT.SET_PRIVILIGEVOLiST,this.privilegeVOList);
     });
   },
   methods:{

@@ -6,7 +6,7 @@
           <span>薪资核算</span>
         </el-col>
         <el-col :span="12">
-          <div class="add-table">
+          <div class="add-table" v-if="privilegeVoList.includes('salary.compute.salaryCheck.addSalaryRule')">
             <i class="iconxinzeng iconfont"></i>
             <span @click="goSalarySet">新增工资表</span>
           </div>
@@ -38,7 +38,7 @@
                       更多操作
                       <i class="iconsanjiao iconfont"></i>
                     </span>
-                    <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-menu slot="dropdown" v-if="privilegeVoList.includes('salary.compute.salaryCheck.updateSalaryRule')">
                       <el-dropdown-item>设置工资表</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
@@ -56,10 +56,13 @@
                   <el-option v-for="(it,index) in item.payInfos" :key="index" :label="it.dec" :value="it.salaryCheckStatus+','+it.id"
                   ></el-option>
                 </el-select>
-                <el-button type="primary" @click="InitCalcSalary(item)" v-show="item.salaryCheckStatus === 'NONE'">启动算薪</el-button>
+                <el-button type="primary" @click="InitCalcSalary(item)" v-show="item.salaryCheckStatus === 'NONE'" v-if="privilegeVoList.includes('salary.compute.salaryCheck.query')">启动算薪</el-button>
 <!--                <p v-show="item.salaryCheckStatus === 'NONE'">启动算薪时，系统根据算薪范围生成本月计薪人员</p>-->
-                <el-button type="primary" @click="calcSalary(item)" v-show="['INIT','WAIT_BACK'].includes(item.salaryCheckStatus)">计算薪资</el-button>
-                <el-button type="primary" @click="seeCalcSalary(item)" v-show="item.salaryCheckStatus === 'COMPUTED' || item.salaryCheckStatus === 'AUDITED' || item.salaryCheckStatus === 'FINISH' || item.salaryCheckStatus === 'PAID'">查看薪资</el-button>
+                <el-button type="primary" @click="calcSalary(item)" v-show="['INIT','WAIT_BACK'].includes(item.salaryCheckStatus)" v-if="privilegeVoList.includes('salary.compute.salaryCheck.query')">计算薪资</el-button>
+                <el-button type="primary"
+                           @click="seeCalcSalary(item)"
+                           v-show="item.salaryCheckStatus === 'COMPUTED' || item.salaryCheckStatus === 'AUDITED' || item.salaryCheckStatus === 'FINISH' || item.salaryCheckStatus === 'PAID'"
+                           v-if="privilegeVoList.includes('salary.compute.salaryCheck.query')">查看薪资</el-button>
               </div>
             </el-col>
           </el-row>
@@ -127,6 +130,9 @@ export default {
     },
     ...mapState("salaryCalStore", {
       IndexCurrentDate: "IndexCurrentDate",
+    }),
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
     }),
   },
   created(){

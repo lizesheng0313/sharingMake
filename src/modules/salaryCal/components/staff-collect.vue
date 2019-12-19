@@ -17,10 +17,10 @@
             </div>
             <div class="right">
               <el-tooltip class="item" effect="dark" content="若未选择人员，抓取工资表全部待报送人员；若选择了人员，抓取所选人员中待报送人员报送。" placement="top">
-                <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
+                <el-button type="primary" class="add-import" @click="handleReport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empReport')">报送</el-button>
               </el-tooltip>
-              <el-button class="add-import" @click="handleReportInfo">获取反馈</el-button>
-              <el-button class="add-import" @click="handleExport">导出</el-button>
+              <el-button class="add-import" @click="handleReportInfo" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empReport')">获取反馈</el-button>
+              <el-button class="add-import" @click="handleExport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empReportExport')">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -81,16 +81,6 @@
                   slot-scope="scope"
                 >{{returnStatus('idValidStatus',scope.row.idValidStatus)}}</template>
               </el-table-column>
-<!--              <el-table-column prop="mobile" label="手机号码" width="140"></el-table-column>-->
-<!--              <el-table-column prop="iscgl" label="是否残疾" width="80">-->
-<!--                <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>-->
-<!--              </el-table-column>-->
-<!--              <el-table-column prop="martyrFamilyYn" label="是否烈属" width="80">-->
-<!--                <template slot-scope="scope">{{returnYesOrNo(scope.row.martyrFamilyYn)}}</template>-->
-<!--              </el-table-column>-->
-<!--              <el-table-column prop="lonelyOldYn" label="是否孤老" width="80">-->
-<!--                <template slot-scope="scope">{{returnYesOrNo(scope.row.iscgl)}}</template>-->
-<!--              </el-table-column>-->
               <el-table-column prop="workerType" label="任职受雇从业类型" width="140">
                 <template slot-scope="scope">{{returnStatus('workerType',scope.row.workerType)}}</template>
               </el-table-column>
@@ -99,8 +89,6 @@
               <el-table-column label="国籍" width="100">
                 <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
               </el-table-column>
-<!--              <el-table-column prop="reportFinishTime" label="更新时间" width="110"></el-table-column>-->
-<!--              <el-table-column prop="updateTime" label="最近操作时间" width="110"></el-table-column>-->
             </el-table>
             <el-pagination
               @current-change="handleSelectionChange"
@@ -209,6 +197,9 @@ export default {
   computed:{
     ...mapState("salaryCalStore", {
       salaryItem:"salaryItem"
+    }),
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
     }),
   },
   created(){

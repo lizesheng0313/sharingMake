@@ -27,7 +27,8 @@ export default new Vuex.Store({
   },
   state: {
     token: '',
-    isShowApp: true
+    isShowApp: true,
+    privilegeVoList:[]
   },
   mutations,
   actions,

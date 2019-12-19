@@ -18,8 +18,8 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
-            <el-button type="primary" @click="handleExport">全部下载</el-button>
-            <el-button   @click="handleReportInfo">获取反馈</el-button>
+            <el-button type="primary" @click="handleExport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.additionDownload')">全部下载</el-button>
+            <el-button   @click="handleReportInfo" v-if="privilegeVoList.includes('salary.compute.salaryCheck.additionDownload')">获取反馈</el-button>
           </div>
         </div>
         <div class="staff-situation">
@@ -158,7 +158,10 @@ export default {
   computed:{
     ...mapState("salaryCalStore", {
       salaryItem:"salaryItem"
-    })
+    }),
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   created(){
     this.downLoadForm.date = this.salaryItem.date;
