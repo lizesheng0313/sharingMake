@@ -127,6 +127,16 @@ export function apiCheckMemberSummary(checkId) {
     method: 'get',
   })
 }
+
+//专项附加扣除导出
+export function apiGetAdditionalListExport(form) {
+  return fetchFile({
+    url: '/api/salary/getAdditionalList/export',
+    method: 'get',
+    params:form
+  })
+}
+
 //薪资核算列表
 export function apiSalaryList(form) {
   return fetch({
@@ -135,6 +145,24 @@ export function apiSalaryList(form) {
     data:form
   })
 }
+
+//薪资计算失败记录
+export function apiSalaryCheckFailRecord(form) {
+  return fetch({
+    url: '/api/salary/salaryCheckFailRecord',
+    method: 'post',
+    data:form
+  })
+}
+//薪资计算导出
+export function apiSalaryCheckFailRecordExport(form) {
+  return fetchFile({
+    url: '/api/salary/salaryCheckFailRecordExport',
+    method: 'post',
+    data:form
+  })
+}
+
 //薪资核算合计
 export function apiSalarySum(form) {
   return fetch({
@@ -233,15 +261,11 @@ export function apiGetStubs(id) {
   })
 }
 //工资表设置
-export function apiEditStubs({salaryId,stubsMsg,itemIds}) {
+export function apiEditStubs(data) {
   return fetch({
     url: '/api/xsalary/salary/stubs/editStubs',
     method: 'post',
-    data: {
-      salaryId:salaryId,
-      stubsMsg:stubsMsg,
-      itemIds:itemIds
-    },
+    data: data,
   })
 }
 //获取核算状态
@@ -334,8 +358,20 @@ export function apiMemberErrorRecord(uuid) {
   })
 }
 
-
-
+// 银行代发状态
+export function apiPayrollCredit(id) {
+  return fetch({
+    url: '/api/salary/stubs/payrollCredit/'+id,
+    method: 'post',
+  })
+}
+//撤销银行代发
+export function apiPayrollCreditCancel(id) {
+  return fetch({
+    url: '/api/salary/stubs/payrollCreditCancel/'+id,
+    method: 'post',
+  })
+}
 
 
 

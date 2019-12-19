@@ -17,6 +17,7 @@ import resultRouter from 'modules/result/router'
 Vue.use(Router)
 
 let router = new Router({
+  // base:'/pSalary',
   mode: 'history',
   saveScrollPosition: true,
   scrollBehavior: () => ({

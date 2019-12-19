@@ -19,22 +19,35 @@
           </div>
           <div class="right">
             <el-button type="primary" @click="handleExport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.additionDownload')">全部下载</el-button>
-            <el-button   @click="handleReportInfo" v-if="privilegeVoList.includes('salary.compute.salaryCheck.additionDownload')">获取反馈</el-button>
+            <el-button @click="handleReportInfo" v-if="privilegeVoList.includes('salary.compute.salaryCheck.additionDownload')">获取反馈</el-button>
+            <el-button @click="handleExport">导出</el-button>
           </div>
         </div>
         <div class="staff-situation">
             <span class="staff-total">
-              <span class="part" @click="selectNum('all')">
+              <span class="part" @click="selectNum('')">
                全部
                <i :class="['num', allActive?'active':'']">{{ total?total:0 }}</i>人
               </span>
-              <span class="part" @click="selectNum('wait')">
-                待报送
-                 <i :class="['num', waitActive?'active':'']">{{ awaitReportCount?awaitReportCount:0 }}</i>人
+              <span class="part" @click="selectNum('DEDUCT')">
+                有扣除
+                 <i :class="['num', deductActive?'active':'']">{{ deductCount }}</i>人
               </span>
-               <span class="part" @click="selectNum('error')">
-                报送失败
-                <i :class="['num', errorActive?'active':'']">{{ failReportCount?failReportCount:0 }}</i>人
+               <span class="part" @click="selectNum('NOT_DEDUCT')">
+                无扣除
+                <i :class="['num', notDeductActive?'active':'']">{{ notDeductCount }}</i>人
+              </span>
+               <span class="part" @click="selectNum('INIT')">
+                未下载
+                <i :class="['num', initActive?'active':'']">{{ initCount }}</i>人
+              </span>
+               <span class="part" @click="selectNum('WAIT_BACK')">
+                下载中
+                <i :class="['num', waitBackActive?'active':'']">{{ waitBackCount }}</i>人
+              </span>
+               <span class="part" @click="selectNum('FAIL')">
+                下载失败
+                <i :class="['num', errorActive?'active':'']">{{ errorCount }}</i>人
               </span>
             </span>
         </div>
@@ -66,6 +79,14 @@
             <el-table-column prop="totalHomeLoads" label="累计住房贷款利息"></el-table-column>
             <el-table-column prop="totalHouseRent" label="累计住房租金"></el-table-column>
             <el-table-column prop="totalSupportParents" label="累计赡养老人"></el-table-column>
+            <el-table-column  label="反馈信息" width="110">
+              <template slot-scope="scope">
+                <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
+                  <span class="hidenCon">{{ scope.row.failReason }}</span>
+                </el-tooltip>
+                <span v-else>{{ scope.row.failReason }}</span>
+              </template>
+            </el-table-column>
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
@@ -125,6 +146,7 @@ export default {
         "enumReportStatus":"",
         "key": "",
         "pageSize":20 ,
+        "enumSpecialDeductionStatus":"",
       },
       downLoadForm:{
         "checkId":this.$route.query.id,
@@ -147,12 +169,18 @@ export default {
       closeModel:false,
       setWarning:false,
       waitReportCount:0,
-      showWaitReport:false,
-      awaitReportCount:"",
-      failReportCount:"",
+      deductCount:0,
+      notDeductCount:0,
+      initCount:0,
+      waitBackCount:0,
+      errorCount:0,
       allActive:true,
-      waitActive:false,
+      deductActive:false,
+      notDeductActive:false,
+      initActive:false,
+      waitBackActive:false,
       errorActive:false,
+      showWaitReport:false,
     };
   },
   computed:{
@@ -186,6 +214,12 @@ export default {
             this.loading = false;
             this.total = res.data.count;
             this.list = res.data.data;
+            this.deductCount = res.data.deductCount;
+            this.notDeductCount = res.data.notDeductCount;
+            this.deductCount = res.data.deductCount;
+            this.initCount = res.data.initCount;
+            this.waitBackCount = res.data.waitBackCount;
+            this.errorCount = res.data.errorCount;
           }
         });
       //校验人员状态
@@ -216,25 +250,34 @@ export default {
     },
     //点击数字切换
     selectNum(type){
-      if(type === "all"){
-        this.allActive = true;
-        this.waitActive = false;
-        this.errorActive = false;
-        this.totalListForm.enumReportStatus = "";
+
+      if(type === ""){
+        this.allActive = true;this.deductActive = false;this.notDeductActive = false;this.initActive = false;this.waitBackActive = false;this.errorActive = false;
       }
-      if(type==="wait"){
-        this.allActive = false;
-        this.waitActive = true;
-        this.errorActive = false;
-        this.totalListForm.enumReportStatus = "AWAIT_REPORT";
+      if(type==="DEDUCT"){
+        this.allActive = false;this.deductActive = true;this.notDeductActive = false;this.initActive = false;this.waitBackActive = false;this.errorActive = false;
       }
-      if(type==="error"){
-        this.allActive = false;
-        this.waitActive = false;
-        this.errorActive = true;
-        this.totalListForm.enumReportStatus = "REPORT_ERROR";
+      if(type==="NOT_DEDUCT"){
+        this.allActive = false;this.deductActive = false;this.notDeductActive = true;this.initActive = false;this.waitBackActive = false;this.errorActive = false;
       }
+      if(type==="INIT"){
+        this.allActive = false;this.deductActive = false;this.notDeductActive = false;this.initActive = true;this.waitBackActive = false;this.errorActive = false;
+      }
+      if(type==="WAIT_BACK") {
+        this.allActive = false;this.deductActive = false;this.notDeductActive = false;this.initActive = false;this.waitBackActive = true;this.errorActive = false;
+      }
+      if(type==="FAIL"){
+        this.allActive = false;this.deductActive = false;this.notDeductActive = false;this.initActive = false;this.waitBackActive = false;this.errorActive = true;
+      }
+      this.totalListForm.enumSpecialDeductionStatus = type;
       this.getList()
+    },
+    //导出
+    handleExport(){
+      this.$store
+        .dispatch("salaryCalStore/actionGetAdditionalListExport", this.totalListForm)
+        .then(res => {
+        })
     },
     //子组件触发刷新
     freshList(data){
@@ -243,7 +286,7 @@ export default {
       }
     },
   //下载
-    handleExport() {
+    handleDownload() {
       if(this.setWarning){
         this.$message.warning("工资表已审核，不允许操作。")
       }else{

@@ -11,7 +11,7 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="showIncrease" class="add-import" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empAdd')">增员导入</el-button>
+        <el-button type="primary" @click="showIncrease" class="add-import" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empAdd')">增减员导入</el-button>
         <el-dropdown trigger="click" @command="handleDropdown">
           <el-button type="default">
             更多

@@ -54,7 +54,6 @@ export function apiTaxEmpCollectNewListExport(exportForm) {
   })
 }
 
-
 //个税申报-人员信息采集--报送
 export function apiTaxReport(reportForm) {
   return fetch({
@@ -190,7 +189,22 @@ export function apiCancelSubTaxReportQuery(invalidForm) {
     data: invalidForm
   })
 }
-
+//综合所得失败列表
+export function apiTaxReportFailRecord(invalidForm) {
+  return fetch({
+    url: '/api/taxReport/taxReportFailRecord',
+    method: 'post',
+    data: invalidForm
+  })
+}
+//综合所得失败列表导出
+export function apiTaxReportFailRecordExport(invalidForm) {
+  return fetchFile({
+    url: '/api/taxReport/taxReportFailRecordExport',
+    method: 'post',
+    data: invalidForm
+  })
+}
 /*综合所得-获取反馈结果*/
 export function apiGetReportBack(reportForm) {
   return fetch({
@@ -231,7 +245,6 @@ export function apiCheckReportData(reportForm) {
     params: reportForm
   })
 }
-
 /*综合所得-申报表导出*/
 export function apiSubTaxReportExport(reportForm) {
   return fetchFile({
