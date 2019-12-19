@@ -6,7 +6,7 @@
       </div>
       <div class="display-flex">
         <div class="side-nav flex1" v-if="isShowApp">
-          <side-nav></side-nav>
+          <old-side-nav :routerList="routerList" :mainMenu="mainMenu"></old-side-nav>
         </div>
         <div class="flex1 div-content" :class="{'no-margin':!isShowApp}">
           <router-view class="router-view"></router-view>
@@ -16,26 +16,25 @@
   </div>
 </template>
 <script>
+import router from "@/router";
 import topHeader from "@/components/basic/Header";
-import sideNav from "@/components/basic/SideNav";
 import { mapState } from "vuex";
 import * as AT from "@/store/actionTypes";
 export default {
   components: {
     topHeader,
-    sideNav
+  },
+  data() {
+    return {
+      //整个路由列表
+      routerList: router.options.routes,
+      mainMenu: {}
+    };
   },
   computed: {
     ...mapState({
       isShowApp: state => state.isShowApp
     })
-  },
-  data() {
-    return {
-      //整个路由列表
-      // routerList: router.options.routes,
-      mainMenu: {}
-    };
   },
   created() {
     this.$store.commit(AT.SHOWAPP, true); //如用户手动改变路由， 需将full-screeen关闭
@@ -65,24 +64,22 @@ export default {
   .no-margin {
     margin: 0;
   }
-
-  .side-nav {
-    width: 223px;
-    flex-grow: 0;
-    background: #4a535e;
-    box-shadow: 0 0 56px 0 #f1f1f1;
-  }
-  .div-content {
-    margin-left: 17px;
-    background: #fff;
-    overflow: hidden;
-    box-shadow: 3px 5px 15px #dae2ea;
-  }
-  .bottom {
-    text-align: center;
-    width: 100%;
-    position: fixed;
-    bottom: 40px;
-  }
+}
+.side-nav {
+  width: 223px;
+  flex-grow: 0;
+  height:calc(100vh - 90px)
+}
+.div-content {
+  margin-left: 17px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 3px 5px 15px #dae2ea;
+}
+.bottom {
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  bottom: 40px;
 }
 </style>

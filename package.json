@@ -85,5 +85,6 @@
     "vuedraggable": "^2.23.0",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4"
+
   }
 }

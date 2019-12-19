@@ -5,8 +5,8 @@ export function apiUserPrivilege() {
   return oldFetch({
     url: '/merchant/personnelManagement/getUserPrivilege',
     method: "post",
-    data:{
-      applicationCodes:["SALARY_MANAGER"]
+    data: {
+      applicationCodes: ["SALARY_MANAGER"]
     }
   })
 }
