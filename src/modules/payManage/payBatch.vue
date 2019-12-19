@@ -16,10 +16,10 @@
                 <el-table-column label="操作" min-width="270">
                     <template slot-scope="scope">
                         <div v-if="scope.row.bhaOpenStatus == 'ACTIVED' && scope.row.platformUserNo">
-                            <el-button type="text" @click="handleShowMonth('create',scope.row)">生成代发数据</el-button>
-                            <el-button type="text" @click="handleShowMonth('import',scope.row)">导入</el-button>
+                            <el-button type="text" @click="handleShowMonth('create',scope.row)" v-if="privilegeVoList.includes('salary.psalaryIssuing.batch.create')">生成代发数据</el-button>
+                            <el-button type="text" @click="handleShowMonth('import',scope.row)" v-if="privilegeVoList.includes('salary.psalaryIssuing.batch.import')">导入</el-button>
                         </div>
-                        <div v-if="scope.row.bhaAuditStatus=='PASS' && scope.row.bhaOpenStatus=='WAIT_ACTIVE'">
+                        <div v-if="scope.row.bhaAuditStatus=='PASS' && scope.row.bhaOpenStatus=='WAIT_ACTIVE' && privilegeVoList.includes('salary.psalaryIssuing.batch.activation')">
                             <el-button type="text" @click="handleActivateAccount(scope.row)">激活账户</el-button>
                         </div>
                     </template>
@@ -67,7 +67,10 @@ export default {
         ...mapState("payManageStore", {
             batchList: "batchList",
             batchListTotal: "batchListTotal"
-        })
+        }),
+        ...mapState({
+          privilegeVoList:state=>state.privilegeVoList
+        }),
     },
     mounted() {
         this.fetchTableList();

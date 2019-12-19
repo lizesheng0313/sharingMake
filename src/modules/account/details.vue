@@ -37,6 +37,7 @@
         </div>
         <div class="btns">
           <el-button type="primary" @click="handleWithdrawal">提现</el-button>
+<!--          账户信息-余额提现-->
         </div>
       </el-col>
     </el-row>
@@ -59,6 +60,7 @@
                       v-show="true"
                       @click="handleAlertPassword"
                     >修改存管交易密码</el-button>
+<!--                    账户信息-修改交易密码-->
                     <br />
                   </div>
                 </el-col>
