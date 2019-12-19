@@ -127,6 +127,16 @@ export function apiCheckMemberSummary(checkId) {
     method: 'get',
   })
 }
+
+//专项附加扣除导出
+export function apiGetAdditionalListExport(form) {
+  return fetchFile({
+    url: '/api/salary/getAdditionalList/export',
+    method: 'get',
+    params:form
+  })
+}
+
 //薪资核算列表
 export function apiSalaryList(form) {
   return fetch({

@@ -271,7 +271,10 @@ export default {
     },
     //导出
     handleExport(){
-
+      this.$store
+        .dispatch("salaryCalStore/actionGetAdditionalListExport", this.totalListForm)
+        .then(res => {
+        })
     },
     //子组件触发刷新
     freshList(data){
