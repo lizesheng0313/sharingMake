@@ -270,44 +270,10 @@
           <el-button @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
-      <!-- 获取反馈结果-->
-      <!-- 报送-->
-      <el-dialog
-        :visible.sync="isShowReportInfo"
-        width="550px"
-        center
-        class="diy-el_dialog"
-        :show-close="false"
-        :close-on-click-modal="closeModel"
-      >
-        <el-row v-for="(item,index) in reportInfoList" :key="index">
-          <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送完成</el-col></div>
-          <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">获取反馈中。。。</el-col></div>
-          <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送失败，{{item.failReason}}</el-col></div>
-        </el-row>
-        <div v-loading="reportInfoLoading" style="height: 40px"></div>
-        <div class="dialog-footer">
-          <el-button @click="isShowReportInfo=false" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
-        </div>
-      </el-dialog>
-      <!-- 获取反馈 -->
-      <el-dialog
-        :visible.sync="isShowReturnInfo"
-        width="550px"
-        title="获取反馈"
-        center
-        class="diy-el_dialog"
-        :show-close="false"
-        :close-on-click-modal="closeModel"
-      >
-        <el-row v-for="(item,index) in reportReturnList" :key="index">
-          <el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ item.dealStatus }}</el-col>
-        </el-row>
-        <div class="dialog-footer">
-          <el-button @click="isShowReturnInfo=false" type="primary" plain>我知道了</el-button>
-        </div>
-      </el-dialog>
-      <authorizeTip ref="authorizeTip"></authorizeTip>
+      <!-- 验证-->
+      <selectSy ref="selectSY" :timeObj="timeObj" :sign="sign"></selectSy>
+      <!-- 查询-->
+      <feedback ref="feedback" :sign="sign"></feedback>
     </div>
   </div>
 </template>
@@ -316,7 +282,8 @@ import { mapState } from "vuex";
 import * as SCR from "./util/constData";
 import * as AT from "./store/actionTypes";
 import fun from "@/util/fun";
-import authorizeTip from "@/components/tool/authorizeTip"
+import selectSy from "./components/partSelectSY";
+import feedback from "./components/partFeedback";
 let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
@@ -381,11 +348,19 @@ export default {
       list: [],
       closeModel: false,
       unNormalIds:[],
+      timeObj:{
+        first:3000,
+        second:8000,
+        third:12000,
+        fourth:22000,
+      },
+      sign:"taxCollect",
       // isSave:this.$route.query.isSave,
     };
   },
   components:{
-    authorizeTip,
+    selectSy,
+    feedback
   },
   computed:{
     ...mapState("salaryCalStore", {
@@ -443,6 +418,12 @@ export default {
           }
         });
     },
+    //子组件触发刷新
+    freshList(data){
+      if(data === this.sign){
+        this.getList()
+      }
+    },
     //导出
     handleExport(){
       this.$store
@@ -452,7 +433,6 @@ export default {
     handleReport() {
       let reportCount = this.reportForm.ids.length > 0 ? this.reportForm.ids.length:this.awaitReportCount;
       if( this.reportForm.ids.length > 0){
-        this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
         this.$confirm(
           "系统共检测到有" +
           reportCount +
@@ -465,29 +445,15 @@ export default {
           }
         ).then(() => {
           //报送
-          this.$store
-            .dispatch("taxPageStore/actionTaxReport", this.reportForm)
-            .then(res => {
-              if (res.success) {
-                //验证通过
-                if(res.data.status === "SUCCESS"){
-                  this.isShowReportInfo = true;
-                  this.reportInfoLoading = true;
-                  this.reportInfoList = res.data.taxSubList;
-                  //是否进行下步查询
-                  if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
-                    this.selectShuiyou()
-                  }else{//报送全部成功或失败
-                    this.reportInfoLoading = false;
-                    this.isShowIknow = true;
-                  }
-                }else{//授权失败
-                  this.$refs.authorizeTip.show()
-                }
-              }else{
-                this.$message.warning(res.message)
-              }
-            });
+          let paramsObj = {
+            validParameter : this.reportForm,
+            validAction : "taxPageStore/actionTaxReport",
+            querytAction : "taxPageStore/actionPostReportInfo",
+            stopTip:"报送",
+            showFailReason:false,
+            freeBackTip:"【获取反馈】"
+          }
+          this.$refs.selectSY.show(true,paramsObj)
         }).catch(() => {});
       }else{
         //如果未点击数据
@@ -498,93 +464,20 @@ export default {
         }
       }
     },
-    selectShuiyou(){
-      this.isShowIknow = false;
-      //查询第一次
-      setTimeout(()=>{
-        this.$store
-          .dispatch("taxPageStore/actionPostReportInfo", {
-            date: this.salaryItem.date,
-            checkId:this.$route.query.id,
-          }).then(r0 => {
-          if(r0.success){
-            if(r0.data.status === "SUCCESS"){
-              this.reportInfoList.push(...r0.data.taxSubList);
-              if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
-                this.selectSec()
-              } else{
-                this.reportInfoLoading = false;
-                this.isShowIknow = true;
-              }
-            }else{
-
-            }
-          }
-        })
-      },3000)
-    },
-    //第二次查询
-    selectSec(){
-      setTimeout(()=>{
-        this.$store.dispatch("taxPageStore/actionPostReportInfo", {
-          date: this.salaryItem.date,
-          checkId:this.$route.query.id,
-        }).then(r0 => {
-          if(r0.data.status === "SUCCESS"){
-            this.reportInfoList.push(...r0.data.taxSubList);
-            if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
-              this.selectThird()
-            } else{
-              this.reportInfoLoading = false;
-              this.isShowIknow = true;
-            }
-          }else{
-
-          }
-        })
-      },10000)
-    },
-    //第三次查询
-    selectThird(){
-      setTimeout(()=>{
-        this.$store
-          .dispatch("taxPageStore/actionPostReportInfo", {
-            date: this.salaryItem.date,
-            checkId:this.$route.query.id,
-          }).then(re => {
-          if(re.success){
-            this.reportInfoList.push(...re.data.taxSubList);
-            this.reportInfoLoading = false;
-            this.isShowIknow = true;
-          }
-        })
-      },15000)
-    },
     //获取反馈
     handleReportInfo(){
-      if( this.reportForm.ids.length > 0){
-        this.reportReturnList = [];
-        this.$store
-          .dispatch("taxPageStore/actionPostReportInfo", {
-            date: this.salaryItem.date,
-            checkId:this.$route.query.id,
-          }).then(res=>{
-          if(res.success){
-            // 已授权，有查询结果
-            if(res.data.status === "SUCCESS"){
-              this.reportReturnList = res.data.taxSubList;
-              this.isShowReportInfo = true;
-            }else{//未授权
-              this.isShowReportInfo = false;
-              this.$refs.authorizeTip.show()
-            }
-          }else{
-            this.$message.warning(res.message)
-          }
-        })
-      }else{
-          this.$message.warning("不存在待反馈的数据")
+      let paramsObj = {
+        validParameter : {
+          date:this.reportForm.date,
+          taxSubjectId: this.reportForm.taxSubId
+        },
+        validAction : "taxPageStore/actionTaxReport",
+        querytAction : "taxPageStore/actionPostReportInfo",
+        stopTip:"报送",
+        showFailReason:false,
+        freeBackTip:"【获取反馈】"
       }
+      this.$refs.feedback.show(true,paramsObj)
     },
     //表格选中事件
     handleSelectItem(row) {
@@ -604,6 +497,7 @@ export default {
         if (res.success) {
           this.taxSubjectInfolist = res.data;
           this.ruleForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
+          this.reportForm.taxSubId = this.taxSubjectInfolist[0].taxSubId;
           this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
           this.getList();
         }
@@ -616,6 +510,7 @@ export default {
     },
     handleCheckTaxSubject(item) {
       this.ruleForm.taxSubjectId = item.taxSubId;
+      this.reportForm.taxSubId = item.taxSubId;
       this.currentTaxSubName = item.taxSubName;
       this.ruleForm.currPage = 1;
       this.getList();

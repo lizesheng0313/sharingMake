@@ -7,7 +7,7 @@
       <div class="screening">
         <div class="clearfix check-staff-menu">
           <el-input
-            placeholder="请输入姓名\工号\证件号码"
+            placeholder="请输入姓名\工号\身份证号"
             v-model="totalListForm.key"
             prefix-icon="iconiconfonticonfontsousuo1 iconfont"
             clearable
@@ -18,7 +18,7 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
-            <el-button type="primary" @click="handleExport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.additionDownload')">全部下载</el-button>
+            <el-button type="primary" @click="handleDownload" v-if="privilegeVoList.includes('salary.compute.salaryCheck.additionDownload')">全部下载</el-button>
             <el-button @click="handleReportInfo" v-if="privilegeVoList.includes('salary.compute.salaryCheck.additionDownload')">获取反馈</el-button>
             <el-button @click="handleExport">导出</el-button>
           </div>
@@ -74,6 +74,7 @@
                 <span v-else>{{ scope.row.taxSubName }}</span>
               </template>
             </el-table-column>
+            <el-table-column prop="syncTimeStr" label="下载时间" width="200"></el-table-column>
             <el-table-column prop="totalChildrenEdu" label="累计子女教育"></el-table-column>
             <el-table-column prop="totalFurtherEdu" label="累计继续教育"></el-table-column>
             <el-table-column prop="totalHomeLoads" label="累计住房贷款利息"></el-table-column>
@@ -100,33 +101,33 @@
       </div>
     </div>
     <!-- 下载-->
-    <selectSY ref="selectSY"
+    <salarySy ref="selectSY"
               :validParameter = "downLoadForm"
               :validAction="validAction"
               :querytAction="querytAction"
               :sign="sign"
               :stopTip="stopTip"
-              :processingTip="processingTip"
               :timeObj="timeObj"
+              :freeBackTip="freeBackTip"
     >
-    </selectSY>
+    </salarySy>
     <!-- 获取反馈 -->
-    <feedback ref="feedback"
+    <salaryBack ref="feedback"
               :validParameter = "downLoadForm"
               :querytAction ="querytAction"
               :sign="sign"
               :stopTip="stopTip"
-              :processingTip="processingTip"
+              :freeBackTip="freeBackTip"
     >
-    </feedback>
+    </salaryBack>
     <authorizeTip ref="authorizeTip"></authorizeTip>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import authorizeTip from "@/components/tool/authorizeTip";
-import selectSY from "@/components/tool/selectSY";
-import feedback from "@/components/tool/feedback";
+import salarySy from "@/components/tool/salarySy";
+import salaryBack from "@/components/tool/salaryBack";
 import fun from "@/util/fun"
 let date = fun.headDate();
 let defaultDate =
@@ -134,8 +135,8 @@ let defaultDate =
 export default {
   components: {
     authorizeTip,
-    selectSY,
-    feedback,
+    salarySy,
+    salaryBack,
   },
   data() {
     return {
@@ -159,7 +160,7 @@ export default {
       validAction:"taxPageStore/actionDownloadAddition",
       querytAction:"taxPageStore/actionDownloadAdditionQuery",
       stopTip:"下载",//终止文案
-      processingTip:"数据反馈中。。。",//进行中文案
+      freeBackTip:"【获取反馈】",//进行中文案
       timeObj:{
         first:3000,
         second:10000,

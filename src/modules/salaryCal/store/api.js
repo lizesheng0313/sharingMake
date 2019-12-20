@@ -131,7 +131,7 @@ export function apiCheckMemberSummary(checkId) {
 //专项附加扣除导出
 export function apiGetAdditionalListExport(form) {
   return fetchFile({
-    url: '/api/salary/getAdditionalList/export',
+    url: '/api/xsalary/salary/getAdditionalList/export',
     method: 'get',
     params:form
   })
@@ -361,14 +361,14 @@ export function apiMemberErrorRecord(uuid) {
 // 银行代发状态
 export function apiPayrollCredit(id) {
   return fetch({
-    url: '/api/salary/stubs/payrollCredit/'+id,
+    url: '/api/xsalary/salary/stubs/payrollCredit/'+id,
     method: 'post',
   })
 }
 //撤销银行代发
 export function apiPayrollCreditCancel(id) {
   return fetch({
-    url: '/api/salary/stubs/payrollCreditCancel/'+id,
+    url: '/api/xsalary/salary/stubs/payrollCreditCancel/'+id,
     method: 'post',
   })
 }

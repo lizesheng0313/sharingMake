@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import { routerConfig } from './routerConfig'
 
 //router
+import homePage from 'modules/homePage/router'
 import salaryCal from 'modules/salaryCal/router'
 import tax from 'modules/tax/router'
 import taxPaid from 'modules/taxPaid/router'
@@ -26,8 +27,9 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/salary-cal'
+      redirect: '/home'
     },
+    ...homePage,
     ...salaryCal,
     ...tax,
     ...taxPaid,

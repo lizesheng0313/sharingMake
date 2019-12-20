@@ -16,7 +16,7 @@
       <div class="screening">
         <div class="clearfix check-staff-menu">
           <el-input
-            placeholder="请输入姓名\证件号码"
+            placeholder="请输入姓名\工号\身份证号"
             v-model="totalListForm.key"
             prefix-icon="iconiconfonticonfontsousuo1 iconfont"
             clearable

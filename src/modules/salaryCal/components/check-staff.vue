@@ -2,7 +2,7 @@
   <div class="check-staff">
     <div class="clearfix check-staff-menu">
       <el-input
-        placeholder="请输入姓名\手机号"
+        placeholder="请输入姓名\工号\身份证号"
         v-model="userForm.key"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
@@ -454,7 +454,7 @@
   .check-staff-menu {
     margin-top: 30px;
     .search-input {
-      width: 205px;
+      width: 215px;
     }
   }
   .add-import {

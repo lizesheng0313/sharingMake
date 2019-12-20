@@ -3,16 +3,19 @@
     <el-dialog
       :visible.sync="isShowReportInfo"
       width="550px"
-      title="提示"
+      :title="isShowIknow?'获取反馈':' '"
       center
       class="diy-el_dialog"
       :show-close="false"
       :close-on-click-modal="closeModel"
     >
-        <div v-if="subjectObj.dealStatus === 'SUCCESS'"><i class="el-icon-success"></i>{{paramsObj.stopTip}}成功</div>
-        <div v-if="subjectObj.dealStatus === 'PROCESSING'"><i class="el-icon-warning"></i>{{ paramsObj.stopTip }}已接收，局端处理中，请稍后点击【{{ paramsObj.stopTip }}反馈】。</div>
-        <div v-if="subjectObj.dealStatus === 'FAIL'"><i class="el-icon-warning"></i>{{ subjectObj.failReason}}</div>
+      <el-row v-for="(item,index) in reportInfoList" :key="index">
+        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">任务完成</el-col></div>
+        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">任务处理中…</el-col></div>
+        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">任务失败，{{item.failReason}}</el-col></div>
+      </el-row>
       <div v-loading="reportInfoLoading" style="height: 40px"></div>
+      <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ paramsObj.freeBackTip }}查询结果</div>
       <div class="dialog-footer">
         <el-button @click="onIknow" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
       </div>
@@ -21,7 +24,7 @@
    <!-- 失败原因   -->
     <el-dialog
       :visible.sync="isShowFailReason"
-      width="550px"
+      width="660px"
       title="失败列表"
       center
       class="diy-el_dialog"
@@ -67,11 +70,15 @@ export default {
         validAction: "", //校验action
         querytAction:"" ,//查询action
         showFailReason:false,//是否显示失败原因
+        freeBackTip:"",//获取反馈提示
       },
       isShowIknow:false,
       closeModel:false,
       failReasonData:[],
       isShowFailReason:false,
+      reportInfoList:[],
+      showReturn:false,
+      returnTip:"",
     };
   },
   created(){
@@ -79,10 +86,7 @@ export default {
   methods: {
     show(data,params) {
       if(data) {
-        this.subjectObj = {
-          dealStatus:"",
-          failReason:""
-        }
+        this.reportInfoList = [];
         this.isShowIknow = false;
         //接口参数赋值
        this.paramsObj = params;
@@ -94,6 +98,7 @@ export default {
     handleExport() {
       this.reportInfoLoading = true;
       this.isShowReportInfo = true;
+      this.returnTip = "";
       this.$store
         .dispatch(this.paramsObj.validAction, this.paramsObj.validParameter)
         .then(res=>{
@@ -103,9 +108,10 @@ export default {
               if(res.data.taxSubList[0].dealStatus === "PROCESSING"){
                 this.selectShuiyou()
               }else{//全部成功或失败
-                this.subjectObj = res.data.taxSubList[0];
+                this.reportInfoList = res.data.taxSubList;
                 this.reportInfoLoading = false;
                 this.isShowIknow = true;
+                this.returnTip = "反馈信息";
               }
             }else{
                 //授权失败
@@ -139,9 +145,10 @@ export default {
                     this.failReasonData = r0.data.dataList;
                     this.isShowFailReason = true;
                   }else{
-                    this.subjectObj = r0.data.taxSubList[0];
+                    this.reportInfoList = r0.data.taxSubList;
                     this.reportInfoLoading = false;
                     this.isShowIknow = true;
+                    this.returnTip = "反馈信息";
                   }
                 }
               }else{}
@@ -166,9 +173,10 @@ export default {
                   this.failReasonData = r0.data.dataList;
                   this.isShowFailReason = true;
                 }else{
-                  this.subjectObj = r0.data.taxSubList[0];
+                  this.reportInfoList = r0.data.taxSubList;
                   this.reportInfoLoading = false;
                   this.isShowIknow = true;
+                  this.returnTip = "反馈信息";
                 }
               }
             }else{
@@ -193,9 +201,13 @@ export default {
                   this.failReasonData = r0.data.dataList;
                   this.isShowFailReason = true;
                 }else{
-                  this.subjectObj = r0.data.taxSubList[0];
+                  this.reportInfoList = r0.data.taxSubList;
+                  if(this.reportInfoList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+                    this.showReturn = true;
+                  }
                   this.reportInfoLoading = false;
                   this.isShowIknow = true;
+                  this.returnTip = "反馈信息";
                 }
               }
             }else{
@@ -219,7 +231,7 @@ export default {
               }else{
                 this.reportInfoLoading = false;
                 this.isShowIknow = true;
-                this.subjectObj = re.data.taxSubList[0];
+                this.reportInfoList = re.data.taxSubList;
               }
             }
           })

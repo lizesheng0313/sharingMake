@@ -164,7 +164,7 @@ export function apiGenerateTaxReportData(generateForm) {
 /*综合所得-生成申报数据反馈*/
 export function apiQueryGenerateTaxReportData(generateForm) {
   return fetch({
-    url: '/api/taxReport/taxReportDataQuery',
+    url: '/api/xsalary/taxReport/taxReportDataQuery',
     method: 'post',
     params: generateForm
   })
@@ -192,7 +192,7 @@ export function apiCancelSubTaxReportQuery(invalidForm) {
 //综合所得失败列表
 export function apiTaxReportFailRecord(invalidForm) {
   return fetch({
-    url: '/api/taxReport/taxReportFailRecord',
+    url: '/api/xsalary/taxReport/taxReportFailRecord',
     method: 'post',
     data: invalidForm
   })
@@ -200,7 +200,7 @@ export function apiTaxReportFailRecord(invalidForm) {
 //综合所得失败列表导出
 export function apiTaxReportFailRecordExport(invalidForm) {
   return fetchFile({
-    url: '/api/taxReport/taxReportFailRecordExport',
+    url: '/api/xsalary/taxReport/taxReportFailRecordExport',
     method: 'post',
     data: invalidForm
   })

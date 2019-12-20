@@ -6,12 +6,11 @@
         <div class="box-fun">
           <p class="box-title">银行代发</p>
           <p class="tip">使用银行代发服务完成在线发薪</p>
-<!--          <div><el-button type="primary">提交代发数据</el-button></div>-->
-          <div><el-button type="primary" v-if="privilegeVoList.includes('salary.compute.salaryCheck.payroll')">启动代发</el-button></div>
-          <p class="tip">使用银行代发服务完成在线发薪{{ payrollStatus }}</p>
-          <div v-if="!payrollStatus || payrollStatus ==='INIT' && privilegeVoList.includes('salary.compute.salaryCheck.payroll')"><el-button type="primary" @click="sendData">提交代发数据</el-button></div>
+          <div v-if="!payrollStatus || payrollStatus ==='INIT' && privilegeVoList.includes('salary.compute.salaryCheck.payroll')">
+            <el-button type="primary" @click="sendData">提交代发数据</el-button>
+          </div>
           <div v-else v-show="privilegeVoList.includes('salary.compute.salaryCheck.payroll')">
-            <el-button type="primary">启动代发</el-button>
+            <el-button type="primary" @click="$router.push('/pay-batch')">启动代发</el-button>
             <el-button type="primary" @click="cancelPayroll">撤销代发</el-button>
           </div>
         </div>
@@ -135,23 +134,6 @@ export default {
     changeSatus(data){
      this.popShow.isshow = data;
     },
-    // 撤销代发
-    cancelPayroll(){
-      this.$confirm('您确定撤销代发吗', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }).then(() => {
-        this.$store.dispatch('salaryCalStore/actionPayrollCreditCancel',this.checkId).then(res=>{
-          if(res.payrollStatus === "SUCCESS"){
-            this.$message.success("撤销成功");
-            this._loading()
-          }else{
-            this.$message.warning(res.message);
-          }
-        })
-      })
-    },
     //发放薪资
     sendSalary(){
       apiProvideStubs(this.checkId).then(res=>{
@@ -176,8 +158,9 @@ export default {
           }
         ).then(() => {
           this.$store.dispatch('salaryCalStore/actionPayrollCredit',this.checkId).then(res=>{
-            if(res.data.list.length == 0){
-              this.$message.success("银行代发成功")
+            if(res.data.payrollStatus === "SUCCESS"){
+              this.$message.success("银行代发成功");
+              this._loading();
             }else{
               this.noCardListShow = true;
               this.noCardList = res.data.list;
@@ -187,6 +170,23 @@ export default {
       }else{
         this.$message.warning("工资数据未审核，请先审核再提交发薪数据。")
       }
+    },
+    // 撤销代发
+    cancelPayroll(){
+      this.$confirm('您确定撤销代发吗', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.$store.dispatch('salaryCalStore/actionPayrollCreditCancel',this.checkId).then(res=>{
+          if(res.data.payrollStatus === "SUCCESS"){
+            this.$message.success("撤销成功");
+            this._loading()
+          }else{
+            this.$message.warning(res.message);
+          }
+        })
+      })
     },
     //查看记录
     seeRecord(){

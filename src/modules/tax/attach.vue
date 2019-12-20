@@ -34,7 +34,7 @@
           <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
         </div>
         <div class="right">
-          <el-button  class="export-button" @click="handleExport" v-if="privilegeVoList.includes('salary.report.additionl.export')">导出</el-button>
+          <el-button class="export-button" @click="handleExport" v-if="privilegeVoList.includes('salary.report.additionl.export')">导出</el-button>
         </div>
       </div>
       <div class="screening">

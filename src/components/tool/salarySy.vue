@@ -10,12 +10,12 @@
       :close-on-click-modal="closeModel"
     >
       <el-row v-for="(item,index) in reportInfoList" :key="index">
-        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ stopTip }}任务完成</el-col></div>
-        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">任务处理中…</el-col></div>
-        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ stopTip }}失败，{{item.failReason}}</el-col></div>
+        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">{{ stopTip }}任务完成</el-col></div>
+        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">{{ stopTip }}任务处理中…</el-col></div>
+        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">{{ stopTip }}失败，{{item.failReason}}</el-col></div>
       </el-row>
       <div v-loading="reportInfoLoading" style="height: 40px"></div>
-      <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击【获取反馈】查询结果</div>
+      <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ freeBackTip }}查询结果</div>
       <div class="dialog-footer">
         <el-button @click="onIknow" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
       </div>
@@ -35,8 +35,8 @@ export default {
     querytAction:String, //查询action
     sign:String, //页面标识
     stopTip:String,//终止文案
-    processingTip:String,//进行中文案
-    timeObj:Object,
+    timeObj:Object,//时间
+    freeBackTip:String,//待反馈按钮提示
   },
   data() {
     return {

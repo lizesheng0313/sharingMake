@@ -33,12 +33,12 @@
               <div>
                 <div>
                   <strong>{{item.salaryRuleName}}</strong>
-                  <el-dropdown trigger="click" class="more-operation" @command="setSalaryTable(item)">
+                  <el-dropdown trigger="click" class="more-operation" @command="setSalaryTable(item)" v-if="privilegeVoList.includes('salary.compute.salaryCheck.updateSalaryRule')">
                     <span class="el-dropdown-link">
                       更多操作
                       <i class="iconsanjiao iconfont"></i>
                     </span>
-                    <el-dropdown-menu slot="dropdown" v-if="privilegeVoList.includes('salary.compute.salaryCheck.updateSalaryRule')">
+                    <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>设置工资表</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>

@@ -8,7 +8,7 @@
     <div class="clearfix check-staff-menu">
       <el-button class="screen" size="small" @click="showScreen">筛选</el-button>
       <el-input
-        placeholder="请输入姓名\手机号"
+        placeholder="请输入姓名\工号\身份证号"
         v-model="salaryForm.key"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
@@ -118,8 +118,7 @@
               <el-radio label="BY_EMP_NO">通过员工工号匹配人员</el-radio>
             </div>
             <div>
-              <el-radio label="BY_ID_NO" v-if="importT === 'social'">通过身份证号匹配人员</el-radio>
-              <el-radio label="BY_PHONE_NO" v-else>通过手机号匹配人员</el-radio>
+              <el-radio label="BY_ID_NO">通过身份证号匹配人员</el-radio>
             </div>
           </el-radio-group>
         </div>
@@ -288,25 +287,25 @@
       </span>
     </el-dialog>
     <!-- 薪资计算-->
-    <selectSY ref="selectSY"
+    <salary-sy ref="selectSy"
               :validParameter = "validParameter"
               :validAction="validAction"
               :querytAction="querytAction"
               :sign="sign"
               :stopTip="stopTip"
-              :processingTip="processingTip"
+              :freeBackTip="freeBackTip"
               :timeObj="timeObj"
     >
-    </selectSY>
+    </salary-sy>
     <!-- 获取反馈 -->
-    <feedback ref="feedback"
+    <salary-back ref="feedback"
               :validParameter = "validParameter"
               :querytAction="querytAction"
               :sign="sign"
               :stopTip="stopTip"
-              :processingTip="processingTip"
+              :freeBackTip="freeBackTip"
     >
-    </feedback>
+    </salary-back>
     <!--计算失败记录-->
     <el-dialog
       title="计算失败记录"
@@ -376,13 +375,13 @@
 </template>
 <script>
   import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,apiSocialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
-  import selectSY from "@/components/tool/selectSY";
-  import feedback from "@/components/tool/feedback";
+  import salarySy from "@/components/tool/salarySy";
+  import salaryBack from "@/components/tool/salaryBack";
   import { mapState } from "vuex";
   export default {
   components:{
-     selectSY,
-     feedback
+     salarySy,
+     salaryBack
   },
   data() {
     return {
@@ -481,7 +480,7 @@
       },
       sign:"calc-wages",
       stopTip:"薪资计算",//终止文案
-      processingTip:"数据反馈中。。。",//进行中文案
+      freeBackTip:"【获取计算结果】",//进行中文案
       timeObj:{
         first:3000,
         second:10000,
@@ -564,8 +563,6 @@
          this.computeErrorCount = salaryData.computeErrorCount?salaryData.computeErrorCount:0;
          this.awaitReportCount = salaryData.awaitReportCount?salaryData.awaitReportCount:0;
          this.isShowWaitReport = this.awaitReportCount || this.computeErrorCount
-         console.log(this.awaitReportCount)
-         console.log(this.computeErrorCount)
          this.tableValue = [];
          this.salaryTableData = salaryData.tableData;
          this.salaryTableDataAll = this.salaryTableData.map(item=>item.diyrow);
@@ -798,7 +795,6 @@
       if(res.code == "0000"){
         let data = res.data;
         this.successCount = data.successCount;
-        // this.uploadFileDisabled = this.;
         this.failCount = data.failCount;
         this.uuid = data.uuid;
       }else{
@@ -917,7 +913,7 @@
       if(this.setWarning){
         this.$message.warning("工资表已审核，不允许操作。")
       }else{
-        this.$refs.selectSY.show(true)
+        this.$refs.selectSy.show(true)
       }
     },
     //获取反馈

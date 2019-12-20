@@ -406,7 +406,7 @@ export default {
         validAction : "taxPageStore/postGenerateTaxReportData",
         querytAction : "taxPageStore/postQueryGenerateTaxReportData",
         stopTip:type === "create" ? "生成申报数据":"更新申报数据",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【获取申报数据】",
         showFailReason:true,
       }
       this.$refs.selectSY.show(true,paramsObj)
@@ -418,7 +418,7 @@ export default {
           validAction : "taxPageStore/postSendReport",
           querytAction : "taxPageStore/postSendReportQuery",
           stopTip:"发送申报",
-          processingTip:"获取反馈中。。。",
+          freeBackTip:"【发送申报反馈】",
         }
         this.$refs.selectSY.show(true,paramsObj)
     },
@@ -428,7 +428,7 @@ export default {
         validParameter : this.buttonForm,
         querytAction : "taxPageStore/postSendReportQuery",
         stopTip:"发送申报",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【发送申报反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -438,7 +438,7 @@ export default {
         validParameter : this.buttonForm,
         querytAction : "taxPageStore/postQueryGenerateTaxReportData",
         stopTip:"生成申报数据",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【生成申报反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -449,7 +449,7 @@ export default {
         validAction : "taxPageStore/postCancelSubTaxReport",
         querytAction : "taxPageStore/postCancelSubTaxReportQuery",
         stopTip:"作废申报",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【作废申报反馈】",
       }
       this.$refs.selectSY.show(true,paramsObj)
     },
@@ -459,7 +459,7 @@ export default {
         validParameter : this.buttonForm,
         querytAction : "taxPageStore/postCancelSubTaxReportQuery",
         stopTip:"作废申报",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【作废申报反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -470,7 +470,7 @@ export default {
         validAction : "taxPageStore/postGetReportBack",
         querytAction : "taxPageStore/postGetReportBackQuery",
         stopTip:"申报获取反馈",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【获取反馈查询】",
       }
       this.$refs.selectSY.show(true,paramsObj)
     },
@@ -480,7 +480,7 @@ export default {
         validParameter : this.buttonForm,
         querytAction : "taxPageStore/postGetReportBackQuery",
         stopTip:"申报获取反馈",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【获取反馈查询】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },

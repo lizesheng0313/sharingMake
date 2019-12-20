@@ -271,11 +271,12 @@ export default {
          taxSubId:this.taxSubId,
          queryMonth:this.agreementListForm.queryMonth,
          tripleAgreementNo:this.tripleAgreementNo,
-         subTaxReportType:this.subTaxReportType
+         subTaxReportType:this.subTaxReportType,
        },
       validAction : "taxPaidStore/actionTaxPay",
       querytAction : "taxPaidStore/actionTaxPayQuery",
       stopTip:"扣款",
+      freeBackTip:"【缴款反馈】",
      }
      this.$refs.selectSY.show(true,paramsObj)
     },
@@ -289,7 +290,7 @@ export default {
         },
         querytAction : "taxPaidStore/actionTaxPayQuery",
         stopTip:"扣款",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【缴款反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -304,6 +305,7 @@ export default {
         validAction : "taxPaidStore/actionGetTripleAgreement",
         querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
         stopTip:"获取三方协议",
+        freeBackTip:"【三方协议反馈】",
       }
       this.$refs.selectSY.show(true,paramsObj);
     },
@@ -316,6 +318,7 @@ export default {
         },
         querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
         stopTip:"获取三方协议",
+        freeBackTip:"【三方协议反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },

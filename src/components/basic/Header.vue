@@ -2,10 +2,10 @@
   <div class="top-header">
     <el-row type="flex" class="row-bg header display-flex">
       <el-col :span="12">
-        <div class="logo" @click="goOladingServer">
+        <div class="logo" >
           <img src="../../assets/images/olading-icon.png" alt />
-          <i class="el-icon-arrow-left"></i>
-          <span>返回选择服务</span>
+<!--          <i class="el-icon-arrow-left"></i>-->
+<!--          <span>返回选择服务</span>-->
         </div>
       </el-col>
       <el-col :span="12">

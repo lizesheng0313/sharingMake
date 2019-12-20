@@ -5,7 +5,7 @@
         <div class="screening">
           <div class="clearfix check-staff-menu">
             <el-input
-              placeholder="请输入姓名\工号\证件号码"
+              placeholder="请输入姓名\工号\身份证号"
               v-model="ruleForm.key"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               @keyup.enter.native="handleSearch"
@@ -114,25 +114,25 @@
         </div>
       </div>
       <!-- 报送-->
-      <selectSy ref="selectSY"
+      <salarySy ref="selectSY"
                 :validParameter = "validParameter"
                 :validAction="validAction"
                 :querytAction="querytAction"
                 :sign="sign"
                 :stopTip="stopTip"
-                :processingTip="processingTip"
                 :timeObj="timeObj"
+                :freeBackTip="freeBackTip"
       >
-      </selectSy>
+      </salarySy>
       <!-- 报送反馈 -->
-      <feedback ref="feedback"
+      <salaryBack ref="feedback"
                 :validParameter = "validParameter"
                 :querytAction="querytAction"
                 :sign="sign"
                 :stopTip="stopTip"
-                :processingTip="processingTip"
+                :freeBackTip="freeBackTip"
       >
-      </feedback>
+      </salaryBack>
       <authorizeTip ref="authorizeTip"></authorizeTip>
     </div>
   </div>
@@ -147,13 +147,13 @@ let month = new Date().getMonth() + 1;
 let defaultDate =
   date.year + "-" + (date.month >= 10 ? date.month : "0" + date.month);
 import authorizeTip from "@/components/tool/authorizeTip"
-import selectSy from "@/components/tool/selectSY"
-import feedback from "@/components/tool/feedback";
+import salarySy from "@/components/tool/salarySy"
+import salaryBack from "@/components/tool/salaryBack";
 export default {
   components:{
     authorizeTip,
-    selectSy,
-    feedback,
+    salarySy,
+    salaryBack,
   },
   data() {
     return {
@@ -199,9 +199,9 @@ export default {
         date:"",
         ids:""
       },
+      freeBackTip:"【获取反馈】",
       sign:"calc-staff-collect",
       stopTip:"报送",//终止文案
-      processingTip:"数据反馈中。。。",//进行中文案
       timeObj:{
         first:3000,
         second:10000,
@@ -335,6 +335,8 @@ export default {
         this.$message.warning("工资表已审核，不允许操作。")
       }else{
         if(this.ids.length>0 || this.allIds.length === 0){
+          this.validParameter.ids = this.ids;
+          this.validParameter.date = this.salaryItem.date;
           this.$refs.feedback.show(true)
         }else{
           this.$message.warning("不存在待反馈的数据")

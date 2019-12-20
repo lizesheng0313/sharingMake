@@ -38,14 +38,16 @@ export default {
   },
   created() {
     this.$store.commit(AT.SHOWAPP, true); //如用户手动改变路由， 需将full-screeen关闭
-  },
-  mounted() {
     //权限列表
     this.$store.dispatch("actionUserPrivilege").then(res => {
       this.mainMenu = res.data.privilegeGroupTreeVO.children[0].children;
-      this.privilegeVOList = res.data.privilegeVOList.map(it=>it.code);
+      let privilegeVOList = res.data.privilegeVOList.map(it=>it.code);
+      this.privilegeVOList = privilegeVOList ? privilegeVOList : [];
       this.$store.commit(AT.SET_PRIVILIGEVOLiST,this.privilegeVOList);
     });
+
+  },
+  mounted() {
   },
   methods:{
 
