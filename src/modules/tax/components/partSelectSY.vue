@@ -88,6 +88,7 @@ export default {
       if(data) {
         this.reportInfoList = [];
         this.isShowIknow = false;
+        this.showReturn = false;
         //接口参数赋值
        this.paramsObj = params;
        this.handleExport();
@@ -111,7 +112,6 @@ export default {
                 this.reportInfoList = res.data.taxSubList;
                 this.reportInfoLoading = false;
                 this.isShowIknow = true;
-                this.returnTip = "反馈信息";
               }
             }else{
                 //授权失败
@@ -148,7 +148,6 @@ export default {
                     this.reportInfoList = r0.data.taxSubList;
                     this.reportInfoLoading = false;
                     this.isShowIknow = true;
-                    this.returnTip = "反馈信息";
                   }
                 }
               }else{}
@@ -176,7 +175,6 @@ export default {
                   this.reportInfoList = r0.data.taxSubList;
                   this.reportInfoLoading = false;
                   this.isShowIknow = true;
-                  this.returnTip = "反馈信息";
                 }
               }
             }else{
@@ -207,7 +205,6 @@ export default {
                   }
                   this.reportInfoLoading = false;
                   this.isShowIknow = true;
-                  this.returnTip = "反馈信息";
                 }
               }
             }else{

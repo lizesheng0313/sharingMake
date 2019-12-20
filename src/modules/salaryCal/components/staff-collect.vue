@@ -142,13 +142,13 @@ import { mapState } from "vuex";
 import * as SCR from "../util/constData";
 import * as AT from "../store/actionTypes";
 import fun from "@/util/fun";
+import authorizeTip from "@/components/tool/authorizeTip"
+import salarySy from "@/components/tool/salarySy"
+import salaryBack from "@/components/tool/salaryBack";
 let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
   date.year + "-" + (date.month >= 10 ? date.month : "0" + date.month);
-import authorizeTip from "@/components/tool/authorizeTip"
-import salarySy from "@/components/tool/salarySy"
-import salaryBack from "@/components/tool/salaryBack";
 export default {
   components:{
     authorizeTip,

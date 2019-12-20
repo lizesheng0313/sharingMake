@@ -3,7 +3,7 @@
     <el-dialog
       :visible.sync="isShowReturnInfo"
       width="550px"
-      title="获取反馈"
+      :title="isShowIknow?'获取反馈':''"
       center
       class="diy-el_dialog"
       :show-close="false"
@@ -15,7 +15,7 @@
         <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">任务失败，{{item.failReason}}</el-col></div>
       </el-row>
       <div v-loading="reportInfoLoading" style="height: 40px"></div>
-      <div v-show="isShowIknow" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ paramsObj.freeBackTip }}查询结果</div>
+      <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ paramsObj.freeBackTip }}查询结果</div>
       <div class="dialog-footer">
         <el-button @click="onIknow" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
       </div>
@@ -38,12 +38,15 @@ export default {
         stopTip:"",//终止文案
         validParameter: "", //校验参数
         querytAction:"" ,//查询action
+        freeBackTip:"",//获取反馈
       },
       isShowReturnInfo:false,
       isShowReportInfo: false,
       closeModel:false,
       reportInfoList:[],
-      showReturn:false
+      showReturn:false,
+      reportInfoLoading:false,
+      isShowIknow:false
     };
   },
   methods: {
@@ -52,6 +55,7 @@ export default {
         //接口参数赋值
         this.showReturn=false;
         this.reportInfoList = []
+        this.isShowIknow = false;
         this.paramsObj = params;
         this.handleReportInfo()
       }

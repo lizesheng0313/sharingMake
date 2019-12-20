@@ -16,7 +16,7 @@
       </el-row>
       <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ freeBackTip }}查询结果</div>
       <div class="dialog-footer">
-        <el-button @click="onIknow" type="primary" plain>我知道了</el-button>
+        <el-button @click="onIknow" type="primary" plain v-show="isShowIknow">我知道了</el-button>
       </div>
     </el-dialog>
     <authorizeTip ref="authorizeTip"></authorizeTip>
@@ -48,14 +48,17 @@ export default {
       },
       reportInfoList:[],
       showReturn:false,
+      isShowIknow:false
     };
   },
   methods: {
     show(data,params) {
       if(data) {
         //接口参数赋值
+        this.reportInfoList = []
         this.showReturn = false;
         this.paramsObj = params;
+        this.isShowIknow = false;
         this.handleReportInfo()
       }
       else{

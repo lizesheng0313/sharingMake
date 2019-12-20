@@ -2,7 +2,7 @@
   <div class="selectSY">
     <el-dialog
       :visible.sync="isShowReportInfo"
-      :title="returnTip"
+      :title="isShowIknow?'获取反馈':''"
       width="550px"
       center
       class="diy-el_dialog"
@@ -57,6 +57,7 @@ export default {
     show(data) {
       if(data) {
         this.reportInfoList=[];
+        this.showReturn = false;
         this.isShowIknow = false;
         this.handleExport();
       }else{
@@ -80,7 +81,6 @@ export default {
               }else{//全部成功或失败
                 this.reportInfoLoading = false;
                 this.isShowIknow = true;
-                this.returnTip = "反馈信息";
               }
             }else{//授权失败
               this.reportInfoLoading = false;
@@ -114,7 +114,6 @@ export default {
                   this.selectSec()
                 } else{
                   this.reportInfoLoading = false;
-                  this.returnTip = "反馈信息";
                   this.isShowIknow = true;
                 }
               }else{
@@ -142,7 +141,6 @@ export default {
                 this.selectThird()
               } else{
                 this.reportInfoLoading = false;
-                this.returnTip = "反馈信息";
                 this.isShowIknow = true;
               }
             }else{
@@ -169,7 +167,6 @@ export default {
                 this.showReturn = true;
               }
               this.reportInfoLoading = false;
-              this.returnTip = "反馈信息";
               this.isShowIknow = true;
             }
           })

@@ -58,6 +58,7 @@ export default {
       if(data) {
         this.reportInfoList = [];
         this.isShowIknow = false;
+        this.showReturn = false;
         //接口参数赋值
        this.paramsObj = params;
        this.handleExport();

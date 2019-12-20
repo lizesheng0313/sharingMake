@@ -182,6 +182,7 @@ export default {
         },
         querytAction : "taxPageStore/actionAccreditQuery",
         stopTip:"授权",
+        freeBackTip:'【授权反馈】'
       }
       this.$refs.feedback.show(true,paramsObj)
     },

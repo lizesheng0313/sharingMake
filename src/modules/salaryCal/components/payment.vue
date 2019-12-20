@@ -220,19 +220,20 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/scss/helpers.scss";
 .payment {
-  margin-top:50px;
-  padding-bottom: 50px;
+  margin-top:120px;
+  padding-bottom: 120px;
+  display: flex;
   .box{
-    width:546px;
-    margin:0 auto;
+    width:300px;
+    margin:0 30px;
     height: 188px;
-    background: url("../../../assets/images/bg.png");
-    background-size:100%;
-    background-position:center;
+    background: url("../../../assets/images/bg.png")no-repeat;
+    background-size:cover;
     position: relative;
     margin-bottom:30px;
+    flex:1;
     .box-con{
-      margin-left:160px;
+      margin-left:110px;
       /*border:1px solid red;*/
       margin-top: 10px;
       padding-top: 40px;
@@ -240,9 +241,11 @@ export default {
         width:50px;
         height:50px;
         margin-right: 30px;
+        vertical-align: bottom;
       }
       .box-fun{
         display: inline-block;
+        height: 80px;
         .box-title{
           color:#333333;
           font-size: 18px;

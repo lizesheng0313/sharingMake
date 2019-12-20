@@ -39,6 +39,7 @@ export default {
         processingTip:"",//进行中文案
         validParameter: "", //校验参数
         querytAction:"" ,//查询action
+        freeBackTip:"",
       },
       isShowReturnInfo:false,
       isShowReportInfo: false,
@@ -53,8 +54,10 @@ export default {
     show(data,params) {
       if(data) {
         //接口参数赋值
+        this.reportInfoList = [];
         this.paramsObj = params;
         this.showReturn = false;
+        this.isShowIknow = false;
         this.handleReportInfo()
       }
       else{
@@ -73,7 +76,7 @@ export default {
             if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
               this.showReturn = true;
             }
-            this.isShowReturnInfo = true;
+            this.isShowIknow = true;
           }else{//未授权
             this.isShowReportInfo = false;
             this.$refs.authorizeTip.show()

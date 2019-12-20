@@ -41,13 +41,15 @@ export default {
       isShowReturnInfo:false,
       isShowReportInfo: false,
       closeModel:false,
-      showReturn:false
+      showReturn:false,
+
     };
   },
   methods: {
     show(data) {
       if(data) {
         this.reportReturnList = [];
+        this.showReturn = false;
         this.handleReportInfo()
       }
       else{

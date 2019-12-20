@@ -3,7 +3,7 @@
     <el-dialog
       :visible.sync="isShowReportInfo"
       width="550px"
-      title="提示"
+      :title="isShowIknow?'获取反馈':''"
       center
       class="diy-el_dialog"
       :show-close="false"
@@ -15,7 +15,7 @@
         <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">任务失败，{{item.failReason}}</el-col></div>
       </el-row>
       <div v-loading="reportInfoLoading" style="height: 40px"></div>
-      <div v-show="isShowIknow" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ paramsObj.freeBackTip }}查询结果</div>
+      <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ paramsObj.freeBackTip }}查询结果</div>
       <div class="dialog-footer">
         <el-button @click="onIknow" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
       </div>
@@ -35,10 +35,6 @@ export default {
   },
   data() {
     return {
-      subjectObj:{
-        dealStatus:"",
-        failReason:""
-      },
       isShowReturnInfo:false,
       isShowReportInfo: false,
       reportInfoLoading:false,
@@ -48,10 +44,12 @@ export default {
         validParameter: {}, //校验参数
         validAction: "", //校验action
         querytAction:"" ,//查询action
+        freeBackTip:"",//反馈信息
       },
       isShowIknow:false,
       closeModel:false,
       reportInfoList:[],
+      showReturn:false
     };
   },
   created(){
@@ -59,7 +57,9 @@ export default {
   methods: {
     show(data,params) {
       if(data) {
+        this.reportInfoList = [];
         this.isShowIknow = false;
+        this.showReturn = false;
         //接口参数赋值
        this.paramsObj = params;
        this.handleExport();
@@ -151,6 +151,9 @@ export default {
               this.reportInfoLoading = false;
               this.isShowIknow = true;
               this.reportInfoList = re.data.taxSubList;
+              if(this.reportInfoList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
+                this.showReturn = true;
+              }
               this.isClose = ["PROCESSING",'SUCCESS'].includes(re.data.taxSubList[0].dealStatus);
             }
           })
