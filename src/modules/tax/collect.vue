@@ -142,8 +142,8 @@
               <el-table-column label="国籍" width="140">
                 <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
               </el-table-column>
-              <el-table-column prop="reportFinishTime" label="更新时间" width="180"></el-table-column>
-              <el-table-column prop="updateTime" label="最近操作时间" width="180"></el-table-column>
+<!--              <el-table-column prop="reportFinishTime" label="更新时间" width="180"></el-table-column>-->
+<!--              <el-table-column prop="updateTime" label="最近操作时间" width="180"></el-table-column>-->
               <el-table-column prop="updateTime" label="反馈信息" width="120">
                 <template slot-scope="scope">
                   <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
@@ -498,6 +498,7 @@ export default {
           this.taxSubjectInfolist = res.data;
           this.ruleForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
           this.reportForm.taxSubId = this.taxSubjectInfolist[0].taxSubId;
+          this.reportForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
           this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
           this.getList();
         }
@@ -511,6 +512,7 @@ export default {
     handleCheckTaxSubject(item) {
       this.ruleForm.taxSubjectId = item.taxSubId;
       this.reportForm.taxSubId = item.taxSubId;
+      this.reportForm.taxSubjectId = item.taxSubId;
       this.currentTaxSubName = item.taxSubName;
       this.ruleForm.currPage = 1;
       this.getList();

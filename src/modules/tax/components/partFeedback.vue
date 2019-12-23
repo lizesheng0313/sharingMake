@@ -79,6 +79,7 @@ export default {
               this.showReturn = true;
             }
             this.isShowReturnInfo = true;
+            this.isShowIknow = true;
           }else{//未授权
             this.isShowReportInfo = false;
             this.$refs.authorizeTip.show()
