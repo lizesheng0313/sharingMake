@@ -98,7 +98,7 @@
       ref="import"
       :radioList="radioList"
       :title="'累计应税项导入'"
-      :apiCheck="'/api/taxTotalBase/importTaxTotalBaseCheck'"
+      :apiCheck="'/api/xsalary/taxTotalBase/importTaxTotalBaseCheck'"
       :apiDownloadLog="'cumulativePageStore/getExportErrorRecord'"
       :apiDownloadTemplate="'cumulativePageStore/actionDownloadTemplate'"
       :parameterData="parameterData"
