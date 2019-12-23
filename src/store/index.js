@@ -7,6 +7,9 @@ import { salaryCalStore } from '../modules/salaryCal/store'
 import { taxPageStore } from '../modules/tax/store'
 import { cumulativePageStore } from '../modules/initialize/store'
 import { taxPaidStore } from '../modules/taxPaid/store'
+import { payManageStore } from '@/modules/payManage/store'
+import { accountPageStore } from "@/modules/account/store"
+import { withdrawalPageStore } from "@/modules/withdrawal/store"
 Vue.use(Vuex)
 
 import mutations from './mutations'
@@ -17,11 +20,15 @@ export default new Vuex.Store({
     salaryCalStore,
     taxPageStore,
     cumulativePageStore,
-    taxPaidStore
+    taxPaidStore,
+    withdrawalPageStore,
+    payManageStore,
+    accountPageStore
   },
   state: {
     token: '',
-    isShowApp: true
+    isShowApp: true,
+    privilegeVoList:[]
   },
   mutations,
   actions,

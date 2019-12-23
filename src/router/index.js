@@ -3,16 +3,22 @@ import Router from 'vue-router'
 import { routerConfig } from './routerConfig'
 
 //router
+import homePage from 'modules/homePage/router'
 import salaryCal from 'modules/salaryCal/router'
 import tax from 'modules/tax/router'
 import taxPaid from 'modules/taxPaid/router'
 import initialize from 'modules/initialize/router'
+import accountPageRouter from 'modules/account/router'
+import payManageRouter from 'modules/payManage/router'
+import withdrawal from 'modules/withdrawal/router'
+import resultRouter from 'modules/result/router'
 
 
 
 Vue.use(Router)
 
 let router = new Router({
+  // base:'/pSalary',
   mode: 'history',
   saveScrollPosition: true,
   scrollBehavior: () => ({
@@ -21,12 +27,17 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/salary-cal'
+      redirect: '/home'
     },
+    ...homePage,
     ...salaryCal,
     ...tax,
     ...taxPaid,
-    ...initialize
+    ...initialize,
+    ...accountPageRouter,
+    ...payManageRouter,
+    ...withdrawal,
+    ...resultRouter
   ]
 })
 routerConfig(router)

@@ -1,4 +1,4 @@
-import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList,apiDownloadAddition,apiDownloadAdditionQuery,apiSocialBenefitsList,apiAccreditQuery,apiQueryGenerateTaxReportData,apiCancelSubTaxReportQuery,apiGetReportBackQuery,apiSendReportQuery,apiEmpCollectNewListExport,apiTaxEmpCollectNewListExport
+import {apiSubTaxReportExport,apiCheckReportData,apiSendReport,apiGetReportBack,apiCancelSubTaxReport,apiEmpCollectList,apiEmpCollectNewList, apiTaxSubjectList, apiDealTaxSubject, apiDelTaxSubject, apiSaveEmpCollectInfo, apiReport,apiTaxReport, apiTaxSubjectInfoList, apiGetFeedback, apiOtherTotalList, apiOtherTotalExport, apiDownloadOtherTotal,apiTaxReportTotalList,apiGenerateTaxReportData,apiPostReportInfo,apiAdditionalList,apiDownloadAddition,apiDownloadAdditionQuery,apiSocialBenefitsList,apiAccreditQuery,apiQueryGenerateTaxReportData,apiCancelSubTaxReportQuery,apiGetReportBackQuery,apiSendReportQuery,apiEmpCollectNewListExport,apiTaxEmpCollectNewListExport,apiTaxReportFailRecord,apiTaxReportFailRecordExport
 } from './api'
 
 /*个税-人员采集*/
@@ -97,6 +97,10 @@ export const postCancelSubTaxReport = ({ dispatch }, invalidForm) => {
     return apiCancelSubTaxReport(invalidForm)
 }
 
+export const actionTaxReportFailRecordExport = ({ dispatch }, invalidForm) => {
+  return apiTaxReportFailRecordExport(invalidForm)
+}
+
 //综合申报-作废申报反馈
 export const postCancelSubTaxReportQuery = ({ dispatch }, invalidForm) => {
   return apiCancelSubTaxReportQuery(invalidForm)
@@ -117,6 +121,11 @@ export const postSendReport = ({ dispatch }, sendReportForm) => {
 //综合申报-发送申报反馈
 export const postSendReportQuery = ({ dispatch }, sendReportForm) => {
   return apiSendReportQuery(sendReportForm)
+}
+
+//综合申报-发送申报反馈
+export const actionTaxReportFailRecord = ({ dispatch }, sendReportForm) => {
+  return apiTaxReportFailRecord(sendReportForm)
 }
 
 //综合申报-获取人员状态为非正常

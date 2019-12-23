@@ -16,7 +16,7 @@
       <div class="screening">
         <div class="clearfix check-staff-menu">
           <el-input
-            placeholder="请输入姓名\证件号码"
+            placeholder="请输入姓名\工号\身份证号"
             v-model="totalListForm.key"
             prefix-icon="iconiconfonticonfontsousuo1 iconfont"
             clearable
@@ -27,9 +27,9 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
-            <el-button type="primary" @click="handleCopyData">复制上月数据</el-button>
-            <el-button @click="handleImport">导入</el-button>
-            <el-button @click="handleExport">导出</el-button>
+            <el-button type="primary" @click="handleCopyData" v-if="privilegeVoList.includes('salary.compute.salaryCheck.socialCopy')">复制上月数据</el-button>
+            <el-button @click="handleImport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.socialImport')">导入</el-button>
+            <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.socialExport')">导出</el-button>
           </div>
         </div>
         <div class="staff-table">
@@ -143,7 +143,9 @@ export default {
     };
   },
   computed:{
-
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     this.getList()

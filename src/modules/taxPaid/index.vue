@@ -62,15 +62,15 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="280px">
             <template slot-scope="scope">
-              <span class="funStyle" @click="getTripleAgreementList(scope.row)">发起缴款</span>
-              <span class="funStyle" @click="queryTaxPay(scope.row)">缴款反馈</span>
+              <span class="funStyle" @click="getTripleAgreementList(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.sendPay')">发起缴款</span>
+              <span class="funStyle" @click="queryTaxPay(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.sendPay')">缴款反馈</span>
               <el-popover
                 ref="popMore"
                 placement="bottom-end"
                 width="250"
                 trigger="hover">
-                <span class="funStyle" @click="getTripleAgreement(scope.row)">获取三方协议下载</span>
-                <span class="funStyle" @click="getTripleAgreementQuery(scope.row)">三方协议反馈</span>
+                <span class="funStyle" @click="getTripleAgreement(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.downloadProtocol')">获取三方协议下载</span>
+                <span class="funStyle" @click="getTripleAgreementQuery(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.downloadProtocol')">三方协议反馈</span>
                 <span slot="reference" class="more-choose">更多>></span>
               </el-popover>
             </template>
@@ -143,6 +143,11 @@ export default {
   components: {
     selectSY,
     feedback,
+  },
+  computed:{
+    ...mapState({
+        privilegeVoList:state=>state.privilegeVoList
+    })
   },
   data() {
     return {
@@ -266,11 +271,12 @@ export default {
          taxSubId:this.taxSubId,
          queryMonth:this.agreementListForm.queryMonth,
          tripleAgreementNo:this.tripleAgreementNo,
-         subTaxReportType:this.subTaxReportType
+         subTaxReportType:this.subTaxReportType,
        },
       validAction : "taxPaidStore/actionTaxPay",
       querytAction : "taxPaidStore/actionTaxPayQuery",
       stopTip:"扣款",
+      freeBackTip:"【缴款反馈】",
      }
      this.$refs.selectSY.show(true,paramsObj)
     },
@@ -284,7 +290,7 @@ export default {
         },
         querytAction : "taxPaidStore/actionTaxPayQuery",
         stopTip:"扣款",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【缴款反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -299,6 +305,7 @@ export default {
         validAction : "taxPaidStore/actionGetTripleAgreement",
         querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
         stopTip:"获取三方协议",
+        freeBackTip:"【三方协议反馈】",
       }
       this.$refs.selectSY.show(true,paramsObj);
     },
@@ -311,6 +318,7 @@ export default {
         },
         querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
         stopTip:"获取三方协议",
+        freeBackTip:"【三方协议反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },

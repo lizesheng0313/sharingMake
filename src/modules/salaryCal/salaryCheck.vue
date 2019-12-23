@@ -2,7 +2,7 @@
   <div class="salary-check sflary-el-step">
     <full-screen :fsTitle="salaryTitle" :bgColor="'#fafafa'" ref="full" style="overflow: hidden;">
       <div slot="fs-buttons" class="header-button">
-        <span class="collect" v-if="active==1" >
+        <span class="collect" v-if="active==1">
          <router-link :to="{ path: '/tax/collect' }"> <i class="iconqiyexinxicaiji iconfont"></i>人员信息采集</router-link>
         </span>
         <span class="refresh" @click="refresh">

@@ -23,7 +23,7 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="handleShowBox">新增</el-button>
+              <el-button type="primary" class="add-import" @click="handleShowBox" v-if="privilegeVoList.includes('salary.init.taxSubject.save')">新增</el-button>
             </div>
           </div>
           <div class="staff-table">
@@ -66,8 +66,8 @@
                 <template slot-scope="scope">
                   <span @click="handleQuery(scope.row)" v-if="scope.row.accreditStatus==='WAIT_ACCREDIT'" class="funStyle">获取反馈</span>
                   <span v-else>
-                     <span @click="handleEditor(scope.row)" class="funStyle">编辑</span>
-                     <span @click="handleDelete(scope.row.taxSubId)" class="funStyle">删除</span>
+                     <span @click="handleEditor(scope.row)" class="funStyle" v-if="privilegeVoList.includes('salary.init.taxSubject.save')">编辑</span>
+                     <span @click="handleDelete(scope.row.taxSubId)" class="funStyle" v-if="privilegeVoList.includes('salary.init.taxSubject.delete')">删除</span>
                   </span>
                 </template>
               </el-table-column>
@@ -143,6 +143,11 @@ export default {
       selectItem:{}
     };
   },
+  computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
+  },
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -177,6 +182,7 @@ export default {
         },
         querytAction : "taxPageStore/actionAccreditQuery",
         stopTip:"授权",
+        freeBackTip:'【授权反馈】'
       }
       this.$refs.feedback.show(true,paramsObj)
     },

@@ -1,17 +1,12 @@
-import { fetch } from 'request/fetch'
+import oldFetch from 'request/oldFetch'
 
-export function apiGetCode() {
-  return fetch({
-    url: '/api/taxReport/getCaptchaId',
-  })
-}
 //获取用户权限
 export function apiUserPrivilege() {
-  return fetch({
-    url: '/api/merchant/personnelManagement/getUserPrivilege',
+  return oldFetch({
+    url: '/merchant/personnelManagement/getUserPrivilege',
     method: "post",
-    data:{
-      applicationCodes:["SALARY_MANAGER"]
+    data: {
+      applicationCodes: ["SALARY_MANAGER"]
     }
   })
 }

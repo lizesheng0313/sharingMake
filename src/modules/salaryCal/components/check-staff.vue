@@ -2,7 +2,7 @@
   <div class="check-staff">
     <div class="clearfix check-staff-menu">
       <el-input
-        placeholder="请输入姓名\手机号"
+        placeholder="请输入姓名\工号\身份证号"
         v-model="userForm.key"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
@@ -11,15 +11,15 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="showIncrease" class="add-import">增员导入</el-button>
+        <el-button type="primary" @click="showIncrease" class="add-import" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empAdd')">增减员导入</el-button>
         <el-dropdown trigger="click" @command="handleDropdown">
           <el-button type="default">
             更多
             <i class="iconsanjiao iconfont"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="delete">全部删除</el-dropdown-item>
-            <el-dropdown-item command="export">导出</el-dropdown-item>
+            <el-dropdown-item command="delete" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">全部删除</el-dropdown-item>
+            <el-dropdown-item command="export" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empExport')">导出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -44,7 +44,7 @@
       </div>-->
       <div class="floating-menu" v-if="selectUserIdList.length>0">
         <span>已选中{{selectUserIdList.length}}人</span>
-        <el-button size="mini" class="button-mini" @click="handleDelete(selectUserIdList)">批量删除</el-button>
+        <el-button size="mini" class="button-mini" @click="handleDelete(selectUserIdList)" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">批量删除</el-button>
       </div>
       <el-table :data="userList"
                 class="check-staff_table"
@@ -116,7 +116,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleDelete([scope.row.id])">删除</el-button>
+            <el-button size="mini" @click="handleDelete([scope.row.id])" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -202,8 +202,8 @@
 </template>
 <script>
   import { apiCheckMember,apiImportMember,apiCheckMemberdelete,apiCheckMemberSummary,apiMemberErrorRecord} from '../store/api'
-export default {
-
+  import { mapState } from "vuex";
+ export default {
   data() {
     return {
       radio: 3,
@@ -248,6 +248,11 @@ export default {
       setWarning:false,
       closeModel:false,
     };
+  },
+  computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     const that = this;
@@ -449,7 +454,7 @@ export default {
   .check-staff-menu {
     margin-top: 30px;
     .search-input {
-      width: 205px;
+      width: 215px;
     }
   }
   .add-import {

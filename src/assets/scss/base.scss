@@ -379,3 +379,36 @@ a {
   vertical-align:middle;
   display: inline-block;
 }
+//页面内容主体
+.page-module{
+  .div-module {
+    background: #fff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 4px;
+    -moz-box-shadow: 3px 5px 15px #c3d0d9;
+    box-shadow: 5px 10px 15px #c3d0d9;
+  }
+}
+//分页组件
+.pages{
+  text-align: center;
+  margin: 10px 0;
+}
+//提示介绍
+.intro {
+  background: #FFFFDB;
+  color: #999999;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 3px;
+  .intro-title {
+    color: #000;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .intro-cnt {
+    line-height: 1.8;
+  }
+}
