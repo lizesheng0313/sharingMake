@@ -87,7 +87,7 @@
         ref="import"
         :radioList="radioList"
         :title="'公积金导入'"
-        :apiCheck="'/api/salary/socialProvident/verify'"
+        :apiCheck="'/api/xsalary/salary/socialProvident/verify'"
         :apiDownloadLog="'salaryCalStore/actionSocialProvidentRecord'"
         :apiDownloadTemplate="'salaryCalStore/actionSocialProvidentTemplate'"
         :parameterData="parameterData"
