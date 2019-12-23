@@ -152,7 +152,7 @@
       <div class="select-file">
         <el-upload
           class="avatar-uploader"
-          action="/api/salary/salaryCheck/verify"
+          action="/api/xsalary/salary/salaryCheck/verify"
           :limit="1"
           :file-list="fileList"
           :before-upload="beforeAvatarUpload"
