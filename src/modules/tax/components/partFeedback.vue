@@ -14,7 +14,7 @@
         <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">任务处理中…</el-col></div>
         <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">任务失败，{{item.failReason}}</el-col></div>
       </el-row>
-      <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ freeBackTip }}查询结果</div>
+      <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ paramsObj.freeBackTip }}查询结果</div>
       <div class="dialog-footer">
         <el-button @click="onIknow" type="primary" plain v-show="isShowIknow">我知道了</el-button>
       </div>
@@ -38,6 +38,7 @@ export default {
         processingTip:"",//进行中文案
         validParameter: "", //校验参数
         querytAction:"" ,//查询action
+        freeBackTip:""//获取反馈提示
       },
       isShowReturnInfo:false,
       isShowReportInfo: false,
