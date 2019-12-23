@@ -380,7 +380,7 @@ export default {
           { required: true, message: "请上传", trigger: "blur" }
         ]
       },
-      submitText: "提交开户",
+      submitText: "",
       bankList: [],
       typeList: []
     };
@@ -397,27 +397,45 @@ export default {
       return false;
     },
     isShowSubmit() {
-      let status = this.$route.query.bhaAuditStatus;
-      let level = this.$route.query.level;
-      let type = this.$route.query.type;
-      if(type == 'right'){
+      // let status = this.$route.query.bhaAuditStatus;
+      // let level = this.$route.query.level;
+      // let type = this.$route.query.type;
+      // if(type == 'right'){
+      //   this.submitText = "提交开户";
+      //   return true;
+      // }
+      // if (
+      //   status == "SUBMITTED" ||
+      //   status == "WAIT" ||
+      //   status == "FAIL" ||
+      //   level == "0"
+      // ) {
+      //   return false;
+      // } else if (status) {
+      //   this.submitText = "保存修改";
+      //   return true;
+      // } else {
+      //   this.submitText = "提交开户";
+      //   return true;
+      // }
+      const {type,bhaAuditStatus} = this.$route.query;
+
+      if(type == "add" || type == "right"){
         this.submitText = "提交开户";
         return true;
       }
-      if (
-        status == "SUBMITTED" ||
-        status == "WAIT" ||
-        status == "FAIL" ||
-        level == "0"
-      ) {
-        return false;
-      } else if (status) {
-        this.submitText = "保存修改";
-        return true;
-      } else {
-        this.submitText = "提交开户";
-        return true;
+
+      if(type == "edit"){
+        if(bhaAuditStatus == 'SUBMITTED' || bhaAuditStatus == 'WAIT' || bhaAuditStatus == 'FAIL'){
+          this.submitText = "";
+          return false;
+        }
+        if(bhaAuditStatus == 'PASS' || bhaAuditStatus == 'BACK'){
+          this.submitText = "保存修改";
+          return true;
+        }
       }
+
     },
     ...mapState({
       privilegeVoList:state=>state.privilegeVoList
@@ -550,8 +568,8 @@ export default {
   }
   .clear-button {
     position: absolute;
-    top: 5px;
-    left: 90px;
+    top: 4px;
+    left: 120px;
   }
   .upload_pic {
     img {

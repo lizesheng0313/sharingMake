@@ -1,5 +1,12 @@
 <template>
   <div class="account router-view">
+    <header class="header main-title">
+      <el-row type="flex">
+        <el-col :span="12">
+          <span>代发账户管理</span>
+        </el-col>
+      </el-row>
+    </header>
     <div>
       <div class="intro">
         <div class="intro-title">说明：</div>
@@ -10,17 +17,25 @@
       </div>
     </div>
     <div>
-      <el-table :data="accountList" v-loading="loading" :header-cell-style="{background:'#F5F5F5'}" border>
-        <el-table-column label="公司名称" prop="name" min-width="170"></el-table-column>
+      <el-table :data="accountList" v-loading="loading">
+        <el-table-column label="公司名称" min-width="170">
+          <template slot-scope="scope">{{scope.row.name}}</template>
+        </el-table-column>
         <el-table-column label="开户审核状态" min-width="170">
-          <template slot-scope="scope">{{accountStatus[scope.row.bhaAuditStatus]}}</template>
+          <template slot-scope="scope">{{scope.row.platformUserNo ? accountStatus[scope.row.bhaAuditStatus] : '-'}}</template>
         </el-table-column>
         <el-table-column label="激活状态" min-width="170">
-          <template slot-scope="scope">{{activeStatus[scope.row.bhaOpenStatus] || '-'}}</template>
+          <template slot-scope="scope">{{scope.row.platformUserNo ? activeStatus[scope.row.bhaOpenStatus] : '-'}}</template>
         </el-table-column>
-        <el-table-column label="申请时间" prop="createTime" min-width="170"></el-table-column>
-        <el-table-column label="不通过原因" prop="bhaAuditDesc" min-width="170"></el-table-column>
-        <el-table-column label="账户金额" prop="amount" min-width="170"></el-table-column>
+        <el-table-column label="申请时间" min-width="170">
+          <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.createTime : '-'}}</template>
+        </el-table-column>
+        <el-table-column label="不通过原因" min-width="170">
+          <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.bhaAuditDesc : '-'}}</template>
+        </el-table-column>
+        <el-table-column label="账户金额" min-width="170">
+          <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.amount : '-'}}</template>
+        </el-table-column>
         <el-table-column label="操作" min-width="270">
           <template slot-scope="scope">
             <el-button
@@ -32,6 +47,7 @@
             <el-button
               type="text"
               @click="handleAccountDetails(scope.row)"
+              v-if="scope.row.bhaAuditStatus=='PASS' && scope.row.platformUserNo"
             >账户详情</el-button>
             <el-button type="text" @click="handleOpenInformation(scope.row)" v-if="scope.row.platformUserNo && scope.row.level == 1">开户信息</el-button>
             <el-button type="text" @click="handleRightOpen(scope.row)" v-if="!scope.row.platformUserNo && privilegeVoList.includes('salary.account.psalaryAccount.open')">立即开户</el-button>
@@ -113,15 +129,19 @@ export default {
         query: {
           level: row.level,
           merchantId: row.id,
+          bhaAuditStatus: row.bhaAuditStatus,
           type: "edit"
         }
       });
     },
+    //新增资金账户
     handleAddInformation(row) {
       this.$router.push({
         path: "/account-information",
         query: {
+          level: row.level,
           merchantId: this.masterId,//新增的时候merchantId就是父ID
+          bhaAuditStatus: row.bhaAuditStatus,
           type: "add"
         }
       });
@@ -133,6 +153,7 @@ export default {
         query: {
           level: row.level,
           merchantId: row.id,
+          bhaAuditStatus: row.bhaAuditStatus,
           type: "right"
         }
       });
@@ -150,6 +171,10 @@ export default {
     margin-top: 15px;
     cursor: pointer;
     margin-bottom: 20px;
+  }
+  .header {
+    border-bottom: 1px solid #ededed;
+    margin-bottom: 10px;
   }
 }
 </style>
