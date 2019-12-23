@@ -405,6 +405,7 @@ export default {
         validParameter : this.buttonForm,
         validAction : "taxPageStore/postGenerateTaxReportData",
         querytAction : "taxPageStore/postQueryGenerateTaxReportData",
+        exportFailAction:"taxPageStore/postErrorExports",
         stopTip:type === "create" ? "生成申报数据":"更新申报数据",
         freeBackTip:"【获取申报数据】",
         showFailReason:true,

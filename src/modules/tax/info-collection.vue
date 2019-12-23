@@ -73,7 +73,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7" class="right-input-box">
-                <el-form-item label="证件号码" prop="idNo" >
+                <el-form-item label="证件号码" prop="idNo">
                   <el-input v-model="employeeFormData.idNo" :disabled="checkSuccess"></el-input>
                 </el-form-item>
                 <el-form-item label="国籍(地区)" prop="country" :disabled="checkSuccess">
@@ -183,7 +183,7 @@ export default {
       personnelCollection: state => state.personnelCollection
     }),
     checkSuccess:function(){
-      return this.employeeFormData.idValidStatus == "CHECK_SUCCESS" || this.employeeFormData.workerStatus=='NO_NORMAL'
+      return this.employeeFormData.idValidStatus === "CHECK_SUCCESS" || this.employeeFormData.idValidStatus ==='CHECKING'
     }
   },
   mounted() {
