@@ -1,5 +1,12 @@
 <template>
     <div class="pay-batch page-module">
+        <header class="header main-title">
+            <el-row type="flex">
+                <el-col :span="12">
+                    <span>批量代发</span>
+                </el-col>
+            </el-row>
+        </header>
         <div>
             <div class="intro">
                 <div class="intro-title">说明：</div>
@@ -8,11 +15,11 @@
                     <p>• 工资卡避免使用二类户，二类户全国日限额为1万元，若超限会导致失败，具体账户类型请咨询发卡行。</p>
                 </div>
             </div>
-            <el-table border :data="batchList" v-loading="loading" :header-cell-style="{background:'#F5F5F5'}">
+            <el-table :data="batchList" v-loading="loading">
                 <el-table-column label="公司名称" prop="name" min-width="170"></el-table-column>
                 <el-table-column label="开户审核状态" prop="bhaAuditStatusStr" min-width="170"></el-table-column>
                 <el-table-column label="激活状态" prop="bhaOpenStatusStr" min-width="170"></el-table-column>
-                <el-table-column label="最近代发日期" prop="createTime" min-width="170"></el-table-column>
+                <el-table-column label="最近代发日期" prop="payDate" min-width="170"></el-table-column>
                 <el-table-column label="操作" min-width="270">
                     <template slot-scope="scope">
                         <div v-if="scope.row.bhaOpenStatus == 'ACTIVED' && scope.row.platformUserNo">
@@ -69,8 +76,8 @@ export default {
             batchListTotal: "batchListTotal"
         }),
         ...mapState({
-          privilegeVoList:state=>state.privilegeVoList
-        }),
+            privilegeVoList: state => state.privilegeVoList
+        })
     },
     mounted() {
         this.fetchTableList();
@@ -151,5 +158,9 @@ export default {
 
 <style lang="scss" scoped>
 .pay-batch {
+    .header {
+        border-bottom: 1px solid #ededed;
+        margin-bottom: 10px;
+    }
 }
 </style>

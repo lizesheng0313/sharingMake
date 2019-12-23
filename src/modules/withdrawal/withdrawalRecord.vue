@@ -1,56 +1,17 @@
 <template>
-  <div class="recharge public_input">
-    <el-form
-      :inline="true"
-      label-position="right"
-      label-width="100px"
-      ref="refSearchForm"
-      :model="searchFormData"
-    >
-      <el-form-item label="提现订单ID：" prop="id">
-        <el-input v-model="searchFormData.id"></el-input>
-      </el-form-item>
-      <el-form-item label="订单状态：" prop="status">
-        <el-select v-model="searchFormData.status">
-          <el-option :label="item.val" :value="item.key" v-for="item in option" :key="item.key"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="到账账户名：" prop="realName">
-        <el-input v-model="searchFormData.realName"></el-input>
-      </el-form-item>
-      <el-form-item label="创建时间：" prop="countTime">
-        <el-date-picker
-          v-model="searchFormData.countTime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          :default-time="['00:00:00', '23:59:59']"
-          :unlink-panels="true"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始月份"
-          end-placeholder="结束月份"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item label="完成时间：" prop="completeTime">
-        <el-date-picker
-          v-model="searchFormData.completeTime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          :default-time="['00:00:00', '23:59:59']"
-          :unlink-panels="true"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始月份"
-          end-placeholder="结束月份"
-        ></el-date-picker>
-      </el-form-item>
-      <p>
-        <el-form-item>
-          <el-button type="primary" @click="handleSearchForm">查询</el-button>
-          <el-button @click="handleResetForm('refSearchForm')">重置</el-button>
-          <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.withdraw.export')">导出</el-button>
-        </el-form-item>
-      </p>
-    </el-form>
-    <el-card>
+  <div class="withdraw public_input">
+    <header class="header main-title">
+      <el-row type="flex">
+        <el-col :span="12">
+          <span>提现记录</span>
+        </el-col>
+      </el-row>
+    </header>
+    <div style="margin-bottom:20px;">
+      <el-button type="default" @click="dlgFilter = true">筛选</el-button>
+      <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.withdraw.export')">导出</el-button>
+    </div>
+    <div>
       <el-table :data="tableList" v-loading="loading" :header-cell-style="{background:'#F5F5F5'}" border>
         <el-table-column label="提现订单ID" prop="id" min-width="120"></el-table-column>
         <el-table-column label="订单状态" prop="mercialName" min-width="170">
@@ -72,7 +33,55 @@
         :page-size="searchFormData.pageSize"
         :total="total"
       ></el-pagination>
-    </el-card>
+    </div>
+    <el-dialog width="52%" center :close-on-click-modal="false" v :visible.sync="dlgFilter">
+      <el-form
+        label-position="right"
+        label-width="100px"
+        ref="refSearchForm"
+        :model="searchFormData"
+      >
+        <el-form-item label="提现订单ID：" prop="id">
+          <el-input v-model="searchFormData.id"></el-input>
+        </el-form-item>
+        <el-form-item label="订单状态：" prop="status">
+          <el-select v-model="searchFormData.status">
+            <el-option :label="item.val" :value="item.key" v-for="item in option" :key="item.key"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="到账账户名：" prop="realName">
+          <el-input v-model="searchFormData.realName"></el-input>
+        </el-form-item>
+        <el-form-item label="创建时间：" prop="countTime">
+          <el-date-picker
+            v-model="searchFormData.countTime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :default-time="['00:00:00', '23:59:59']"
+            :unlink-panels="true"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始月份"
+            end-placeholder="结束月份"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="完成时间：" prop="completeTime">
+          <el-date-picker
+            v-model="searchFormData.completeTime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :default-time="['00:00:00', '23:59:59']"
+            :unlink-panels="true"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始月份"
+            end-placeholder="结束月份"
+          ></el-date-picker>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleSearchForm">查询</el-button>
+        <el-button @click="handleResetForm('refSearchForm')">重置</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -99,7 +108,8 @@ export default {
         countTime: [],
         completeTime: [],
       },
-      tableList: []
+      tableList: [],
+      dlgFilter: false
     };
   },
   computed: {
@@ -142,6 +152,7 @@ export default {
     },
     handleSearchForm() {
       this.fetchTableList(1);
+      this.dlgFilter = false;
     },
     handleResetForm(formName) {
       this.searchFormData.startTime = null;
@@ -150,6 +161,7 @@ export default {
       this.searchFormData.completedTimeEnd = null;
       this.$refs[formName].resetFields();
       this.fetchTableList(1);
+      this.dlgFilter = false;
     },
     handleCurrentChange(e) {
       this.fetchTableList(e);
@@ -179,4 +191,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.withdraw{
+  .header {
+    border-bottom: 1px solid #ededed;
+    margin-bottom: 10px;
+  }
+  .el-select,
+  .el-input,
+  .el-date-editor--month {
+    width: 200px !important;
+  }
+}
 </style>
