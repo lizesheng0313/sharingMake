@@ -7,11 +7,15 @@
                 </el-col>
             </el-row>
         </header>
-        <div>
-            <div style="margin-bottom:20px;">
+        <div class="flex-center">
+            <div>
                 <el-button type="default" @click="dlgFilter = true">筛选</el-button>
-                <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.psalaryIssuing.batchRecord.export')">导出</el-button>
+                <!-- <el-input placeholder="请输入姓名\工号\身份证号" v-model="searchFormData.payMonth" prefix-icon="iconiconfonticonfontsousuo1 iconfont" class="search-input"></el-input> -->
+                <el-date-picker v-model="searchFormData.payMonth" value-format="yyyyMM" type="month" placeholder="选择月" class="search-input" clearable>
+                </el-date-picker>
+                <el-button type="primary" @click="handleSearch">查询</el-button>
             </div>
+            <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.psalaryIssuing.batchRecord.export')">导出</el-button>
         </div>
         <div>
             <el-table :data="recordList" v-loading="loading">
@@ -23,7 +27,7 @@
                 <el-table-column label="出款成功订单数" prop="orderSuccessNum" min-width="120"></el-table-column>
                 <el-table-column label="实发金额" prop="amountSuccess" min-width="170"></el-table-column>
                 <el-table-column label="支付时间" prop="payTime" min-width="170"></el-table-column>
-                <el-table-column label="操作" min-width="120">
+                <el-table-column label="操作" min-width="120" fixed="right">
                     <template slot-scope="scope">
                         <el-button type="text" @click="handleDetail(scope.row.id)"
                             v-if="['PAID','CLOSED'].includes(scope.row.status) && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.select')">查看</el-button>
@@ -47,10 +51,10 @@
                         <el-option v-for="(merchant,index) in selectMerchant" :key="index" :label="merchant.val" :value="merchant.key"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="发放月份：" prop="payMonth">
+                <!-- <el-form-item label="发放月份：" prop="payMonth">
                     <el-date-picker v-model="searchFormData.payMonth" value-format="yyyyMM" type="month" placeholder="选择月">
                     </el-date-picker>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="批次状态：" prop="status">
                     <el-select v-model="searchFormData.status">
                         <el-option v-for="(status,index) in selectStatus" :key="index" :label="status.val" :value="status.key"></el-option>
@@ -122,6 +126,16 @@ export default {
         handleSearchForm() {
             this.fetchTableList(1);
             this.dlgFilter = false;
+        },
+        handleSearch() {
+            const param = {
+                currPage: 1,
+                pageSize: 10,
+                payMonth: this.searchFormData.payMonth
+            };
+            this.$store.dispatch("payManageStore/postRecordList", param).then(() => {
+                this.loading = false;
+            });
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
@@ -195,6 +209,11 @@ export default {
 
 <style lang="scss" scoped>
 .pay-record {
+    .flex-center {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
     .header {
         border-bottom: 1px solid #ededed;
         margin-bottom: 10px;

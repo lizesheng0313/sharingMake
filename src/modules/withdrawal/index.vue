@@ -21,22 +21,22 @@
         <el-table-column label="公司名称" min-width="170">
           <template slot-scope="scope">{{scope.row.name}}</template>
         </el-table-column>
-        <el-table-column label="开户审核状态" min-width="170">
+        <el-table-column label="开户审核状态" min-width="150">
           <template slot-scope="scope">{{scope.row.platformUserNo ? accountStatus[scope.row.bhaAuditStatus] : '-'}}</template>
         </el-table-column>
-        <el-table-column label="激活状态" min-width="170">
+        <el-table-column label="激活状态" min-width="150">
           <template slot-scope="scope">{{scope.row.platformUserNo ? activeStatus[scope.row.bhaOpenStatus] : '-'}}</template>
         </el-table-column>
-        <el-table-column label="申请时间" min-width="170">
+        <el-table-column label="申请时间" min-width="150">
           <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.createTime : '-'}}</template>
         </el-table-column>
-        <el-table-column label="不通过原因" min-width="170">
+        <el-table-column label="不通过原因" min-width="150">
           <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.bhaAuditDesc : '-'}}</template>
         </el-table-column>
-        <el-table-column label="账户金额" min-width="170">
+        <el-table-column label="账户金额" min-width="150">
           <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.amount : '-'}}</template>
         </el-table-column>
-        <el-table-column label="操作" min-width="270">
+        <el-table-column label="操作" min-width="240">
           <template slot-scope="scope">
             <el-button
               type="text"
