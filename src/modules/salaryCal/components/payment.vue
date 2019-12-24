@@ -221,15 +221,15 @@ export default {
 @import "../../../assets/scss/helpers.scss";
 .payment {
   margin-top:120px;
-  padding-bottom: 120px;
+  padding: 0px 40px 120px 40px;
   display: flex;
   .box{
     width:160px;
-    margin:0 20px;
+    margin:0 10px;
     height: 188px;
     position: relative;
     margin-bottom:30px;
-    border:1px solid #999;
+    border:1px solid #EBEEF5;
     border-radius: 4px;
     flex:1;
     .box-con{

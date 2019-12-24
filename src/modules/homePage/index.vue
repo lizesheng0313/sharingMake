@@ -1,14 +1,14 @@
 <template>
-  <div class="accounting-page">
+  <div class="homePage">
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
-          <span>薪资核算</span>
+          <span>首页</span>
         </el-col>
         <el-col :span="12">
           <div class="add-table">
-            <i class="iconxinzeng iconfont"></i>
-            <span>新增工资表</span>
+<!--            <i class="iconxinzeng iconfont"></i>-->
+<!--            <span>新增工资表</span>-->
           </div>
         </el-col>
       </el-row>
@@ -26,7 +26,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
-.accounting-page {
+.homePage {
+  height:calc(100vh - 90px);
   .header {
     padding:0 20px;
     font-size: 14px;

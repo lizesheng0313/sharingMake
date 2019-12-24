@@ -116,7 +116,6 @@ export default {
     },
     goStep(data){
       this.active = data;
-      console.log(this.active)
       this.replaceRoute(this.active)
     },
     replaceRoute(data){

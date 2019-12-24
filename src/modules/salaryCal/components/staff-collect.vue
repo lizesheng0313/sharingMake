@@ -557,7 +557,7 @@ export default {
   }
 }  //超出部分隐藏
 .hidenCon{
-    width:200px;
+    width:300px;
     overflow: hidden;
     word-break: keep-all;
     white-space: nowrap;

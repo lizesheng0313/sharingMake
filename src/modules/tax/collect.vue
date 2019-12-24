@@ -344,7 +344,7 @@ export default {
       isShowInfoColl: true,
       isShowScreening: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
-      screenHeight: document.body.clientHeight - 316,
+      screenHeight: document.body.clientHeight - 350,
       list: [],
       closeModel: false,
       unNormalIds:[],
@@ -381,7 +381,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 316;
+        this.screenHeight = document.body.clientHeight - 350;
       })();
     };
   },

@@ -9,7 +9,7 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <span class="log-out icontuichu iconfont" @click="logOut"></span>
+<!--        <span class="log-out icontuichu iconfont" @click="logOut"></span>-->
       </el-col>
     </el-row>
   </div>
