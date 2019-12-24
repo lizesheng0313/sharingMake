@@ -10,7 +10,7 @@ export default [
     component: index,
     meta: {
       businessCode: "salary.compute.salaryCheck",
-      icon:"iconshouye"
+      icon:"iconxinzihesuan"
     }
   }, {
     path: '/salarySet',
