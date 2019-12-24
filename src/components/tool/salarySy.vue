@@ -2,7 +2,7 @@
   <div class="selectSY">
     <el-dialog
       :visible.sync="isShowReportInfo"
-      :title="isShowIknow?'获取反馈':''"
+      :title="isShowIknow?'反馈信息':''"
       width="550px"
       center
       class="diy-el_dialog"
