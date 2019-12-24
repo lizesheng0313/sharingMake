@@ -140,7 +140,7 @@ export function apiGetAdditionalListExport(form) {
 //薪资核算列表
 export function apiSalaryList(form) {
   return fetch({
-    url: '/api/salary/salaryCheck/salaryList',
+    url: '/api/xsalary/salary/salaryCheck/salaryList',
     method: 'post',
     data:form
   })
@@ -157,7 +157,7 @@ export function apiSalaryCheckFailRecord(form) {
 //薪资计算导出
 export function apiSalaryCheckFailRecordExport(form) {
   return fetchFile({
-    url: '/api/salary/salaryCheckFailRecordExport',
+    url: '/api/xsalary/salary/salaryCheckFailRecordExport',
     method: 'post',
     data:form
   })
