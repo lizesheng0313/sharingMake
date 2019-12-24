@@ -46,7 +46,7 @@
                 <el-form-item label="姓名" prop="empName">
                   <el-input v-model="employeeFormData.empName" :disabled="checkSuccess"></el-input>
                 </el-form-item>
-                <el-form-item label="性别" required >
+                <el-form-item label="性别" required>
                   <el-select v-model="employeeFormData.empSex" placeholder="请选择" :disabled="checkDisabled">
                     <el-option
                       v-for="(value,key) in baseInfo.empSex"
@@ -248,7 +248,7 @@ export default {
           {
             validator: (rule, value, callback) => {
               if (t.employeeFormData.workerStatus == "NO_NORMAL" && !value) {
-                callback(new Error("请输入离职日期"));
+                callback(new Error("离职日期不能为空"));
               } else {
                 callback();
               }
@@ -314,6 +314,7 @@ export default {
           }
         });
       }
+      console.log(this.employeeFormData)
     }
   }
 };

@@ -765,7 +765,7 @@
         this.fileList=[];
         this.importType="BY_EMP_NO";
         this.importT = type;
-        this.actionUrl = type == "social"?"/api/salary/socialProvident/verify":"/api/salary/floatItem/verify";
+        this.actionUrl = type == "social"?"/api/xsalary/salary/socialProvident/verify":"/api/xsalary/salary/floatItem/verify";
         this.isShowImport = true;
       }
     },
