@@ -17,9 +17,15 @@
             </div>
             <el-table :data="batchList" v-loading="loading">
                 <el-table-column label="公司名称" prop="name" min-width="170"></el-table-column>
-                <el-table-column label="开户审核状态" prop="bhaAuditStatusStr" min-width="170"></el-table-column>
-                <el-table-column label="激活状态" prop="bhaOpenStatusStr" min-width="170"></el-table-column>
-                <el-table-column label="最近代发日期" prop="payDate" min-width="170"></el-table-column>
+                <el-table-column label="开户审核状态" min-width="170">
+                    <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.bhaAuditStatusStr : '-'}}</template>
+                </el-table-column>
+                <el-table-column label="激活状态" min-width="170">
+                    <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.bhaOpenStatusStr : '-'}}</template>
+                </el-table-column>
+                <el-table-column label="最近代发日期" min-width="170">
+                    <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.payDate : '-'}}</template>
+                </el-table-column>
                 <el-table-column label="操作" min-width="270">
                     <template slot-scope="scope">
                         <div v-if="scope.row.bhaOpenStatus == 'ACTIVED' && scope.row.platformUserNo">

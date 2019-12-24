@@ -184,9 +184,9 @@
 .upload-disable .el-upload--picture-card{
   display: none;
 }
-.el-upload-dragger{
-  width:180px!important;
-}
+// .el-upload-dragger{
+//   width:180px!important;
+// }
 .el-submenu .el-menu-item{
   min-width:170px;
 }
@@ -277,4 +277,10 @@
 .el-step.is-simple:not(:last-of-type) .el-step__title{
   max-width: 60%;
   word-break: break-all;
+}
+
+.input-bigger{
+  .el-select,.el-input{
+    width: 320px !important;
+  }
 }
