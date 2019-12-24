@@ -233,6 +233,7 @@ export default {
 @import "../../assets/scss/helpers.scss";
 .salary-cal {
   height:calc(100vh - 90px);
+  overflow: auto;
   .el-icon-date{
     font-size:16px;
     .el-month-table td.today .cell{
