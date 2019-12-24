@@ -142,15 +142,13 @@
           <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
           <span v-if="successCount === 0"><i class="el-icon-error"></i>数据全部未通过校验</span>
           <span>
-            <a :href="'/api/xsalary/salary/socialProvident/errorRecord/download/'+uuid" v-if="importT === 'social'">下载日志</a>
-            <a :href="'/api/xsalary/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
+            <a :href="'/api/xsalary/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId">下载日志</a>
           </span>
         </div>
         <p class="file-tip">
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
           <span>
-             <a href="/api/xsalary/salary/socialProvident/template/download" v-if="importT === 'social'">下载模板</a>
-             <a :href="'/api/salary/floatTemplate/download/'+salaryForm.checkId" v-else>下载模板</a>
+             <a :href="'/api/xsalary/salary/floatTemplate/download/'+salaryForm.checkId" >下载模板</a>
           </span>
         </p>
         <p class="instructions">
@@ -765,7 +763,7 @@
         this.fileList=[];
         this.importType="BY_EMP_NO";
         this.importT = type;
-        this.actionUrl = type == "social"?"/api/xsalary/salary/socialProvident/verify":"/api/xsalary/salary/floatItem/verify";
+        this.actionUrl ="/api/xsalary/salary/floatItem/verify";
         this.isShowImport = true;
       }
     },
@@ -804,7 +802,7 @@
     },
     // 导出通过数据
     uploadFile(){
-      let methods = this.importT == "social"?apiSocialProvident:floatItem;
+      let methods = floatItem;
         methods({
         uuid:this.uuid,
         id:this.salaryForm.checkId,
