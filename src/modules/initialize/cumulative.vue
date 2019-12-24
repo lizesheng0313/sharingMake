@@ -3,7 +3,7 @@
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
-          <span>累计应税项</span>
+          <span>个税明细表初始化</span>
         </el-col>
       </el-row>
     </header>
