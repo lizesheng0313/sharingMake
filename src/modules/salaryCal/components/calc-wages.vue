@@ -142,14 +142,14 @@
           <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
           <span v-if="successCount === 0"><i class="el-icon-error"></i>数据全部未通过校验</span>
           <span>
-            <a :href="'/api/salary/socialProvident/errorRecord/download/'+uuid" v-if="importT === 'social'">下载日志</a>
-            <a :href="'/api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
+            <a :href="'/api/xsalary/salary/socialProvident/errorRecord/download/'+uuid" v-if="importT === 'social'">下载日志</a>
+            <a :href="'/api/xsalary/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
           </span>
         </div>
         <p class="file-tip">
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
           <span>
-             <a href="/api/salary/socialProvident/template/download" v-if="importT === 'social'">下载模板</a>
+             <a href="/api/xsalary/salary/socialProvident/template/download" v-if="importT === 'social'">下载模板</a>
              <a :href="'/api/salary/floatTemplate/download/'+salaryForm.checkId" v-else>下载模板</a>
           </span>
         </p>
