@@ -799,6 +799,7 @@
         this.uuid = data.uuid;
       }else{
         this.$message.error(res.message);
+        this.fileList = []
       }
     },
     // 导出通过数据
