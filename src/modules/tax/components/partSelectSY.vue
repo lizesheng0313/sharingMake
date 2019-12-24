@@ -39,7 +39,8 @@
         <el-table-column prop="failReason" label="失败原因"></el-table-column>
       </el-table>
       <div class="dialog-footer">
-        <el-button @click="onIknow" type="primary" plain>我知道了</el-button>
+        <el-button type="primary" @click="handleFailExport">导出</el-button>
+        <el-button @click="onIknow" plain>我知道了</el-button>
       </div>
     </el-dialog>
   </div>
@@ -69,6 +70,7 @@ export default {
         validParameter: "", //校验参数
         validAction: "", //校验action
         querytAction:"" ,//查询action
+        exportFailAction:"",//导出失败原因
         showFailReason:false,//是否显示失败原因
         freeBackTip:"",//获取反馈提示
       },
@@ -124,6 +126,13 @@ export default {
             this.isShowReportInfo = false;
             this.$message.warning(res.message)
           }
+        })
+    },
+    handleFailExport(){
+      this.$store
+        .dispatch(this.paramsObj.exportFailAction, this.paramsObj.validParameter)
+        .then(res=>{
+          console.log(res)
         })
     },
     selectShuiyou(){

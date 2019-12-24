@@ -40,15 +40,14 @@
                       :key="key"
                       :label="value"
                       :value="key"
-                      :disabled="checkSuccess"
                     ></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="姓名" prop="empName" :disabled="checkSuccess">
-                  <el-input v-model="employeeFormData.empName"></el-input>
+                <el-form-item label="姓名" prop="empName">
+                  <el-input v-model="employeeFormData.empName" :disabled="checkSuccess"></el-input>
                 </el-form-item>
-                <el-form-item label="性别" required :disabled="checkSuccess">
-                  <el-select v-model="employeeFormData.empSex" placeholder="请选择">
+                <el-form-item label="性别" required >
+                  <el-select v-model="employeeFormData.empSex" placeholder="请选择" :disabled="checkDisabled">
                     <el-option
                       v-for="(value,key) in baseInfo.empSex"
                       :key="key"
@@ -74,18 +73,19 @@
                 </el-form-item>
               </el-col>
               <el-col :span="7" class="right-input-box">
-                <el-form-item label="证件号码" prop="idNo" :disabled="checkSuccess">
-                  <el-input v-model="employeeFormData.idNo"></el-input>
+                <el-form-item label="证件号码" prop="idNo">
+                  <el-input v-model="employeeFormData.idNo" :disabled="checkSuccess"></el-input>
                 </el-form-item>
                 <el-form-item label="国籍(地区)" prop="country" :disabled="checkSuccess">
                   <el-input value="中国" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="出生日期" prop="birthday" :disabled="checkSuccess">
+                <el-form-item label="出生日期" prop="birthday">
                   <el-date-picker
                     value-format="yyyy-MM-dd"
                     v-model="employeeFormData.birthday"
                     type="date"
                     placeholder="选择日期"
+                    :disabled="checkDisabled"
                   ></el-date-picker>
                 </el-form-item>
                 <el-form-item
@@ -181,15 +181,15 @@ export default {
   computed: {
     ...mapState("taxPageStore", {
       personnelCollection: state => state.personnelCollection
-    })
+    }),
+    checkSuccess:function(){
+      return this.employeeFormData.idValidStatus === "CHECK_SUCCESS" || this.employeeFormData.idValidStatus ==='CHECKING'
+    }
   },
   mounted() {
     this.employeeFormData = JSON.parse(
       JSON.stringify(this.personnelCollection)
     );
-    if (this.employeeFormData.idValidStatus == "CHECK_SUCCESS") {
-      this.checkSuccess = true;
-    }
   },
   data() {
     const t = this;
@@ -271,7 +271,7 @@ export default {
           }
         ]
       },
-      checkSuccess: false,
+      checkDisabled:true,
       baseInfo: SCR,
       employeeFormData: {
         martyrFamilyYn: ""

@@ -47,6 +47,7 @@ export default {
       reportReturnList:[],
       showReturn:false,
       isShowIknow:false,
+      reportInfoLoading:false,
       reportInfoList:[]
     };
   },
@@ -76,6 +77,7 @@ export default {
             if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
               this.showReturn = true;
             }
+            this.reportInfoLoading=false;
             this.isShowIknow = true;
           }else{//未授权
             this.isShowReportInfo = false;

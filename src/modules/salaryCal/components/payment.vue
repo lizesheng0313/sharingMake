@@ -41,7 +41,7 @@
           </el-popover>
           <el-button type="warning" @click="sendSalary" v-if="checkStatus === 'AUDITED' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">发放</el-button>
           <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">
-            <el-button type="warning" @click="seeRecord">查看发放记录</el-button>
+            <el-button type="primary" @click="seeRecord">查看发放记录</el-button>
             <el-button type="info" @click="deleteSalary">删除发放</el-button>
           </div>
         </div>
@@ -224,11 +224,9 @@ export default {
   padding-bottom: 120px;
   display: flex;
   .box{
-    width:300px;
-    margin:0 30px;
+    width:160px;
+    margin:0 20px;
     height: 188px;
-    background: url("../../../assets/images/bg.png")no-repeat;
-    background-size:cover;
     position: relative;
     margin-bottom:30px;
     flex:1;

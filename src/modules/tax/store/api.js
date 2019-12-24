@@ -169,7 +169,14 @@ export function apiQueryGenerateTaxReportData(generateForm) {
     params: generateForm
   })
 }
-
+/*综合所得-生成申报数据导出*/
+export function apiErrorExports(generateForm) {
+  return fetchFile({
+    url: '/api/xsalary/taxReport/taxReportDataQuery/errorExports',
+    method: 'post',
+    params: generateForm
+  })
+}
 
 
 /*综合所得-作废申报*/
