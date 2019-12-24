@@ -229,10 +229,11 @@ export default {
     height: 188px;
     position: relative;
     margin-bottom:30px;
+    border:1px solid #999;
+    border-radius: 4px;
     flex:1;
     .box-con{
-      margin-left:110px;
-      /*border:1px solid red;*/
+      margin-left:70px;
       margin-top: 10px;
       padding-top: 40px;
       img{

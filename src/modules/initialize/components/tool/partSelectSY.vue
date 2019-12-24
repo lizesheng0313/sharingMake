@@ -3,7 +3,7 @@
     <el-dialog
       :visible.sync="isShowReportInfo"
       width="550px"
-      :title="isShowIknow?'获取反馈':''"
+      :title="isShowIknow?'反馈信息':''"
       center
       class="diy-el_dialog"
       :show-close="false"
