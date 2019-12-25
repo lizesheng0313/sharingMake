@@ -289,15 +289,19 @@ export default {
       }
 
       this.employeeFormData.operType = "UPDATE";
-      if (this.employeeFormData.empDay > this.employeeFormData.leaveDay) {
+      if (this.employeeFormData.empDay > this.employeeFormData.leaveDay && this.employeeFormData.leaveDay) {
         this.$message({
           message: "离职日期不能早于任职受雇从业日期",
           type: "warning"
         });
+
       } else {
         if (!this.employeeFormData.leaveDay) {
           this.employeeFormData.leaveDay = "";
         }
+
+        //过滤failReason字段
+        if(this.employeeFormData.failReason){this.employeeFormData.failReason == ""}
         this.$refs.refEmployeeForm.validate(valid => {
           if (valid) {
             this.$store
@@ -307,14 +311,14 @@ export default {
               )
               .then(res => {
                 if (res.success) {
-                  // this.$router.push({path:"/tax/collect",query:{isSave:true}})
                  this.$router.go(-1)
+                }else{
+                  this.$message.warning(res.message)
                 }
               });
           }
         });
       }
-      console.log(this.employeeFormData)
     }
   }
 };
