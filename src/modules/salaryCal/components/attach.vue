@@ -57,6 +57,7 @@
             class="check-staff_table"
             v-loading="loading"
             :height="screenHeight"
+            align="left"
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empName" label="姓名"></el-table-column>

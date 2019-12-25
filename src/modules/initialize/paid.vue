@@ -49,7 +49,7 @@
               <el-table-column prop="taxPayerNo" label="纳税人识别号" width="180px" align="left"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
               <el-table-column prop="remark" label="经办人姓名"></el-table-column>
-              <el-table-column prop="accreditStatus" label="授权状态">
+              <el-table-column prop="accreditStatus" label="验证状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.accreditStatus | accreditStatus}}</span>
                 </template>

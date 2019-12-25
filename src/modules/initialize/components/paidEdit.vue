@@ -31,7 +31,7 @@
           </div>
         </el-form>
         <span slot="footer" class="con-footer">
-          <el-button type="primary" @click="handleNewBody">授权</el-button>
+          <el-button type="primary" @click="handleNewBody">确定</el-button>
           <el-button @click="handleCancel(false)">取消</el-button>
         </span>
         <!-- 下载-->

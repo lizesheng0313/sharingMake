@@ -179,9 +179,13 @@ export default {
         type: 'warning',
       }).then(() => {
         this.$store.dispatch('salaryCalStore/actionPayrollCreditCancel',this.checkId).then(res=>{
-          if(res.data.payrollStatus === "SUCCESS"){
-            this.$message.success("撤销成功");
-            this._loading()
+          if(res.success){
+              if(res.data.payrollStatus === "SUCCESS"){
+                this.$message.success("撤销成功");
+                this._loading()
+              }else{
+                this.$message.warning(res.message);
+              }
           }else{
             this.$message.warning(res.message);
           }
@@ -194,7 +198,8 @@ export default {
       this.$router.push({path:"/salaryCheck",query:{id:this.checkId,active:this.active-(-1),salaryRuleId:this.$route.query.salaryRuleId}})
     },
     downLoadData(){
-
+      this.$store.dispatch('salaryCalStore/actionPayrollCreditExport',this.checkId).then(res=>{
+      })
     },
     //删除发放
     deleteSalary(){

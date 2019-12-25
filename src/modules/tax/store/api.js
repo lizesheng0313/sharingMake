@@ -174,7 +174,7 @@ export function apiErrorExports(generateForm) {
   return fetchFile({
     url: '/api/xsalary/taxReport/taxReportDataQuery/errorExports',
     method: 'post',
-    params: generateForm
+    data: generateForm
   })
 }
 
