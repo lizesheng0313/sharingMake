@@ -179,24 +179,32 @@
     <el-dialog
       title="失败记录"
       :visible.sync="isShowFail"
-      width="600px"
+      width="750px"
+      border
       :close-on-click-modal="closeModel"
     >
       <div class="failTip">生成申报表失败，以下员工数据存在问题，请参考错误信息处理后更新申报数据</div>
       <el-table :data="failList">
-        <el-table-column prop="subTaxReportType" label="申报表">
+        <el-table-column prop="subTaxReportType" label="申报表" width="150px">
           <template slot-scope="scope">
-            <span>{{scope.row.subTaxReportType | texRule}}</span>
+            <span>{{reportSubTaxReportType(scope.row.subTaxReportType)}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="idNo" label="证件号码"></el-table-column>
-        <el-table-column prop="empName" label="扣缴义务人"></el-table-column>
-        <el-table-column prop="checkStatus" label="申报状态">
+        <el-table-column prop="empName" label="姓名" width="80px"></el-table-column>
+        <el-table-column prop="idNo" label="证件号码" width="170px"></el-table-column>
+        <el-table-column prop="checkStatus" label="状态" width="60">
           <template slot-scope="scope">
             <span>{{scope.row.checkStatus | reportType}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="failReason" label="反馈信息"></el-table-column>
+        <el-table-column prop="failReason" label="反馈信息">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
+              <span class="hidenCon">{{ scope.row.failReason }}</span>
+            </el-tooltip>
+            <span v-else>{{ scope.row.failReason }}</span>
+          </template>
+        </el-table-column>
       </el-table>
       <div style="text-align: center;margin-top: 20px;">
         <el-button type="primary" @click="handleExport">导出</el-button>

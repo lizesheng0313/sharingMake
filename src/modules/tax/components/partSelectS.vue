@@ -24,19 +24,34 @@
    <!-- 失败原因   -->
     <el-dialog
       :visible.sync="isShowFailReason"
-      width="660px"
-      title="失败列表"
+      width="750px"
+      title="反馈信息"
       center
       class="diy-el_dialog"
       :show-close="false"
       :close-on-click-modal="closeModel"
     >
       <el-table :data="failReasonData">
-        <el-table-column prop="name" label="姓名"></el-table-column>
-        <el-table-column prop="idNo" label="证件号码"></el-table-column>
-        <el-table-column prop="status" label="状态"></el-table-column>
-        <el-table-column prop="subTaxReportType" label="报表名称"></el-table-column>
-        <el-table-column prop="failReason" label="失败原因"></el-table-column>
+        <el-table-column prop="subTaxReportType" label="申报表" width="150px">
+          <template slot-scope="scope">
+            <span>{{ reportSubTaxReportType(scope.row.subTaxReportType)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" label="姓名" width="80"></el-table-column>
+        <el-table-column prop="idNo" label="证件号码" width="170"></el-table-column>
+        <el-table-column label="状态" width="60">
+          <template slot-scope="scope">
+            <span>{{scope.row.status | reportType}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="failReason" label="反馈信息">
+            <template slot-scope="scope">
+              <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
+                <span class="hidenCon">{{ scope.row.failReason }}</span>
+              </el-tooltip>
+              <span v-else>{{ scope.row.failReason }}</span>
+            </template>
+        </el-table-column>
       </el-table>
       <div class="dialog-footer">
         <el-button type="primary" @click="handleFailExport">导出</el-button>
@@ -47,6 +62,7 @@
 </template>
 <script>
   import authorizeTip from "@/components/tool/authorizeTip"
+  import * as SCR from "../util/constData";
 export default {
   components:{
     authorizeTip
@@ -88,6 +104,7 @@ export default {
   methods: {
     show(data,params) {
       if(data) {
+        this.isShowReportInfo = true;
         this.reportInfoList = [];
         this.isShowIknow = false;
         this.showReturn = false;
@@ -243,8 +260,12 @@ export default {
           })
       },this.timeObj.fourth)
     },
+    reportSubTaxReportType(params) {
+      return SCR.subTaxReportType[params];
+    },
     onIknow(){
-      this.isShowReportInfo = false;
+      // this.isShowReportInfo = false;
+      this.isShowFailReason = false;
       this.$parent.freshList(this.sign)
     },
   }

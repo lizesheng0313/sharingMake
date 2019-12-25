@@ -372,6 +372,14 @@ export function apiPayrollCreditCancel(id) {
     method: 'post',
   })
 }
+//银行代发失败原因导出
+export function apiPayrollCreditExport(id) {
+  return fetchFile({
+    url: '/api/xsalary/salary/stubs/payrollCredit/errorExport/'+id,
+    method: 'post',
+  })
+}
+
 
 
 

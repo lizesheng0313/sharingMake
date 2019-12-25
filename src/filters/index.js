@@ -125,10 +125,10 @@ const getDay = (val) => {
 const accreditStatus = (val) => {
   switch (val) {//仲裁类别
     case 'SUCCESS': {
-      return '授权成功';
+      return '验证成功';
     }
     case 'FAIL': {
-      return '授权失败';
+      return '验证失败';
     }
     case 'WAIT_ACCREDIT': {
       return '待反馈';
