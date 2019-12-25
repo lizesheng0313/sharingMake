@@ -368,15 +368,16 @@ export default {
     //失败原因
     showFail(){
       this.isShowFail = true
+      console.log(this.salaryForm)
       this.$store
-        .dispatch("taxPageStore/actionTaxReportFailRecord", this.salaryForm)
+        .dispatch("taxPageStore/actionTaxReportFailRecord",this.reportForm)
         .then(res => {
           this.failList = res.data;
         })
     },
     handleExport(){
       this.$store
-        .dispatch("taxPageStore/actionTaxReportFailRecordExport", this.salaryForm)
+        .dispatch("taxPageStore/actionTaxReportFailRecordExport", this.reportForm)
         .then(res => {
           console.log(res)
         })
