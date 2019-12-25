@@ -282,7 +282,7 @@ import { mapState } from "vuex";
 import * as SCR from "./util/constData";
 import * as AT from "./store/actionTypes";
 import fun from "@/util/fun";
-import selectSy from "./components/partSelectSY";
+import selectSy from "./components/partSelectSy";
 import feedback from "./components/partFeedback";
 let date = fun.headDate();
 let month = new Date().getMonth() + 1;

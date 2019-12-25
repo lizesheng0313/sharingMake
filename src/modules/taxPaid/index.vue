@@ -134,7 +134,7 @@
   </div>
 </template>
 <script>
- import selectSY from "./components/partSelectSY";
+ import selectSY from "./components/partSelectSy";
  import feedback from "./components/partFeedback";
  import * as constData from "./util/constData"
 import { mapState } from "vuex";
