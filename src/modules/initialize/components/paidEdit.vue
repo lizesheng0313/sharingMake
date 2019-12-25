@@ -40,7 +40,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import selectSY from "./tool/partSelectSy";
+import selectSY from "./tool/partSelectS";
 export default {
   selectItem:{
     type: Object,
