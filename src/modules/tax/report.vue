@@ -207,7 +207,7 @@
 </template>
 <script>
  import { mapState } from "vuex";
- import selectSY from "./components/partSelectSy";
+ import selectSY from "./components/partSelectS";
  import feedback from "./components/partFeedback";
 import * as SCR from "./util/constData";
 import fun from "@/util/fun";
