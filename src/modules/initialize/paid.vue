@@ -4,7 +4,7 @@
       <header class="header main-title">
         <el-row type="flex">
           <el-col :span="12">
-            <span>扣缴义务人</span>
+            <span>扣缴义务人管理</span>
           </el-col>
         </el-row>
       </header>
