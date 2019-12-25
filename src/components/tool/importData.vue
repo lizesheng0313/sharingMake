@@ -110,7 +110,6 @@ export default {
   },
   created(){
     this.radio = this.sendRadio;
-    this.successCount = 0;
   },
   methods: {
     handleTemplate() {
