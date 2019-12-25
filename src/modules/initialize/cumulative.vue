@@ -114,7 +114,7 @@
     <import-data
       ref="import"
       :radioList="radioList"
-      :title="'累计应税项导入'"
+      :title="'个税明细表导入'"
       :apiCheck="'/api/xsalary/taxTotalBase/importTaxTotalBaseCheck'"
       :apiDownloadLog="'cumulativePageStore/getExportErrorRecord'"
       :apiDownloadTemplate="'cumulativePageStore/actionDownloadTemplate'"
@@ -190,7 +190,6 @@ export default {
     };
     // this.screenHeight = document.body.clientHeight-this.$refs.tableCon.offsetTop-60;
     this.getTaxSubjectInfoList();
-    this.getList();
   },
   methods: {
     //表格选中事件
@@ -206,6 +205,7 @@ export default {
         if (res.success) {
           this.taxSubjectInfolist = res.data;
           this.ruleForm.taxSubId = this.taxSubjectInfolist[0]['taxSubId'];
+          this.getList();
         }
       });
     },

@@ -110,6 +110,7 @@ export default {
   },
   created(){
     this.radio = this.sendRadio;
+    this.successCount = 0;
   },
   methods: {
     handleTemplate() {
@@ -122,6 +123,7 @@ export default {
     show() {
       this.isShowIncrease = true;
       this.fileList = [];
+      this.uuid = "";
     },
     handleRadioValue(value) {
       this.$emit("changeRadioValue", value);
@@ -166,10 +168,11 @@ export default {
         this.successCount = data.successCount;
         this.failCount = data.failCount;
         this.uuid = data.uuid;
+        this.fileList = this.failCount > 0 ? []:this.fileList;
       }else{
-        this.$message.warning(res.message)
+        this.$message.warning(res.message);
+        this.fileList = [];
       }
-
     },
     importMemberFinish() {
       this.isShowIncrease = false;
