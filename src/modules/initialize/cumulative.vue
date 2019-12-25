@@ -73,7 +73,7 @@
           <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
           <el-table-column prop="idNo" label="证件号码" width="170"></el-table-column>
           <el-table-column prop="taxSubName" label="扣缴义务人" width="170"></el-table-column>
-          <el-table-column prop="endMonth" label="截止月份" width="140"></el-table-column>
+          <el-table-column prop="endMonthStr" label="截止月份" width="140"></el-table-column>
           <el-table-column prop="currentIncome" label="当期收入额" width="100"></el-table-column>
           <el-table-column prop="pensionInsuranceFee" label="养老个人" width="100"></el-table-column>
           <el-table-column prop="medicalInsuranceFee" label="医疗个人" width="100"></el-table-column>
