@@ -90,7 +90,6 @@
           <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140"></el-table-column>
           <el-table-column prop="totalHouseRent" label="累计住房租金" width="140"></el-table-column>
           <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="140"></el-table-column>
-          <el-table-column prop="totalHouseRent" label="累计住房租金" width="140"></el-table-column>
 <!--          <el-table-column prop="otherDeduction" label="累计其他扣除" width="140"></el-table-column>-->
 <!--          <el-table-column prop="totalDonated" label="累计准予扣除的捐赠" width="140"></el-table-column>-->
 <!--          <el-table-column prop="taxBreakTotal" label="累计减免税额" width="140"></el-table-column>-->
