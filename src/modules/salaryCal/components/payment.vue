@@ -39,7 +39,7 @@
             trigger="click">
             <img src="../../../assets/images/salary.png" width="200px" alt="">
           </el-popover>
-          <el-button type="warning" @click="sendSalary" v-if="checkStatus === 'AUDITED' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">发放</el-button>
+          <el-button type="primary" @click="sendSalary" v-if="checkStatus === 'AUDITED' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">生成工资条</el-button>
           <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">
             <el-button type="primary" @click="seeRecord">查看发放记录</el-button>
             <el-button type="info" @click="deleteSalary">删除发放</el-button>
@@ -238,7 +238,7 @@ export default {
     border-radius: 4px;
     flex:1;
     .box-con{
-      margin-left:70px;
+      margin-left:56px;
       margin-top: 10px;
       padding-top: 40px;
       img{

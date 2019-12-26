@@ -13,6 +13,10 @@
         </el-col>
       </el-row>
     </header>
+    <div class="home-content">
+      <div class="home-head">薪税通操作指引 ></div>
+      <img src="../../assets/images/home_content.png" alt="" class="home-image-down">
+    </div>
   </div>
 </template>
 <script>
@@ -72,6 +76,21 @@ export default {
       position: relative;
       top: 1px;
     }
+  }
+  .home-head{
+    display: block;
+    height: 110px;
+    width: 100%;
+    padding: 70px 0px 0px 100px;
+    box-sizing: border-box;
+    font-size: 20px;
+    background: url("../../assets/images/home_head.png") no-repeat;
+    background-size: cover;
+  }
+  .home-image-down{
+    display: inline-block;
+    width: 800px;
+    margin: 20px 0px 20px 100px;
   }
 }
 </style>
