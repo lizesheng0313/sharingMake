@@ -20,10 +20,33 @@ import { mapState } from "vuex";
 export default {
   components: {},
   data() {
-    return {};
+    return {
+      userType:"",
+    };
+  },
+  computed:{
+    ...mapState({
+      token: state => state.token
+    })
   },
   created() {
-
+    this.$store.dispatch("homePageStore/actionGetUserInfo",{
+      token:this.token
+    }).then(res => {
+      if(res.success){
+        this.userType = res.data.userType
+       if(this.userType === 'ENTERPRISE'){
+         this.$notify({
+           title: '',
+           duration:0,
+           message: '企业管理员不能进行薪税通业务操作，请使用已分配薪税通权限的业务操作员登陆。',
+           type: 'warning'
+         });
+       }
+      }else{
+        this.$message.warning(res.message)
+      }
+    })
   }
 };
 </script>
@@ -37,6 +60,7 @@ export default {
     height: 61px;
     border-bottom: 1px solid #ededed;
     line-height: 61px;
+    font-size: 17px;
     .add-table {
       cursor: pointer;
       float: right;

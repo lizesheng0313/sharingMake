@@ -138,6 +138,7 @@
       center
       class="diy-el_dialog"
       :close-on-click-modal="closeModel"
+      :show-close="closeModel"
     >
       <div>
         <p class="headings">1、选择导入匹配方式</p>
