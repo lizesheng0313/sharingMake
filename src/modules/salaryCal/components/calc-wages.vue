@@ -1,7 +1,7 @@
 <template>
   <div class="calc-wages">
     <div class="waitReport" v-if="isShowWaitReport">
-      <div v-if="computeErrorCount">存在“计算失败”的人员 <span class="failStyle" @click="showFail">{{ computeErrorCount }}</span> 人，点击数字可查看计算失败名单和原因</div>
+      <div v-if="computeErrorCount">存在“计算失败”的人员 <span class="bold" @click="showFail">{{ computeErrorCount }}</span> 人，点击数字可查看计算失败名单和原因</div>
       <div v-if="awaitReportCount">存在“待报送”的人员 <span class="bold">{{ awaitReportCount }}</span> 人，待报送人员无法参与个税计算，如需计算，请在“人员采集报送”界面中先完成报送！</div>
       <i class="el-icon-close close-style" @click="isShowWaitReport=false"></i>
     </div>
@@ -312,20 +312,27 @@
     <el-dialog
       title="计算失败记录"
       :visible.sync="isShowFail"
-      width="600px"
+      width="700px"
       :close-on-click-modal="closeModel"
     >
-      <div class="failTip">生成申报表失败，以下员工数据存在问题，请参考错误信息处理后更新申报数据</div>
+      <div class="failTip">薪资计算失败，以下员工数据存在问题，请参考错误信息处理后更新申报数据</div>
       <el-table :data="failList">
         <el-table-column prop="empName" label="姓名"></el-table-column>
-        <el-table-column prop="idNo" label="证件号码"></el-table-column>
+        <el-table-column prop="idNo" label="证件号码" width="200px"></el-table-column>
         <el-table-column prop="taxSubName" label="扣缴义务人"></el-table-column>
         <el-table-column prop="empName" label="计算状态">
           <template slot-scope="scope">
             <span>{{scope.row.checkStatus | reportType}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="failReason" label="反馈信息"></el-table-column>
+        <el-table-column prop="failReason" label="反馈信息">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
+              <span class="hidenCon">{{ scope.row.failReason }}</span>
+            </el-tooltip>
+            <span v-else>{{ scope.row.failReason }}</span>
+          </template>
+        </el-table-column>
       </el-table>
       <div style="text-align: center;margin-top: 20px;">
         <el-button type="primary" @click="handleExport">导出</el-button>
@@ -985,6 +992,7 @@
     .bold{
       color:#E6A23C;
       font-weight: bold;
+      cursor: pointer;
     }
     .close-style{
       position: absolute;

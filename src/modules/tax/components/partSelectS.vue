@@ -10,11 +10,11 @@
       :close-on-click-modal="closeModel"
     >
       <el-row v-for="(item,index) in reportInfoList" :key="index">
-        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">任务完成</el-col></div>
-        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">任务处理中…</el-col></div>
-        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">【{{ item.taxSubName }}】</el-col><el-col :span="12">任务失败，{{item.failReason}}</el-col></div>
+        <div v-if="item.dealStatus === 'SUCCESS'">任务完成</div>
+        <div v-if="item.dealStatus === 'PROCESSING'">任务处理中…</div>
+        <div v-if="item.dealStatus === 'FAIL'">任务失败，{{item.failReason}}</div>
       </el-row>
-      <div v-loading="reportInfoLoading" style="height: 40px"></div>
+      <div v-loading="reportInfoLoading" style="height: 40px" element-loading-text="任务处理中"></div>
       <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ paramsObj.freeBackTip }}查询结果</div>
       <div class="dialog-footer">
         <el-button @click="onIknow" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
