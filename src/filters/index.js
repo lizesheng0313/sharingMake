@@ -70,7 +70,7 @@ const filterEmpType = (val) => {
     case 'LABOUR': {
       return '劳务';
     }
-    case 'AUDIT_REJECT': {
+    case 'RE_EMPLOY': {
       return '退休返聘';
     }
   }
