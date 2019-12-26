@@ -25,7 +25,7 @@
                    v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryReview')">薪资审核</el-button>
         <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')"
                    v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryReview')">取消审核</el-button>
-        <el-button @click="handleBigTable">放大</el-button>
+<!--        <el-button @click="handleBigTable">放大</el-button>-->
       </div>
     </div>
     <div class="staff-situation clearfix">
