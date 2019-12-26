@@ -279,8 +279,16 @@
   word-break: break-all;
 }
 
+.el-table td .number-right{
+  text-align: right;
+}
+//表头与内容不对齐问题
+.el-table th.gutter {
+  display: table-cell !important;
+}
 .input-bigger{
   .el-select,.el-input{
     width: 320px !important;
   }
+
 }

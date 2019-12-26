@@ -81,12 +81,13 @@
           v-for="(col,index) in salaryTableDataAll[0]"
           :min-width="setMinWidth(col.col)"
           :show-overflow-tooltip="col.col === '部门' || col.col === '岗位' || col.col === '工号' || col.col === '姓名'"
-          :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="[0,1,2,3].includes(index)">
+          :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="[0,1,2,3].includes(index)"
+        >
           <template slot-scope="scope">
-            <span>
+            <div :class="{'number-right':!noNumberRightList.includes(col.col)}">
 <!--              <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>-->
               {{ filterVal(scope['row'][index]) }}
-            </span>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -348,7 +349,8 @@
             v-for="(col,index) in salaryTableDataAll[0]"
             :min-width="setMinWidth(col.col)"
             :show-overflow-tooltip="col.col === '部门' || col.col === '岗位' || col.col === '工号' || col.col === '姓名'"
-            :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="[0,1,2,3].includes(index)">
+            :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="[0,1,2,3].includes(index)"
+          >
             <template slot-scope="scope">
             <span>
 <!--              <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>-->
@@ -453,6 +455,7 @@
       checkAll: false,
       checkedPerson: ['工号', '姓名', '身份证号', '部门'],
       personOptions:['工号', '姓名', '身份证号', '部门',"岗位","工作地点","工作性质","入职日期","离职日期"],
+      noNumberRightList:['序号','工号','姓名','身份证号','部门','岗位'],
       isIndeterminate: false,
       showExportSalaryDetail:false,
       isDiyIndeterminate:[],
@@ -655,7 +658,7 @@
     },
     setMinWidth(value){
       if(['序号','工号','姓名'].includes(value)){ return '80px'}
-      else if(["身份证号","累计住房贷款利息","社保公积金个人合计","累计准予扣除的捐赠","累计应纳税所得额","累计应扣缴税额","累计已预缴税额","补偿金免税收入","补偿金应纳税所得额"].includes(value)){ return '170px' }
+      else if(["身份证号","累计住房贷款利息","社保公积金个人合计","准予扣除的捐赠额","累计准予扣除的捐赠","累计应纳税所得额","累计应扣缴税额","累计已预缴税额","补偿金免税收入","补偿金应纳税所得额"].includes(value)){ return '170px' }
       else {return '100px'}
     },
     filterVal(val){

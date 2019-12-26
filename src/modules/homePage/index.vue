@@ -21,6 +21,9 @@ export default {
   components: {},
   data() {
     return {};
+  },
+  created() {
+
   }
 };
 </script>
