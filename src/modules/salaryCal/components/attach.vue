@@ -59,8 +59,8 @@
             :height="screenHeight"
             align="left"
           >
-            <el-table-column width="55" label="序号" type="index"></el-table-column>
-            <el-table-column prop="empName" label="姓名"></el-table-column>
+            <el-table-column width="60" label="序号" type="index"></el-table-column>
+            <el-table-column prop="empName" label="姓名" width="80"></el-table-column>
             <el-table-column prop="idNo" label="身份证号" width="180"></el-table-column>
 <!--            <el-table-column label="入职日期">-->
 <!--              <template slot-scope="scope">-->
@@ -75,13 +75,13 @@
                 <span v-else>{{ scope.row.taxSubName }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="syncTimeStr" label="下载时间" width="200"></el-table-column>
-            <el-table-column prop="totalChildrenEdu" label="累计子女教育"></el-table-column>
-            <el-table-column prop="totalFurtherEdu" label="累计继续教育"></el-table-column>
-            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="累计住房租金"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="累计赡养老人"></el-table-column>
-            <el-table-column  label="反馈信息" width="110">
+            <el-table-column prop="syncTimeStr" label="下载时间" width="100"></el-table-column>
+            <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="120"></el-table-column>
+            <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="120"></el-table-column>
+            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140"></el-table-column>
+            <el-table-column prop="totalHouseRent" label="累计住房租金" width="120"></el-table-column>
+            <el-table-column prop="totalSupportParents" label="累计赡养老人" width="120"></el-table-column>
+            <el-table-column  label="反馈信息">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
                   <span class="hidenCon">{{ scope.row.failReason }}</span>
