@@ -264,7 +264,7 @@ export default {
       return SCR.subTaxReportType[params];
     },
     onIknow(){
-      // this.isShowReportInfo = false;
+      this.isShowReportInfo = false;
       this.isShowFailReason = false;
       this.$parent.freshList(this.sign)
     },

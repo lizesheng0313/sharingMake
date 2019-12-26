@@ -281,3 +281,7 @@
 .el-table td .number-right{
   text-align: right;
 }
+//表头与内容不对齐问题
+.el-table th.gutter{
+  display: table-cell!important;
+}
