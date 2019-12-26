@@ -10,9 +10,9 @@
       :close-on-click-modal="closeModel"
     >
       <el-row v-for="(item,index) in reportInfoList" :key="index">
-        <div v-if="item.dealStatus === 'SUCCESS'">任务完成</div>
-        <div v-if="item.dealStatus === 'PROCESSING'">任务处理中…</div>
-        <div v-if="item.dealStatus === 'FAIL'">任务失败，{{item.failReason}}</div>
+        <div v-if="item.dealStatus === 'SUCCESS'"><i class="el-icon-success"></i>任务完成</div>
+        <div v-if="item.dealStatus === 'PROCESSING'"><i class="el-icon-warning"></i>任务处理中…</div>
+        <div v-if="item.dealStatus === 'FAIL'"><i class="el-icon-error"></i>任务失败，{{item.failReason}}</div>
       </el-row>
       <div v-loading="reportInfoLoading" style="height: 40px" element-loading-text="任务处理中"></div>
       <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ paramsObj.freeBackTip }}查询结果</div>
