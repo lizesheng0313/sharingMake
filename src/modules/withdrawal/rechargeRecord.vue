@@ -7,8 +7,12 @@
         </el-col>
       </el-row>
     </header>
-    <div style="margin-bottom:20px;">
-      <el-button type="default" @click="dlgFilter = true">筛选</el-button>
+    <div class="flex-center">
+      <div>
+        <el-button type="default" @click="dlgFilter = true">筛选</el-button>
+        <el-input placeholder="" v-model="searchFormData.id" prefix-icon="iconiconfonticonfontsousuo1 iconfont" class="search-input"></el-input>
+        <el-button type="primary" @click="handleSearch">查询</el-button>
+      </div>
       <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.recharge.export')">导出</el-button>
     </div>
     <div>
@@ -49,9 +53,9 @@
         ref="refSearchForm"
         :model="searchFormData"
       >
-        <el-form-item label="充值订单ID：" prop="id">
+        <!-- <el-form-item label="充值订单ID：" prop="id">
           <el-input v-model="searchFormData.id"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="订单状态：" prop="orderStatus">
           <el-select v-model="searchFormData.orderStatus">
             <el-option :label="item.val" :value="item.key" v-for="item in option" :key="item.key"></el-option>
@@ -174,6 +178,16 @@ export default {
       this.fetchTableList(1);
       this.dlgFilter = false;
     },
+    handleSearch() {
+      const param = {
+        currPage: 1,
+        pageSize: 10,
+        id: this.searchFormData.id
+      };
+      this.$store.dispatch("withdrawalPageStore/actionRecordslist", param).then(() => {
+        this.loading = false;
+      });
+    },
     handleResetForm(formName) {
       this.searchFormData.startTime = null;
       this.searchFormData.endTime = null;
@@ -212,6 +226,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .recharge{
+  .flex-center {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
   .header {
     border-bottom: 1px solid #ededed;
     margin-bottom: 10px;

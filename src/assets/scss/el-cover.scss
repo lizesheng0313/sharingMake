@@ -184,9 +184,9 @@
 .upload-disable .el-upload--picture-card{
   display: none;
 }
-.el-upload-dragger{
-  width:180px!important;
-}
+// .el-upload-dragger{
+//   width:180px!important;
+// }
 .el-submenu .el-menu-item{
   min-width:170px;
 }
@@ -278,10 +278,17 @@
   max-width: 60%;
   word-break: break-all;
 }
+
 .el-table td .number-right{
   text-align: right;
 }
 //表头与内容不对齐问题
-.el-table th.gutter{
-  display: table-cell!important;
+.el-table th.gutter {
+  display: table-cell !important;
+}
+.input-bigger{
+  .el-select,.el-input{
+    width: 320px !important;
+  }
+
 }

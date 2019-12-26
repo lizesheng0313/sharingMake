@@ -7,11 +7,15 @@
                 </el-col>
             </el-row>
         </header>
-        <div>
-            <div style="margin-bottom:20px;">
+        <div class="flex-center">
+            <div>
                 <el-button type="default" @click="dlgFilter = true">筛选</el-button>
-                <el-button @click="handleExport">导出</el-button>
+                <!-- <el-input placeholder="请输入姓名\工号\身份证号" v-model="searchFormData.payMonth" prefix-icon="iconiconfonticonfontsousuo1 iconfont" class="search-input"></el-input> -->
+                <el-date-picker v-model="searchFormData.payMonth" value-format="yyyyMM" type="month" placeholder="选择月" class="search-input" clearable>
+                </el-date-picker>
+                <el-button type="primary" @click="handleSearch">查询</el-button>
             </div>
+            <el-button @click="handleExport">导出</el-button>
         </div>
         <div>
             <el-table :data="orderList" v-loading="loading">
@@ -47,10 +51,10 @@
                         <el-option v-for="(merchant,index) in selectMerchant" :key="index" :label="merchant.val" :value="merchant.key"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="发放月份：" prop="payMonth">
+                <!-- <el-form-item label="发放月份：" prop="payMonth">
                     <el-date-picker v-model="searchFormData.payMonth" value-format="yyyyMM" type="month" placeholder="选择月">
                     </el-date-picker>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="订单状态：" prop="status">
                     <el-select v-model="searchFormData.status">
                         <el-option v-for="(status,index) in orderStatus" :key="index" :label="status.val" :value="status.key"></el-option>
@@ -137,6 +141,16 @@ export default {
             this.fetchTableList(1);
             this.dlgFilter = false;
         },
+        handleSearch() {
+            const param = {
+                currPage: 1,
+                pageSize: 10,
+                payMonth: this.searchFormData.payMonth
+            };
+            this.$store.dispatch("payManageStore/postOrderList", param).then(() => {
+                this.loading = false;
+            });
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
             this.fetchTableList(1);
@@ -165,6 +179,11 @@ export default {
 
 <style lang="scss" scoped>
 .pay-order {
+    .flex-center {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
     .width-fixed {
         cursor: pointer;
         white-space: nowrap;
