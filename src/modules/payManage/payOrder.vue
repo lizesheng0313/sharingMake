@@ -183,6 +183,7 @@ export default {
         display: flex;
         justify-content: space-between;
         margin-bottom: 20px;
+        padding:20px 20px 0px 20px;
     }
     .width-fixed {
         cursor: pointer;
