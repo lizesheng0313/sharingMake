@@ -213,6 +213,7 @@ export default {
         display: flex;
         justify-content: space-between;
         margin-bottom: 20px;
+        padding:20px 20px 0px 20px;
     }
     .header {
         border-bottom: 1px solid #ededed;
