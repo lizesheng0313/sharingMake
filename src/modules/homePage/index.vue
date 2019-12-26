@@ -34,7 +34,7 @@ export default {
       token:this.token
     }).then(res => {
       if(res.success){
-        this.userType = res.data.userType
+        this.userType = res.data ? res.data.userType : "";
        if(this.userType === 'ENTERPRISE'){
          this.$notify({
            title: '',
