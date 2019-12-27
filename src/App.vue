@@ -7,7 +7,7 @@
       </div>
       <div class="display-flex">
         <div class="side-nav" v-if="isShowApp">
-          <old-side-nav :routerList="routerList" :mainMenu="mainMenu"></old-side-nav>
+          <old-side-nav :routerList="routerList" :mainMenu="mainMenu" :insertNavList="insertNavList"></old-side-nav>
       </div>
         <div class="flex1 div-content" :class="{'no-margin':!isShowApp}">
           <router-view class="router-view"></router-view>
@@ -30,8 +30,14 @@ export default {
     return {
       //整个路由列表
       routerList: router.options.routes,
-      mainMenu: [],
-    };
+       mainMenu: [],
+      insertNavList: [{
+          businessCode: null,
+          name: "首页",
+          index: 0,
+          url: "/home",
+          icon:"iconshouye"}],
+      }
   },
   computed: {
     ...mapState({
@@ -39,18 +45,17 @@ export default {
     })
   },
   created() {
+
     this.$store.commit(AT.SHOWAPP, true); //如用户手动改变路由， 需将full-screeen关闭
     //权限列表
     this.$store.dispatch("actionUserPrivilege").then(res => {
-      this.mainMenu = res.data.privilegeGroupTreeVO.children[0].children;
-      let privilegeVOList = res.data.privilegeVOList.map(it=>it.code);
-      this.privilegeVOList = privilegeVOList ? privilegeVOList : [];
+      this.mainMenu = res.data.privilegeGroupTreeVO ? res.data.privilegeGroupTreeVO.children[0].children : [];
+      this.privilegeVOList  = res.data.privilegeVOList ? res.data.privilegeVOList.map(it=>it.code):[];
       this.$store.commit(AT.SET_PRIVILIGEVOLiST,this.privilegeVOList);
     });
     // this.mainMenu = privilegeGroupTreeVO
     // let privilegeVOList0 = this.privilegeVOList.map(it=>it.code);
     // this.$store.commit(AT.SET_PRIVILIGEVOLiST,privilegeVOList0);
-
   },
   mounted() {
   },
