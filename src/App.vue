@@ -1,4 +1,4 @@
-<script src="../webpack/webpack.config.prod.js"></script>
+<!--<script src="../webpack/webpack.config.prod.js"></script>-->
 <template>
   <div class="app-page">
     <div class="app-page">
@@ -30,13 +30,8 @@ export default {
     return {
       //整个路由列表
       routerList: router.options.routes,
-       mainMenu: [],
-      insertNavList: [{
-          businessCode: null,
-          name: "首页",
-          index: 0,
-          url: "/home",
-          icon:"iconshouye"}],
+      mainMenu: [],
+      insertNavList: [],
       }
   },
   computed: {
@@ -45,12 +40,21 @@ export default {
     })
   },
   created() {
-
     this.$store.commit(AT.SHOWAPP, true); //如用户手动改变路由， 需将full-screeen关闭
     //权限列表
     this.$store.dispatch("actionUserPrivilege").then(res => {
-      this.mainMenu = res.data.privilegeGroupTreeVO ? res.data.privilegeGroupTreeVO.children[0].children : [];
-      this.privilegeVOList  = res.data.privilegeVOList ? res.data.privilegeVOList.map(it=>it.code):[];
+      console.log(res.data.privilegeGroupTreeVO)
+      if(res.data.privilegeGroupTreeVO){
+        // this.mainMenu = res.data.privilegeGroupTreeVO.children[0].children;children
+        this.insertNavList = [{
+          businessCode: null,
+          name: "首页",
+          index: 0,
+          url: "/home",
+          icon:"iconshouye"}];
+      }
+
+      this.privilegeVOList = res.data.privilegeVOList ? res.data.privilegeVOList.map(it=>it.code):[];
       this.$store.commit(AT.SET_PRIVILIGEVOLiST,this.privilegeVOList);
     });
     // this.mainMenu = privilegeGroupTreeVO
