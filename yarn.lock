@@ -6000,10 +6000,10 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://nexus.lanmaoly.com/repository/npm/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha1-Cb6jND1BhZ69RGKS0RydTbYZCE4=
 
-olading-ui@^0.0.8:
-  version "0.0.8"
-  resolved "https://nexus.lanmaoly.com/repository/npm/olading-ui/-/olading-ui-0.0.8.tgz#de0963815279005efc1224bb44f87c50ef222a8b"
-  integrity sha512-InKUSbkYj+kjD9DZAACJU2ZavQKj02tNXvobl3mflx04K+hk6+J5MgVXvy7m7kYxx4F0vTfMV8x5w/5TDdF71A==
+olading-ui@^0.0.9:
+  version "0.0.9"
+  resolved "https://nexus.lanmaoly.com/repository/npm/olading-ui/-/olading-ui-0.0.9.tgz#412ea70d37613f06c2dbc89979f469f54872f6d6"
+  integrity sha512-We6X73qsHcvMhiuIBRfiHwNynwVSKNQDyqU581pEkyezL7bkKs+hTFw3vRrxvgoIt30BNmqvONz9G6kmikp/wA==
 
 old-fetch@^0.0.16:
   version "0.0.16"
