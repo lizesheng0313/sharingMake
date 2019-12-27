@@ -31,7 +31,15 @@ export default {
       //整个路由列表
       routerList: router.options.routes,
       mainMenu: [],
-      insertNavList: [],
+      insertNavList: [
+        {
+          businessCode: null,
+          name: "首页",
+          url: "/home",
+          index: 0,
+          icon:"iconshouye"
+        }
+      ]
       }
   },
   computed: {
