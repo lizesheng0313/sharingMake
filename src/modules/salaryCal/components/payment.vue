@@ -6,7 +6,7 @@
         <div class="box-fun">
           <p class="box-title">银行代发</p>
           <p class="tip">使用银行代发服务完成在线发薪</p>
-          <div v-if="!payrollStatus || payrollStatus ==='INIT' && privilegeVoList.includes('salary.compute.salaryCheck.payroll')">
+          <div v-if="!payrollStatus || payrollStatus ==='INIT' || payrollStatus ==='CANCEL' && privilegeVoList.includes('salary.compute.salaryCheck.payroll')">
             <el-button type="primary" @click="sendData">提交代发数据</el-button>
           </div>
           <div v-else v-show="privilegeVoList.includes('salary.compute.salaryCheck.payroll')">
