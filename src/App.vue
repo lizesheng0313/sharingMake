@@ -45,7 +45,7 @@ export default {
     this.$store.dispatch("actionUserPrivilege").then(res => {
       console.log(res.data.privilegeGroupTreeVO)
       if(res.data.privilegeGroupTreeVO){
-        // this.mainMenu = res.data.privilegeGroupTreeVO.children[0].children;children
+        this.mainMenu = res.data.privilegeGroupTreeVO.children[0].children;children
         this.insertNavList = [{
           businessCode: null,
           name: "首页",
@@ -53,7 +53,6 @@ export default {
           url: "/home",
           icon:"iconshouye"}];
       }
-
       this.privilegeVOList = res.data.privilegeVOList ? res.data.privilegeVOList.map(it=>it.code):[];
       this.$store.commit(AT.SET_PRIVILIGEVOLiST,this.privilegeVOList);
     });
