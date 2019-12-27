@@ -56,7 +56,7 @@
     <el-dialog
       title="银行卡为空"
       :visible.sync="noCardListShow"
-      width="760px"
+      width="750px"
       :show-close="false"
     >
      <el-table :data="noCardList" class="check-staff_table">
