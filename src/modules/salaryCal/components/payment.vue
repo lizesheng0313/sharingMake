@@ -10,7 +10,7 @@
             <el-button type="primary" @click="sendData">提交代发数据</el-button>
           </div>
           <div v-else v-show="privilegeVoList.includes('salary.compute.salaryCheck.payroll')">
-            <el-button type="primary" @click="$router.push('/pay-batch')">启动代发</el-button>
+            <el-button type="primary" @click="$router.push('/pay-batch')">前往代发</el-button>
             <el-button type="primary" @click="cancelPayroll">撤销代发</el-button>
           </div>
         </div>
