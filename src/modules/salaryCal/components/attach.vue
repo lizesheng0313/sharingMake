@@ -81,7 +81,12 @@
             <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140"></el-table-column>
             <el-table-column prop="totalHouseRent" label="累计住房租金" width="120"></el-table-column>
             <el-table-column prop="totalSupportParents" label="累计赡养老人" width="120"></el-table-column>
-            <el-table-column  label="反馈信息">
+            <el-table-column prop="totalSupportParents" label="下载状态" width="110">
+              <template slot-scope="scope">
+                <span>{{ downLoadStatusObj[scope.row.status]}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="反馈信息" >
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
                   <span class="hidenCon">{{ scope.row.failReason }}</span>
@@ -183,6 +188,12 @@ export default {
       waitBackActive:false,
       errorActive:false,
       showWaitReport:false,
+      downLoadStatusObj:{
+        "INIT":"未下载",
+        "SUCCESS":"下载成功",
+        "FAIL":"下载失败",
+        "WAIT_BACK":"待反馈"
+      }
     };
   },
   computed:{

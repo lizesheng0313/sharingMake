@@ -79,7 +79,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-ui": "^2.4.11",
-    "olading-ui": "^0.0.9",
+    "olading-ui": "^0.0.10",
     "old-fetch": "^0.0.16",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
