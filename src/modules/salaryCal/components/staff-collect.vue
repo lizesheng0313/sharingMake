@@ -51,6 +51,7 @@
               @selection-change="handleSelectItem"
               :style="{width:screenWidth-40+'px'}"
               :height="screenHeight"
+              border
             >
               <el-table-column type="selection" width="55" fixed></el-table-column>
               <el-table-column prop="empNo" label="工号"></el-table-column>

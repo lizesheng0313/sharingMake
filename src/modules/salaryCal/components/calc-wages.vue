@@ -312,11 +312,11 @@
     <el-dialog
       title="计算失败记录"
       :visible.sync="isShowFail"
-      width="700px"
+      width="750px"
       :close-on-click-modal="closeModel"
     >
       <div class="failTip">薪资计算失败，以下员工数据存在问题，请参考错误信息处理后更新申报数据</div>
-      <el-table :data="failList">
+      <el-table :data="failList" height="400px">
         <el-table-column prop="empName" label="姓名"></el-table-column>
         <el-table-column prop="idNo" label="证件号码" width="200px"></el-table-column>
         <el-table-column prop="taxSubName" label="扣缴义务人"></el-table-column>

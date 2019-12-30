@@ -59,7 +59,7 @@
       width="750px"
       :show-close="false"
     >
-     <el-table :data="noCardList" class="check-staff_table">
+     <el-table :data="noCardList" class="check-staff_table" height="400px">
         <el-table-column prop="empName" label="姓名"></el-table-column>
         <el-table-column prop="idNo" label="证件号码"></el-table-column>
         <el-table-column prop="empNo" label="员工工号"></el-table-column>

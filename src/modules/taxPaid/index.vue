@@ -91,7 +91,7 @@
 <!-- 三方协议列表-->
     <el-dialog
       :visible.sync="isShowTripleAgreementTaxList"
-      width="550px"
+      width="750px"
       title="请选择三方协议"
       center
       class="diy-el_dialog"
@@ -103,6 +103,7 @@
         v-loading="tripleAgreementLoading"
         highlight-current-row
         ref="selectTable"
+        height="400px"
       >
         <el-table-column label=" " width="65">
           <template slot-scope="scope">

@@ -52,6 +52,7 @@
                 v-loading="userLoading"
                 @selection-change="handleSelectionChange"
                 :height="screenHeight"
+                border
       >
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column label="姓名" width="104px" :show-overflow-tooltip="true">
