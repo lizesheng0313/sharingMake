@@ -21,8 +21,8 @@ import router from "@/router";
 import topHeader from "@/components/basic/Header";
 import { mapState } from "vuex";
 import * as AT from "@/store/actionTypes";
-import { getServerUrl } from "old-env-map"
-console.log(getServerUrl({projectName:'contract'}))
+// import { getServerUrl } from "old-env-map"
+// console.log(getServerUrl())
 // import { privilegeVOList, privilegeGroupTreeVO } from "@/utils/constData";
 export default {
   components: {
