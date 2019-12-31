@@ -8,37 +8,39 @@
       </el-row>
     </header>
     <div class="tax-content">
-      <div class="content-header head-date" style="display: inline-block">
-        <span>{{selectMonth}}</span>
-        <el-date-picker
-          v-model="selectMonth"
-          type="month"
-          @input="changeMonth"
-          value-format="yyyy年MM月"
-          :editable="false"
-          :clearable="false"
-        ></el-date-picker>
-      </div>
-      <div class="input-" style="float: right;width: 80%">
-        <div style="width: 200px">
-          <el-input
-            placeholder="请输入姓名\证件号码"
-            v-model="totalListForm.nameOrMore"
-            prefix-icon="iconiconfonticonfontsousuo1 iconfont"
-            clearable
-            @keyup.enter.native="handleSearch"
-            class="search-input left"
-          ></el-input>
+      <div style="width: 100%">
+        <div class="content-header head-date" style="float:left;margin-right: 20px">
+          <span>{{selectMonth}}</span>
+          <el-date-picker
+            v-model="selectMonth"
+            type="month"
+            @input="changeMonth"
+            value-format="yyyy年MM月"
+            :editable="false"
+            :clearable="false"
+          ></el-date-picker>
         </div>
-        <div class="left">
-          <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
+        <div style="float:left; width: 800px">
+          <div style="width: 200px">
+            <el-input
+              placeholder="请输入姓名\证件号码"
+              v-model="totalListForm.nameOrMore"
+              prefix-icon="iconiconfonticonfontsousuo1 iconfont"
+              clearable
+              @keyup.enter.native="handleSearch"
+              class="search-input left"
+            ></el-input>
+          </div>
+          <div class="left">
+            <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
+          </div>
         </div>
         <div class="right">
           <el-button class="export-button" @click="handleExport" v-if="privilegeVoList.includes('salary.report.additionl.export')">导出</el-button>
         </div>
       </div>
       <div class="screening">
-        <div class="select_tax-payer">
+        <div class="select_tax-payer" style="clear: both">
           扣缴义务人：
           <el-dropdown trigger="click">
             <el-button type="text">
@@ -62,7 +64,7 @@
           <el-table
             :data="list"
             class="check-staff_table"
-            :style="{width:screenWidth-285+'px'}"
+            :style="{width:screenWidth-255+'px'}"
             v-loading="loading"
             :height="screenHeight"
             border

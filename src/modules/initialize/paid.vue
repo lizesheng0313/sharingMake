@@ -36,6 +36,7 @@
               :style="{width:screenWidth-285+'px'}"
               :height="screenHeight"
               v-loading="loading"
+              border
             >
               <el-table-column label="序号" type="index"></el-table-column>
               <el-table-column prop="taxSubName" label="扣缴义务人名称" width="200px" align="left">
@@ -253,7 +254,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px 20px 0px 20px;
+    padding: 20px 20px 0px 20px;
     .content-header {
       position: relative;
       font-size: 18px;
@@ -277,7 +278,6 @@ export default {
   .screening {
     .check-staff-menu {
       .search-input {
-        margin-left: 10px;
         width: 205px;
       }
     }

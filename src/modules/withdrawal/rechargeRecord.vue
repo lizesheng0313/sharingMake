@@ -8,20 +8,20 @@
       </el-row>
     </header>
     <div class="flex-center">
-      <div>
+      <div class="main-content">
         <el-button type="default" @click="dlgFilter = true">筛选</el-button>
         <el-input placeholder="" v-model="searchFormData.id" prefix-icon="iconiconfonticonfontsousuo1 iconfont" class="search-input"></el-input>
         <el-button type="primary" @click="handleSearch">查询</el-button>
       </div>
       <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.recharge.export')">导出</el-button>
     </div>
-    <div>
+    <div class="main-content">
       <el-table
-      border
+       border
         style="width: 100%"
         :data="tableList"
         v-loading="loading"
-        :header-cell-style="{background:'#F5F5F5'}"
+       :height="screenHeight"
       >
         <el-table-column label="充值订单ID" prop="id" min-width="170"></el-table-column>
         <el-table-column label="订单状态" prop="mercialName" min-width="120">
@@ -129,7 +129,8 @@ export default {
         completeTime: [],
       },
       tableList: [],
-      dlgFilter: false
+      dlgFilter: false,
+      screenHeight:document.body.clientHeight - 280
     };
   },
   computed: {
@@ -139,6 +140,13 @@ export default {
     ...mapState({
       privilegeVoList:state=>state.privilegeVoList
     })
+  },
+  created(){
+    window.onresize = () => {
+      return (() => {
+        this.screenHeight = document.body.clientHeight - 280;
+      })();
+    };
   },
   mounted() {
     this.$store
@@ -230,16 +238,18 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
-    padding:20px 20px 0px 20px;
+    padding:20px 20px 0px 0px;
   }
   .header {
     border-bottom: 1px solid #ededed;
-    margin-bottom: 10px;
   }
   .el-select,
   .el-input,
   .el-date-editor--month {
     width: 200px !important;
+  }
+  .search-input{
+    margin: 0 20px;
   }
 }
 </style>

@@ -327,10 +327,13 @@ a {
   height: 40px;
 }
 .main-title {
-  padding: 0 20px;
+  padding-left: 20px;
   font-size: 17px;
   height: 61px;
   line-height: 61px;
+}
+.main-content {
+  padding:0px 20px;
 }
 .tax-collect-tips {
   background: #fff6e2;
@@ -392,7 +395,7 @@ a {
 }
 //分页组件
 .pages{
-  text-align: center;
+  text-align: right;
   margin: 10px 0;
 }
 //提示介绍

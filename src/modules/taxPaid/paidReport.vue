@@ -17,8 +17,9 @@
           :data="paidList"
           class="check-staff_table"
           v-loading="loading"
+          border
         >
-          <el-table-column  label="序号" type="index"></el-table-column>
+          <el-table-column label="序号" type="index"></el-table-column>
           <el-table-column prop="name" label="所得月份"></el-table-column>
           <el-table-column prop="tableName" label="申报表"></el-table-column>
           <el-table-column prop="status" label="征收品目"></el-table-column>
@@ -47,6 +48,7 @@ export default {
       closeModel: false,
       isShowReturn:false,
       returnMsg:"",
+      screenHeight:document.body.clientHeight - 326
     };
   },
   created(){

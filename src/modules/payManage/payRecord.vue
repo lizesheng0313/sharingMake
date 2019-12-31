@@ -17,8 +17,8 @@
             </div>
             <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.psalaryIssuing.batchRecord.export')">导出</el-button>
         </div>
-        <div>
-            <el-table :data="recordList" v-loading="loading">
+        <div class="main-content">
+            <el-table :data="recordList" v-loading="loading" border :height="screenHeight">
                 <el-table-column label="批次号" prop="id" min-width="120"></el-table-column>
                 <el-table-column label="公司名称" prop="enterpriseName" min-width="170"></el-table-column>
                 <el-table-column label="发放月份" prop="payMonth" min-width="170"></el-table-column>
@@ -27,7 +27,7 @@
                 <el-table-column label="出款成功订单数" prop="orderSuccessNum" min-width="120"></el-table-column>
                 <el-table-column label="实发金额" prop="amountSuccess" min-width="170"></el-table-column>
                 <el-table-column label="支付时间" prop="payTime" min-width="170"></el-table-column>
-                <el-table-column label="操作" min-width="120" fixed="right">
+                <el-table-column label="操作" min-width="170" fixed="right">
                     <template slot-scope="scope">
                         <el-button type="text" @click="handleDetail(scope.row.id)"
                             v-if="['PAID','CLOSED'].includes(scope.row.status) && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.select')">查看</el-button>
@@ -95,7 +95,8 @@ export default {
             },
             selectMerchant: [],
             selectStatus: [],
-            dlgFilter: false
+            dlgFilter: false,
+            screenHeight: document.body.clientHeight - 280,
         };
     },
     computed: {
@@ -106,6 +107,13 @@ export default {
         ...mapState({
             privilegeVoList: state => state.privilegeVoList
         })
+    },
+    created(){
+      window.onresize = () => {
+        return (() => {
+          this.screenHeight = document.body.clientHeight - 280;
+        })();
+      };
     },
     mounted() {
         this.fetchTableList();
@@ -217,12 +225,14 @@ export default {
     }
     .header {
         border-bottom: 1px solid #ededed;
-        margin-bottom: 10px;
     }
     .el-select,
     .el-input,
     .el-date-editor--month {
         width: 200px !important;
+    }
+    .search-input{
+      margin:0 20px;
     }
 }
 </style>

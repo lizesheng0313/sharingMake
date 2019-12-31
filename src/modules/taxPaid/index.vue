@@ -24,8 +24,9 @@
           :data="paidList"
           class="check-staff_table"
           v-loading="loading"
-          :style="{width:screenWidth-300+'px'}"
+          :style="{width:screenWidth-280+'px'}"
           :height="screenHeight"
+          border
         >
           <el-table-column  label="序号" type="index"></el-table-column>
           <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
@@ -162,7 +163,7 @@ export default {
       },
       payStatus:constData.payStatus,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 306,
+      screenHeight: document.body.clientHeight - 300,
       paidList:[
         { name:"北京懒猫联银科技有限公司",tableName:"综合所得预扣预缴表",status:"申报成功",isThree:"是",paidStatus:"无需缴款",time:"2019-12-12" }
       ],
@@ -209,7 +210,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 310;
+        this.screenHeight = document.body.clientHeight - 300;
       })();
     };
   },
@@ -345,10 +346,10 @@ export default {
     line-height: 61px;
   }
   .taxPaidCon{
-    padding:22px;
+    padding:20px;
   }
   .tableCon{
-    margin-top:40px;
+    margin-top:30px;
   }
   .more-choose{
     color: #2c7cff;

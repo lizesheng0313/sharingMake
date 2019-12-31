@@ -7,7 +7,7 @@
                 </el-col>
             </el-row>
         </header>
-        <div>
+        <div class="main-content">
             <div class="intro">
                 <div class="intro-title">说明：</div>
                 <div class="intro-cnt">
@@ -15,7 +15,7 @@
                     <p>• 工资卡避免使用二类户，二类户全国日限额为1万元，若超限会导致失败，具体账户类型请咨询发卡行。</p>
                 </div>
             </div>
-            <el-table :data="batchList" v-loading="loading">
+            <el-table :data="batchList" v-loading="loading" border :height="screenHeight">
                 <el-table-column label="公司名称" prop="name" min-width="170"></el-table-column>
                 <el-table-column label="开户审核状态" min-width="170">
                     <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.bhaAuditStatusStr : '-'}}</template>
@@ -73,7 +73,8 @@ export default {
             salaryMerchantId: "",
             salaryLevel: null,
             salaryMasterId: null,
-            monthSelected: ""
+            monthSelected: "",
+            screenHeight: document.body.clientHeight - 326,
         };
     },
     computed: {
@@ -84,6 +85,13 @@ export default {
         ...mapState({
             privilegeVoList: state => state.privilegeVoList
         })
+    },
+    created(){
+      window.onresize = () => {
+        return (() => {
+          this.screenHeight = document.body.clientHeight - 326;
+        })();
+      };
     },
     mounted() {
         this.fetchTableList();

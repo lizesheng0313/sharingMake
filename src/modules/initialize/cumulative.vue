@@ -222,7 +222,7 @@ export default {
       total: 0,
       fileList: [],
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight-340,
+      screenHeight: document.body.clientHeight-330,
       list: [],
       taxSubjectInfolist:[],
       showFilter:true,
@@ -240,7 +240,7 @@ export default {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
         // this.$refs.tableCon.offsetTop-60
-        this.screenHeight = document.body.clientHeight - 340;
+        this.screenHeight = document.body.clientHeight - 330;
       })();
     };
     // this.screenHeight = document.body.clientHeight-this.$refs.tableCon.offsetTop-60;
@@ -403,7 +403,7 @@ export default {
   }
 
   .check-staff-menu {
-    margin-top: 30px;
+    margin-top: 20px;
     .search-input {
       width: 205px;
     }

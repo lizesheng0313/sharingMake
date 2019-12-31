@@ -17,8 +17,8 @@
             </div>
             <el-button @click="handleExport">导出</el-button>
         </div>
-        <div>
-            <el-table :data="orderList" v-loading="loading">
+        <div class="main-content">
+            <el-table :data="orderList" v-loading="loading" border :height="screenHeight">
                 <el-table-column label="公司名称" prop="enterpriseName" min-width="170"></el-table-column>
                 <el-table-column label="发放月份" prop="payMonth" min-width="170"></el-table-column>
                 <el-table-column label="姓名" prop="realName" min-width="170"></el-table-column>
@@ -107,7 +107,8 @@ export default {
             },
             selectMerchant: [],
             orderStatus: [],
-            dlgFilter: false
+            dlgFilter: false,
+            screenHeight: document.body.clientHeight - 280
         };
     },
     computed: {
@@ -116,6 +117,13 @@ export default {
             orderListTotal: "orderListTotal"
         })
     },
+  created(){
+        window.onresize = () => {
+          return (() => {
+            this.screenHeight = document.body.clientHeight - 280;
+          })();
+        };
+  },
     mounted() {
         this.fetchTableList();
         this.fetchSelectMerchant();
@@ -194,12 +202,14 @@ export default {
     }
     .header {
         border-bottom: 1px solid #ededed;
-        margin-bottom: 10px;
     }
     .el-select,
     .el-input,
     .el-date-editor--month {
         width: 200px !important;
     }
+  .search-input{
+    margin:0 20px;
+  }
 }
 </style>

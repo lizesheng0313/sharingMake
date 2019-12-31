@@ -101,7 +101,8 @@
               class="check-staff_table"
               @selection-change="handleSelectItem"
               :height="screenHeight"
-              :style="{width:screenWidth-285+'px'}">
+              :style="{width:screenWidth-285+'px'}"
+              border>
               <el-table-column type="selection" width="55" fixed></el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
               <el-table-column prop="empName" label="姓名" width="140">
@@ -652,7 +653,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 10px 20px 0px 20px;
+    padding: 20px 20px 0px 20px;
     .content-header {
       display: inline-block;
       font-size: 16px;
@@ -673,12 +674,12 @@ export default {
     }
   }
   .tax-search {
-    margin-left: 40px;
+    margin-left: 24px;
   }
   .screening {
     .check-staff-menu {
       .search-input {
-        margin-left: 10px;
+        margin:0px 20px;
         width: 205px;
       }
     }

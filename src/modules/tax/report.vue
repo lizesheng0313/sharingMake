@@ -71,6 +71,7 @@
             :style="{width:screenWidth-285+'px'}"
             v-loading="loading"
             border
+            :height="screenHeight"
           >
             <el-table-column prop="subTaxReportType" label="报表名称" width="200">
               <template slot-scope="scope">
@@ -309,6 +310,7 @@ export default {
       awaitReportCount:0,
       failReportCount:0,
       showWaitReport:false,
+      screenHeight: document.body.clientHeight - 344
     };
   },
   computed: {
@@ -358,6 +360,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 344;
       })();
     };
   },
@@ -673,7 +676,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 22px;
+    padding: 20px 20px 0px 20px;
     .company-collection {
       height: 80px;
       margin-right: 91px;
@@ -774,7 +777,7 @@ export default {
         }
       }
       .staff-page {
-        margin-top: 20px;
+        margin-top: 10px;
         text-align: right;
       }
     }
