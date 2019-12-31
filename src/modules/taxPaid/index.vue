@@ -51,7 +51,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="taxPaid" label="已缴税款"></el-table-column>
-          <el-table-column  label="缴款状态">
+          <el-table-column label="缴款状态">
             <template slot-scope="scope">
               <span>{{ payStatus[scope.row.payStatus] }}</span>
             </template>

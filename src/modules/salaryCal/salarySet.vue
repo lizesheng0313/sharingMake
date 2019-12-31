@@ -30,7 +30,7 @@
                 <el-input v-model="basicInfoForm.name"></el-input>
               </el-form-item>
               <el-form-item label="计税规则" prop="taxRule" class="taxRule">
-                <el-select v-model="basicInfoForm.taxRule" placeholder="请选择" @change="selectMonth" :disabled="isEdit">
+                <el-select v-model="basicInfoForm.taxRule" placeholder="请选择" @change="selectMonth" :disabled=isEdit>
                   <el-option v-for="item in taxRuleOptions"
                              :key="item.value"
                              :label="item.label"
