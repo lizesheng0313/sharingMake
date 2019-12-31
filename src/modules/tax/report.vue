@@ -70,6 +70,8 @@
             class="check-staff_table"
             :style="{width:screenWidth-285+'px'}"
             v-loading="loading"
+            border
+            :height="screenHeight"
           >
             <el-table-column prop="subTaxReportType" label="报表名称" width="200">
               <template slot-scope="scope">
@@ -82,19 +84,30 @@
               </template>
             </el-table-column>
             <el-table-column prop="currentTotalIncome" label="本期收入">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.currentTotalIncome }}</div>
+              </template>
             </el-table-column>
             <el-table-column prop="hisTotalIncome" label="累计收入">
               <template slot-scope="scope">
-                <span>{{ showSalary(scope.row.subTaxReportType,scope.row.hisTotalIncome) }}</span>
+                <div class="number-right">{{ showSalary(scope.row.subTaxReportType,scope.row.hisTotalIncome) }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="calculateTaxTotal" label="应扣缴税额"></el-table-column>
+            <el-table-column prop="calculateTaxTotal" label="应扣缴税额">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.calculateTaxTotal }}</div>
+              </template>
+            </el-table-column>
             <el-table-column prop="realTaxTotal" label="已缴税额">
               <template slot-scope="scope">
-                <span>{{ showSalary(scope.row.subTaxReportType,scope.row.realTaxTotal)}}</span>
+                <div class="number-right">{{ showSalary(scope.row.subTaxReportType,scope.row.realTaxTotal)}}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="taxDiffTotal" label="应补(退)税额"></el-table-column>
+            <el-table-column prop="taxDiffTotal" label="应补(退)税额">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.taxDiffTotal }}</div>
+              </template>
+            </el-table-column>
             <el-table-column  label="是否可申报">
               <template slot-scope="scope">
                 <span>{{scope.row.idReport?'是':'否'}}</span>
@@ -297,6 +310,7 @@ export default {
       awaitReportCount:0,
       failReportCount:0,
       showWaitReport:false,
+      screenHeight: document.body.clientHeight - 344
     };
   },
   computed: {
@@ -346,6 +360,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 344;
       })();
     };
   },
@@ -661,7 +676,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 22px;
+    padding: 20px 20px 0px 20px;
     .company-collection {
       height: 80px;
       margin-right: 91px;
@@ -762,7 +777,7 @@ export default {
         }
       }
       .staff-page {
-        margin-top: 20px;
+        margin-top: 10px;
         text-align: right;
       }
     }

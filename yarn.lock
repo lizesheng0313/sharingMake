@@ -6005,6 +6005,11 @@ olading-ui@^0.0.10:
   resolved "https://nexus.lanmaoly.com/repository/npm/olading-ui/-/olading-ui-0.0.10.tgz#33d2b5af0f007e4561c23c4e576a0593449d6b22"
   integrity sha512-WnhLAK4gZK8fePo0MuAjhxRKaKfqegWSiBsn6cpyjgrUKlNn6FQ5fOhNDQQbv6YnqtxuRGlvdm4PIUsNEzHEmw==
 
+old-env-map@^0.0.1:
+  version "0.0.1"
+  resolved "https://nexus.lanmaoly.com/repository/npm/old-env-map/-/old-env-map-0.0.1.tgz#4eb7d6271b26772b121293d5669e599b71d4a8b6"
+  integrity sha512-OL9jntVQxM7w0mJxjxEjdHsgEP61EhhteKPdwbz3OQMgkxVp4mQ+6OhZzLT379m1XKh4Fx2z3JNQ4AjsUTb6vA==
+
 old-fetch@^0.0.16:
   version "0.0.16"
   resolved "https://nexus.lanmaoly.com/repository/npm/old-fetch/-/old-fetch-0.0.16.tgz#6de75e3555c49558d47115a48d2c31f01666dbf8"

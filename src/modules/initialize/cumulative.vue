@@ -59,6 +59,7 @@
           @selection-change="handleSelectItem"
           :height = "screenHeight"
           ref="table"
+          border
         >
           <el-table-column type="selection" width="55" fixed></el-table-column>
           <el-table-column prop="empName" label="姓名" width="80"></el-table-column>
@@ -73,23 +74,79 @@
             </template>
           </el-table-column>
           <el-table-column prop="endMonthStr" label="截止月份" width="120"></el-table-column>
-          <el-table-column prop="currentIncome" label="当期收入额" width="100"></el-table-column>
-          <el-table-column prop="pensionInsuranceFee" label="养老个人" width="100"></el-table-column>
-          <el-table-column prop="medicalInsuranceFee" label="医疗个人" width="100"></el-table-column>
-          <el-table-column prop="unemploymentInsuranceFee" label="失业个人" width="140"></el-table-column>
-          <el-table-column prop="housingFund" label="公积金个人" width="140"></el-table-column>
-          <el-table-column prop="currentTaxfreeIncome" label="当期免税收入" width="140"></el-table-column>
-          <el-table-column prop="yearMount" label="年金" width="60"></el-table-column>
-          <el-table-column prop="bussHealthInsuranceFee" label="商业健康保险" width="140"></el-table-column>
-          <el-table-column prop="otherMonth" label="其他" width="60"></el-table-column>
+          <el-table-column prop="currentIncome" label="当期收入额" width="100">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.currentIncome }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="pensionInsuranceFee" label="养老个人" width="100">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.pensionInsuranceFee }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="medicalInsuranceFee" label="医疗个人" width="100">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.medicalInsuranceFee }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="unemploymentInsuranceFee" label="失业个人" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.unemploymentInsuranceFee }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="housingFund" label="公积金个人" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.housingFund }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="currentTaxfreeIncome" label="当期免税收入" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.currentTaxfreeIncome }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="yearMount" label="年金" width="60">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.yearMount }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="bussHealthInsuranceFee" label="商业健康保险" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.bussHealthInsuranceFee }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="otherMonth" label="其他" width="60">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.otherMonth }}</div>
+            </template>
+          </el-table-column>
 <!--          <el-table-column prop="currentTaxRefund" label="应补(退)税额" width="100"></el-table-column>-->
 <!--          <el-table-column prop="totalIncome" label="累计收入" width="100"></el-table-column>-->
 <!--          <el-table-column prop="spectialDeduction" label="累计专项扣除" width="100"></el-table-column>-->
-          <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="140"></el-table-column>
-          <el-table-column prop="totalSupportParents" label="累计赡养老人" width="140"></el-table-column>
-          <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140"></el-table-column>
-          <el-table-column prop="totalHouseRent" label="累计住房租金" width="140"></el-table-column>
-          <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="140"></el-table-column>
+          <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.totalChildrenEdu }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="totalSupportParents" label="累计赡养老人" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.totalSupportParents }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.totalHomeLoads }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="totalHouseRent" label="累计住房租金" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.totalHouseRent }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.totalFurtherEdu }}</div>
+            </template>
+          </el-table-column>
 <!--          <el-table-column prop="otherDeduction" label="累计其他扣除" width="140"></el-table-column>-->
 <!--          <el-table-column prop="totalDonated" label="累计准予扣除的捐赠" width="140"></el-table-column>-->
 <!--          <el-table-column prop="taxBreakTotal" label="累计减免税额" width="140"></el-table-column>-->
@@ -165,7 +222,7 @@ export default {
       total: 0,
       fileList: [],
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight-340,
+      screenHeight: document.body.clientHeight-330,
       list: [],
       taxSubjectInfolist:[],
       showFilter:true,
@@ -183,7 +240,7 @@ export default {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
         // this.$refs.tableCon.offsetTop-60
-        this.screenHeight = document.body.clientHeight - 340;
+        this.screenHeight = document.body.clientHeight - 330;
       })();
     };
     // this.screenHeight = document.body.clientHeight-this.$refs.tableCon.offsetTop-60;
@@ -346,7 +403,7 @@ export default {
   }
 
   .check-staff-menu {
-    margin-top: 30px;
+    margin-top: 20px;
     .search-input {
       width: 205px;
     }

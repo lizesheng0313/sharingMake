@@ -58,6 +58,7 @@
             v-loading="loading"
             :height="screenHeight"
             align="left"
+            border
           >
             <el-table-column width="60" label="序号" type="index"></el-table-column>
             <el-table-column prop="empName" label="姓名" width="80"></el-table-column>
@@ -76,11 +77,31 @@
               </template>
             </el-table-column>
             <el-table-column prop="syncTimeStr" label="下载时间" width="100"></el-table-column>
-            <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="120"></el-table-column>
-            <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="120"></el-table-column>
-            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="累计住房租金" width="120"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="累计赡养老人" width="120"></el-table-column>
+            <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="120">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.totalChildrenEdu }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="120">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.totalFurtherEdu }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.totalHomeLoads }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="totalHouseRent" label="累计住房租金" width="120">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.totalHouseRent }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="totalSupportParents" label="累计赡养老人" width="120">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.totalSupportParents }}</div>
+              </template>
+            </el-table-column>
             <el-table-column prop="totalSupportParents" label="下载状态" width="110">
               <template slot-scope="scope">
                 <span>{{ downLoadStatusObj[scope.row.status]}}</span>

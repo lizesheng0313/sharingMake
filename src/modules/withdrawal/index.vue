@@ -7,7 +7,7 @@
         </el-col>
       </el-row>
     </header>
-    <div>
+    <div class="main-content">
       <div class="intro">
         <div class="intro-title">说明：</div>
         <div class="intro-cnt">
@@ -16,8 +16,8 @@
         </div>
       </div>
     </div>
-    <div>
-      <el-table :data="accountList" v-loading="loading">
+    <div class="main-content">
+      <el-table :data="accountList" v-loading="loading" border :height="screenHeight">
         <el-table-column label="公司名称" min-width="170">
           <template slot-scope="scope">{{scope.row.name}}</template>
         </el-table-column>
@@ -69,13 +69,21 @@ export default {
       accountList: [],
       loading: true,
       accountStatus,
-      activeStatus
+      activeStatus,
+      screenHeight: document.body.clientHeight - 356
     };
   },
   computed:{
     ...mapState({
         privilegeVoList:state=>state.privilegeVoList
     })
+  },
+  created(){
+    window.onresize = () => {
+      return (() => {
+        this.screenHeight = document.body.clientHeight - 356;
+      })();
+    };
   },
   mounted() {
     this.$store

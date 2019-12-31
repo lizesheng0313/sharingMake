@@ -1,5 +1,5 @@
 <template>
-  <div class="account router-view">
+  <div class="account router-view min-content">
     <div>
       <div class="intro">
         <div class="intro-title">说明：</div>
@@ -53,7 +53,7 @@ export default {
       accountList: [],
       loading: true,
       accountStatus,
-      activeStatus
+      activeStatus,
     };
   },
   mounted() {
@@ -138,6 +138,7 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
 .account {
+  margin:0px 20px;
   .add_account {
     color: $mainColor;
     font-size: 14px;

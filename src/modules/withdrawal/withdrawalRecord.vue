@@ -15,8 +15,8 @@
       </div>
       <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.withdraw.export')">导出</el-button>
     </div>
-    <div>
-      <el-table :data="tableList" v-loading="loading" :header-cell-style="{background:'#F5F5F5'}" border>
+    <div class="main-content">
+      <el-table :data="tableList" v-loading="loading"  border :height="screenHeight">
         <el-table-column label="提现订单ID" prop="id" min-width="120"></el-table-column>
         <el-table-column label="订单状态" prop="mercialName" min-width="170">
           <template slot-scope="scope">{{withdrawStatus[scope.row.status]}}</template>
@@ -113,7 +113,8 @@ export default {
         completeTime: [],
       },
       tableList: [],
-      dlgFilter: false
+      dlgFilter: false,
+      screenHeight : document.body.clientHeight - 280
     };
   },
   computed: {
@@ -123,6 +124,13 @@ export default {
     ...mapState({
       privilegeVoList:state=>state.privilegeVoList
     })
+  },
+  created(){
+    window.onresize = () => {
+      return (() => {
+        this.screenHeight = document.body.clientHeight - 280;
+      })();
+    };
   },
   mounted() {
     this.$store
@@ -214,12 +222,14 @@ export default {
   }
   .header {
     border-bottom: 1px solid #ededed;
-    margin-bottom: 10px;
   }
   .el-select,
   .el-input,
   .el-date-editor--month {
     width: 200px !important;
+  }
+  .search-input{
+    margin:0 20px;
   }
 }
 </style>
