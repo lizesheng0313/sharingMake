@@ -70,7 +70,7 @@
             border
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
-            <el-table-column prop="empName" label="姓名" width="130"></el-table-column>
+            <el-table-column prop="empName" label="姓名"></el-table-column>
             <el-table-column prop="idNo" label="身份证号" width="180"></el-table-column>
             <el-table-column label="入职日期" width="180">
               <template slot-scope="scope">
