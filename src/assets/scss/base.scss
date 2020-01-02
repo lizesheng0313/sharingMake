@@ -386,8 +386,9 @@ a {
 .page-module{
   .div-module {
     background: #fff;
-    margin-bottom: 20px;
-    padding: 20px;
+    //margin-bottom: 20px;
+    padding: 20px 20px 16px 20px;
+    box-sizing: border-box;
     border-radius: 4px;
     -moz-box-shadow: 3px 5px 15px #c3d0d9;
     box-shadow: 5px 10px 15px #c3d0d9;
