@@ -71,7 +71,6 @@
             :style="{width:screenWidth-285+'px'}"
             v-loading="loading"
             border
-            :height="screenHeight"
           >
             <el-table-column prop="subTaxReportType" label="报表名称" width="200">
               <template slot-scope="scope">
