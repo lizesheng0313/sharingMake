@@ -233,12 +233,13 @@
 }
 .el-dropdown-menu__item.current-tab-sub_name{
   @include ellipsis;
-  width:200px;
+  width: 200px;
   display: block;
 }
 .el-month-table td.today .cell {
-  color:#606266;
+  color: #606266;
   font-weight: normal;
+  padding: 0px;
 }
 
 .salarySet-page{
@@ -298,6 +299,11 @@
     margin-bottom: 0px;
   }
   .el-form-item__label {
-    padding: 0 30px 0 0
+    padding: 0 30px 0 0;
+  }
+}
+.taxPaid {
+  .el-radio__label {
+    display: none;
   }
 }

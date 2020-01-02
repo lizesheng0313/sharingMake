@@ -2,7 +2,7 @@
     <el-row class="data-create" v-loading="loading" element-loading-text="员工工资银行卡鉴权中，请稍等…" element-loading-spinner="el-icon-loading">
         <div class="intro">
             <div class="intro-cnt">
-                <p>未从薪税通中检测到公司所选月份存在待发薪数据，请确认薪税通中是否已提交工资代发数据</p>
+                <p>公司所选月份存在待发薪数据，确定后可查看待发薪人员明细</p>
             </div>
         </div>
         <div class="form-con">

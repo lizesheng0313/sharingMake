@@ -101,8 +101,9 @@
               class="check-staff_table"
               @selection-change="handleSelectItem"
               :height="screenHeight"
-              :style="{width:screenWidth-285+'px'}"
-              border>
+              :style="{width:screenWidth-255+'px'}"
+              border
+             >
               <el-table-column type="selection" width="55" fixed></el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
               <el-table-column prop="empName" label="姓名" width="140">

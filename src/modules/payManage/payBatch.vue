@@ -10,7 +10,7 @@
         <div class="main-content">
             <div class="intro">
                 <div class="intro-cnt">
-                    <p>• 发薪主体公司需开通资金账户和激活账户后，才能使用工资银行代发功能服务。<span class="no-account">若无已激活的账户,<span class="to-account">点击这里</span>新增账户</span></p>
+                    <p>• 发薪主体公司需开通资金账户和激活账户后，才能使用工资银行代发功能服务。<span class="no-account">若无已激活的账户,<span class="to-account" @click="$router.push('/account')">点击这里</span>新增账户</span></p>
                     <p>• 工资卡避免使用二类户，二类户全国日限额为1万元，若超限会导致失败，具体账户类型请咨询发卡行。</p>
                 </div>
             </div>
