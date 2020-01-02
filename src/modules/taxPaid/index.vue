@@ -254,10 +254,12 @@ export default {
         .then(res => {
           if(res.success){
             this.tripleAgreementTaxList = res.data.tripleAgreementListVoList;
+            this.tripleAgreementNo = this.tripleAgreementTaxList[0].tripleAgreementNo;
+            this.taxSubId =this.tripleAgreementTaxList[0].taxSubId;
             this.deductionAmount = res.data.deductionAmount;
             this.tripleAgreementLoading = false;
           }else{
-            // this.$message.warning(res.message)
+            this.$message.warning(res.message)
           }
         });
     },
@@ -343,7 +345,7 @@ export default {
   }
   .header {
     padding:0 20px;
-    font-size: 14px;
+    font-size: 17px;
     height: 61px;
     border-bottom: 1px solid #ededed;
     line-height: 61px;

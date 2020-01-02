@@ -77,27 +77,27 @@
                 <span>{{ scope.row.empDay.split(' ')[0] }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="totalChildrenEdu" label="累计子女教育">
+            <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="120px">
               <template slot-scope="scope">
                 <div class="number-right"> {{ scope.row.totalChildrenEdu }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="totalFurtherEdu" label="累计继续教育">
+            <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="120px">
               <template slot-scope="scope">
                 <div class="number-right"> {{ scope.row.totalFurtherEdu }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="150px">
+            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140px">
               <template slot-scope="scope">
                 <div class="number-right"> {{ scope.row.totalHomeLoads }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="totalHouseRent" label="累计住房租金">
+            <el-table-column prop="totalHouseRent" label="累计住房租金" width="110px">
               <template slot-scope="scope">
                 <div class="number-right"> {{ scope.row.totalHouseRent }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="totalSupportParents" label="累计赡养老人">
+            <el-table-column prop="totalSupportParents" label="累计赡养老人" width="110px">
               <template slot-scope="scope">
                 <div class="number-right"> {{ scope.row.totalSupportParents }}</div>
               </template>
