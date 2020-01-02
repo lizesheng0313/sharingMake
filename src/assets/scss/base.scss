@@ -415,3 +415,11 @@ a {
     line-height: 1.8;
   }
 }
+//隐藏属性
+.width-fixed {
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 150px;
+}

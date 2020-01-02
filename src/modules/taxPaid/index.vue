@@ -32,7 +32,7 @@
           <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName && scope.row.taxSubName.length>10">
-                <span class="hidenCon">{{ scope.row.taxSubName }}</span>
+                <span class="hiden-con">{{ scope.row.taxSubName }}</span>
               </el-tooltip>
               <span v-else>{{ scope.row.taxSubName }}</span>
             </template>
@@ -45,7 +45,7 @@
           <el-table-column  label="申报表" width="150px">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" :content="subTaxReportTypeObj[scope.row.subTaxReportType]" placement="top-start" v-if="scope.row.subTaxReportType">
-                <span class="hidenCon">{{ subTaxReportTypeObj[scope.row.subTaxReportType] }}</span>
+                <span class="hiden-con">{{ subTaxReportTypeObj[scope.row.subTaxReportType] }}</span>
               </el-tooltip>
               <span v-else>{{ subTaxReportTypeObj[scope.row.subTaxReportType]}}</span>
             </template>

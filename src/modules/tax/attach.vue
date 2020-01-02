@@ -1,5 +1,5 @@
 <template>
-  <div class="tax el-diy-month">
+  <div class="tax el-diy-month attach">
     <header class="header main-title">
       <el-row type="flex">
         <el-col :span="12">
@@ -274,7 +274,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
-.tax {
+.attach {
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {

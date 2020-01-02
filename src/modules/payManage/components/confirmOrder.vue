@@ -1,7 +1,6 @@
 <template>
     <el-row class="confirm-order" v-loading="wrapLoading">
         <div class="intro">
-            <div class="intro-title">说明：</div>
             <div class="intro-cnt">
                 <p>• 仅校验通过的订单可进行代发，校验失败的订单不可进行代发(说明：每条数据都是1个独立订单)</p>
                 <p>• 请确认发薪公司名称是否准确，发薪公司名称会显示在员工银行卡的交易详情中</p>
@@ -63,14 +62,24 @@
         <el-table border :data="orderList" v-loading="loading" :header-cell-style="{background:'#F5F5F5'}">
             <el-table-column label="批次号" prop="orderBatchId"></el-table-column>
             <el-table-column label="姓名" prop="realName"></el-table-column>
-            <el-table-column label="证件号码" prop="idCard"></el-table-column>
-            <el-table-column label="手机号" prop="phoneNo"></el-table-column>
-            <el-table-column label="开户行" prop="openingBank"></el-table-column>
-            <el-table-column label="银行卡号" prop="bankCardNo"></el-table-column>
+            <el-table-column label="证件号码" prop="idCard" width="170"></el-table-column>
+            <el-table-column label="手机号" prop="phoneNo" width="120px"></el-table-column>
+            <el-table-column label="开户行" prop="openingBank">
+              <template slot-scope="scope">
+                <span>{{ scope.row.openingBank && scope.row.openingBank != 'null' ? scope.row.openingBank : " " }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="银行卡号" prop="bankCardNo" width="180"></el-table-column>
             <el-table-column label="实发金额" prop="amount"></el-table-column>
             <el-table-column label="订单状态" prop="statusStr"></el-table-column>
-            <el-table-column label="失败原因" prop="failReason"></el-table-column>
-            <el-table-column label="操作">
+           <el-table-column label="失败原因" min-width="120">
+              <template slot-scope="scope">
+                <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top">
+                  <div class="hiden-con">{{scope.row.failReason}}</div>
+                </el-tooltip>
+              </template>
+           </el-table-column>
+            <el-table-column label="操作" width="120">
                 <template slot-scope="scope">
                     <el-button type="text" @click="handleEdite(scope.row)">编辑</el-button>
                     <el-button type="text" @click="handleDeleteOrder(scope.row.id)">删除</el-button>

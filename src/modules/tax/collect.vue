@@ -14,15 +14,26 @@
             <div class="left">
               <el-button type="default" @click="isShowScreening=true">筛选</el-button>
             </div>
+            <div class="content-header head-date">
+              <!--              <span>{{selectMonth}}</span>-->
+              <el-date-picker
+                v-model="selectMonth"
+                @input="changeMonth"
+                type="month"
+                value-format="yyyy年MM月"
+                :editable="false"
+                :clearable="false"
+              ></el-date-picker>
+            </div>
             <el-input
               placeholder="请输入姓名\工号\身份证号"
               v-model="ruleForm.nameOrMore"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               @keyup.enter.native="handleSearch"
               clearable
-              class="search-input left"
+              class="search-input"
             ></el-input>
-            <div class="left">
+            <div class="select" style="display: inline-block">
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
@@ -82,17 +93,6 @@
               减少
               <i>{{decreaseCount}}</i>人
             </span>
-            <div class="content-header head-date">
-              <!--              <span>{{selectMonth}}</span>-->
-              <el-date-picker
-                v-model="selectMonth"
-                @input="changeMonth"
-                type="month"
-                value-format="yyyy年MM月"
-                :editable="false"
-                :clearable="false"
-              ></el-date-picker>
-            </div>
           </div>
           <div class="staff-table">
             <el-table
@@ -148,7 +148,7 @@
               <el-table-column prop="updateTime" label="反馈信息" width="120">
                 <template slot-scope="scope">
                   <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
-                    <span class="hidenCon">{{ scope.row.failReason }}</span>
+                    <span class="hiden-con">{{ scope.row.failReason }}</span>
                   </el-tooltip>
                   <span v-else>{{ scope.row.failReason }}</span>
                 </template>
@@ -657,7 +657,7 @@ export default {
     .content-header {
       display: inline-block;
       font-size: 16px;
-      margin-bottom: 6px;
+      margin:0px 0px 6px 20px;
       i {
         font-size: 16px;
         color: #ccc;

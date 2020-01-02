@@ -46,7 +46,7 @@
 .head-date{
   .el-input--prefix .el-input__inner{
     font-size: 16px;
-    padding-left: 14px;
+    padding: 19px;
   }
   .el-input__prefix{
     right:-74px;
@@ -59,15 +59,19 @@
     }
   }
 }
-.collect{
-  .el-input--prefix .el-input__inner{
+.collect,.attach {
+  .el-input--prefix .el-input__inner {
     font-size: 14px;
+    padding: 19px 20px;
+  }
+  .search-input .el-input__prefix {
+    top:4px;
   }
 }
 .el-date-editor.el-input{
   width: 130px;
 }
-.sflary-el-step{
+.sflary-el-step {
   .el-step__main {
     color:#999;
   }
@@ -248,13 +252,13 @@
   }
 }
 //超出部分隐藏
-.hidenCon{
-  width:200px;
+.hiden-con{
+  width:150px;
   overflow: hidden;
-  word-break: keep-all;
+  cursor:pointer;
   white-space: nowrap;
   text-overflow: ellipsis;
-  cursor:pointer;
+  text-align: center;
 }
 .funStyle{
   color:$mainColor;
