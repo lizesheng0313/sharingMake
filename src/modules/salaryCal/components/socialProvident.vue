@@ -414,7 +414,7 @@ export default {
     }
   }
   .check-staff-menu {
-    margin-top: 30px;
+    margin-top: 20px;
     .search-input {
       width: 250px;
     }

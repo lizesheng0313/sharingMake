@@ -1,5 +1,5 @@
 <template>
-  <div class="collect">
+  <div class="calc-collect">
     <div class="tax el-diy-month">
       <div class="tax-content">
         <div class="screening">
@@ -396,7 +396,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../../assets/scss/helpers.scss";
-.collect {
+.calc-collect {
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
@@ -412,7 +412,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px 20px 0px 20px;
+    padding: 20px 20px 0px 20px;
     .content-header {
       display: inline-block;
       font-size: 16px;
@@ -448,6 +448,7 @@ export default {
       font-size: 12px;
     }
     .staff-situation {
+      margin:10px 0px;
       .staff-total {
         .part{
           display:inline-block;
@@ -462,7 +463,6 @@ export default {
           }
         }
       }
-      margin-top: 20px;
       color: #999;
       font-size: 12px;
       i {

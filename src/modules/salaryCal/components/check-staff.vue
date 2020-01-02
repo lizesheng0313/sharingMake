@@ -454,7 +454,7 @@
   padding: 0 20px;
   box-sizing: border-box;
   .check-staff-menu {
-    margin-top: 30px;
+    margin-top: 20px;
     .search-input {
       width: 215px;
     }
@@ -466,12 +466,12 @@
     font-size: 12px;
   }
   .staff-situation {
+    margin:10px;
     .staff-total {
       border-right: 1px solid #e6e6e6;
       padding-right: 15px;
       margin-right: 15px;
     }
-    margin-top: 20px;
     color: #999;
     font-size: 12px;
     i {

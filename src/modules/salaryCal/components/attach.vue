@@ -366,6 +366,9 @@ export default {
 .calc-attach {
   padding:0 22px;
   .staff-situation {
+    margin: 10px 0px;
+    color: #999;
+    font-size: 12px;
     .staff-total {
       margin-left: 15px;
       .part{
@@ -381,9 +384,6 @@ export default {
         }
       }
     }
-    margin-top: 20px;
-    color: #999;
-    font-size: 12px;
     i {
       color: $mainColor;
       font-style: normal;
