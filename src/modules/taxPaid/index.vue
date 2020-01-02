@@ -163,7 +163,7 @@ export default {
       },
       payStatus:constData.payStatus,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 300,
+      screenHeight: document.body.clientHeight - 290,
       paidList:[
         { name:"北京懒猫联银科技有限公司",tableName:"综合所得预扣预缴表",status:"申报成功",isThree:"是",paidStatus:"无需缴款",time:"2019-12-12" }
       ],
@@ -210,7 +210,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 300;
+        this.screenHeight = document.body.clientHeight - 290;
       })();
     };
   },
@@ -338,6 +338,9 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
 .taxPaid {
+  .head-date{
+    margin-bottom: 10px;
+  }
   .header {
     padding:0 20px;
     font-size: 14px;
@@ -349,7 +352,7 @@ export default {
     padding:20px;
   }
   .table-con{
-    padding-top:20px;
+
   }
   .more-choose{
     color: #2c7cff;
