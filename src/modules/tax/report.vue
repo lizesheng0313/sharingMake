@@ -212,7 +212,7 @@
         <el-table-column prop="failReason" label="反馈信息">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
-              <span class="hidenCon">{{ scope.row.failReason }}</span>
+              <span class="hiden-con">{{ scope.row.failReason }}</span>
             </el-tooltip>
             <span v-else>{{ scope.row.failReason }}</span>
           </template>
@@ -631,6 +631,7 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
 .tax-report {
+  height: calc( 100vh - 90px );
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
@@ -757,7 +758,7 @@ export default {
         overflow-x: auto;
       }
       position: relative;
-      margin-top: 27px;
+      margin-top: 20px;
       .floating-menu {
         position: absolute;
         left: 100px;

@@ -1,6 +1,6 @@
 
 <template>
-  <div class="content templates" id="account-wrap">
+  <div class="content templates account-detail" id="account-wrap">
     <el-row>
       <el-col :span="24"></el-col>
       <el-col>
@@ -276,6 +276,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.account-detail{
+  height:calc(100vh - 90px);
+}
 .table-col {
   border: 1px solid #ebeef5;
   padding: 12px 10px;

@@ -549,7 +549,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .imformation {
-  padding-bottom: 50px;
+  padding-bottom: 80px;
+  height: calc(100vh - 90px);
   strong {
     font-size: 14px;
     padding: 5px 0;
@@ -563,6 +564,11 @@ export default {
     margin: 10px;
   }
   .information_button {
+    padding:20px;
+    background: #fff;
+    width: 100%;
+    position: fixed;
+    bottom:0px;
     margin-top: 25px;
     margin-left: 12px;
   }

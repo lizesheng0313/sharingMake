@@ -35,14 +35,14 @@
                         <el-table-column label="订单号" prop="id"></el-table-column>
                         <el-table-column label="订单状态" prop="statusStr"></el-table-column>
                         <el-table-column label="姓名" prop="realName"></el-table-column>
-                        <el-table-column label="证件号码" prop="idCard"></el-table-column>
-                        <el-table-column label="手机号" prop="phoneNo"></el-table-column>
+                        <el-table-column label="证件号码" prop="idCard" width="170"></el-table-column>
+                        <el-table-column label="手机号" prop="phoneNo" width="120"></el-table-column>
                         <el-table-column label="开户行" prop="openingBank"></el-table-column>
-                        <el-table-column label="银行卡号" prop="bankCardNo"></el-table-column>
+                        <el-table-column label="银行卡号" prop="bankCardNo" width="180"></el-table-column>
                         <el-table-column label="实发金额" prop="amount"></el-table-column>
                         <el-table-column label="失败原因" prop="failReason"></el-table-column>
-                        <el-table-column label="创建时间" prop="createTime"></el-table-column>
-                        <el-table-column label="操作">
+                        <el-table-column label="创建时间" prop="createTime" width="160"></el-table-column>
+                        <el-table-column label="操作" width="140">
                             <template slot-scope="scope">
                                 <el-button type="text" @click="handleEdite('edite',scope.row)" v-if="scope.row.status == 'CHECK_FAIL' && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.detailsEdit')">编辑</el-button>
                                 <el-button type="text" @click="handleEdite('resend',scope.row)"
@@ -257,6 +257,7 @@ export default {
 
 <style lang="scss" scoped>
 .record-detail {
+  height: calc(100vh - 90px);
     .summary {
         display: flex;
         justify-content: space-between;

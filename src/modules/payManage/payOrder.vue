@@ -19,6 +19,8 @@
         </div>
         <div class="main-content">
             <el-table :data="orderList" v-loading="loading" border :height="screenHeight">
+              <el-table-column type="index" width="50" label="序号">
+              </el-table-column>
                 <el-table-column label="公司名称" prop="enterpriseName" min-width="170"></el-table-column>
                 <el-table-column label="发放月份" prop="payMonth" min-width="170"></el-table-column>
                 <el-table-column label="姓名" prop="realName" min-width="170"></el-table-column>

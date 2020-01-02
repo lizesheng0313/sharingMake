@@ -51,7 +51,7 @@
             <el-table-column label="扣缴义务人名称" prop="taxSubName" width="200">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
-                  <span class="hidenCon">{{ scope.row.taxSubName }}</span>
+                  <span class="hiden-con">{{ scope.row.taxSubName }}</span>
                 </el-tooltip>
                 <span v-else>{{ scope.row.taxSubName }}</span>
               </template>

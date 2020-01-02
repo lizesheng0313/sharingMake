@@ -9,7 +9,6 @@
     </header>
     <div class="main-content">
       <div class="intro">
-        <div class="intro-title">说明：</div>
         <div class="intro-cnt">
           <p>• 使用工资银行代发服务前，请开通发薪主体公司的资金账户并激活</p>
           <p>• 账户激活后，可在账户详情中充值和提现</p>
@@ -18,8 +17,8 @@
     </div>
     <div class="main-content">
       <el-table :data="accountList" v-loading="loading" border :height="screenHeight">
-        <el-table-column label="公司名称" min-width="170">
-          <template slot-scope="scope">{{scope.row.name}}</template>
+        <el-table-column label="公司名称" min-width="160">
+          <template slot-scope="scope"><div>{{scope.row.name}}</div></template>
         </el-table-column>
         <el-table-column label="开户审核状态" min-width="150">
           <template slot-scope="scope">{{scope.row.platformUserNo ? accountStatus[scope.row.bhaAuditStatus] : '-'}}</template>
@@ -27,14 +26,20 @@
         <el-table-column label="激活状态" min-width="150">
           <template slot-scope="scope">{{scope.row.platformUserNo ? activeStatus[scope.row.bhaOpenStatus] : '-'}}</template>
         </el-table-column>
-        <el-table-column label="申请时间" min-width="150">
+        <el-table-column label="申请时间" min-width="170">
           <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.createTime : '-'}}</template>
         </el-table-column>
         <el-table-column label="不通过原因" min-width="150">
-          <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.bhaAuditDesc : '-'}}</template>
+            <template slot-scope="scope">
+              <el-tooltip class="item" effect="dark" :content="scope.row.platformUserNo ? scope.row.bhaAuditDesc : '-'" placement="top">
+                <span class="hiden-con">{{scope.row.platformUserNo ? scope.row.bhaAuditDesc : '-'}}</span>
+              </el-tooltip>
+            </template>
         </el-table-column>
         <el-table-column label="账户金额" min-width="150">
-          <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.amount : '-'}}</template>
+          <template slot-scope="scope">
+            <div class="number-right">{{scope.row.platformUserNo ? scope.row.amount : '-'}}</div>
+          </template>
         </el-table-column>
         <el-table-column label="操作" min-width="240">
           <template slot-scope="scope">

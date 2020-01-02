@@ -1,5 +1,5 @@
 <template>
-  <div class="tax el-diy-month">
+  <div class="tax el-diy-month attach">
     <header class="header main-title">
       <el-row type="flex">
         <el-col :span="12">
@@ -87,7 +87,7 @@
                 <div class="number-right"> {{ scope.row.totalFurtherEdu }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息">
+            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="150px">
               <template slot-scope="scope">
                 <div class="number-right"> {{ scope.row.totalHomeLoads }}</div>
               </template>
@@ -274,7 +274,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
-.tax {
+.attach {
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {

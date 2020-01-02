@@ -47,7 +47,7 @@
         <el-table-column prop="failReason" label="反馈信息">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
-                <span class="hidenCon">{{ scope.row.failReason }}</span>
+                <span class="hiden-con">{{ scope.row.failReason }}</span>
               </el-tooltip>
               <span v-else>{{ scope.row.failReason }}</span>
             </template>

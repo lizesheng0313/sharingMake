@@ -42,11 +42,10 @@
     }
   }
 }
-
 .head-date{
   .el-input--prefix .el-input__inner{
     font-size: 16px;
-    padding-left: 14px;
+    padding: 19px;
   }
   .el-input__prefix{
     right:-74px;
@@ -59,15 +58,19 @@
     }
   }
 }
-.collect{
-  .el-input--prefix .el-input__inner{
+.collect,.attach {
+  .el-input--prefix .el-input__inner {
     font-size: 14px;
+    padding: 19px 20px;
+  }
+  .search-input .el-input__prefix {
+    top:4px;
   }
 }
 .el-date-editor.el-input{
   width: 130px;
 }
-.sflary-el-step{
+.sflary-el-step {
   .el-step__main {
     color:#999;
   }
@@ -187,17 +190,17 @@
 // .el-upload-dragger{
 //   width:180px!important;
 // }
-.el-submenu .el-menu-item{
-  min-width:170px;
+.el-submenu .el-menu-item {
+  min-width: 170px;
 }
 
-.el-button--primary{
-  border:1px solid $mainColor;
-  font-size:14px;
+.el-button--primary {
+  border: 1px solid $mainColor;
+  font-size: 14px;
 }
-.el-dropdown{
-  .el-button{
-    padding:9px 0px;
+.el-dropdown {
+  .el-button {
+    padding: 9px 0px;
   }
 }
 .check-staff,.salary-send{
@@ -230,12 +233,13 @@
 }
 .el-dropdown-menu__item.current-tab-sub_name{
   @include ellipsis;
-  width:200px;
+  width: 200px;
   display: block;
 }
 .el-month-table td.today .cell {
-  color:#606266;
+  color: #606266;
   font-weight: normal;
+  padding: 0px;
 }
 
 .salarySet-page{
@@ -248,13 +252,13 @@
   }
 }
 //超出部分隐藏
-.hidenCon{
-  width:200px;
+.hiden-con{
+  width:150px;
   overflow: hidden;
-  word-break: keep-all;
+  cursor:pointer;
   white-space: nowrap;
   text-overflow: ellipsis;
-  cursor:pointer;
+  text-align: center;
 }
 .funStyle{
   color:$mainColor;
@@ -283,9 +287,23 @@
 .el-table th.gutter {
   display: table-cell !important;
 }
-.input-bigger{
-  .el-select,.el-input{
+.input-bigger {
+  .el-select,.el-input {
     width: 320px !important;
   }
-
+}
+.data-create {
+  .el-form-item {
+    border-bottom: 1px solid #eee;
+    padding: 4px 0px;
+    margin-bottom: 0px;
+  }
+  .el-form-item__label {
+    padding: 0 30px 0 0;
+  }
+}
+.taxPaid {
+  .el-radio__label {
+    display: none;
+  }
 }

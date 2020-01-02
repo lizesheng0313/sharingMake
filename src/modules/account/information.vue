@@ -527,7 +527,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .imformation {
-  padding-bottom: 50px;
+
+  height: calc( 100vh - 90px );
   strong {
     font-size: 14px;
     padding: 5px 0;
