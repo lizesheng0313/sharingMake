@@ -438,7 +438,7 @@ export default {
   .screening {
     .check-staff-menu {
       .search-input {
-        width: 205px;
+        width: 250px;
       }
     }
     /*.add-import {*/
