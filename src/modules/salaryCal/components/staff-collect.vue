@@ -412,7 +412,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px 20px 0px 20px;
+    padding: 20px 20px 0px 20px;
     .content-header {
       display: inline-block;
       font-size: 16px;
