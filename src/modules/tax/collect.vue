@@ -346,7 +346,7 @@ export default {
       isShowInfoColl: true,
       isShowScreening: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
-      screenHeight: document.body.clientHeight - 350,
+      screenHeight: document.body.clientHeight - 330,
       list: [],
       closeModel: false,
       unNormalIds:[],
@@ -383,7 +383,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 350;
+        this.screenHeight = document.body.clientHeight - 330;
       })();
     };
   },
@@ -691,14 +691,14 @@ export default {
       font-size: 12px;
     }
     .staff-situation {
+      margin: 0px 10px 10px 0px;
+      color: #999;
+      font-size: 12px;
       .staff-total {
         border-right: 1px solid #e6e6e6;
         padding-right: 15px;
         margin-right: 15px;
       }
-      margin-top: 20px;
-      color: #999;
-      font-size: 12px;
       i {
         font-style: normal;
         padding: 0 3px;

@@ -374,7 +374,7 @@ export default {
     }
   }
   .selectCon{
-    margin:20px 0px;
+    margin:10px 0px;
   }
   .table-content{
     padding:0px 20px;

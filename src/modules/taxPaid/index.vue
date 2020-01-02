@@ -19,7 +19,7 @@
           @change="changeDate"
         ></el-date-picker>
       </div>
-      <div class="tableCon">
+      <div class="table-con">
         <el-table
           :data="paidList"
           class="check-staff_table"
@@ -348,8 +348,8 @@ export default {
   .taxPaidCon{
     padding:20px;
   }
-  .tableCon{
-    margin-top:30px;
+  .table-con{
+    padding-top:20px;
   }
   .more-choose{
     color: #2c7cff;

@@ -758,7 +758,7 @@ export default {
         overflow-x: auto;
       }
       position: relative;
-      margin-top: 27px;
+      margin-top: 20px;
       .floating-menu {
         position: absolute;
         left: 100px;
