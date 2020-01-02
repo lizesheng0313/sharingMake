@@ -56,5 +56,7 @@ export default {
 
 <style lang="scss" scoped>
 .batch-edite {
+  height:calc(100vh - 90px);
+  overflow: auto;
 }
 </style>
