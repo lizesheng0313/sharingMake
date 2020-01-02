@@ -253,11 +253,12 @@
 }
 //超出部分隐藏
 .hiden-con{
+  display: inline-block;
   width:150px;
   overflow: hidden;
   cursor:pointer;
   white-space: nowrap;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis !important;
   text-align: center;
 }
 .funStyle{
@@ -306,4 +307,7 @@
   .el-radio__label {
     display: none;
   }
+}
+.v-modal {
+  z-index: 2000 !important;
 }

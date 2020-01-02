@@ -87,10 +87,12 @@
           :fixed="[0,1,2,3].includes(index)"
         >
           <template slot-scope="scope">
-            <div :class="{'number-right':col.numberItem}">
-<!--              <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>-->
-              {{ filterVal(scope['row'][index]) }}
+            <div v-if="scope['row'][index]['col'] === '反馈信息'">
+              <el-tooltip class="item" effect="dark" :content="scope['row'][index]['val']" placement="top">
+                <span class="hiden-con">{{ scope['row'][index]['val'] }}</span>
+              </el-tooltip>
             </div>
+            <div :class="{'number-right':col.numberItem}" v-else>{{ filterVal(scope['row'][index]) }}</div>
           </template>
         </el-table-column>
       </el-table>
@@ -668,7 +670,7 @@
     },
     setMinWidth(value){
       if(['序号','工号','姓名'].includes(value)){ return '80px'}
-      else if(["身份证号","累计住房贷款利息","社保公积金个人合计","准予扣除的捐赠额","累计准予扣除的捐赠","累计应纳税所得额","累计应扣缴税额","累计已预缴税额","补偿金免税收入","补偿金应纳税所得额"].includes(value)){ return '170px' }
+      else if(["身份证号","累计住房贷款利息","社保公积金个人合计","准予扣除的捐赠额","累计准予扣除的捐赠","累计应纳税所得额","累计应扣缴税额","累计已预缴税额","补偿金免税收入","补偿金应纳税所得额","反馈信息"].includes(value)){ return '170px' }
       else {return '100px'}
     },
     filterVal(val){
