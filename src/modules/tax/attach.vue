@@ -87,7 +87,7 @@
                 <div class="number-right"> {{ scope.row.totalFurtherEdu }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息">
+            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="150px">
               <template slot-scope="scope">
                 <div class="number-right"> {{ scope.row.totalHomeLoads }}</div>
               </template>
