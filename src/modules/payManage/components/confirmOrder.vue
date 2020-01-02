@@ -274,7 +274,7 @@ export default {
 <style lang="scss" scoped>
 .confirm-order {
     .pre {
-        margin: 40px 0;
+        margin: 20px 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -285,7 +285,7 @@ export default {
         .nav {
             display: flex;
             .nav-item {
-                width: 310px;
+                width: 260px;
                 border: 1px solid #ccc;
                 border-radius: 3px;
                 padding: 10px;
@@ -316,7 +316,7 @@ export default {
     }
     .total {
         padding: 20px;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
         background: rgba(228, 228, 228, 1);
         border-radius: 4px;
         line-height: 1.8;

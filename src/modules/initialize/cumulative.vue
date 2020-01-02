@@ -271,7 +271,7 @@ export default {
       this.parameterData.type = val;
     },
     handleImport() {
-      this.parameterData.year = this.selectYear;
+      this.parameterData.year = this.ruleForm.queryYear;
       this.$refs.import.show();
     },
     refresh(data) {

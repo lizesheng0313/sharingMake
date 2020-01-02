@@ -1,5 +1,5 @@
 <template>
-  <div class="tax el-diy-month">
+  <div class="tax-report el-diy-month">
     <header class="header main-title">
       <el-row type="flex">
         <el-col :span="12">
@@ -310,7 +310,6 @@ export default {
       awaitReportCount:0,
       failReportCount:0,
       showWaitReport:false,
-      screenHeight: document.body.clientHeight - 344
     };
   },
   computed: {
@@ -360,7 +359,6 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 344;
       })();
     };
   },
@@ -633,7 +631,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
-.tax {
+.tax-report {
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {

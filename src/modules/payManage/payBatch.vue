@@ -9,9 +9,8 @@
         </header>
         <div class="main-content">
             <div class="intro">
-                <div class="intro-title">说明：</div>
                 <div class="intro-cnt">
-                    <p>• 发薪主体公司需开通资金账户和激活账户后，才能使用工资银行代发功能服务。</p>
+                    <p>• 发薪主体公司需开通资金账户和激活账户后，才能使用工资银行代发功能服务。<span class="no-account">若无已激活的账户,<span class="to-account">点击这里</span>新增账户</span></p>
                     <p>• 工资卡避免使用二类户，二类户全国日限额为1万元，若超限会导致失败，具体账户类型请咨询发卡行。</p>
                 </div>
             </div>
@@ -26,7 +25,7 @@
                 <el-table-column label="最近代发日期" min-width="170">
                     <template slot-scope="scope">{{scope.row.platformUserNo ? scope.row.payDate : '-'}}</template>
                 </el-table-column>
-                <el-table-column label="操作" min-width="270">
+                <el-table-column label="操作" min-width="140">
                     <template slot-scope="scope">
                         <div v-if="scope.row.bhaOpenStatus == 'ACTIVED' && scope.row.platformUserNo">
                             <el-button type="text" @click="handleShowMonth('create',scope.row)" v-if="privilegeVoList.includes('salary.psalaryIssuing.batch.create')">生成代发数据</el-button>
@@ -60,8 +59,10 @@
 <script>
 import { mapState } from "vuex";
 import utils from "@/utils/utils";
+import RouterLink from "olading-ui/lib/mixins/router-link";
 export default {
-    data() {
+  components: {RouterLink},
+  data() {
         return {
             loading: false,
             searchFormData: {
@@ -176,5 +177,15 @@ export default {
         border-bottom: 1px solid #ededed;
         margin-bottom: 10px;
     }
+    .no-account{
+      font-size: 15px;
+      color: #2c2d30;
+    }
+  .to-account{
+    color:#2C7CFF;
+    display: inline-block;
+    padding: 0 10px;
+    cursor: pointer;
+  }
 }
 </style>
