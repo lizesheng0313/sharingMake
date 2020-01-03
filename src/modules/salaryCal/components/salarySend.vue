@@ -5,7 +5,7 @@
     </div>
     <div class="clearfix check-staff-menu">
       <el-input
-        placeholder="请输入姓名\手机号\工号"
+        placeholder="请输入姓名\身份证号\手机号"
         v-model="salaryForm.key"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
