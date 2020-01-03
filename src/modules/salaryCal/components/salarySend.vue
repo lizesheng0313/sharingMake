@@ -275,7 +275,7 @@
     .check-staff-menu {
       margin-top: 0px;
       .search-input {
-        width: 215px;
+        width: 250px;
       }
     }
     .add-import {
