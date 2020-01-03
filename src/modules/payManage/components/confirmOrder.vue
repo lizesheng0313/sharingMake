@@ -70,9 +70,9 @@
               </template>
             </el-table-column>
             <el-table-column label="银行卡号" prop="bankCardNo" width="180"></el-table-column>
-            <el-table-column label="实发金额" prop="amount"></el-table-column>
+            <el-table-column label="实发金额" prop="amount" width="140"></el-table-column>
             <el-table-column label="订单状态" prop="statusStr"></el-table-column>
-           <el-table-column label="失败原因" min-width="120">
+           <el-table-column label="失败原因" min-width="150">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top">
                   <div class="hiden-con">{{scope.row.failReason}}</div>
