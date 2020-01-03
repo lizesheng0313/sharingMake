@@ -184,7 +184,7 @@ export default {
                 this.$message.success("撤销成功");
                 this._loading()
               }else{
-                this.$message.warning(res.message);
+                this.$message.warning(res.data.message);
               }
           }else{
             this.$message.warning(res.message);
