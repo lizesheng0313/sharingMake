@@ -42,16 +42,16 @@
     }
   }
 }
-.head-date{
-  .el-input--prefix .el-input__inner{
+.head-date {
+  .el-input--prefix .el-input__inner {
     font-size: 16px;
     padding: 19px;
   }
-  .el-input__prefix{
+  .el-input__prefix {
     right:-74px;
     top:-1px;
     color: #2C7CFF;
-    .el-input__icon{
+    .el-input__icon {
       line-height: 30px;
       font-size: 20px;
       cursor: pointer;
@@ -64,49 +64,49 @@
     padding: 19px 20px;
   }
   .search-input .el-input__prefix {
-    top:4px;
+    top: 4px;
   }
 }
-.el-date-editor.el-input{
+.el-date-editor.el-input {
   width: 130px;
 }
 .sflary-el-step {
   .el-step__main {
-    color:#999;
+    color: #999;
   }
-  .el-step__title{
-    font-size:14px;
+  .el-step__title {
+    font-size: 14px;
   }
-  .el-step__head.is-process{
-    color:$mainColor;
-    .el-step__icon.is-text{
+  .el-step__head.is-process {
+    color: $mainColor;
+    .el-step__icon.is-text {
       border-color:$mainColor;
     }
   }
-  .el-step__title.is-process{
-    color:$mainColor;
+  .el-step__title.is-process {
+    color: $mainColor;
   }
 }
 .salary-check {
-  .first-step{
+  .first-step {
     .el-step__head.is-success{
-      color:#C0C4CC !important;
-      border-color:#C0C4CC;
+      color: #C0C4CC !important;
+      border-color: #C0C4CC;
     }
     .el-step__title.is-success {
       color: #C0C4CC;
     }
   }
-  .el-steps--simple{
+  .el-steps--simple {
     padding: 13px 4%;
   }
 }
-.check-staff{
-  .el-input__suffix{
+.check-staff {
+  .el-input__suffix {
     top:5px;
     cursor: pointer;
   }
-  .el-input__suffix-inner{
+  .el-input__suffix-inner {
     display: block;
   }
 }
@@ -242,46 +242,46 @@
   padding: 0px;
 }
 
-.salarySet-page{
-  .el-step__head.is-finish{
+.salarySet-page {
+  .el-step__head.is-finish {
     color: #303133 !important;
     border-color: #303133 !important;
   }
-  .el-step__title.is-finish{
+  .el-step__title.is-finish {
     color: #303133 !important;
   }
 }
 //超出部分隐藏
-.hiden-con{
+.hiden-con {
   display: inline-block;
-  width:150px;
+  width: 150px;
   overflow: hidden;
-  cursor:pointer;
+  cursor: pointer;
   white-space: nowrap;
   text-overflow: ellipsis !important;
   text-align: left;
 }
-.funStyle{
-  color:$mainColor;
+.funStyle {
+  color: $mainColor;
   cursor: pointer;
-  padding:0px 10px;
+  padding: 0px 10px;
   font-size: 14px;
 }
-.paid-eidt{
-  .el-checkbox__input.is-checked + .el-checkbox__label{
-    color:#606266;
+.paid-eidt {
+  .el-checkbox__input.is-checked + .el-checkbox__label {
+    color: #606266;
   }
-  .el-checkbox__input.is-checked .el-checkbox__inner{
+  .el-checkbox__input.is-checked .el-checkbox__inner {
     background-color: #606266;
     border-color: #606266;
   }
 }
-.el-step.is-simple:not(:last-of-type) .el-step__title{
+.el-step.is-simple:not(:last-of-type) .el-step__title {
   max-width: 60%;
   word-break: break-all;
 }
 
-.el-table td .number-right{
+.el-table td .number-right {
   text-align: right;
 }
 //表头与内容不对齐问题
