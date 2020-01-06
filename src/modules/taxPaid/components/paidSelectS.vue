@@ -1,5 +1,5 @@
 <template>
-  <div class="paidSelectS">
+  <div class="paid-select">
     <el-dialog
       :visible.sync="isShowReportInfo"
       width="550px"
@@ -158,7 +158,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.paidSelectS {
+.paid-select {
   .dialog-footer{
     text-align: right;
     height: 40px;
