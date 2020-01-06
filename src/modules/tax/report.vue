@@ -184,9 +184,9 @@
       </span>
     </el-dialog>
     <!-- 验证-->
-    <selectSY ref="selectSY" :timeObj="timeObj" :sign="sign"></selectSY>
+    <taxSelectS ref="selectSY" :timeObj="timeObj" :sign="sign"></taxSelectS>
     <!-- 查询-->
-    <feedback ref="feedback" :sign="sign"></feedback>
+    <taxtFeedback ref="feedback" :sign="sign"></taxtFeedback>
     <!--计算失败记录-->
     <el-dialog
       title="失败记录"
@@ -227,8 +227,8 @@
 </template>
 <script>
  import { mapState } from "vuex";
- import selectSY from "./components/partSelectS";
- import feedback from "./components/partFeedback";
+ import taxSelectS from "./components/taxSelectS";
+ import taxtFeedback from "./components/taxtFeedback";
 import * as SCR from "./util/constData";
 import fun from "@/util/fun";
 let date = fun.headDate();
@@ -238,8 +238,8 @@ let defaultDate =
 
 export default {
   components: {
-    selectSY,
-    feedback,
+    taxSelectS,
+    taxtFeedback,
   },
   data() {
     return {

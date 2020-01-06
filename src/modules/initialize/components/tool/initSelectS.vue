@@ -1,5 +1,5 @@
 <template>
-  <div class="selectSY">
+  <div class="initSelectS">
     <el-dialog
       :visible.sync="isShowReportInfo"
       width="550px"
@@ -167,7 +167,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.selectSY {
+.initSelectS {
   .dialog-footer{
     text-align: right;
     height: 40px;
