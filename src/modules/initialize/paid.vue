@@ -55,7 +55,7 @@
                   <span>{{scope.row.accreditStatus | accreditStatus}}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="failReason" label="未通过原因" width="170px">
+              <el-table-column prop="failReason" label="未通过原因" width="160px">
                 <template slot-scope="scope">
                   <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
                     <span class="hiden-con">{{ scope.row.failReason }}</span>
@@ -83,19 +83,19 @@
       </div>
     </right-pop>
     <!-- 查询-->
-    <feedback ref="feedback" :sign="sign"></feedback>
+    <initFeedback ref="feedback" :sign="sign"></initFeedback>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import rightPop from '@/components/basic/rightPop'
 import paidEdit from './components/paidEdit'
-import feedback from './components/tool/partFeedback'
+import initFeedback from './components/tool/initFeedback'
 export default {
   components:{
     rightPop,
     paidEdit,
-    feedback
+    initFeedback
   },
   data() {
     return {

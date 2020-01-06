@@ -1,5 +1,5 @@
 <template>
-  <div class="selectSY">
+  <div class="taxtFeedback">
     <el-dialog
       :visible.sync="isShowReturnInfo"
       width="550px"
@@ -10,14 +10,13 @@
       :close-on-click-modal="closeModel"
     >
       <el-row v-for="(item,index) in reportInfoList" :key="index">
-        <div v-if="item.dealStatus === 'SUCCESS'">任务完成。</div>
-        <div v-if="item.dealStatus === 'PROCESSING'">任务处理中…</div>
-        <div v-if="item.dealStatus === 'FAIL'">任务失败，{{item.failReason}}</div>
+        <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12">任务完成</el-col></div>
+        <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12">任务处理中…</el-col></div>
+        <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12">任务失败，{{item.failReason}}</el-col></div>
       </el-row>
-      <div v-loading="reportInfoLoading" style="height: 40px"></div>
       <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ paramsObj.freeBackTip }}查询结果</div>
       <div class="dialog-footer">
-        <el-button @click="onIknow" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
+        <el-button @click="onIknow" type="primary" plain v-show="isShowIknow">我知道了</el-button>
       </div>
     </el-dialog>
     <authorizeTip ref="authorizeTip"></authorizeTip>
@@ -36,16 +35,20 @@ export default {
     return {
       paramsObj:{
         stopTip:"",//终止文案
+        processingTip:"",//进行中文案
         validParameter: "", //校验参数
         querytAction:"" ,//查询action
-        freeBackTip:"",//获取反馈
+        freeBackTip:""//获取反馈提示
       },
       isShowReturnInfo:false,
       isShowReportInfo: false,
       closeModel:false,
+      subjectObj:{
+        dealStatus:"",
+        failReason:""
+      },
       reportInfoList:[],
       showReturn:false,
-      reportInfoLoading:false,
       isShowIknow:false
     };
   },
@@ -53,10 +56,10 @@ export default {
     show(data,params) {
       if(data) {
         //接口参数赋值
-        this.showReturn=false;
         this.reportInfoList = []
-        this.isShowIknow = false;
+        this.showReturn = false;
         this.paramsObj = params;
+        this.isShowIknow = false;
         this.handleReportInfo()
       }
       else{
@@ -72,10 +75,11 @@ export default {
           // 已授权，有查询结果
           if(res.data.status === "SUCCESS"){
             this.reportInfoList = res.data.taxSubList;
-            this.isShowReturnInfo = true;
             if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
               this.showReturn = true;
             }
+            this.isShowReturnInfo = true;
+            this.isShowIknow = true;
           }else{//未授权
             this.isShowReportInfo = false;
             this.$refs.authorizeTip.show()
@@ -87,13 +91,13 @@ export default {
     },
     onIknow(){
       this.isShowReturnInfo = false;
-      this.$parent.getList()
+      this.$parent.freshList(this.sign)
     },
   }
 };
 </script>
 <style lang="scss" scoped>
-.selectSY {
+.taxtFeedback {
   .dialog-footer{
     text-align: right;
     height: 40px;

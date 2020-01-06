@@ -123,28 +123,28 @@
       </div>
     </el-dialog>
     <!-- 缴款 三方协议-->
-    <selectSY ref="selectSY"
+    <paidSelectS ref="selectSY"
               :timeObj="timeObj"
               :sign="sign"
     >
-    </selectSY>
+    </paidSelectS>
     <!--获取反馈 -->
-    <feedback ref="feedback"
+    <paidFeedback ref="feedback"
               :sign="sign"
     >
-    </feedback>
+    </paidFeedback>
   </div>
 </template>
 <script>
- import selectSY from "./components/partSelectS";
- import feedback from "./components/partFeedback";
+ import paidSelectS from "./components/paidSelectS";
+ import paidFeedback from "./components/paidFeedback";
  import * as constData from "./util/constData"
 import { mapState } from "vuex";
 import fun from "@/util/fun"
 export default {
   components: {
-    selectSY,
-    feedback,
+    paidSelectS,
+    paidFeedback,
   },
   computed:{
     ...mapState({
