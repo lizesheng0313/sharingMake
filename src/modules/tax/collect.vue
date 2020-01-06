@@ -399,7 +399,7 @@ export default {
       if(type==="REPORTING"){this.allActive = false;this.successActive = false; this.waitActive = false; this.backActive = true ; this.errorActive = false;}
       //报送失败
       if(type==="REPORT_ERROR"){this.allActive = false;this.successActive = false;  this.waitActive = false; this.backActive = false ; this.errorActive = true; }
-      this.ruleForm.empStatus = type;
+      this.ruleForm.reportStatus = type === "" ? [] : [type];
       this.getList()
     },
     getList() {
