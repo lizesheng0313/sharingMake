@@ -1,5 +1,5 @@
 <template>
-  <div class="taxtFeedback">
+  <div class="taxt-feedback">
     <el-dialog
       :visible.sync="isShowReturnInfo"
       width="550px"
@@ -97,7 +97,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.taxtFeedback {
+.taxt-feedback {
   .dialog-footer{
     text-align: right;
     height: 40px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="paidFeedback">
+  <div class="paid-feedback">
     <el-dialog
       :visible.sync="isShowReturnInfo"
       width="550px"
@@ -96,7 +96,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.paidFeedback {
+.paid-feedback {
   .dialog-footer{
     text-align: right;
     height: 40px;

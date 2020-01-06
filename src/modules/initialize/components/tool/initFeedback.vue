@@ -1,5 +1,5 @@
 <template>
-  <div class="initFeedback">
+  <div class="init-feedback">
     <el-dialog
       :visible.sync="isShowReturnInfo"
       width="550px"
@@ -93,7 +93,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.initFeedback {
+.init-feedback {
   .dialog-footer{
     text-align: right;
     height: 40px;
