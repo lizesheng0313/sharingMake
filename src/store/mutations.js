@@ -6,5 +6,8 @@ export default {
     },
     [AT.SET_TOKEN](state,value){
       state.token = value
+    },
+    [AT.SET_PRIVILIGEVOLiST](state,value){
+      state.privilegeVoList = value
     }
 }

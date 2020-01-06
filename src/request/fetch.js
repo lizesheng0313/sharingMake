@@ -37,28 +37,28 @@ export function fetch(options) {
   return new Promise((resolve, reject) => {
     instance(options).then(response => {
       let data = response.data;
-      if (data.code != "0000") {
-        Message.error(data.message);
-        let originHref = "";
-        switch (window.__CURRENT_ENV__) {
-          case "prod":
-            originHref='https://www.olading.com/main.html#/';
-            break;
-          case "stage":
-            originHref='https://stage.olading.com/main.html#/';
-            break;
-          case "dev":
-            originHref='http://172.19.60.38/main.html#/';
-            break;
-          case "local":
-            originHref='http://localhost:8081/main.html#/';
-            break;
-        }
-        //未认证跳回登陆
-        if(data.code === "802"){
-          window.open(originHref+'login', "_self")
-        }
-      }
+      // if (data.code != "0000") {
+      //   Message.error(data.message);
+      //   let originHref = "";
+      //   switch (window.__CURRENT_ENV__) {
+      //     case "prod":
+      //       originHref='https://www.olading.com/main.html#/';
+      //       break;
+      //     case "stage":
+      //       originHref='https://stage.olading.com/main.html#/';
+      //       break;
+      //     case "dev":
+      //       originHref='http://172.19.60.38/main.html#/';
+      //       break;
+      //     case "local":
+      //       originHref='http://localhost:8081/main.html#/';
+      //       break;
+      //   }
+      //   //未认证跳回登陆
+      //   if(data.code === "802"){
+      //     window.open(originHref+'login', "_self")
+      //   }
+      // }
       resolve(data)
     })
       .catch(error => {

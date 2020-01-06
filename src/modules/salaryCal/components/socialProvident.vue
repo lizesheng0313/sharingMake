@@ -16,7 +16,7 @@
       <div class="screening">
         <div class="clearfix check-staff-menu">
           <el-input
-            placeholder="请输入姓名\证件号码"
+            placeholder="请输入姓名\工号\身份证号"
             v-model="totalListForm.key"
             prefix-icon="iconiconfonticonfontsousuo1 iconfont"
             clearable
@@ -27,9 +27,9 @@
             <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
-            <el-button type="primary" @click="handleCopyData">复制上月数据</el-button>
-            <el-button @click="handleImport">导入</el-button>
-            <el-button @click="handleExport">导出</el-button>
+            <el-button type="primary" @click="handleCopyData" v-if="privilegeVoList.includes('salary.compute.salaryCheck.socialCopy')">复制上月数据</el-button>
+            <el-button @click="handleImport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.socialImport')">导入</el-button>
+            <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.socialExport')">导出</el-button>
           </div>
         </div>
         <div class="staff-table">
@@ -42,6 +42,7 @@
             v-loading="loading"
             :style="{width:screenWidth-40+'px'}"
             :height="screenHeight"
+            border
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
             <el-table-column prop="empNo" label="工号"></el-table-column>
@@ -50,28 +51,96 @@
             <el-table-column label="扣缴义务人名称" prop="taxSubName" width="200">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
-                  <span class="hidenCon">{{ scope.row.taxSubName }}</span>
+                  <span class="hiden-con">{{ scope.row.taxSubName }}</span>
                 </el-tooltip>
                 <span v-else>{{ scope.row.taxSubName }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="pensionInsurancePerson" label="养老个人"></el-table-column>
-            <el-table-column prop="medicalInsurancePerson" label="医疗个人"></el-table-column>
-            <el-table-column prop="unemploymentInsurancePerson" label="失业个人"></el-table-column>
-            <el-table-column prop="seriousMedicalInsurancePerson" label="大病医疗个人" width="100px"></el-table-column>
-            <el-table-column prop="socialSecurityPerson" label="社保个人合计" width="100px"></el-table-column>
-            <el-table-column prop="pensionInsuranceComp" label="养老单位"></el-table-column>
-            <el-table-column prop="medicalInsuranceComp" label="医疗单位"></el-table-column>
-            <el-table-column prop="unemploymentInsuranceComp" label="失业单位"></el-table-column>
-            <el-table-column prop="industrialInjuryInsuranceComp" label="工伤单位"></el-table-column>
-            <el-table-column prop="birthInsuranceComp" label="生育单位"></el-table-column>
-            <el-table-column prop="seriousMedicalInsuranceComp" label="大病医疗单位" width="100px"></el-table-column>
-            <el-table-column prop="socialSecurityComp" label="社保单位合计" width="100px"></el-table-column>
-            <el-table-column prop="socialSecurityTotal" label="社保合计"></el-table-column>
-            <el-table-column prop="housingFundPerson" label="公积金个人" width="100px"></el-table-column>
-            <el-table-column prop="housingFundComp" label="公积金单位" width="100px"></el-table-column>
-            <el-table-column prop="housingFundTotal" label="公积金合计" width="100px"></el-table-column>
-            <el-table-column prop="disabilityInsuranceFee" label="残保金"></el-table-column>
+            <el-table-column prop="pensionInsurancePerson" label="养老个人">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.pensionInsurancePerson }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="medicalInsurancePerson" label="医疗个人">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.medicalInsurancePerson }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="unemploymentInsurancePerson" label="失业个人">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.unemploymentInsurancePerson }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="seriousMedicalInsurancePerson" label="大病医疗个人" width="100px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.seriousMedicalInsurancePerson }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="socialSecurityPerson" label="社保个人合计" width="100px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.socialSecurityPerson }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="pensionInsuranceComp" label="养老单位">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.pensionInsuranceComp }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="medicalInsuranceComp" label="医疗单位">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.medicalInsuranceComp }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="unemploymentInsuranceComp" label="失业单位">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.unemploymentInsuranceComp }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="industrialInjuryInsuranceComp" label="工伤单位">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.industrialInjuryInsuranceComp }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="birthInsuranceComp" label="生育单位">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.birthInsuranceComp }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="seriousMedicalInsuranceComp" label="大病医疗单位" width="100px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.seriousMedicalInsuranceComp }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="socialSecurityComp" label="社保单位合计" width="100px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.socialSecurityComp }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="socialSecurityTotal" label="社保合计">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.socialSecurityTotal }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="housingFundPerson" label="公积金个人" width="100px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.housingFundPerson }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="housingFundComp" label="公积金单位" width="100px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.housingFundComp }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="housingFundTotal" label="公积金合计" width="100px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.housingFundTotal }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="disabilityInsuranceFee" label="残保金">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.disabilityInsuranceFee }}</div>
+              </template>
+            </el-table-column>
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
@@ -87,7 +156,7 @@
         ref="import"
         :radioList="radioList"
         :title="'公积金导入'"
-        :apiCheck="'/api/salary/socialProvident/verify'"
+        :apiCheck="'/api/xsalary/salary/socialProvident/verify'"
         :apiDownloadLog="'salaryCalStore/actionSocialProvidentRecord'"
         :apiDownloadTemplate="'salaryCalStore/actionSocialProvidentTemplate'"
         :parameterData="parameterData"
@@ -143,7 +212,9 @@ export default {
     };
   },
   computed:{
-
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     this.getList()
@@ -343,7 +414,7 @@ export default {
     }
   }
   .check-staff-menu {
-    margin-top: 30px;
+    margin-top: 20px;
     .search-input {
       width: 250px;
     }

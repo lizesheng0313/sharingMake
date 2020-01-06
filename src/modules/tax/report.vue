@@ -1,5 +1,5 @@
 <template>
-  <div class="tax el-diy-month">
+  <div class="tax-report el-diy-month">
     <header class="header main-title">
       <el-row type="flex">
         <el-col :span="12">
@@ -7,6 +7,11 @@
         </el-col>
       </el-row>
     </header>
+    <div class="waitReport" v-if="showWaitReport">
+      <div v-if="failReportCount">存在生成申报表失败的人员<span class="failStyle bold" @click="showFail">{{ failReportCount }}</span> 人，点击数字可查看失败名单和原因</div>
+      <div v-if="awaitReportCount">存在“待报送”的人员 <span class="bold">{{ awaitReportCount }}</span> 人，待报送人员无法参与个税计算，如需计算，请在“人员采集报送”界面中先完成报送！</div>
+      <i class="el-icon-close close-style" @click="showWaitReport=false"></i>
+    </div>
     <div class="tax-content">
       <div class="content-header head-date" style="display: inline-block">
         <span>{{selectDate}}</span>
@@ -20,16 +25,16 @@
         ></el-date-picker>
       </div>
       <div class="right declare-buttton-groups" style="float: right">
-        <el-button type="primary" v-if="showCreate" @click="handleGenerateData('create')">生成申报数据</el-button>
-        <el-button type="primary" v-if="showCreateReturn" @click="handleGenerateDataQ">获取申报数据</el-button>
-        <el-button type="primary" v-if="showSend" @click="handleGenerateData('update')">更新申报数据</el-button>
-        <el-button type="primary" v-if="showSend" @click="handleSendReport">发送申报</el-button>
-        <el-button type="primary" v-if="showSendQ" @click="handleSendReportQ">发送申报反馈</el-button>
-        <el-button  v-if="showExport" @click="handleExportApplyTable">导出申请表</el-button>
-        <el-button type="primary" v-if="showFeedback" @click="handleGetFeedback">获取反馈</el-button>
-        <el-button type="primary" v-if="showFeedbackQ" @click="handleGetFeedbackQ">获取反馈查询</el-button>
-        <el-button type="primary" v-if="showInvalid" @click="handleInvalid">作废申报</el-button>
-        <el-button type="primary" v-if="showInvalidQ" @click="handleInvalidQ">作废申报反馈</el-button>
+        <el-button type="primary" v-if="showCreate && privilegeVoList.includes('salary.report.taxReport.generateReport')" @click="handleGenerateData('create')">生成申报数据</el-button>
+        <el-button type="primary" v-if="showCreateReturn && privilegeVoList.includes('salary.report.taxReport.generateReport')" @click="handleGenerateDataQ">获取申报数据</el-button>
+        <el-button type="primary" v-if="showSend && privilegeVoList.includes('salary.report.taxReport.generateReport')" @click="handleGenerateData('update')">更新申报数据</el-button>
+        <el-button type="primary" v-if="showSend && privilegeVoList.includes('salary.report.taxReport.sendReport')" @click="handleSendReport">发送申报</el-button>
+        <el-button type="primary" v-if="showSendQ && privilegeVoList.includes('salary.report.taxReport.sendReport')" @click="handleSendReportQ">发送申报反馈</el-button>
+        <el-button v-if="showExport && privilegeVoList.includes('salary.report.taxReport.export')" @click="handleExportApplyTable">导出申请表</el-button>
+        <el-button type="primary" v-if="showFeedback && privilegeVoList.includes('salary.report.taxReport.reportBack')" @click="handleGetFeedback">获取反馈</el-button>
+        <el-button type="primary" v-if="showFeedbackQ && privilegeVoList.includes('salary.report.taxReport.reportBack')" @click="handleGetFeedbackQ">获取反馈查询</el-button>
+        <el-button type="primary" v-if="showInvalid && privilegeVoList.includes('salary.report.taxReport.cancelReport')" @click="handleInvalid">作废申报</el-button>
+        <el-button type="primary" v-if="showInvalidQ && privilegeVoList.includes('salary.report.taxReport.cancelReport')" @click="handleInvalidQ">作废申报反馈</el-button>
       </div>
       <div class="screening">
         <div class="clearfix">
@@ -65,6 +70,7 @@
             class="check-staff_table"
             :style="{width:screenWidth-285+'px'}"
             v-loading="loading"
+            border
           >
             <el-table-column prop="subTaxReportType" label="报表名称" width="200">
               <template slot-scope="scope">
@@ -77,19 +83,30 @@
               </template>
             </el-table-column>
             <el-table-column prop="currentTotalIncome" label="本期收入">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.currentTotalIncome }}</div>
+              </template>
             </el-table-column>
             <el-table-column prop="hisTotalIncome" label="累计收入">
               <template slot-scope="scope">
-                <span>{{ showSalary(scope.row.subTaxReportType,scope.row.hisTotalIncome) }}</span>
+                <div class="number-right">{{ showSalary(scope.row.subTaxReportType,scope.row.hisTotalIncome) }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="calculateTaxTotal" label="应扣缴税额"></el-table-column>
+            <el-table-column prop="calculateTaxTotal" label="应扣缴税额">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.calculateTaxTotal }}</div>
+              </template>
+            </el-table-column>
             <el-table-column prop="realTaxTotal" label="已缴税额">
               <template slot-scope="scope">
-                <span>{{ showSalary(scope.row.subTaxReportType,scope.row.realTaxTotal)}}</span>
+                <div class="number-right">{{ showSalary(scope.row.subTaxReportType,scope.row.realTaxTotal)}}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="taxDiffTotal" label="应补(退)税额"></el-table-column>
+            <el-table-column prop="taxDiffTotal" label="应补(退)税额">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.taxDiffTotal }}</div>
+              </template>
+            </el-table-column>
             <el-table-column  label="是否可申报">
               <template slot-scope="scope">
                 <span>{{scope.row.idReport?'是':'否'}}</span>
@@ -170,11 +187,47 @@
     <selectSY ref="selectSY" :timeObj="timeObj" :sign="sign"></selectSY>
     <!-- 查询-->
     <feedback ref="feedback" :sign="sign"></feedback>
+    <!--计算失败记录-->
+    <el-dialog
+      title="失败记录"
+      :visible.sync="isShowFail"
+      width="750px"
+      border
+      :close-on-click-modal="closeModel"
+    >
+      <div class="failTip">生成申报表失败，以下员工数据存在问题，请参考错误信息处理后更新申报数据</div>
+      <el-table :data="failList">
+        <el-table-column prop="subTaxReportType" label="申报表" width="150px">
+          <template slot-scope="scope">
+            <span>{{reportSubTaxReportType(scope.row.subTaxReportType)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="empName" label="姓名" width="80px"></el-table-column>
+        <el-table-column prop="idNo" label="证件号码" width="170px"></el-table-column>
+        <el-table-column prop="checkStatus" label="状态" width="60">
+          <template slot-scope="scope">
+            <span>{{scope.row.checkStatus | reportType}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="failReason" label="反馈信息">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
+              <span class="hiden-con">{{ scope.row.failReason }}</span>
+            </el-tooltip>
+            <span v-else>{{ scope.row.failReason }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="text-align: center;margin-top: 20px;">
+        <el-button type="primary" @click="handleExport">导出</el-button>
+        <el-button @click="isShowFail = false">关闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
  import { mapState } from "vuex";
- import selectSY from "./components/partSelectSY";
+ import selectSY from "./components/partSelectS";
  import feedback from "./components/partFeedback";
 import * as SCR from "./util/constData";
 import fun from "@/util/fun";
@@ -251,6 +304,11 @@ export default {
         fourth:22000,
       },
       sign:"taxReport",
+      failList:[],
+      isShowFail:false,
+      awaitReportCount:0,
+      failReportCount:0,
+      showWaitReport:false,
     };
   },
   computed: {
@@ -288,7 +346,10 @@ export default {
     //获取反馈
     showFeedbackQ:function(){
       return ['REPORT_BACK_WAIT_BACK'].includes(this.reportStatus)
-    }
+    },
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     this.getTaxSubjectInfoList();
@@ -312,6 +373,9 @@ export default {
             this.reportType = res.data.reportType;
             this.total = res.data.count;
             this.list = res.data.data;
+            this.failReportCount = res.data.failReportCount;
+            this.awaitReportCount = res.data.awaitReportCount;
+            this.showWaitReport = this.failReportCount || this.awaitReportCount;
             if (this.list.length == 0 && flag) {
               this.$message({
                 message: "暂无申报数据",
@@ -320,6 +384,23 @@ export default {
             }
           }
         });
+    },
+    //失败原因
+    showFail(){
+      this.isShowFail = true
+      console.log(this.salaryForm)
+      this.$store
+        .dispatch("taxPageStore/actionTaxReportFailRecord",this.reportForm)
+        .then(res => {
+          this.failList = res.data;
+        })
+    },
+    handleExport(){
+      this.$store
+        .dispatch("taxPageStore/actionTaxReportFailRecordExport", this.reportForm)
+        .then(res => {
+          console.log(res)
+        })
     },
     //展示收入，已缴税额
     showSalary(subTaxReportType,data){
@@ -345,8 +426,9 @@ export default {
         validParameter : this.buttonForm,
         validAction : "taxPageStore/postGenerateTaxReportData",
         querytAction : "taxPageStore/postQueryGenerateTaxReportData",
+        exportFailAction:"taxPageStore/postErrorExports",
         stopTip:type === "create" ? "生成申报数据":"更新申报数据",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【获取申报数据】",
         showFailReason:true,
       }
       this.$refs.selectSY.show(true,paramsObj)
@@ -358,7 +440,7 @@ export default {
           validAction : "taxPageStore/postSendReport",
           querytAction : "taxPageStore/postSendReportQuery",
           stopTip:"发送申报",
-          processingTip:"获取反馈中。。。",
+          freeBackTip:"【发送申报反馈】",
         }
         this.$refs.selectSY.show(true,paramsObj)
     },
@@ -368,7 +450,7 @@ export default {
         validParameter : this.buttonForm,
         querytAction : "taxPageStore/postSendReportQuery",
         stopTip:"发送申报",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【发送申报反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -378,7 +460,7 @@ export default {
         validParameter : this.buttonForm,
         querytAction : "taxPageStore/postQueryGenerateTaxReportData",
         stopTip:"生成申报数据",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【生成申报反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -389,7 +471,7 @@ export default {
         validAction : "taxPageStore/postCancelSubTaxReport",
         querytAction : "taxPageStore/postCancelSubTaxReportQuery",
         stopTip:"作废申报",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【作废申报反馈】",
       }
       this.$refs.selectSY.show(true,paramsObj)
     },
@@ -399,7 +481,7 @@ export default {
         validParameter : this.buttonForm,
         querytAction : "taxPageStore/postCancelSubTaxReportQuery",
         stopTip:"作废申报",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【作废申报反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -410,7 +492,7 @@ export default {
         validAction : "taxPageStore/postGetReportBack",
         querytAction : "taxPageStore/postGetReportBackQuery",
         stopTip:"申报获取反馈",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【获取反馈查询】",
       }
       this.$refs.selectSY.show(true,paramsObj)
     },
@@ -420,7 +502,7 @@ export default {
         validParameter : this.buttonForm,
         querytAction : "taxPageStore/postGetReportBackQuery",
         stopTip:"申报获取反馈",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【获取反馈查询】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -548,7 +630,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
-.tax {
+.tax-report {
+  height: calc( 100vh - 90px );
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
@@ -568,8 +651,30 @@ export default {
     color: #666;
     margin-bottom: 20px;
   }
+  .waitReport{
+    line-height: 30px;
+    margin-top: 20px;
+    color:#909399;
+    border-left:4px solid #E6A23C;
+    background:#FDF7E9;
+    padding-left: 20px;
+    position: relative;
+    .bold{
+      color:#E6A23C;
+      font-weight: bold;
+    }
+    .failStyle{
+      cursor: pointer;
+    }
+    .close-style{
+      position: absolute;
+      top:10px;
+      right:10px;
+      cursor: pointer;
+    }
+  }
   .tax-content {
-    padding: 22px;
+    padding: 20px 20px 0px 20px;
     .company-collection {
       height: 80px;
       margin-right: 91px;
@@ -653,7 +758,7 @@ export default {
         overflow-x: auto;
       }
       position: relative;
-      margin-top: 27px;
+      margin-top: 20px;
       .floating-menu {
         position: absolute;
         left: 100px;
@@ -670,7 +775,7 @@ export default {
         }
       }
       .staff-page {
-        margin-top: 20px;
+        margin-top: 10px;
         text-align: right;
       }
     }

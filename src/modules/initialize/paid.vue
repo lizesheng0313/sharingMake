@@ -4,7 +4,7 @@
       <header class="header main-title">
         <el-row type="flex">
           <el-col :span="12">
-            <span>扣缴义务人</span>
+            <span>扣缴义务人管理</span>
           </el-col>
         </el-row>
       </header>
@@ -23,7 +23,7 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="handleShowBox">新增</el-button>
+              <el-button type="primary" class="add-import" @click="handleShowBox" v-if="privilegeVoList.includes('salary.init.taxSubject.save')">新增</el-button>
             </div>
           </div>
           <div class="staff-table">
@@ -36,12 +36,13 @@
               :style="{width:screenWidth-285+'px'}"
               :height="screenHeight"
               v-loading="loading"
+              border
             >
               <el-table-column label="序号" type="index"></el-table-column>
               <el-table-column prop="taxSubName" label="扣缴义务人名称" width="200px" align="left">
                 <template slot-scope="scope">
                   <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>12">
-                    <span class="hidenCon">{{ scope.row.taxSubName }}</span>
+                    <span class="hiden-con">{{ scope.row.taxSubName }}</span>
                   </el-tooltip>
                   <span v-else>{{ scope.row.taxSubName }}</span>
                 </template>
@@ -49,7 +50,7 @@
               <el-table-column prop="taxPayerNo" label="纳税人识别号" width="180px" align="left"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
               <el-table-column prop="remark" label="经办人姓名"></el-table-column>
-              <el-table-column prop="accreditStatus" label="授权状态">
+              <el-table-column prop="accreditStatus" label="验证状态">
                 <template slot-scope="scope">
                   <span>{{scope.row.accreditStatus | accreditStatus}}</span>
                 </template>
@@ -57,7 +58,7 @@
               <el-table-column prop="failReason" label="未通过原因" width="170px">
                 <template slot-scope="scope">
                   <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
-                    <span class="hidenCon">{{ scope.row.failReason }}</span>
+                    <span class="hiden-con">{{ scope.row.failReason }}</span>
                   </el-tooltip>
                   <span v-else>{{ scope.row.failReason }}</span>
                 </template>
@@ -66,8 +67,8 @@
                 <template slot-scope="scope">
                   <span @click="handleQuery(scope.row)" v-if="scope.row.accreditStatus==='WAIT_ACCREDIT'" class="funStyle">获取反馈</span>
                   <span v-else>
-                     <span @click="handleEditor(scope.row)" class="funStyle">编辑</span>
-                     <span @click="handleDelete(scope.row.taxSubId)" class="funStyle">删除</span>
+                     <span @click="handleEditor(scope.row)" class="funStyle" v-if="privilegeVoList.includes('salary.init.taxSubject.save')">编辑</span>
+                     <span @click="handleDelete(scope.row.taxSubId)" class="funStyle" v-if="privilegeVoList.includes('salary.init.taxSubject.delete')">删除</span>
                   </span>
                 </template>
               </el-table-column>
@@ -143,6 +144,11 @@ export default {
       selectItem:{}
     };
   },
+  computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
+  },
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -177,6 +183,7 @@ export default {
         },
         querytAction : "taxPageStore/actionAccreditQuery",
         stopTip:"授权",
+        freeBackTip:'【授权反馈】'
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -247,7 +254,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px 20px 0px 20px;
+    padding: 20px 20px 0px 20px;
     .content-header {
       position: relative;
       font-size: 18px;
@@ -271,7 +278,6 @@ export default {
   .screening {
     .check-staff-menu {
       .search-input {
-        margin-left: 10px;
         width: 205px;
       }
     }

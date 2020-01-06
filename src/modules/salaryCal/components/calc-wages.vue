@@ -1,12 +1,14 @@
 <template>
   <div class="calc-wages">
-    <div class="waitReport" v-if="showWaitReport">存在“待报送”的人员 <span class="bold">{{ waitReportCount }}</span> 人，待报送人员无法参与个税计算，如需计算，请在“人员采集报送”界面中先完成报送！
-      <i class="el-icon-close close-style" @click="showWaitReport=false"></i>
+    <div class="waitReport" v-if="isShowWaitReport">
+      <div v-if="computeErrorCount">存在“计算失败”的人员 <span class="bold" @click="showFail">{{ computeErrorCount }}</span> 人，点击数字可查看计算失败名单和原因</div>
+      <div v-if="awaitReportCount">存在“待报送”的人员 <span class="bold">{{ awaitReportCount }}</span> 人，待报送人员无法参与个税计算，如需计算，请在“人员采集报送”界面中先完成报送！</div>
+      <i class="el-icon-close close-style" @click="isShowWaitReport=false"></i>
     </div>
     <div class="clearfix check-staff-menu">
       <el-button class="screen" size="small" @click="showScreen">筛选</el-button>
       <el-input
-        placeholder="请输入姓名\手机号"
+        placeholder="请输入姓名\工号\身份证号"
         v-model="salaryForm.key"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
@@ -15,30 +17,53 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchSalary" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary">薪资计算</el-button>
-        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShowQ" @click="handleReportInfo">获取算税结果</el-button>
-        <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')">薪资审核</el-button>
-        <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')">取消审核</el-button>
+        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShow" @click="handleCalcSalary"
+                   v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryCompute')">薪资计算</el-button>
+        <el-button type="primary" :disabled="salaryDisabled" v-show="salaryShowQ" @click="handleReportInfo"
+                   v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryCompute')">获取算税结果</el-button>
+        <el-button type="default" :disabled="checkDisabled" v-show="auditedShow" @click="handleCheckSalary('AUDIT')"
+                   v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryReview')">薪资审核</el-button>
+        <el-button type="default" v-show="cancelAuditeShow" @click="handleCheckSalary('UN_AUDIT')"
+                   v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryReview')">取消审核</el-button>
+<!--        <el-button @click="handleBigTable">放大</el-button>-->
       </div>
     </div>
     <div class="staff-situation clearfix">
       <div class="left">
-        <span class="staff-total">
+        <span class="staff-total" @click="selectNum('')">
           人员总数
-          <i class="tatal-number">{{count}}</i>人
+          <i :class="['tatal-number', allActive?'active':'']">{{ count }}</i>人
+        </span>
+        <span class="staff-total" @click="selectNum('FINISH')">
+          已计算
+          <i :class="['tatal-number', computedActive? 'active' : '']">{{ computedCount }}</i>人
+        </span>
+        <span class="staff-total" @click="selectNum('INIT')">
+          未计算
+          <i :class="['tatal-number', unComputedActive? 'active' : '']">{{ unComputedCount }}</i>人
+        </span>
+        <span class="staff-total" @click="selectNum('PROCESSING')">
+          计算中
+          <i :class="['tatal-number', computingActive? 'active' : '']">{{ computingCount }}</i>人
+        </span>
+        <span class="staff-total" @click="selectNum('FAIL')">
+          计算失败
+          <i :class="['tatal-number', errorComputedActive? 'active' : '']">{{ computeErrorCount }}</i>人
         </span>
       </div>
       <div class="right calc-table_menu">
 <!--        <span @click="showImport('social')">社会公积金导入</span>-->
-        <span class="have-border_right" @click="showImport('floatItem')">浮动项导入</span>
+        <span class="have-border_right" @click="showImport('floatItem')" v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryImport')">浮动项导入</span>
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             更多功能
             <i class="iconsanjiao iconfont"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="exportSalaryDetail('salaryDetail')">导出工资明细</el-dropdown-item>
-            <el-dropdown-item @click.native="exportDepartTotal('summy')">导出部门汇总</el-dropdown-item>
+            <el-dropdown-item @click.native="exportSalaryDetail('salaryDetail')"
+                              v-if="privilegeVoList.includes('salary.compute.salaryCheck.salaryExport')">导出工资明细</el-dropdown-item>
+            <el-dropdown-item @click.native="exportDepartTotal('summy')"
+                              v-if="privilegeVoList.includes('salary.compute.salaryCheck.depExport')">导出部门汇总</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -56,12 +81,18 @@
           v-for="(col,index) in salaryTableDataAll[0]"
           :min-width="setMinWidth(col.col)"
           :show-overflow-tooltip="col.col === '部门' || col.col === '岗位' || col.col === '工号' || col.col === '姓名'"
-          :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="[0,1,2,3].includes(index)">
+          :label="col.col"
+          :key="index"
+          :resizable = "!col.floatItem"
+          :fixed="[0,1,2,3].includes(index)"
+        >
           <template slot-scope="scope">
-            <span>
-<!--              <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>-->
-              {{ filterVal(scope['row'][index]) }}
-            </span>
+            <div v-if="scope['row'][index]['col'] === '反馈信息'">
+              <el-tooltip class="item" effect="dark" :content="scope['row'][index]['val']" placement="top">
+                <span class="hiden-con">{{ scope['row'][index]['val'] }}</span>
+              </el-tooltip>
+            </div>
+            <div :class="{'number-right':col.numberItem}" v-else>{{ filterVal(scope['row'][index]) }}</div>
           </template>
         </el-table-column>
       </el-table>
@@ -93,8 +124,7 @@
               <el-radio label="BY_EMP_NO">通过员工工号匹配人员</el-radio>
             </div>
             <div>
-              <el-radio label="BY_ID_NO" v-if="importT === 'social'">通过身份证号匹配人员</el-radio>
-              <el-radio label="BY_PHONE_NO" v-else>通过手机号匹配人员</el-radio>
+              <el-radio label="BY_ID_NO">通过身份证号匹配人员</el-radio>
             </div>
           </el-radio-group>
         </div>
@@ -118,15 +148,13 @@
           <span v-if="failCount !== 0 && successCount !==0"><i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{this.failCount}}</strong>条数据错误</span>
           <span v-if="successCount === 0"><i class="el-icon-error"></i>数据全部未通过校验</span>
           <span>
-            <a :href="'/api/salary/socialProvident/errorRecord/download/'+uuid" v-if="importT === 'social'">下载日志</a>
-            <a :href="'/api/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId" v-else>下载日志</a>
+            <a :href="'/api/xsalary/salary/floatData/errorRecord/download/'+uuid+'/'+salaryForm.checkId">下载日志</a>
           </span>
         </div>
         <p class="file-tip">
           支持xlsx和xls文件，文件不超过5M，建议使用标准模板格式
           <span>
-             <a href="/api/salary/socialProvident/template/download" v-if="importT === 'social'">下载模板</a>
-             <a :href="'/api/salary/floatTemplate/download/'+salaryForm.checkId" v-else>下载模板</a>
+             <a :href="'/api/xsalary/salary/floatTemplate/download/'+salaryForm.checkId" >下载模板</a>
           </span>
         </p>
         <p class="instructions">
@@ -263,35 +291,109 @@
       </span>
     </el-dialog>
     <!-- 薪资计算-->
-    <selectSY ref="selectSY"
+    <salary-sy ref="selectSy"
               :validParameter = "validParameter"
               :validAction="validAction"
               :querytAction="querytAction"
               :sign="sign"
               :stopTip="stopTip"
-              :processingTip="processingTip"
+              :freeBackTip="freeBackTip"
               :timeObj="timeObj"
     >
-    </selectSY>
+    </salary-sy>
     <!-- 获取反馈 -->
-    <feedback ref="feedback"
+    <salary-back ref="feedback"
               :validParameter = "validParameter"
               :querytAction="querytAction"
               :sign="sign"
               :stopTip="stopTip"
-              :processingTip="processingTip"
+              :freeBackTip="freeBackTip"
     >
-    </feedback>
+    </salary-back>
+    <!--计算失败记录-->
+    <el-dialog
+      title="计算失败记录"
+      :visible.sync="isShowFail"
+      width="750px"
+      :close-on-click-modal="closeModel"
+    >
+      <div class="failTip">薪资计算失败，以下员工数据存在问题，请参考错误信息处理后更新申报数据</div>
+      <el-table :data="failList" height="400px">
+        <el-table-column prop="empName" label="姓名"></el-table-column>
+        <el-table-column prop="idNo" label="证件号码" width="200px"></el-table-column>
+        <el-table-column prop="taxSubName" label="扣缴义务人"></el-table-column>
+        <el-table-column prop="empName" label="计算状态">
+          <template slot-scope="scope">
+            <span>{{scope.row.checkStatus | reportType}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="failReason" label="反馈信息" width="170">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
+              <span class="hiden-con">{{ scope.row.failReason }}</span>
+            </el-tooltip>
+            <span v-else>{{ scope.row.failReason }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="text-align: center;margin-top: 20px;">
+        <el-button type="primary" @click="handleExport">导出</el-button>
+        <el-button @click="isShowFail = false">关闭</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      :visible.sync="isShowBigTable"
+      width="100%"
+      height="100%"
+      :close-on-click-modal="closeModel"
+      class="big-table"
+    >
+      <div class="staff-table">
+        <el-table :data="salaryTableDataAll"
+                  class="check-staff_table"
+                  :style="{width:screenWidth-40+'px'}"
+                  :cell-style="cellStyle"
+                  width="100%"
+                  :height="screenHeight"
+                  v-loading="tableLoading"
+                  border>
+          <el-table-column
+            v-for="(col,index) in salaryTableDataAll[0]"
+            :min-width="setMinWidth(col.col)"
+            :show-overflow-tooltip="col.col === '部门' || col.col === '岗位' || col.col === '工号' || col.col === '姓名'"
+            :label="col.col" :key="index" :resizable = "!col.floatItem" :fixed="[0,1,2,3].includes(index)"
+          >
+            <template slot-scope="scope">
+            <span>
+<!--              <span v-if="scope['row'][index]['val'] != 'icon'">{{scope['row'][index]['val']}}</span>-->
+              {{ filterVal(scope['row'][index]) }}
+            </span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+          :current-page="salaryForm.currPage"
+          :page-sizes="[20, 50, 100, 200]"
+          :page-size="salaryForm.pageSize"
+          layout="total, sizes, prev, pager, next"
+          :total="count"
+          class="staff-page">
+        </el-pagination>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
   import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,apiSocialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
-  import selectSY from "@/components/tool/selectSY";
-  import feedback from "@/components/tool/feedback";
+  import salarySy from "@/components/tool/salarySy";
+  import salaryBack from "@/components/tool/salaryBack";
+  import { mapState } from "vuex";
   export default {
   components:{
-     selectSY,
-     feedback
+     salarySy,
+     salaryBack
   },
   data() {
     return {
@@ -339,6 +441,7 @@
         key:"",
         currPage:1,
         pageSize:20,
+        enumComputeStatus:"",
         queryFilterParam:{
           taxSubId:"",
           departName:"",//部门
@@ -364,6 +467,7 @@
       checkAll: false,
       checkedPerson: ['工号', '姓名', '身份证号', '部门'],
       personOptions:['工号', '姓名', '身份证号', '部门',"岗位","工作地点","工作性质","入职日期","离职日期"],
+      noNumberRightList:['序号','工号','姓名','身份证号','部门','岗位'],
       isIndeterminate: false,
       showExportSalaryDetail:false,
       isDiyIndeterminate:[],
@@ -389,18 +493,34 @@
       },
       sign:"calc-wages",
       stopTip:"薪资计算",//终止文案
-      processingTip:"数据反馈中。。。",//进行中文案
+      freeBackTip:"【获取计算结果】",//进行中文案
       timeObj:{
         first:3000,
         second:10000,
         third:15000,
       },
       setWarning:false,
-      waitReportCount:0,
+      awaitReportCount:0,
       showWaitReport:false,
+      computedCount:0,
+      unComputedCount:0,
+      computingCount:0,
+      computeErrorCount:0,
+      allActive:true,
+      computedActive:false,
+      computingActive:false,
+      unComputedActive:false,
+      errorComputedActive:false,
+      failList:[],
+      isShowFail:false,
+      isShowWaitReport:false,
+      isShowBigTable:false
     };
   },
   computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
     nowDate:function () {
       let date = new Date();
       let year = date.getFullYear();
@@ -408,7 +528,6 @@
       let day = date.getDate();
       return year+"-"+month+"-"+day+ " 00:00:00";
     },
-
     salaryShow:function () {
       return this.checkStatus === "INIT" || this.checkStatus === "COMPUTED" || this.checkStatus==="AUDITED"
     },
@@ -451,6 +570,12 @@
        if(res.code === "0000"){
          let salaryData = res.data;
          this.count = salaryData.count;
+         this.computedCount = salaryData.computedCount ? salaryData.computedCount : 0;
+         this.unComputedCount = salaryData.unComputedCount ? salaryData.unComputedCount :0;
+         this.computingCount = salaryData.computingCount ? salaryData.computingCount:0;
+         this.computeErrorCount = salaryData.computeErrorCount?salaryData.computeErrorCount:0;
+         this.awaitReportCount = salaryData.awaitReportCount?salaryData.awaitReportCount:0;
+         this.isShowWaitReport = this.awaitReportCount || this.computeErrorCount
          this.tableValue = [];
          this.salaryTableData = salaryData.tableData;
          this.salaryTableDataAll = this.salaryTableData.map(item=>item.diyrow);
@@ -485,6 +610,44 @@
       //校验人员状态
       this.checkEmpReportStatus()
     },
+    showFail(){
+      this.isShowFail = true
+      this.$store
+        .dispatch("salaryCalStore/actionSalaryCheckFailRecord", this.salaryForm)
+        .then(res => {
+          this.failList = res.data;
+        })
+    },
+    handleBigTable(){
+      this.isShowBigTable = true
+    },
+    handleExport(){
+      this.$store
+        .dispatch("salaryCalStore/actionSalaryCheckFailRecordExport", this.salaryForm)
+        .then(res => {
+          console.log(res)
+        })
+    },
+    //点击数字切换
+    selectNum(type){
+      if(type === ""){
+        this.allActive=true;this.computedActive=false;this.unComputedActive=false;this.computingActive=false;this.errorComputedActive=false;
+      }
+      if(type==="FINISH"){
+        this.allActive=false;this.computedActive=true;this.unComputedActive=false;this.computingActive=false;this.errorComputedActive=false;
+      }
+      if(type==="INIT"){
+        this.allActive=false;this.computedActive=false;this.unComputedActive=true;this.computingActive=false;this.errorComputedActive=false;
+      }
+      if(type==="PROCESSING"){
+        this.allActive=false;this.computedActive=false;this.unComputedActive=false;this.computingActive=true;this.errorComputedActive=false;
+      }
+      if(type==="FAIL") {
+        this.allActive=false;this.computedActive=false;this.unComputedActive=false;this.computingActive=false;this.errorComputedActive=true;
+      }
+      this.salaryForm.enumComputeStatus = type;
+      this.loading()
+    },
     //校验人员状态
     checkEmpReportStatus(){
       this.$store
@@ -495,7 +658,7 @@
           if (res.success) {
             this.waitReportCount = res.data;
             this.showWaitReport = this.waitReportCount != 0;
-            if(this.waitReportCount == 0) {this.screenHeight+=60}
+            if(this.waitReportCount == 0) {this.screenHeight += 60}
           }
         });
     },
@@ -507,7 +670,7 @@
     },
     setMinWidth(value){
       if(['序号','工号','姓名'].includes(value)){ return '80px'}
-      else if(["身份证号","累计住房贷款利息","社保公积金个人合计","累计准予扣除的捐赠","累计应纳税所得额","累计应扣缴税额","累计已预缴税额","补偿金免税收入","补偿金应纳税所得额"].includes(value)){ return '170px' }
+      else if(["身份证号","累计住房贷款利息","社保公积金个人合计","准予扣除的捐赠额","累计准予扣除的捐赠","累计应纳税所得额","累计应扣缴税额","累计已预缴税额","补偿金免税收入","补偿金应纳税所得额","反馈信息"].includes(value)){ return '170px' }
       else {return '100px'}
     },
     filterVal(val){
@@ -615,7 +778,7 @@
         this.fileList=[];
         this.importType="BY_EMP_NO";
         this.importT = type;
-        this.actionUrl = type == "social"?"/api/salary/socialProvident/verify":"/api/salary/floatItem/verify";
+        this.actionUrl ="/api/xsalary/salary/floatItem/verify";
         this.isShowImport = true;
       }
     },
@@ -645,16 +808,16 @@
       if(res.code == "0000"){
         let data = res.data;
         this.successCount = data.successCount;
-        // this.uploadFileDisabled = this.;
         this.failCount = data.failCount;
         this.uuid = data.uuid;
       }else{
         this.$message.error(res.message);
+        this.fileList = []
       }
     },
     // 导出通过数据
     uploadFile(){
-      let methods = this.importT == "social"?apiSocialProvident:floatItem;
+      let methods = floatItem;
         methods({
         uuid:this.uuid,
         id:this.salaryForm.checkId,
@@ -764,7 +927,7 @@
       if(this.setWarning){
         this.$message.warning("工资表已审核，不允许操作。")
       }else{
-        this.$refs.selectSY.show(true)
+        this.$refs.selectSy.show(true)
       }
     },
     //获取反馈
@@ -820,8 +983,8 @@
   padding: 0 20px;
   box-sizing: border-box;
   .waitReport{
-    height: 40px;
-    line-height: 40px;
+    padding:10px 0px;
+    line-height: 30px;
     margin-top: 20px;
     color:#909399;
     border-left:4px solid #E6A23C;
@@ -831,6 +994,7 @@
     .bold{
       color:#E6A23C;
       font-weight: bold;
+      cursor: pointer;
     }
     .close-style{
       position: absolute;
@@ -883,6 +1047,11 @@
       color: $mainColor;
       font-style: normal;
       padding: 0 3px;
+      cursor: pointer;
+    }
+    .active {
+      color:#e6a23c;
+      font-weight: bold;
     }
     .calc-table_menu {
       span {

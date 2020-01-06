@@ -3,7 +3,8 @@
 import index from '../index'
 export default [
   {
-    path: '/accounting',
+    path: '/home',
     component: index,
+    meta: { businessCode: "salary.homePage", icon:"iconshouye"}
   }
 ]

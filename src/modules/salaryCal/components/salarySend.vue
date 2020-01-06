@@ -5,7 +5,7 @@
     </div>
     <div class="clearfix check-staff-menu">
       <el-input
-        placeholder="请输入姓名\手机号\工号"
+        placeholder="请输入姓名\身份证号\手机号"
         v-model="salaryForm.key"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
@@ -83,7 +83,7 @@
   </div>
 </template>
 <script>
-  import {apiCheckMemberSummary,apiSalaryStubsStatusAlter,apiSalaryStubsStatusBatchAlter,apiRefreshStubs} from '../store/api'
+  import { apiCheckMemberSummary,apiSalaryStubsStatusAlter,apiSalaryStubsStatusBatchAlter,apiRefreshStubs } from '../store/api'
   export default {
     data() {
       return {
@@ -94,6 +94,7 @@
           "currPage": 1,
           "key": "",
           "pageSize":20 ,
+          "enumComputeStatus":"",
         },
         active:this.$route.query.active,
         screenWidth: document.body.clientWidth, // 屏幕尺寸
@@ -274,7 +275,7 @@
     .check-staff-menu {
       margin-top: 0px;
       .search-input {
-        width: 215px;
+        width: 250px;
       }
     }
     .add-import {

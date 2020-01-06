@@ -3,7 +3,7 @@
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
-          <span>累计应税项</span>
+          <span>个税明细表初始化</span>
         </el-col>
       </el-row>
     </header>
@@ -29,7 +29,7 @@
             </div>
             <div class="right">
     <!--          <el-button type="primary" @click="handledDownload" class="add-import">局端在线下载</el-button>-->
-              <el-button type="primary" @click="handleImport" class="add-import">导入</el-button>
+              <el-button type="primary" @click="handleImport" class="add-import" v-if="privilegeVoList.includes('salary.init.taxTotalBase.import')">导入</el-button>
             </div>
           </div>
           <div class="selectCon">
@@ -59,26 +59,98 @@
           @selection-change="handleSelectItem"
           :height = "screenHeight"
           ref="table"
+          border
         >
           <el-table-column type="selection" width="55" fixed></el-table-column>
-          <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
-              <template slot-scope="scope">
-                <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
-                  <span class="hidenCon">{{ scope.row.taxSubName }}</span>
-                </el-tooltip>
-                <span v-else>{{ scope.row.taxSubName }}</span>
-              </template>
-          </el-table-column>
-          <el-table-column prop="empName" label="姓名" width="140"></el-table-column>
-          <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
+          <el-table-column prop="empName" label="姓名" width="80"></el-table-column>
+          <el-table-column prop="empNo" label="工号" width="100"></el-table-column>
           <el-table-column prop="idNo" label="证件号码" width="170"></el-table-column>
-          <el-table-column prop="endMonth" label="截止月份" width="140"></el-table-column>
-          <el-table-column prop="totalIncome" label="累计收入" width="140"></el-table-column>
-          <el-table-column prop="spectialDeduction" label="累计专项扣除" width="140"></el-table-column>
-          <el-table-column prop="otherDeduction" label="累计其他扣除" width="140"></el-table-column>
-          <el-table-column prop="totalDonated" label="累计准予扣除的捐赠" width="140"></el-table-column>
-          <el-table-column prop="taxBreakTotal" label="累计减免税额" width="140"></el-table-column>
-          <el-table-column prop="taxTotal" label="累计已预缴税额" width="140"></el-table-column>
+          <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
+            <template slot-scope="scope">
+              <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
+                <span class="hiden-con">{{ scope.row.taxSubName }}</span>
+              </el-tooltip>
+              <span v-else>{{ scope.row.taxSubName }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="endMonthStr" label="截止月份" width="120"></el-table-column>
+          <el-table-column prop="currentIncome" label="当期收入额" width="100">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.currentIncome }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="pensionInsuranceFee" label="养老个人" width="100">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.pensionInsuranceFee }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="medicalInsuranceFee" label="医疗个人" width="100">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.medicalInsuranceFee }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="unemploymentInsuranceFee" label="失业个人" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.unemploymentInsuranceFee }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="housingFund" label="公积金个人" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.housingFund }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="currentTaxfreeIncome" label="当期免税收入" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.currentTaxfreeIncome }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="yearMount" label="年金" width="60">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.yearMount }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="bussHealthInsuranceFee" label="商业健康保险" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.bussHealthInsuranceFee }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="otherMonth" label="其他" width="60">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.otherMonth }}</div>
+            </template>
+          </el-table-column>
+<!--          <el-table-column prop="currentTaxRefund" label="应补(退)税额" width="100"></el-table-column>-->
+<!--          <el-table-column prop="totalIncome" label="累计收入" width="100"></el-table-column>-->
+<!--          <el-table-column prop="spectialDeduction" label="累计专项扣除" width="100"></el-table-column>-->
+          <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.totalChildrenEdu }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="totalSupportParents" label="累计赡养老人" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.totalSupportParents }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.totalHomeLoads }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="totalHouseRent" label="累计住房租金" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.totalHouseRent }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="140">
+            <template slot-scope="scope">
+              <div class="number-right">{{ scope.row.totalFurtherEdu }}</div>
+            </template>
+          </el-table-column>
+<!--          <el-table-column prop="otherDeduction" label="累计其他扣除" width="140"></el-table-column>-->
+<!--          <el-table-column prop="totalDonated" label="累计准予扣除的捐赠" width="140"></el-table-column>-->
+<!--          <el-table-column prop="taxBreakTotal" label="累计减免税额" width="140"></el-table-column>-->
+<!--          <el-table-column prop="taxTotal" label="累计已预缴税额" width="140"></el-table-column>-->
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <span @click="handleDelete(scope.row.id)" class="funStyle">删除</span>
@@ -97,8 +169,8 @@
     <import-data
       ref="import"
       :radioList="radioList"
-      :title="'累计应税项导入'"
-      :apiCheck="'/api/taxTotalBase/importTaxTotalBaseCheck'"
+      :title="'个税明细表导入'"
+      :apiCheck="'/api/xsalary/taxTotalBase/importTaxTotalBaseCheck'"
       :apiDownloadLog="'cumulativePageStore/getExportErrorRecord'"
       :apiDownloadTemplate="'cumulativePageStore/actionDownloadTemplate'"
       :parameterData="parameterData"
@@ -118,6 +190,7 @@ for (let i = maxYear; i >= 2019; i--) {
   year.push(i);
 }
 import importData from "@/components/tool/importData";
+import { mapState } from "vuex";
 export default {
   components: {
     importData
@@ -149,11 +222,16 @@ export default {
       total: 0,
       fileList: [],
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight-340,
+      screenHeight: document.body.clientHeight-330,
       list: [],
       taxSubjectInfolist:[],
       showFilter:true,
     };
+  },
+  computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     const that = this;
@@ -162,12 +240,11 @@ export default {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
         // this.$refs.tableCon.offsetTop-60
-        this.screenHeight = document.body.clientHeight - 340;
+        this.screenHeight = document.body.clientHeight - 330;
       })();
     };
     // this.screenHeight = document.body.clientHeight-this.$refs.tableCon.offsetTop-60;
     this.getTaxSubjectInfoList();
-    this.getList();
   },
   methods: {
     //表格选中事件
@@ -183,6 +260,7 @@ export default {
         if (res.success) {
           this.taxSubjectInfolist = res.data;
           this.ruleForm.taxSubId = this.taxSubjectInfolist[0]['taxSubId'];
+          this.getList();
         }
       });
     },
@@ -193,7 +271,7 @@ export default {
       this.parameterData.type = val;
     },
     handleImport() {
-      this.parameterData.year = this.selectYear;
+      this.parameterData.year = this.ruleForm.queryYear;
       this.$refs.import.show();
     },
     refresh(data) {
@@ -296,7 +374,7 @@ export default {
     }
   }
   .selectCon{
-    margin:20px 0px;
+    margin:10px 0px;
   }
   .table-content{
     padding:0px 20px;
@@ -325,7 +403,7 @@ export default {
   }
 
   .check-staff-menu {
-    margin-top: 30px;
+    margin-top: 20px;
     .search-input {
       width: 205px;
     }
@@ -361,7 +439,7 @@ export default {
       text-align: right;
     }
   }
-  .hidenCon{
+  .hiden-con{
     width:150px;
     overflow: hidden;
     word-break: keep-all;

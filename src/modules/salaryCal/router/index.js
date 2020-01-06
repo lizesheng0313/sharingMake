@@ -8,6 +8,10 @@ export default [
   {
     path: '/salary-cal',
     component: index,
+    meta: {
+      businessCode: "salary.compute.salaryCheck",
+      icon:"iconxinzihesuan"
+    }
   }, {
     path: '/salarySet',
     component: salarySet,

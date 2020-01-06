@@ -327,10 +327,13 @@ a {
   height: 40px;
 }
 .main-title {
-  padding: 0 20px;
+  padding-left: 20px;
   font-size: 17px;
   height: 61px;
   line-height: 61px;
+}
+.main-content {
+  padding:0px 20px;
 }
 .tax-collect-tips {
   background: #fff6e2;
@@ -378,4 +381,46 @@ a {
   height: 34px;
   vertical-align:middle;
   display: inline-block;
+}
+//页面内容主体
+.page-module{
+  .div-module {
+    background: #fff;
+    //margin-bottom: 20px;
+    padding: 20px 20px 16px 20px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    -moz-box-shadow: 3px 5px 15px #c3d0d9;
+    box-shadow: 5px 10px 15px #c3d0d9;
+  }
+}
+//分页组件
+.pages{
+  text-align: right;
+  margin: 10px 0;
+}
+//提示介绍
+.intro {
+  background: #FFFFDB;
+  color: #999999;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 3px;
+  .intro-title {
+    color: #000;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .intro-cnt {
+    line-height: 1.8;
+  }
+}
+//隐藏属性
+.width-fixed {
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 150px;
 }

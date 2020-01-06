@@ -70,7 +70,7 @@ const filterEmpType = (val) => {
     case 'LABOUR': {
       return '劳务';
     }
-    case 'AUDIT_REJECT': {
+    case 'RE_EMPLOY': {
       return '退休返聘';
     }
   }
@@ -125,10 +125,10 @@ const getDay = (val) => {
 const accreditStatus = (val) => {
   switch (val) {//仲裁类别
     case 'SUCCESS': {
-      return '授权成功';
+      return '验证成功';
     }
     case 'FAIL': {
-      return '授权失败';
+      return '验证失败';
     }
     case 'WAIT_ACCREDIT': {
       return '待反馈';
@@ -169,6 +169,14 @@ const countryType = (val) => {
     }
   }
 };
+
+const reportType = (val) => {
+  switch (val) {
+    case 'FAIL': {
+      return '失败';
+    }
+  }
+};
 export default {
   resetDate,
   texRule,
@@ -177,5 +185,6 @@ export default {
   idType,
   countryType,
   accreditStatus,
-  dateStyle
+  dateStyle,
+  reportType
 }

@@ -14,21 +14,35 @@
             <div class="left">
               <el-button type="default" @click="isShowScreening=true">筛选</el-button>
             </div>
+            <div class="content-header head-date">
+              <!--              <span>{{selectMonth}}</span>-->
+              <el-date-picker
+                v-model="selectMonth"
+                @input="changeMonth"
+                type="month"
+                value-format="yyyy年MM月"
+                :editable="false"
+                :clearable="false"
+              ></el-date-picker>
+            </div>
             <el-input
               placeholder="请输入姓名\工号\身份证号"
               v-model="ruleForm.nameOrMore"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               @keyup.enter.native="handleSearch"
               clearable
-              class="search-input left"
+              class="search-input"
             ></el-input>
-            <div class="left">
+            <div class="select" style="display: inline-block">
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="handleReport">报送</el-button>
-              <el-button  class="add-import" @click="handleReportInfo">获取反馈</el-button>
-              <el-button  class="add-import" @click="handleExport">导出</el-button>
+              <el-button type="primary" class="add-import" @click="handleReport"
+                         v-if="privilegeVoList.includes('salary.report.personReport.sendReport')">报送</el-button>
+              <el-button class="add-import" @click="handleReportInfo"
+                         v-if="privilegeVoList.includes('salary.report.personReport.sendReport')">获取反馈</el-button>
+              <el-button class="add-import" @click="handleExport"
+                         v-if="privilegeVoList.includes('salary.report.personReport.export')">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -50,11 +64,25 @@
               </el-dropdown>
             </span>
             <span class="staff-total">
-              正常
-              <i>{{normalCount}}</i>人
-              <span class="wait-report">
+              <span class="wait-report" @click="selectNum('')">
+                全部
+                <i :class="['num', allActive?'active':'']">{{ total }}</i>人
+              </span>
+              <span class="wait-report" @click="selectNum('REPORT_SUCCESS')">
+                正常
+                <i :class="['num', successActive?'active':'']">{{ normalCount }}</i>人
+              </span>
+              <span class="wait-report" @click="selectNum('AWAIT_REPORT')">
                 待报送
-                <i>{{awaitReportCount}}</i>人
+                <i :class="['num', waitActive?'active':'']">{{ awaitReportCount?awaitReportCount:0 }}</i>人
+              </span>
+              <span class="wait-report" @click="selectNum('REPORTING')">
+                待反馈
+                <i :class="['num', backActive?'active':'']">{{ awaitFeedBackCount ? awaitFeedBackCount:0 }}</i>人
+              </span>
+               <span class="wait-report" @click="selectNum('REPORT_ERROR')">
+                报送失败
+                <i :class="['num', errorActive?'active':'']">{{ failReportCount ? failReportCount:0 }}</i>人
               </span>
             </span>
             <span>
@@ -65,17 +93,6 @@
               减少
               <i>{{decreaseCount}}</i>人
             </span>
-            <div class="content-header head-date">
-              <!--              <span>{{selectMonth}}</span>-->
-              <el-date-picker
-                v-model="selectMonth"
-                @input="changeMonth"
-                type="month"
-                value-format="yyyy年MM月"
-                :editable="false"
-                :clearable="false"
-              ></el-date-picker>
-            </div>
           </div>
           <div class="staff-table">
             <el-table
@@ -84,15 +101,15 @@
               class="check-staff_table"
               @selection-change="handleSelectItem"
               :height="screenHeight"
-              :style="{width:screenWidth-285+'px'}">
+              :style="{width:screenWidth-255+'px'}"
+              border
+             >
               <el-table-column type="selection" width="55" fixed></el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
               <el-table-column prop="empName" label="姓名" width="140">
                 <template slot-scope="scope">
-                  <span
-                    class="table-name"
-                    @click="handleCollectionName(scope.row)"
-                  >{{scope.row.empName }}</span>
+                  <span class="table-name" @click="handleCollectionName(scope.row)" v-if="privilegeVoList.includes('salary.report.personReport.edit')">{{ scope.row.empName }}</span>
+                  <span class="table-name" v-else>{{ scope.row.empName }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="idType" label="证件类型" width="140">
@@ -127,8 +144,16 @@
               <el-table-column label="国籍" width="140">
                 <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
               </el-table-column>
-              <el-table-column prop="reportFinishTime" label="更新时间" width="180"></el-table-column>
-              <el-table-column prop="updateTime" label="最近操作时间" width="180"></el-table-column>
+<!--              <el-table-column prop="reportFinishTime" label="更新时间" width="180"></el-table-column>-->
+<!--              <el-table-column prop="updateTime" label="最近操作时间" width="180"></el-table-column>-->
+              <el-table-column prop="updateTime" label="反馈信息" width="120">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
+                    <span class="hiden-con">{{ scope.row.failReason }}</span>
+                  </el-tooltip>
+                  <span v-else>{{ scope.row.failReason }}</span>
+                </template>
+              </el-table-column>
             </el-table>
             <el-pagination
               @current-change="handleSelectionChange"
@@ -247,44 +272,10 @@
           <el-button @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
-      <!-- 获取反馈结果-->
-      <!-- 报送-->
-      <el-dialog
-        :visible.sync="isShowReportInfo"
-        width="550px"
-        center
-        class="diy-el_dialog"
-        :show-close="false"
-        :close-on-click-modal="closeModel"
-      >
-        <el-row v-for="(item,index) in reportInfoList" :key="index">
-          <div v-if="item.dealStatus === 'SUCCESS'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送完成</el-col></div>
-          <div v-if="item.dealStatus === 'PROCESSING'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">获取反馈中。。。</el-col></div>
-          <div v-if="item.dealStatus === 'FAIL'"><el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">报送失败，{{item.failReason}}</el-col></div>
-        </el-row>
-        <div v-loading="reportInfoLoading" style="height: 40px"></div>
-        <div class="dialog-footer">
-          <el-button @click="isShowReportInfo=false" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
-        </div>
-      </el-dialog>
-      <!-- 获取反馈 -->
-      <el-dialog
-        :visible.sync="isShowReturnInfo"
-        width="550px"
-        title="获取反馈"
-        center
-        class="diy-el_dialog"
-        :show-close="false"
-        :close-on-click-modal="closeModel"
-      >
-        <el-row v-for="(item,index) in reportReturnList" :key="index">
-          <el-col :span="12" style="height:30px">{{ item.taxSubName }}</el-col><el-col :span="12">{{ item.dealStatus }}</el-col>
-        </el-row>
-        <div class="dialog-footer">
-          <el-button @click="isShowReturnInfo=false" type="primary" plain>我知道了</el-button>
-        </div>
-      </el-dialog>
-      <authorizeTip ref="authorizeTip"></authorizeTip>
+      <!-- 验证-->
+      <selectSy ref="selectSY" :timeObj="timeObj" :sign="sign"></selectSy>
+      <!-- 查询-->
+      <feedback ref="feedback" :sign="sign"></feedback>
     </div>
   </div>
 </template>
@@ -293,7 +284,8 @@ import { mapState } from "vuex";
 import * as SCR from "./util/constData";
 import * as AT from "./store/actionTypes";
 import fun from "@/util/fun";
-import authorizeTip from "@/components/tool/authorizeTip"
+import selectSy from "./components/partSelectS";
+import feedback from "./components/partFeedback";
 let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
@@ -316,7 +308,7 @@ export default {
         reportFinishTimeStart: "",
         reportStatus: [],
         workerType: [],
-        taxSubjectId: ""
+        taxSubjectId: "",
       },
       loading: false,
       reportForm: {
@@ -335,7 +327,14 @@ export default {
       increaseCount: 0,
       decreaseCount: 0,
       awaitReportCount: 0,
+      awaitFeedBackCount:0,
       normalCount: 0,
+      failReportCount:0,
+      allActive:true,
+      successActive:false,
+      backActive:false,
+      waitActive:false,
+      errorActive:false,
       total: 0,
       idValidStatus: true,
       reportStatus: true,
@@ -347,20 +346,34 @@ export default {
       isShowInfoColl: true,
       isShowScreening: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
-      screenHeight: document.body.clientHeight - 316,
+      screenHeight: document.body.clientHeight - 330,
       list: [],
       closeModel: false,
       unNormalIds:[],
+      timeObj:{
+        first:3000,
+        second:8000,
+        third:12000,
+        fourth:22000,
+      },
+      sign:"taxCollect",
       // isSave:this.$route.query.isSave,
     };
   },
   components:{
-    authorizeTip,
+    selectSy,
+    feedback
   },
   computed:{
     ...mapState("salaryCalStore", {
       salaryItem:"salaryItem"
-    })
+    }),
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
+  },
+  created(){
+
   },
   mounted() {
     this.getTaxSubjectInfoList();
@@ -370,11 +383,25 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 316;
+        this.screenHeight = document.body.clientHeight - 330;
       })();
     };
   },
   methods: {
+    selectNum(type){
+      //全部
+      if(type===""){this.allActive = true;this.successActive = false;  this.waitActive = false;this.backActive = false ; this.errorActive = false; }
+      //正常
+      if(type === "REPORT_SUCCESS"){this.allActive = false;this.successActive = true; this.waitActive = false; this.backActive = false ; this.errorActive = false;}
+      //待报送
+      if(type === "AWAIT_REPORT"){this.allActive = false;this.successActive = false; this.waitActive = true; this.backActive = false ; this.errorActive = false;}
+      //待反馈
+      if(type==="REPORTING"){this.allActive = false;this.successActive = false; this.waitActive = false; this.backActive = true ; this.errorActive = false;}
+      //报送失败
+      if(type==="REPORT_ERROR"){this.allActive = false;this.successActive = false;  this.waitActive = false; this.backActive = false ; this.errorActive = true; }
+      this.ruleForm.reportStatus = type === "" ? [] : [type];
+      this.getList()
+    },
     getList() {
       this.loading = true;
       this.$store
@@ -388,8 +415,16 @@ export default {
             this.decreaseCount = res.data.decreaseCount;
             this.awaitReportCount = res.data.awaitReportCount;
             this.normalCount = res.data.normalCount;
+            this.failReportCount = res.data.failReportCount;
+            this.awaitFeedBackCount = res.data.awaitFeedBackCount;
           }
         });
+    },
+    //子组件触发刷新
+    freshList(data){
+      if(data === this.sign){
+        this.getList()
+      }
     },
     //导出
     handleExport(){
@@ -400,7 +435,6 @@ export default {
     handleReport() {
       let reportCount = this.reportForm.ids.length > 0 ? this.reportForm.ids.length:this.awaitReportCount;
       if( this.reportForm.ids.length > 0){
-        this.reportForm.taxSubId = this.ruleForm.taxSubjectId;
         this.$confirm(
           "系统共检测到有" +
           reportCount +
@@ -413,29 +447,15 @@ export default {
           }
         ).then(() => {
           //报送
-          this.$store
-            .dispatch("taxPageStore/actionTaxReport", this.reportForm)
-            .then(res => {
-              if (res.success) {
-                //验证通过
-                if(res.data.status === "SUCCESS"){
-                  this.isShowReportInfo = true;
-                  this.reportInfoLoading = true;
-                  this.reportInfoList = res.data.taxSubList;
-                  //是否进行下步查询
-                  if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
-                    this.selectShuiyou()
-                  }else{//报送全部成功或失败
-                    this.reportInfoLoading = false;
-                    this.isShowIknow = true;
-                  }
-                }else{//授权失败
-                  this.$refs.authorizeTip.show()
-                }
-              }else{
-                this.$message.warning(res.message)
-              }
-            });
+          let paramsObj = {
+            validParameter : this.reportForm,
+            validAction : "taxPageStore/actionTaxReport",
+            querytAction : "taxPageStore/actionPostReportInfo",
+            stopTip:"报送",
+            showFailReason:false,
+            freeBackTip:"【获取反馈】"
+          }
+          this.$refs.selectSY.show(true,paramsObj)
         }).catch(() => {});
       }else{
         //如果未点击数据
@@ -446,93 +466,20 @@ export default {
         }
       }
     },
-    selectShuiyou(){
-      this.isShowIknow = false;
-      //查询第一次
-      setTimeout(()=>{
-        this.$store
-          .dispatch("taxPageStore/actionPostReportInfo", {
-            date: this.salaryItem.date,
-            checkId:this.$route.query.id,
-          }).then(r0 => {
-          if(r0.success){
-            if(r0.data.status === "SUCCESS"){
-              this.reportInfoList.push(...r0.data.taxSubList);
-              if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
-                this.selectSec()
-              } else{
-                this.reportInfoLoading = false;
-                this.isShowIknow = true;
-              }
-            }else{
-
-            }
-          }
-        })
-      },3000)
-    },
-    //第二次查询
-    selectSec(){
-      setTimeout(()=>{
-        this.$store.dispatch("taxPageStore/actionPostReportInfo", {
-          date: this.salaryItem.date,
-          checkId:this.$route.query.id,
-        }).then(r0 => {
-          if(r0.data.status === "SUCCESS"){
-            this.reportInfoList.push(...r0.data.taxSubList);
-            if(r0.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
-              this.selectThird()
-            } else{
-              this.reportInfoLoading = false;
-              this.isShowIknow = true;
-            }
-          }else{
-
-          }
-        })
-      },10000)
-    },
-    //第三次查询
-    selectThird(){
-      setTimeout(()=>{
-        this.$store
-          .dispatch("taxPageStore/actionPostReportInfo", {
-            date: this.salaryItem.date,
-            checkId:this.$route.query.id,
-          }).then(re => {
-          if(re.success){
-            this.reportInfoList.push(...re.data.taxSubList);
-            this.reportInfoLoading = false;
-            this.isShowIknow = true;
-          }
-        })
-      },15000)
-    },
     //获取反馈
     handleReportInfo(){
-      if( this.reportForm.ids.length > 0){
-        this.reportReturnList = [];
-        this.$store
-          .dispatch("taxPageStore/actionPostReportInfo", {
-            date: this.salaryItem.date,
-            checkId:this.$route.query.id,
-          }).then(res=>{
-          if(res.success){
-            // 已授权，有查询结果
-            if(res.data.status === "SUCCESS"){
-              this.reportReturnList = res.data.taxSubList;
-              this.isShowReportInfo = true;
-            }else{//未授权
-              this.isShowReportInfo = false;
-              this.$refs.authorizeTip.show()
-            }
-          }else{
-            this.$message.warning(res.message)
-          }
-        })
-      }else{
-          this.$message.warning("不存在待反馈的数据")
+      let paramsObj = {
+        validParameter : {
+          date:this.reportForm.date,
+          taxSubjectId: this.reportForm.taxSubId
+        },
+        validAction : "taxPageStore/actionTaxReport",
+        querytAction : "taxPageStore/actionPostReportInfo",
+        stopTip:"报送",
+        showFailReason:false,
+        freeBackTip:"【获取反馈】"
       }
+      this.$refs.feedback.show(true,paramsObj)
     },
     //表格选中事件
     handleSelectItem(row) {
@@ -552,6 +499,8 @@ export default {
         if (res.success) {
           this.taxSubjectInfolist = res.data;
           this.ruleForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
+          this.reportForm.taxSubId = this.taxSubjectInfolist[0].taxSubId;
+          this.reportForm.taxSubjectId = this.taxSubjectInfolist[0].taxSubId;
           this.currentTaxSubName = this.taxSubjectInfolist[0].taxSubName;
           this.getList();
         }
@@ -564,6 +513,8 @@ export default {
     },
     handleCheckTaxSubject(item) {
       this.ruleForm.taxSubjectId = item.taxSubId;
+      this.reportForm.taxSubId = item.taxSubId;
+      this.reportForm.taxSubjectId = item.taxSubId;
       this.currentTaxSubName = item.taxSubName;
       this.ruleForm.currPage = 1;
       this.getList();
@@ -703,11 +654,11 @@ export default {
     }
   }
   .tax-content {
-    padding: 10px 20px 0px 20px;
+    padding: 20px 20px 0px 20px;
     .content-header {
       display: inline-block;
       font-size: 16px;
-      margin-bottom: 6px;
+      margin:0px 0px 6px 20px;
       i {
         font-size: 16px;
         color: #ccc;
@@ -724,12 +675,12 @@ export default {
     }
   }
   .tax-search {
-    margin-left: 40px;
+    margin-left: 24px;
   }
   .screening {
     .check-staff-menu {
       .search-input {
-        margin-left: 10px;
+        margin:0px 20px;
         width: 205px;
       }
     }
@@ -740,16 +691,15 @@ export default {
       font-size: 12px;
     }
     .staff-situation {
+      margin: 0px 10px 10px 0px;
+      color: #999;
+      font-size: 12px;
       .staff-total {
         border-right: 1px solid #e6e6e6;
         padding-right: 15px;
         margin-right: 15px;
       }
-      margin-top: 20px;
-      color: #999;
-      font-size: 12px;
       i {
-        color: $mainColor;
         font-style: normal;
         padding: 0 3px;
       }
@@ -781,6 +731,17 @@ export default {
   .dialog-footer{
     text-align: right;
     margin-top: 20px;
+  }
+  .wait-report{
+    margin-right:20px;
+    cursor: pointer;
+    .num{
+      font-weight: bold;
+      color: $mainColor;
+    }
+    .active{
+      color:#e6a23c;
+    }
   }
 }
 .screen-dialog {

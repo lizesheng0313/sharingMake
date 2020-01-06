@@ -18,6 +18,10 @@
           </div>
         </el-checkbox-group>
       </div>
+      <div class="salary-tip">
+        工资条项目显示规则
+        <div> <el-checkbox v-model="stubsItemsShowRules">隐藏工资条中值为零的工资项目</el-checkbox></div>
+      </div>
       <div class="line"></div>
       <div class="salary-tip">工资条说明<span class="title-tip">(将显示在员工的工资条最后)</span></div>
       <el-form :model="stubsMsgForm" ref="stubsMsgForm" :rules="rules" class="demo-ruleForm">
@@ -48,6 +52,7 @@ export default {
       stubsMsgForm:{
         stubsMsg:""
       },
+      stubsItemsShowRules:true,
       rules:{
         stubsMsg: [
           { max: 60, message: '内容过长', trigger: 'blur' }
@@ -60,6 +65,7 @@ export default {
       if(res.code === "0000"){
         this.stubsItems = res.data.stubsItems;
         this.stubsMsgForm.stubsMsg = res.data.stubsMsg;
+        this.stubsItemsShowRules = res.data.stubsItemsShowRules;
         //  初始化导出配置项数据、
         let allId = [];
         let checkedId = [];
@@ -134,7 +140,8 @@ export default {
             apiEditStubs({
               salaryId:this.salaryRuleId,
               stubsMsg:this.stubsMsgForm.stubsMsg,
-              itemIds:itemIds
+              itemIds:itemIds,
+              stubsItemsShowRules:this.stubsItemsShowRules,
             }).then(res=>{
               if(res.code === "0000"){
                 this.$emit('changeSatus',false);

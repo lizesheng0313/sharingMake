@@ -42,11 +42,10 @@
     }
   }
 }
-
 .head-date{
   .el-input--prefix .el-input__inner{
     font-size: 16px;
-    padding-left: 14px;
+    padding: 19px;
   }
   .el-input__prefix{
     right:-74px;
@@ -59,15 +58,19 @@
     }
   }
 }
-.collect{
-  .el-input--prefix .el-input__inner{
+.collect,.attach {
+  .el-input--prefix .el-input__inner {
     font-size: 14px;
+    padding: 19px 20px;
+  }
+  .search-input .el-input__prefix {
+    top:4px;
   }
 }
 .el-date-editor.el-input{
   width: 130px;
 }
-.sflary-el-step{
+.sflary-el-step {
   .el-step__main {
     color:#999;
   }
@@ -184,23 +187,20 @@
 .upload-disable .el-upload--picture-card{
   display: none;
 }
-.el-upload-dragger{
-  width:180px!important;
-}
-.el-submenu .el-menu-item{
-  min-width:170px;
+// .el-upload-dragger{
+//   width:180px!important;
+// }
+.el-submenu .el-menu-item {
+  min-width: 170px;
 }
 
-.el-button--primary{
-  border:1px solid $mainColor;
-  font-size:14px;
+.el-button--primary {
+  border: 1px solid $mainColor;
+  font-size: 14px;
 }
-.el-button{
-  padding:9px 20px;
-}
-.el-dropdown{
-  .el-button{
-    padding:9px 0px;
+.el-dropdown {
+  .el-button {
+    padding: 9px 0px;
   }
 }
 .check-staff,.salary-send{
@@ -233,12 +233,13 @@
 }
 .el-dropdown-menu__item.current-tab-sub_name{
   @include ellipsis;
-  width:200px;
+  width: 200px;
   display: block;
 }
 .el-month-table td.today .cell {
-  color:#606266;
+  color: #606266;
   font-weight: normal;
+  padding: 0px;
 }
 
 .salarySet-page{
@@ -251,13 +252,14 @@
   }
 }
 //超出部分隐藏
-.hidenCon{
-  width:200px;
+.hiden-con{
+  display: inline-block;
+  width:150px;
   overflow: hidden;
-  word-break: keep-all;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   cursor:pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis !important;
+  text-align: left;
 }
 .funStyle{
   color:$mainColor;
@@ -277,4 +279,35 @@
 .el-step.is-simple:not(:last-of-type) .el-step__title{
   max-width: 60%;
   word-break: break-all;
+}
+
+.el-table td .number-right{
+  text-align: right;
+}
+//表头与内容不对齐问题
+.el-table th.gutter {
+  display: table-cell !important;
+}
+.input-bigger {
+  .el-select,.el-input {
+    width: 320px !important;
+  }
+}
+.data-create {
+  .el-form-item {
+    border-bottom: 1px solid #eee;
+    padding: 4px 0px;
+    margin-bottom: 0px;
+  }
+  .el-form-item__label {
+    padding: 0 30px 0 0;
+  }
+}
+.taxPaid {
+  .el-radio__label {
+    display: none;
+  }
+}
+.v-modal {
+  z-index: 2000 !important;
 }

@@ -19,19 +19,20 @@
           @change="changeDate"
         ></el-date-picker>
       </div>
-      <div class="tableCon">
+      <div class="table-con">
         <el-table
           :data="paidList"
           class="check-staff_table"
           v-loading="loading"
-          :style="{width:screenWidth-300+'px'}"
+          :style="{width:screenWidth-280+'px'}"
           :height="screenHeight"
+          border
         >
           <el-table-column  label="序号" type="index"></el-table-column>
           <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName && scope.row.taxSubName.length>10">
-                <span class="hidenCon">{{ scope.row.taxSubName }}</span>
+                <span class="hiden-con">{{ scope.row.taxSubName }}</span>
               </el-tooltip>
               <span v-else>{{ scope.row.taxSubName }}</span>
             </template>
@@ -44,13 +45,13 @@
           <el-table-column  label="申报表" width="150px">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" :content="subTaxReportTypeObj[scope.row.subTaxReportType]" placement="top-start" v-if="scope.row.subTaxReportType">
-                <span class="hidenCon">{{ subTaxReportTypeObj[scope.row.subTaxReportType] }}</span>
+                <span class="hiden-con">{{ subTaxReportTypeObj[scope.row.subTaxReportType] }}</span>
               </el-tooltip>
               <span v-else>{{ subTaxReportTypeObj[scope.row.subTaxReportType]}}</span>
             </template>
           </el-table-column>
           <el-table-column prop="taxPaid" label="已缴税款"></el-table-column>
-          <el-table-column  label="缴款状态">
+          <el-table-column label="缴款状态">
             <template slot-scope="scope">
               <span>{{ payStatus[scope.row.payStatus] }}</span>
             </template>
@@ -62,15 +63,15 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="280px">
             <template slot-scope="scope">
-              <span class="funStyle" @click="getTripleAgreementList(scope.row)">发起缴款</span>
-              <span class="funStyle" @click="queryTaxPay(scope.row)">缴款反馈</span>
+              <span class="funStyle" @click="getTripleAgreementList(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.sendPay')">发起缴款</span>
+              <span class="funStyle" @click="queryTaxPay(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.sendPay')">缴款反馈</span>
               <el-popover
                 ref="popMore"
                 placement="bottom-end"
                 width="250"
                 trigger="hover">
-                <span class="funStyle" @click="getTripleAgreement(scope.row)">获取三方协议下载</span>
-                <span class="funStyle" @click="getTripleAgreementQuery(scope.row)">三方协议反馈</span>
+                <span class="funStyle" @click="getTripleAgreement(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.downloadProtocol')">获取三方协议下载</span>
+                <span class="funStyle" @click="getTripleAgreementQuery(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.downloadProtocol')">三方协议反馈</span>
                 <span slot="reference" class="more-choose">更多>></span>
               </el-popover>
             </template>
@@ -91,7 +92,7 @@
 <!-- 三方协议列表-->
     <el-dialog
       :visible.sync="isShowTripleAgreementTaxList"
-      width="550px"
+      width="750px"
       title="请选择三方协议"
       center
       class="diy-el_dialog"
@@ -103,6 +104,7 @@
         v-loading="tripleAgreementLoading"
         highlight-current-row
         ref="selectTable"
+        height="400px"
       >
         <el-table-column label=" " width="65">
           <template slot-scope="scope">
@@ -134,7 +136,7 @@
   </div>
 </template>
 <script>
- import selectSY from "./components/partSelectSY";
+ import selectSY from "./components/partSelectS";
  import feedback from "./components/partFeedback";
  import * as constData from "./util/constData"
 import { mapState } from "vuex";
@@ -143,6 +145,11 @@ export default {
   components: {
     selectSY,
     feedback,
+  },
+  computed:{
+    ...mapState({
+        privilegeVoList:state=>state.privilegeVoList
+    })
   },
   data() {
     return {
@@ -156,7 +163,7 @@ export default {
       },
       payStatus:constData.payStatus,
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 306,
+      screenHeight: document.body.clientHeight - 300,
       paidList:[
         { name:"北京懒猫联银科技有限公司",tableName:"综合所得预扣预缴表",status:"申报成功",isThree:"是",paidStatus:"无需缴款",time:"2019-12-12" }
       ],
@@ -203,7 +210,7 @@ export default {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        this.screenHeight = document.body.clientHeight - 310;
+        this.screenHeight = document.body.clientHeight - 300;
       })();
     };
   },
@@ -247,10 +254,12 @@ export default {
         .then(res => {
           if(res.success){
             this.tripleAgreementTaxList = res.data.tripleAgreementListVoList;
+            this.tripleAgreementNo = this.tripleAgreementTaxList[0].tripleAgreementNo;
+            this.taxSubId =this.tripleAgreementTaxList[0].taxSubId;
             this.deductionAmount = res.data.deductionAmount;
             this.tripleAgreementLoading = false;
           }else{
-            // this.$message.warning(res.message)
+            this.$message.warning(res.message)
           }
         });
     },
@@ -266,11 +275,12 @@ export default {
          taxSubId:this.taxSubId,
          queryMonth:this.agreementListForm.queryMonth,
          tripleAgreementNo:this.tripleAgreementNo,
-         subTaxReportType:this.subTaxReportType
+         subTaxReportType:this.subTaxReportType,
        },
       validAction : "taxPaidStore/actionTaxPay",
       querytAction : "taxPaidStore/actionTaxPayQuery",
       stopTip:"扣款",
+      freeBackTip:"【缴款反馈】",
      }
      this.$refs.selectSY.show(true,paramsObj)
     },
@@ -284,7 +294,7 @@ export default {
         },
         querytAction : "taxPaidStore/actionTaxPayQuery",
         stopTip:"扣款",
-        processingTip:"获取反馈中。。。",
+        freeBackTip:"【缴款反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -299,6 +309,7 @@ export default {
         validAction : "taxPaidStore/actionGetTripleAgreement",
         querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
         stopTip:"获取三方协议",
+        freeBackTip:"【三方协议反馈】",
       }
       this.$refs.selectSY.show(true,paramsObj);
     },
@@ -311,6 +322,7 @@ export default {
         },
         querytAction : "taxPaidStore/actionGetTripleAgreementQuery",
         stopTip:"获取三方协议",
+        freeBackTip:"【三方协议反馈】",
       }
       this.$refs.feedback.show(true,paramsObj)
     },
@@ -328,18 +340,21 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
 .taxPaid {
+  .head-date{
+    margin-bottom: 20px;
+  }
   .header {
     padding:0 20px;
-    font-size: 14px;
+    font-size: 17px;
     height: 61px;
     border-bottom: 1px solid #ededed;
     line-height: 61px;
   }
   .taxPaidCon{
-    padding:22px;
+    padding:20px;
   }
-  .tableCon{
-    margin-top:40px;
+  .table-con{
+
   }
   .more-choose{
     color: #2c7cff;

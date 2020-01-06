@@ -42,7 +42,10 @@ const config = Object.assign(webpackConfigBase.config, {
   devServer: {
     proxy: {
       '/api': {
-        target: "http://172.19.60.38:8017",
+        //38
+        target: "https://webapi-qa.lanmaoly.com",
+        //188
+        // target:"https://webapi-dev.lanmaoly.com",
         //陈莹
         // target:"http://172.19.63.49:9999",
         //陈莹2
@@ -50,12 +53,12 @@ const config = Object.assign(webpackConfigBase.config, {
         //小白
         // target:" http://172.19.65.31:9999",
         //苏宇
-        // target:" http://172.19.64.66:9999",
+        // target:"http:172.19.64.66:9999",
         secure: false,
         changeOrigin: true,
         // pathRewrite: {
-        //   '^/': ''   //需要rewrite的,
-        // }
+        //         //   '/xsalary': ''   //需要rewrite的,
+        //         // }
       },
       // koa 代码在 ./mock 目录中，启动命令为 npm run mock。
       // '/mockapi': {

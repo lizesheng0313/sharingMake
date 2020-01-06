@@ -1,4 +1,4 @@
-import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery,apiSocialProvidentExport,apiCheckEmpReportStatus} from './api'
+import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery,apiSocialProvidentExport,apiCheckEmpReportStatus,apiPayrollCredit,apiSalaryCheckFailRecord,apiSalaryCheckFailRecordExport,apiPayrollCreditCancel,apiGetAdditionalListExport,apiPayrollCreditExport} from './api'
 
 export const actionGetSalaryStatus = ({ dispatch },id) => {
   return apiGetSalaryStatus(id);
@@ -58,3 +58,34 @@ export const actionSalaryComputes = ({ dispatch },params) => {
 export const actionSalaryCheckQuery = ({ dispatch },params) => {
   return apiSalaryCheckQuery(params);
 }
+//检索发放状态
+export const actionPayrollCredit = ({ dispatch },id) => {
+  return apiPayrollCredit(id);
+}
+//检索撤销发放
+export const actionPayrollCreditCancel = ({ dispatch },id) => {
+  return apiPayrollCreditCancel(id);
+}
+//检索发放失败原因导出
+export const actionPayrollCreditExport = ({ dispatch },id) => {
+  return apiPayrollCreditExport(id);
+}
+
+//薪资计算失败记录
+export const actionSalaryCheckFailRecord = ({ dispatch },params) => {
+  return apiSalaryCheckFailRecord(params);
+}
+//薪资计算失败记录
+export const actionSalaryCheckFailRecordExport = ({ dispatch },params) => {
+  return apiSalaryCheckFailRecordExport(params);
+}
+
+//专项附加扣除导出
+export const actionGetAdditionalListExport = ({ dispatch },data) => {
+  return apiGetAdditionalListExport(data);
+}
+
+
+
+
+

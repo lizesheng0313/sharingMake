@@ -2,7 +2,7 @@
   <div class="check-staff">
     <div class="clearfix check-staff-menu">
       <el-input
-        placeholder="请输入姓名\手机号"
+        placeholder="请输入姓名\工号\身份证号"
         v-model="userForm.key"
         prefix-icon="iconiconfonticonfontsousuo1 iconfont"
         clearable
@@ -11,15 +11,15 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="showIncrease" class="add-import">增员导入</el-button>
+        <el-button type="primary" @click="showIncrease" class="add-import" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empAdd')">增减员导入</el-button>
         <el-dropdown trigger="click" @command="handleDropdown">
           <el-button type="default">
             更多
             <i class="iconsanjiao iconfont"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="delete">全部删除</el-dropdown-item>
-            <el-dropdown-item command="export">导出</el-dropdown-item>
+            <el-dropdown-item command="delete" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">全部删除</el-dropdown-item>
+            <el-dropdown-item command="export" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empExport')">导出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -44,7 +44,7 @@
       </div>-->
       <div class="floating-menu" v-if="selectUserIdList.length>0">
         <span>已选中{{selectUserIdList.length}}人</span>
-        <el-button size="mini" class="button-mini" @click="handleDelete(selectUserIdList)">批量删除</el-button>
+        <el-button size="mini" class="button-mini" @click="handleDelete(selectUserIdList)" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">批量删除</el-button>
       </div>
       <el-table :data="userList"
                 class="check-staff_table"
@@ -52,6 +52,7 @@
                 v-loading="userLoading"
                 @selection-change="handleSelectionChange"
                 :height="screenHeight"
+                border
       >
         <el-table-column type="selection" width="55" fixed></el-table-column>
         <el-table-column label="姓名" width="104px" :show-overflow-tooltip="true">
@@ -116,7 +117,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleDelete([scope.row.id])">删除</el-button>
+            <el-button size="mini" @click="handleDelete([scope.row.id])" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -138,6 +139,7 @@
       center
       class="diy-el_dialog"
       :close-on-click-modal="closeModel"
+      :show-close="closeModel"
     >
       <div>
         <p class="headings">1、选择导入匹配方式</p>
@@ -152,7 +154,7 @@
       <div class="select-file">
         <el-upload
           class="avatar-uploader"
-          action="/api/salary/salaryCheck/verify"
+          action="/api/xsalary/salary/salaryCheck/verify"
           :limit="1"
           :file-list="fileList"
           :before-upload="beforeAvatarUpload"
@@ -202,8 +204,8 @@
 </template>
 <script>
   import { apiCheckMember,apiImportMember,apiCheckMemberdelete,apiCheckMemberSummary,apiMemberErrorRecord} from '../store/api'
-export default {
-
+  import { mapState } from "vuex";
+ export default {
   data() {
     return {
       radio: 3,
@@ -248,6 +250,11 @@ export default {
       setWarning:false,
       closeModel:false,
     };
+  },
+  computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     const that = this;
@@ -447,9 +454,9 @@ export default {
   padding: 0 20px;
   box-sizing: border-box;
   .check-staff-menu {
-    margin-top: 30px;
+    margin-top: 20px;
     .search-input {
-      width: 205px;
+      width: 215px;
     }
   }
   .add-import {
@@ -459,12 +466,12 @@ export default {
     font-size: 12px;
   }
   .staff-situation {
+    margin:10px;
     .staff-total {
       border-right: 1px solid #e6e6e6;
       padding-right: 15px;
       margin-right: 15px;
     }
-    margin-top: 20px;
     color: #999;
     font-size: 12px;
     i {

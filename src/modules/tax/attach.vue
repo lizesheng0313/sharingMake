@@ -1,5 +1,5 @@
 <template>
-  <div class="tax el-diy-month">
+  <div class="tax el-diy-month attach">
     <header class="header main-title">
       <el-row type="flex">
         <el-col :span="12">
@@ -8,37 +8,39 @@
       </el-row>
     </header>
     <div class="tax-content">
-      <div class="content-header head-date" style="display: inline-block">
-        <span>{{selectMonth}}</span>
-        <el-date-picker
-          v-model="selectMonth"
-          type="month"
-          @input="changeMonth"
-          value-format="yyyy年MM月"
-          :editable="false"
-          :clearable="false"
-        ></el-date-picker>
-      </div>
-      <div class="input-" style="float: right;width: 80%">
-        <div style="width: 200px">
-          <el-input
-            placeholder="请输入姓名\证件号码"
-            v-model="totalListForm.nameOrMore"
-            prefix-icon="iconiconfonticonfontsousuo1 iconfont"
-            clearable
-            @keyup.enter.native="handleSearch"
-            class="search-input left"
-          ></el-input>
+      <div style="width: 100%">
+        <div class="content-header head-date" style="float:left;margin-right: 20px">
+          <span>{{selectMonth}}</span>
+          <el-date-picker
+            v-model="selectMonth"
+            type="month"
+            @input="changeMonth"
+            value-format="yyyy年MM月"
+            :editable="false"
+            :clearable="false"
+          ></el-date-picker>
         </div>
-        <div class="left">
-          <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
+        <div style="float:left; width: 800px">
+          <div style="width: 200px">
+            <el-input
+              placeholder="请输入姓名\证件号码"
+              v-model="totalListForm.nameOrMore"
+              prefix-icon="iconiconfonticonfontsousuo1 iconfont"
+              clearable
+              @keyup.enter.native="handleSearch"
+              class="search-input left"
+            ></el-input>
+          </div>
+          <div class="left">
+            <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
+          </div>
         </div>
         <div class="right">
-          <el-button  class="export-button" @click="handleExport">导出</el-button>
+          <el-button class="export-button" @click="handleExport" v-if="privilegeVoList.includes('salary.report.additionl.export')">导出</el-button>
         </div>
       </div>
       <div class="screening">
-        <div class="select_tax-payer">
+        <div class="select_tax-payer" style="clear: both">
           扣缴义务人：
           <el-dropdown trigger="click">
             <el-button type="text">
@@ -62,23 +64,44 @@
           <el-table
             :data="list"
             class="check-staff_table"
-            :style="{width:screenWidth-285+'px'}"
+            :style="{width:screenWidth-255+'px'}"
             v-loading="loading"
             :height="screenHeight"
+            border
           >
             <el-table-column width="55" label="序号" type="index"></el-table-column>
-            <el-table-column prop="empName" label="姓名" width="130"></el-table-column>
+            <el-table-column prop="empName" label="姓名"></el-table-column>
             <el-table-column prop="idNo" label="身份证号" width="180"></el-table-column>
             <el-table-column label="入职日期" width="180">
               <template slot-scope="scope">
                 <span>{{ scope.row.empDay.split(' ')[0] }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="totalChildrenEdu" label="累计子女教育"></el-table-column>
-            <el-table-column prop="totalFurtherEdu" label="累计继续教育"></el-table-column>
-            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息"></el-table-column>
-            <el-table-column prop="totalHouseRent" label="累计住房租金"></el-table-column>
-            <el-table-column prop="totalSupportParents" label="累计赡养老人"></el-table-column>
+            <el-table-column prop="totalChildrenEdu" label="累计子女教育" width="120px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.totalChildrenEdu }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="totalFurtherEdu" label="累计继续教育" width="120px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.totalFurtherEdu }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="totalHomeLoads" label="累计住房贷款利息" width="140px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.totalHomeLoads }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="totalHouseRent" label="累计住房租金" width="110px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.totalHouseRent }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="totalSupportParents" label="累计赡养老人" width="110px">
+              <template slot-scope="scope">
+                <div class="number-right"> {{ scope.row.totalSupportParents }}</div>
+              </template>
+            </el-table-column>
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
@@ -147,6 +170,11 @@ export default {
       closeModel: false,
       updateDisabled:false
     };
+  },
+  computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     this.formatQuerymonth(this.selectMonth);
@@ -246,7 +274,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
-.tax {
+.attach {
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
