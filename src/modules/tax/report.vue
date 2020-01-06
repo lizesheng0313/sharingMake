@@ -404,7 +404,7 @@ export default {
     },
     //展示收入，已缴税额
     showSalary(subTaxReportType,data){
-      return subTaxReportType === "SALARY_PAY_RULE" || subTaxReportType === "TOTAL_RULE" ? data:"--"
+      return subTaxReportType === "SALARY_PAY_RULE" ? data:"--"
     },
     //子组件触发刷新
     freshList(data){
