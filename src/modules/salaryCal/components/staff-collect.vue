@@ -433,7 +433,7 @@ export default {
     }
   }
   .tax-search {
-    margin-left: 40px;
+    margin-left: 20px;
   }
   .screening {
     .check-staff-menu {
