@@ -24,7 +24,7 @@
             class="search-input left"
           ></el-input>
           <div class="left">
-            <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
+            <el-button type="primary" class="tax-search" @click="handleSearch" size="small">查询</el-button>
           </div>
           <div class="right">
             <el-button type="primary" @click="handleCopyData" v-if="privilegeVoList.includes('salary.compute.salaryCheck.socialCopy')">复制上月数据</el-button>

@@ -245,6 +245,9 @@ export default {
   .tax-search {
     margin-left: 20px;
   }
+  .el-input--prefix .el-input__inner{
+    padding:19px 20px;
+  }
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
