@@ -1,5 +1,5 @@
 <template>
-  <div class="selectSY">
+  <div class="paid-select">
     <el-dialog
       :visible.sync="isShowReportInfo"
       width="550px"
@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import authorizeTip from "@/components/tool/authorizeTip"
+  import authorizeTip from "@/components/tool/authorizeTip"
 export default {
   components:{
     authorizeTip
@@ -40,16 +40,15 @@ export default {
       reportInfoLoading:false,
       paramsObj:{
         stopTip:"",//终止文案
-        processingTip:"",//进行中文案
-        validParameter: {}, //校验参数
+        validParameter: "", //校验参数
         validAction: "", //校验action
         querytAction:"" ,//查询action
-        freeBackTip:"",//反馈信息
+        freeBackTip:"",//获取反馈提示
       },
       isShowIknow:false,
       closeModel:false,
       reportInfoList:[],
-      showReturn:false
+      showReturn:false,
     };
   },
   created(){
@@ -71,16 +70,13 @@ export default {
       this.$store
         .dispatch(this.paramsObj.validAction, this.paramsObj.validParameter)
         .then(res=>{
+          console.log(res.success)
           if (res.success) {
             //验证通过
             if(res.data.status === "SUCCESS"){
               this.reportInfoLoading = true;
               this.isShowReportInfo = true;
               if(res.data.taxSubList[0].dealStatus === "PROCESSING"){
-                //如果是授权接口 新增时添加 taxSubId
-                if(res.data.taxSubList[0].taxSubId){
-                  this.paramsObj.validParameter.taxSubId = res.data.taxSubList[0].taxSubId;
-                }
                 this.selectShuiyou()
               }else{//全部成功或失败
                 this.reportInfoList = res.data.taxSubList;
@@ -110,8 +106,6 @@ export default {
                   this.reportInfoList = r0.data.taxSubList;
                   this.reportInfoLoading = false;
                   this.isShowIknow = true;
-                  //关闭右侧划窗
-                  this.isClose = r0.data.taxSubList[0].dealStatus === "SUCCESS";
                 }
               }else{
 
@@ -133,8 +127,6 @@ export default {
                 this.reportInfoList = r0.data.taxSubList;
                 this.reportInfoLoading = false;
                 this.isShowIknow = true;
-                //关闭右侧划窗
-                this.isClose = r0.data.taxSubList[0].dealStatus === "SUCCESS";
               }
             }else{
             }
@@ -154,20 +146,19 @@ export default {
               if(this.reportInfoList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
                 this.showReturn = true;
               }
-              this.isClose = ["PROCESSING",'SUCCESS'].includes(re.data.taxSubList[0].dealStatus);
             }
           })
       },this.timeObj.third)
     },
     onIknow(){
       this.isShowReportInfo = false;
-      this.$parent.freshList(this.sign,this.isClose)
+      this.$parent.freshList(this.sign)
     },
   }
 };
 </script>
 <style lang="scss" scoped>
-.selectSY {
+.paid-select {
   .dialog-footer{
     text-align: right;
     height: 40px;

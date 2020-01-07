@@ -68,7 +68,7 @@
                 全部
                 <i :class="['num', allActive?'active':'']">{{ total }}</i>人
               </span>
-              <span class="wait-report" @click="selectNum('REPORT_SUCCESS')">
+              <span class="wait-report" @click="selectNum('NORMAL')">
                 正常
                 <i :class="['num', successActive?'active':'']">{{ normalCount }}</i>人
               </span>
@@ -273,9 +273,9 @@
         </span>
       </el-dialog>
       <!-- 验证-->
-      <selectSy ref="selectSY" :timeObj="timeObj" :sign="sign"></selectSy>
+      <taxSelectS ref="selectSY" :timeObj="timeObj" :sign="sign"></taxSelectS>
       <!-- 查询-->
-      <feedback ref="feedback" :sign="sign"></feedback>
+      <taxtFeedback ref="feedback" :sign="sign"></taxtFeedback>
     </div>
   </div>
 </template>
@@ -284,8 +284,8 @@ import { mapState } from "vuex";
 import * as SCR from "./util/constData";
 import * as AT from "./store/actionTypes";
 import fun from "@/util/fun";
-import selectSy from "./components/partSelectS";
-import feedback from "./components/partFeedback";
+import taxSelectS from "./components/taxSelectS";
+import taxtFeedback from "./components/taxtFeedback";
 let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
@@ -361,8 +361,8 @@ export default {
     };
   },
   components:{
-    selectSy,
-    feedback
+    taxSelectS,
+    taxtFeedback
   },
   computed:{
     ...mapState("salaryCalStore", {
@@ -392,7 +392,7 @@ export default {
       //全部
       if(type===""){this.allActive = true;this.successActive = false;  this.waitActive = false;this.backActive = false ; this.errorActive = false; }
       //正常
-      if(type === "REPORT_SUCCESS"){this.allActive = false;this.successActive = true; this.waitActive = false; this.backActive = false ; this.errorActive = false;}
+      if(type === "NORMAL"){this.allActive = false;this.successActive = true; this.waitActive = false; this.backActive = false ; this.errorActive = false;}
       //待报送
       if(type === "AWAIT_REPORT"){this.allActive = false;this.successActive = false; this.waitActive = true; this.backActive = false ; this.errorActive = false;}
       //待反馈

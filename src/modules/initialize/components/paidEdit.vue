@@ -35,19 +35,19 @@
           <el-button @click="handleCancel(false)">取消</el-button>
         </span>
         <!-- 下载-->
-        <selectSY ref="selectSY" :sign="sign" :timeObj="timeObj"></selectSY>
+        <initSelectS ref="selectSY" :sign="sign" :timeObj="timeObj"></initSelectS>
     </div>
 </template>
 <script>
 import { mapState } from "vuex";
-import selectSY from "./tool/partSelectS";
+import initSelectS from "./tool/initSelectS";
 export default {
   selectItem:{
     type: Object,
     default:{}
   },
   components: {
-    selectSY,
+    initSelectS,
   },
   data() {
     return {
