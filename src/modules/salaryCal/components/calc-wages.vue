@@ -1027,7 +1027,7 @@
   .check-staff-menu {
     margin-top: 20px;
     .search-input {
-      width: 215px;
+      width: 250px;
     }
   }
   .iconiconfonticonfontsousuo1 {font-size: 12px;}
