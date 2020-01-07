@@ -15,7 +15,7 @@
             class="search-input left"
           ></el-input>
           <div class="left">
-            <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
+            <el-button type="primary" class="tax-search" size="small" @click="handleSearch">查询</el-button>
           </div>
           <div class="right">
             <el-button type="primary" @click="handleDownload" v-if="privilegeVoList.includes('salary.compute.salaryCheck.additionDownload')">全部下载</el-button>

@@ -19,21 +19,20 @@
         </div>
         <div class="main-content">
             <el-table :data="recordList" v-loading="loading" border :height="screenHeight">
-                <el-table-column label="批次号" prop="id" min-width="120"></el-table-column>
+                <el-table-column label="批次号" prop="id" min-width="80"></el-table-column>
                 <el-table-column label="公司名称" prop="enterpriseName" min-width="170"></el-table-column>
-                <el-table-column label="发放月份" prop="payMonth" min-width="170"></el-table-column>
-                <el-table-column label="批次状态" prop="statusStr" min-width="170"></el-table-column>
-                <el-table-column label="订单总数" prop="orderNum" min-width="120"></el-table-column>
+                <el-table-column label="发放月份" prop="payMonth" min-width="100"></el-table-column>
+                <el-table-column label="批次状态" prop="statusStr" min-width="120"></el-table-column>
+                <el-table-column label="订单总数" prop="orderNum" min-width="80"></el-table-column>
                 <el-table-column label="出款成功订单数" prop="orderSuccessNum" min-width="120"></el-table-column>
-                <el-table-column label="实发金额" prop="amountSuccess" min-width="170"></el-table-column>
+                <el-table-column label="实发金额" prop="amountSuccess" min-width="100"></el-table-column>
                 <el-table-column label="支付时间" prop="payTime" min-width="170"></el-table-column>
-                <el-table-column label="操作" min-width="170" fixed="right">
+                <el-table-column label="操作" fixed="right" min-width="170">
                     <template slot-scope="scope">
-                        <el-button type="text" @click="handleDetail(scope.row.id)"
-                            v-if="['PAID','CLOSED'].includes(scope.row.status) && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.select')">查看</el-button>
-                        <el-button type="text" @click="handleDeleteBatch(scope.row.id)" v-if="scope.row.status != 'PAID' && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.delete')">删除
+                        <el-button type="text" size="mini" @click="handleDetail(scope.row.id)" v-if="['PAID','CLOSED'].includes(scope.row.status) && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.select')">查看</el-button>
+                        <el-button type="text" size="mini" @click="handleDeleteBatch(scope.row.id)" v-if="scope.row.status != 'PAID' && privilegeVoList.includes('salary.psalaryIssuing.batchRecord.delete')">删除
                         </el-button>
-                        <el-button type="text" @click="handleContinuePay(scope.row)" v-if="['CHECK_ALL_SUCCESS','CHECK_PART_SUCCESS','CHECK_ALL_FAIL'].includes(scope.row.status)&&
+                        <el-button type="text" size="mini" @click="handleContinuePay(scope.row)" v-if="['CHECK_ALL_SUCCESS','CHECK_PART_SUCCESS','CHECK_ALL_FAIL'].includes(scope.row.status)&&
                                    privilegeVoList.includes('salary.psalaryIssuing.batchRecord.continue')
                           ">继续代发</el-button>
                     </template>
