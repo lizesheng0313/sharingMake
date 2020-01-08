@@ -24,7 +24,7 @@ export default {
     },
     ruleId:{
       type: String,
-      default:" "
+      default:""
     },
     actionUrl:{
       type: String,
