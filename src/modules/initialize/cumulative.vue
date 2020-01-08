@@ -3,7 +3,8 @@
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
-          <span>个税明细表初始化</span>
+          <span @click="$router.go(-1)" class="back-style">返回</span>
+          <span>上月收入与减除填写</span>
         </el-col>
       </el-row>
     </header>
@@ -184,6 +185,7 @@
   </div>
 </template>
 <script>
+import RouterLink from "olading-ui/lib/mixins/router-link";
 let maxYear = new Date().getFullYear();
 let year = [];
 for (let i = maxYear; i >= 2019; i--) {
@@ -193,6 +195,7 @@ import importData from "@/components/tool/importData";
 import { mapState } from "vuex";
 export default {
   components: {
+    RouterLink,
     importData
   },
   data() {
@@ -401,7 +404,14 @@ export default {
       z-index: 0;
     }
   }
-
+  .back-style{
+    color: $mainColor;
+    display: inline-block;
+    line-height: 16px;
+    padding-right:10px;
+    border-right:1.5px solid #333;
+    cursor: pointer;
+  }
   .check-staff-menu {
     margin-top: 20px;
     .search-input {
