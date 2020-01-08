@@ -44,7 +44,7 @@
 }
 .head-date {
   .el-input--prefix .el-input__inner {
-    font-size: 16px;
+    font-size: 14px;
     padding: 19px;
   }
   .el-input__prefix {
@@ -58,7 +58,8 @@
     }
   }
 }
-.collect,.attach {
+
+.collect,.attach,.recharge,.withdraw {
   .el-input--prefix .el-input__inner {
     font-size: 14px;
     padding: 19px 20px;
@@ -67,6 +68,26 @@
     top: 4px;
   }
 }
+.paid,.cumulative {
+  .el-input--prefix .el-input__inner {
+    font-size: 14px;
+    padding: 19px 30px;
+  }
+  .search-input .el-input__prefix {
+    top: 4px;
+  }
+  .el-input--suffix .el-input__inner {
+    padding: 19px 30px;
+  }
+}
+.pay-record,.pay-order {
+  .el-input--prefix .el-input__inner {
+    font-size: 14px;
+    padding: 19px 30px;
+  }
+}
+
+
 .el-date-editor.el-input {
   width: 130px;
 }

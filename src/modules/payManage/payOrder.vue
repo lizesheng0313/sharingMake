@@ -27,7 +27,7 @@
                 <el-table-column label="银行卡号" prop="bankCardNo" min-width="200"></el-table-column>
                 <el-table-column label="实发金额" prop="amount" min-width="170"></el-table-column>
                 <el-table-column label="订单状态" prop="statusStr" min-width="170"></el-table-column>
-                <el-table-column label="身份证号" prop="idCard" min-width="170"></el-table-column>
+                <el-table-column label="身份证号" prop="idCard" min-width="180"></el-table-column>
                 <el-table-column label="手机号" prop="phoneNo" min-width="170"></el-table-column>
                 <el-table-column label="代发订单号" prop="id" min-width="120"></el-table-column>
                 <el-table-column label="批次号" prop="orderBatchId" min-width="120"></el-table-column>

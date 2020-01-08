@@ -449,6 +449,7 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/helpers.scss";
 .salarySet-page {
+  height:calc(100vh - 90px);
   .step-style{
     width:100%;
     margin: 30px auto;
