@@ -59,7 +59,7 @@ export default {
       this.$store.commit(AT.SET_PRIVILIGEVOLiST,this.privilegeVOList);
     });
     // this.mainMenu = privilegeGroupTreeVO
-    // let privilegeVOList0 = this.privilegeVOList.map(it=>it.code);
+    // let privilegeVOList0 = privilegeVOList.map(it=>it.code);
     // this.$store.commit(AT.SET_PRIVILIGEVOLiST,privilegeVOList0);
   },
   mounted() {
