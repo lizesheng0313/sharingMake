@@ -4,6 +4,7 @@
       <el-row type="flex">
         <el-col :span="12">
           <span @click="$router.go(-1)" class="back-style">返回</span>
+          <span class="header-line">|</span>
           <span>上月收入与减除填写</span>
         </el-col>
       </el-row>
@@ -360,21 +361,10 @@ export default {
 .cumulative {
   .header {
     padding: 0 20px;
-    font-size: 17px;
+    font-size: 14px;
     height: 61px;
     line-height: 61px;
     border-bottom: 1px solid #ededed;
-    .add-table {
-      cursor: pointer;
-      float: right;
-      color: $mainColor;
-    }
-    .iconxinzeng {
-      font-size: 18px;
-      color: #9c9c9c;
-      position: relative;
-      top: 1px;
-    }
   }
   .selectCon{
     margin:10px 0px;
@@ -405,12 +395,13 @@ export default {
     }
   }
   .back-style{
-    color: $mainColor;
     display: inline-block;
-    line-height: 16px;
-    padding-right:10px;
-    border-right:1.5px solid #333;
     cursor: pointer;
+    color: $mainColor;
+  }
+  .header-line{
+    display: inline-block;
+    padding:0 10px;
   }
   .check-staff-menu {
     margin-top: 20px;

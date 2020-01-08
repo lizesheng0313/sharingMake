@@ -383,17 +383,21 @@
         </el-pagination>
       </div>
     </el-dialog>
+   <!--上月收入与减除填写提示 -->
+    <notification :notiShow="notiShow"></notification>
   </div>
 </template>
 <script>
   import { apiSalaryList,apiGetTaxSubjectList,apiSalaryItemEnableInfo,apiSalaryDetailExport,apiSocialProvident,floatItem,apiSalaryComputes,apiAuditSalaryCheck,apiExportDepartSum} from '../store/api'
   import salarySy from "@/components/tool/salarySy";
   import salaryBack from "@/components/tool/salaryBack";
+  import notification from "@/components/tool/notification";
   import { mapState } from "vuex";
   export default {
   components:{
      salarySy,
-     salaryBack
+     salaryBack,
+     notification,
   },
   data() {
     return {
@@ -436,6 +440,7 @@
         }
       ],
       screenTaxOption:[],
+      ruleId:this.$route.query.salaryRuleId,
       salaryForm:{
         checkId:this.$route.query.id,
         key:"",
@@ -514,7 +519,10 @@
       failList:[],
       isShowFail:false,
       isShowWaitReport:false,
-      isShowBigTable:false
+      isShowBigTable:false,
+      notiShow:{
+        isShow:false
+      }
     };
   },
   computed:{
@@ -561,6 +569,8 @@
         this.screenHeight = document.body.clientHeight - 430;
       })();
     };
+    // console.log(this.ruleId)
+    // this.notiShow.isShow = true;
     this.$store.commit("salaryCalStore/SET_ROULEID", this.salaryRuleId);
   },
   methods: {
