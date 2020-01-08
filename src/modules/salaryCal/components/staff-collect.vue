@@ -94,7 +94,7 @@
               <el-table-column label="国籍" width="100">
                 <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
               </el-table-column>
-              <el-table-column  label="反馈信息" width="110">
+              <el-table-column  label="反馈信息" width="150">
                 <template slot-scope="scope">
                   <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
                     <span class="hiden-con">{{ scope.row.failReason }}</span>

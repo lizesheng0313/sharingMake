@@ -68,7 +68,7 @@
 <!--                <span>{{ scope.row.empDay.split(' ')[0] }}</span>-->
 <!--              </template>-->
 <!--            </el-table-column>-->
-            <el-table-column prop="taxSubName" label="扣缴义务人名称" width="200">
+            <el-table-column prop="taxSubName" label="扣缴义务人名称" min-width="200">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
                   <span class="hiden-con">{{ scope.row.taxSubName }}</span>
@@ -107,14 +107,14 @@
                 <span>{{ downLoadStatusObj[scope.row.status]}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="反馈信息" min-width="150">
-              <template slot-scope="scope">
-                <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
-                  <span class="hiden-con">{{ scope.row.failReason }}</span>
-                </el-tooltip>
-                <span v-else>{{ scope.row.failReason }}</span>
-              </template>
-            </el-table-column>
+<!--            <el-table-column label="反馈信息" min-width="150">-->
+<!--              <template slot-scope="scope">-->
+<!--                <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">-->
+<!--                  <span class="hiden-con">{{ scope.row.failReason }}</span>-->
+<!--                </el-tooltip>-->
+<!--                <span v-else>{{ scope.row.failReason }}</span>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
