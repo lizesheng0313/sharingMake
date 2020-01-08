@@ -3,7 +3,7 @@
     <header class="header">
       <el-row type="flex">
         <el-col :span="12">
-          <span @click="$router.back(-1)" style="cursor: pointer;">返回</span>
+          <span @click="$router.back(-1)" class="back-style">返回</span>
           <span class="header-line">|</span>
           <span>工资表设置</span>
         </el-col>
@@ -475,6 +475,11 @@ export default {
     .add-table {
       cursor: pointer;
       float: right;
+      color: $mainColor;
+    }
+    .back-style{
+      display: inline-block;
+      cursor: pointer;
       color: $mainColor;
     }
     .iconxinzeng {
