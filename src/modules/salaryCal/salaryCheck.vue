@@ -15,7 +15,7 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item><router-link :to="{ path: '/tax/attach' }">专项附加扣除</router-link></el-dropdown-item>
-              <el-dropdown-item><router-link :to="{ path: '/cumulative' }">个税明细表初始化</router-link></el-dropdown-item>
+              <el-dropdown-item><router-link :to="{ path: '/initialize/cumulative' }">上月收入与减除填写</router-link></el-dropdown-item>
               <el-dropdown-item><router-link :to="{path:'/salarySet',query:{'isEdit':true}}">设置工资表</router-link></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
