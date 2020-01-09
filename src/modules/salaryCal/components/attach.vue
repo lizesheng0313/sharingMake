@@ -62,7 +62,9 @@
           >
             <el-table-column width="60" label="序号" type="index"></el-table-column>
             <el-table-column prop="empName" label="姓名" width="80"></el-table-column>
+            <el-table-column prop="empNo" label="工号" width="180"></el-table-column>
             <el-table-column prop="idNo" label="身份证号" width="180"></el-table-column>
+
 <!--            <el-table-column label="入职日期">-->
 <!--              <template slot-scope="scope">-->
 <!--                <span>{{ scope.row.empDay.split(' ')[0] }}</span>-->

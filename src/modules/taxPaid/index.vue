@@ -68,11 +68,11 @@
               <el-popover
                 ref="popMore"
                 placement="bottom-end"
-                width="250"
+                width="120"
                 trigger="hover">
-                <span class="funStyle" @click="getTripleAgreement(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.downloadProtocol')">获取三方协议下载</span>
-                <span class="funStyle" @click="getTripleAgreementQuery(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.downloadProtocol')">三方协议反馈</span>
-                <span slot="reference" class="more-choose">更多>></span>
+                <span class="funStyle more-style" @click="getTripleAgreement(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.downloadProtocol')">获取三方协议下载</span>
+                <span class="funStyle more-style" @click="getTripleAgreementQuery(scope.row)" v-if="privilegeVoList.includes('salary.taxpay.paytax.downloadProtocol')">三方协议反馈</span>
+                <span slot="reference" class="more-choose">更多</span>
               </el-popover>
             </template>
           </el-table-column>
@@ -353,9 +353,6 @@ export default {
   .taxPaidCon{
     padding:20px;
   }
-  .table-con{
-
-  }
   .more-choose{
     color: #2c7cff;
     cursor: pointer;
@@ -377,6 +374,10 @@ export default {
     text-align: center;
     margin-top: 20px;
   }
+}
+.more-style{
+  display: inline-block;
+  line-height: 28px;
 }
 </style>
 
