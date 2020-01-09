@@ -10,7 +10,17 @@
     <div class="flex-center">
       <div>
         <el-button type="default" @click="dlgFilter = true">筛选</el-button>
-        <el-input placeholder="" v-model="searchFormData.id" prefix-icon="iconiconfonticonfontsousuo1 iconfont" class="search-input"></el-input>
+        <el-date-picker
+          v-model="searchFormData.completeTime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          :default-time="['00:00:00', '23:59:59']"
+          :unlink-panels="true"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始月份"
+          end-placeholder="结束月份"
+          @change="changeCompleteTime"
+        ></el-date-picker>
         <el-button type="primary" @click="handleSearch">查询</el-button>
       </div>
       <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.withdraw.export')">导出</el-button>
@@ -38,7 +48,7 @@
         :total="total"
       ></el-pagination>
     </div>
-    <el-dialog width="52%" center :close-on-click-modal="false" v :visible.sync="dlgFilter">
+    <el-dialog width="52%" center :close-on-click-modal="false" v :visible.sync="dlgFilter" class="select-dialog">
       <el-form
         label-position="right"
         label-width="100px"
@@ -59,18 +69,6 @@
         <el-form-item label="创建时间：" prop="countTime">
           <el-date-picker
             v-model="searchFormData.countTime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            :default-time="['00:00:00', '23:59:59']"
-            :unlink-panels="true"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始月份"
-            end-placeholder="结束月份"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="完成时间：" prop="completeTime">
-          <el-date-picker
-            v-model="searchFormData.completeTime"
             value-format="yyyy-MM-dd HH:mm:ss"
             :default-time="['00:00:00', '23:59:59']"
             :unlink-panels="true"
@@ -185,6 +183,10 @@ export default {
       this.fetchTableList(1);
       this.dlgFilter = false;
     },
+    //开始结束时间筛选
+    changeCompleteTime() {
+      this.fetchTableList()
+    },
     handleCurrentChange(e) {
       this.fetchTableList(e);
     },
@@ -229,6 +231,18 @@ export default {
     width: 200px !important;
   }
   .search-input{
+    margin:0 20px;
+  }
+  .select-dialog{
+    .el-range-editor.el-input__inner {
+      line-height: 35px;
+      height: 35px;
+    }
+  }
+  .el-range-editor.el-input__inner {
+    line-height:39px;
+  }
+  .el-range-editor {
     margin:0 20px;
   }
 }
