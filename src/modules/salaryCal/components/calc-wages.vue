@@ -887,7 +887,7 @@
       for(let key in this.salaryForm.queryFilterParam){
         this.salaryForm["queryFilterParam"][key] = "";
       }
-      this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
+      // this.salaryForm.queryFilterParam.enterEndTime = this.nowDate;
       this.noEnumEmpType = null;
       this.enumEmpType = [];
       this.salaryForm.queryFilterParam.enumEmpTypes = [];
