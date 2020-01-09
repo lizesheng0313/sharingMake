@@ -384,7 +384,7 @@
       </div>
     </el-dialog>
    <!--上月收入与减除填写提示 -->
-    <notification :notiShow="notiShow"></notification>
+    <notification :notiShow="notiShow" :ruleId="ruleId" :actionUrl="actionUrl"></notification>
   </div>
 </template>
 <script>
@@ -440,7 +440,6 @@
         }
       ],
       screenTaxOption:[],
-      ruleId:this.$route.query.salaryRuleId,
       salaryForm:{
         checkId:this.$route.query.id,
         key:"",
@@ -522,7 +521,9 @@
       isShowBigTable:false,
       notiShow:{
         isShow:false
-      }
+      },
+      actionUrl:"salaryCalStore/actionPostTips",
+      ruleId:""
     };
   },
   computed:{
@@ -569,8 +570,9 @@
         this.screenHeight = document.body.clientHeight - 430;
       })();
     };
-    // console.log(this.ruleId)
-    // this.notiShow.isShow = true;
+    //是否显示提示
+    this.showTips()
+    this.ruleId = typeof(this.salaryRuleId) === "number" ? this.salaryRuleId.toString():this.salaryRuleId
     this.$store.commit("salaryCalStore/SET_ROULEID", this.salaryRuleId);
   },
   methods: {
@@ -627,6 +629,19 @@
         .then(res => {
           this.failList = res.data;
         })
+    },
+    showTips(){
+      this.$store
+        .dispatch("salaryCalStore/actionPostTips", {
+          ruleId:this.salaryRuleId,
+          salaryHideTip:"",
+        })
+        .then(res => {
+          if(res.success){
+            this.notiShow.isShow = !res.data.salaryHideTip;
+          }
+        })
+
     },
     handleBigTable(){
       this.isShowBigTable = true

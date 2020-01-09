@@ -1,4 +1,4 @@
-import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery,apiSocialProvidentExport,apiCheckEmpReportStatus,apiPayrollCredit,apiSalaryCheckFailRecord,apiSalaryCheckFailRecordExport,apiPayrollCreditCancel,apiGetAdditionalListExport,apiPayrollCreditExport} from './api'
+import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery,apiSocialProvidentExport,apiCheckEmpReportStatus,apiPayrollCredit,apiSalaryCheckFailRecord,apiSalaryCheckFailRecordExport,apiPayrollCreditCancel,apiGetAdditionalListExport,apiPayrollCreditExport,apiTips} from './api'
 
 export const actionGetSalaryStatus = ({ dispatch },id) => {
   return apiGetSalaryStatus(id);
@@ -10,6 +10,10 @@ export const actionGetSalaryStubsList = ({ dispatch },form) => {
 //薪资表合计
 export const actionPostSalarySum = ({ dispatch },form) => {
   return apiSalarySum(form);
+}
+//薪资核算提示
+export const actionPostTips = ({ dispatch },form) => {
+  return apiTips(form);
 }
 //下载人员模板
 export const postCheckMemberDownload = ({ dispatch }) => {

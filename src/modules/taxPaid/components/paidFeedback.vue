@@ -73,7 +73,8 @@ export default {
         if(res.success){
           // 已授权，有查询结果
           if(res.data.status === "SUCCESS"){
-            this.reportReturnList = res.data.taxSubList;
+            this.reportInfoList = res.data.taxSubList;
+            this.isShowReturnInfo = true;
             if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
               this.showReturn = true;
             }
