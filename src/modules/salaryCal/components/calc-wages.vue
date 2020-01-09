@@ -571,8 +571,8 @@
       })();
     };
     //是否显示提示
-    this.showTips()
-    this.ruleId = typeof(this.salaryRuleId) === "number" ? this.salaryRuleId.toString():this.salaryRuleId
+    // this.showTips()
+    // this.ruleId = typeof(this.salaryRuleId) === "number" ? this.salaryRuleId.toString():this.salaryRuleId;
     this.$store.commit("salaryCalStore/SET_ROULEID", this.salaryRuleId);
   },
   methods: {
