@@ -597,7 +597,6 @@
              this.countData = res.data.tableData[0]['diyrow']
              this.countData.forEach(item=>{
                if(item.col==="序号"){item.val="合计"}
-               if(item.col == '姓名'){item.val = null}
              })
              // this.noCountData = [];
              // this.countData.forEach(item=>{
