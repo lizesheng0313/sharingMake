@@ -10,7 +10,9 @@
     <div class="flex-center">
       <div class="main-content">
         <el-button type="default" @click="dlgFilter = true">筛选</el-button>
-        <el-date-picker
+        <span class="picker-time">
+          完成时间：
+          <el-date-picker
           v-model="searchFormData.completeTime"
           value-format="yyyy-MM-dd HH:mm:ss"
           :default-time="['00:00:00', '23:59:59']"
@@ -21,6 +23,7 @@
           end-placeholder="结束月份"
           @change="changeCompleteTime"
         ></el-date-picker>
+        </span>
         <el-button type="primary" @click="handleSearch">查询</el-button>
       </div>
       <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.recharge.export')">导出</el-button>
@@ -262,7 +265,7 @@ export default {
   .el-range-editor.el-input__inner {
       line-height:39px;
     }
-  .el-range-editor {
+  .picker-time {
     margin:0 20px;
   }
 }
