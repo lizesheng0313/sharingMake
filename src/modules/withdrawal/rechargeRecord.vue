@@ -11,7 +11,6 @@
       <div class="main-content">
         <el-button type="default" @click="dlgFilter = true">筛选</el-button>
         <span class="picker-time">
-          完成时间：
           <el-date-picker
           v-model="searchFormData.completeTime"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -19,12 +18,11 @@
           :unlink-panels="true"
           type="daterange"
           range-separator="至"
-          start-placeholder="开始月份"
-          end-placeholder="结束月份"
-          @change="changeCompleteTime"
+          start-placeholder="完成时间始"
+          end-placeholder="完成时间止"
         ></el-date-picker>
         </span>
-        <el-button type="primary" @click="handleSearch">查询</el-button>
+        <el-button type="primary" @click="changeCompleteTime">查询</el-button>
       </div>
       <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.recharge.export')">导出</el-button>
     </div>
@@ -58,7 +56,6 @@
         :total="total"
       ></el-pagination>
     </div>
-
     <el-dialog width="52%" center :close-on-click-modal="false" v :visible.sync="dlgFilter" class="select-dialog">
       <el-form
         label-position="right"
@@ -131,7 +128,8 @@ export default {
       },
       tableList: [],
       dlgFilter: false,
-      screenHeight:document.body.clientHeight - 280
+      screenHeight:document.body.clientHeight - 280,
+      separator:""
     };
   },
   computed: {
@@ -186,16 +184,6 @@ export default {
     handleSearchForm() {
       this.fetchTableList(1);
       this.dlgFilter = false;
-    },
-    handleSearch() {
-      const param = {
-        currPage: 1,
-        pageSize: 10,
-        id: this.searchFormData.id
-      };
-      this.$store.dispatch("withdrawalPageStore/actionRecordslist", param).then(() => {
-        this.loading = false;
-      });
     },
     //开始结束时间筛选
     changeCompleteTime() {
