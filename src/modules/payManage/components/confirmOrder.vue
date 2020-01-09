@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            <el-button @click="handleDeleteBatch">删除批次</el-button>
+            <el-button @click="handleDeleteBatch" style="float: right">删除批次</el-button>
         </div>
         <div class="total">
             <div>
@@ -294,7 +294,7 @@ export default {
         .nav {
             display: flex;
             .nav-item {
-                width: 260px;
+                width: 247px;
                 border: 1px solid #ccc;
                 border-radius: 3px;
                 padding: 10px;
