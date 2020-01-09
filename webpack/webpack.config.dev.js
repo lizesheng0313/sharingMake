@@ -53,12 +53,12 @@ const config = Object.assign(webpackConfigBase.config, {
         //小白
         // target:" http://172.19.65.31:9999",
         //苏宇
-        // target:"http:172.19.64.66:9999",
+        // target:"http://172.19.64.66:9999",
         secure: false,
         changeOrigin: true,
         // pathRewrite: {
-        //         //   '/xsalary': ''   //需要rewrite的,
-        //         // }
+        //     '^/api/xsalary/': '/api/'  //需要rewrite的,
+        //     }
       },
       // koa 代码在 ./mock 目录中，启动命令为 npm run mock。
       // '/mockapi': {

@@ -332,3 +332,12 @@
 .v-modal {
   z-index: 2000 !important;
 }
+
+.notification {
+  .check-tip {
+    margin-top:4px;
+    .el-checkbox__label {
+      font-size: 12px;
+    }
+  }
+}

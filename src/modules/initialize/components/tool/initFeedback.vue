@@ -14,7 +14,6 @@
         <div v-if="item.dealStatus === 'PROCESSING'">任务处理中…</div>
         <div v-if="item.dealStatus === 'FAIL'">任务失败，{{item.failReason}}</div>
       </el-row>
-      <div v-loading="reportInfoLoading" style="height: 40px"></div>
       <div v-show="showReturn" style="color:#E6A23C">任务仍在处理中，请稍后点击{{ paramsObj.freeBackTip }}查询结果</div>
       <div class="dialog-footer">
         <el-button @click="onIknow" v-show="isShowIknow" type="primary" plain>我知道了</el-button>
@@ -45,7 +44,6 @@ export default {
       closeModel:false,
       reportInfoList:[],
       showReturn:false,
-      reportInfoLoading:false,
       isShowIknow:false
     };
   },

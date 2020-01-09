@@ -60,9 +60,9 @@
                   <span class="table-name" @click="handleCollectionName(scope.row)">{{scope.row.empName }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="idType" label="证件类型" width="150">
-                <template slot-scope="scope">{{scope.row.idType | idType}}</template>
-              </el-table-column>
+<!--              <el-table-column prop="idType" label="证件类型" width="150">-->
+<!--                <template slot-scope="scope">{{scope.row.idType | idType}}</template>-->
+<!--              </el-table-column>-->
               <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
 <!--              <el-table-column prop="empSex" label="性别">-->
 <!--                <template slot-scope="scope">{{returnStatus('empSex',scope.row.empSex)}}</template>-->
@@ -94,7 +94,7 @@
               <el-table-column label="国籍" width="100">
                 <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
               </el-table-column>
-              <el-table-column  label="反馈信息" width="110">
+              <el-table-column  label="反馈信息" width="150">
                 <template slot-scope="scope">
                   <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
                     <span class="hiden-con">{{ scope.row.failReason }}</span>

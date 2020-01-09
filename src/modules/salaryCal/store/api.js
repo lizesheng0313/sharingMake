@@ -1,8 +1,17 @@
 import { fetch,fetchFile } from 'request/fetch'
+import oldfetch from 'request/oldFetch'
 //保存基本信息
 export function apiSaveSalaryRule(form) {
   return fetch({
     url: '/api/xsalary/salary/rule/save',
+    method: 'post',
+    data: form
+  })
+}
+//设置薪资核算弹窗提示
+export function apiTips(form) {
+  return oldfetch({
+    url: '/xsalary/salary/tips',
     method: 'post',
     data: form
   })
