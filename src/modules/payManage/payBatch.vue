@@ -116,11 +116,15 @@ export default {
             this.salaryMasterId = row.masterId;
         },
         handleConfirmSelect() {
-            const { salaryType } = this;
-            if (salaryType == "create") {
-                this.cbCreateSalary();
+            const { salaryType, monthSelected } = this;
+            if (monthSelected) {
+                if (salaryType == "create") {
+                    this.cbCreateSalary();
+                } else {
+                    this.cbImportSalary();
+                }
             } else {
-                this.cbImportSalary();
+                this.$message("请选择发放月份！");
             }
         },
         cbCreateSalary() {
