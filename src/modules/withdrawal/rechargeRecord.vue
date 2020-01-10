@@ -20,6 +20,7 @@
           range-separator="至"
           start-placeholder="完成时间始"
           end-placeholder="完成时间止"
+          :clearable="clearable"
         ></el-date-picker>
         </span>
         <el-button type="primary" @click="changeCompleteTime">查询</el-button>
@@ -91,6 +92,7 @@
             range-separator="至"
             start-placeholder="开始月份"
             end-placeholder="结束月份"
+            :clearable="clearable"
           ></el-date-picker>
         </el-form-item>
       </el-form>
@@ -129,7 +131,8 @@ export default {
       tableList: [],
       dlgFilter: false,
       screenHeight:document.body.clientHeight - 280,
-      separator:""
+      separator:"",
+      clearable:false,
     };
   },
   computed: {

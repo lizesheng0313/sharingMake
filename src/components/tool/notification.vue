@@ -5,7 +5,7 @@
         <div>
           <p>初次使用本系统计算本月个税与工资前，若上月个税暂未向税局申报，请导入上月收入与减除。否则无法获取累计收入等计税累计项的值</p>
           <p class="tip">操作路径：本界面右上角【更多 - 上月收入与减除填写】</p>
-          <p class="check-tip"><el-checkbox v-model="salaryHideTip">不在提示</el-checkbox></p>
+          <p class="check-tip"><el-checkbox v-model="salaryHideTip">不再提示</el-checkbox></p>
         </div>
     </div>
     <i class="el-icon-close" @click="closeNoti"></i>

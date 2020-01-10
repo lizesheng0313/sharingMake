@@ -20,6 +20,7 @@
               range-separator="至"
               start-placeholder="完成时间始"
               end-placeholder="完成时间止"
+              :clearable="clearable"
             ></el-date-picker>
         </span>
 
@@ -28,7 +29,7 @@
       <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.withdraw.export')">导出</el-button>
     </div>
     <div class="main-content">
-      <el-table :data="tableList" v-loading="loading"  border :height="screenHeight">
+      <el-table :data="tableList" v-loading="loading" border :height="screenHeight">
         <el-table-column label="提现订单ID" prop="id" min-width="120"></el-table-column>
         <el-table-column label="订单状态" prop="mercialName" min-width="170">
           <template slot-scope="scope">{{withdrawStatus[scope.row.status]}}</template>
@@ -78,6 +79,7 @@
             range-separator="至"
             start-placeholder="开始月份"
             end-placeholder="结束月份"
+            :clearable="clearable"
           ></el-date-picker>
         </el-form-item>
       </el-form>
@@ -114,7 +116,8 @@ export default {
       },
       tableList: [],
       dlgFilter: false,
-      screenHeight : document.body.clientHeight - 280
+      screenHeight : document.body.clientHeight - 280,
+      clearable:false,
     };
   },
   computed: {
