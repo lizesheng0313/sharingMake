@@ -304,14 +304,14 @@ a {
   //height: 34px;
   //margin-left: 4px;
   input {
-    width: 150px;
+    width: 120px;
   }
 }
 .el-date-editor--daterange.el-input,
 .el-date-editor--daterange.el-input__inner,
 .el-date-editor--timerange.el-input,
 .el-date-editor--timerange.el-input__inner {
-  width: 380px !important;
+  width: 330px;
   overflow: auto;
 }
 .el-table th > .cell {
