@@ -76,7 +76,7 @@ export default {
   background-position: center center;
   .router-view {
     box-sizing: border-box;
-    padding: 0px 0 0 15px;
+    /*padding: 0px 0 0 15px;*/
     overflow: auto;
   }
   .no-margin {
