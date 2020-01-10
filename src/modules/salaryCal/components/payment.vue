@@ -225,20 +225,20 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/scss/helpers.scss";
 .payment {
-  margin-top:120px;
+  width: 1300px;
+  margin: 120px auto;
   padding: 0px 40px 120px 40px;
   display: flex;
   .box{
-    width:160px;
-    margin:0 10px;
+    width:400px;
+    margin:0 20px;
     height: 188px;
     position: relative;
     margin-bottom:30px;
     border:1px solid #EBEEF5;
     border-radius: 4px;
-    flex:1;
     .box-con{
-      margin-left:56px;
+      margin-left:30px;
       margin-top: 10px;
       padding-top: 40px;
       img{
