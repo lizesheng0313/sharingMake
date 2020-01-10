@@ -169,16 +169,6 @@ export default {
       this.fetchTableList(1);
       this.dlgFilter = false;
     },
-    handleSearch() {
-      const param = {
-        currPage: 1,
-        pageSize: 10,
-        id: this.searchFormData.id
-      };
-      this.$store.dispatch("withdrawalPageStore/actionWithdrawList", param).then(() => {
-        this.loading = false;
-      });
-    },
     handleResetForm(formName) {
       this.searchFormData.startTime = null;
       this.searchFormData.endTime = null;
