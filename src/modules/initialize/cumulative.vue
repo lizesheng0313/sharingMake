@@ -52,7 +52,7 @@
       <div class="staff-table" ref="tableCon">
         <div class="floating-menu" v-if="deleteIdsForm.ids.length>0">
           <span>已选中{{deleteIdsForm.ids.length}}人</span>
-          <el-button size="mini" class="button-mini" @click="handleDeleteItem">批量删除</el-button>
+          <el-button size="small" class="button-mini" @click="handleDeleteItem">批量删除</el-button>
         </div>
         <el-table
           :data="list"
