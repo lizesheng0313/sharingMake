@@ -57,7 +57,7 @@
                 <div>可代发订单：<span class="color-green">{{batchInfo.checkSuccessNum}} 笔</span></div>
                 <div>总代发金额：<span class="color-green">{{batchInfo.checkSuccessAmount}} 元</span></div>
             </div>
-            <el-button type="primary" @click="handleConfirmOrder" v-if="privilegeVoList.includes('salary.psalaryIssuing.batchRecord.pay')">确认代发</el-button>
+            <el-button type="primary" :disabled="batchInfo.checkSuccessAmount == 0" @click="handleConfirmOrder" v-if="privilegeVoList.includes('salary.psalaryIssuing.batchRecord.pay')">确认代发</el-button>
         </div>
         <el-table border :data="orderList" v-loading="loading" :header-cell-style="{background:'#F5F5F5'}">
             <el-table-column label="批次号" prop="orderBatchId"></el-table-column>
