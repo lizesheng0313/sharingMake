@@ -22,7 +22,7 @@
               <el-form-item label="发薪中人数:">
                   <span>{{salaryInfo.sendingNum}}</span>
               </el-form-item>
-              <el-form-item label="代发薪人数:">
+              <el-form-item label="待发薪人数:">
                   <span>{{salaryInfo.readyNum}}</span>
               </el-form-item>
           </el-form>

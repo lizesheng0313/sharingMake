@@ -476,7 +476,7 @@ export default {
           let _accountForm = {...this.accountForm};
           if(type == 'right'){
             _accountForm.id = "";
-            _accountForm.type = "right";
+            _accountForm.type = "add";
           }
           this.$store
             .dispatch("accountPageStore/actionCreateAccount", _accountForm)

@@ -52,7 +52,7 @@
       <div class="staff-table" ref="tableCon">
         <div class="floating-menu" v-if="deleteIdsForm.ids.length>0">
           <span>已选中{{deleteIdsForm.ids.length}}人</span>
-          <el-button size="mini" class="button-mini" @click="handleDeleteItem">批量删除</el-button>
+          <el-button size="small" class="button-mini" @click="handleDeleteItem">批量删除</el-button>
         </div>
         <el-table
           :data="list"
@@ -171,7 +171,7 @@
     <import-data
       ref="import"
       :radioList="radioList"
-      :title="'个税明细表导入'"
+      :title="'收入与减除导入'"
       :apiCheck="'/api/xsalary/taxTotalBase/importTaxTotalBaseCheck'"
       :apiDownloadLog="'cumulativePageStore/getExportErrorRecord'"
       :apiDownloadTemplate="'cumulativePageStore/actionDownloadTemplate'"
@@ -181,7 +181,7 @@
       :impoartAction="'cumulativePageStore/actionImportTaxTotalBaseSuccess'"
       @getLoading="refresh"
       :uploadFileData="uploadFileData"
-      :tips="'说明：若本年度纳税主体下员工已存在累计值，再次导入后将覆盖原数据'"
+      :tips="'说明：再次导入后将覆盖同月数据'"
     ></import-data>
   </div>
 </template>

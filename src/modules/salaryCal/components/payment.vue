@@ -1,52 +1,54 @@
 <template>
   <div class="payment">
-    <div class="box">
-      <div class="box-con">
-        <img src="../../../assets/images/bank.png" alt="" width="49px" height="50px">
-        <div class="box-fun">
-          <p class="box-title">银行代发</p>
-          <p class="tip">使用银行代发服务完成在线发薪</p>
-          <div v-if="!payrollStatus || payrollStatus ==='INIT' || payrollStatus ==='CANCEL' && privilegeVoList.includes('salary.compute.salaryCheck.payroll')">
-            <el-button type="primary" @click="sendData">提交代发数据</el-button>
-          </div>
-          <div v-else v-show="privilegeVoList.includes('salary.compute.salaryCheck.payroll')">
-            <el-button type="primary" @click="$router.push('/pay-batch')">前往代发</el-button>
-            <el-button type="primary" @click="cancelPayroll">撤销代发</el-button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="box">
-      <div class="box-con">
-        <img src="../../../assets/images/item1.png" alt="" width="49px" height="50px">
-        <div class="box-fun">
-          <p class="box-title">银行报盘</p>
-          <p class="tip">导出姓名、银行卡号、实发工资</p>
-          <a :href="'/api/xsalary/salary/stubs/exportReport/'+checkId" style="color:#fff;" v-if="privilegeVoList.includes('salary.compute.salaryCheck.bankOffer')"><el-button type="primary">导出</el-button></a>
-        </div>
-      </div>
-    </div>
-    <div class="box">
-      <div class="box-con">
-        <img src="../../../assets/images/item2.png" alt="" width="49px" height="50px">
-        <div class="box-fun">
-          <p class="box-title">发放工资条</p>
-          <p class="tip">员工可在微信小程序中查看工资条<span class="seeExample" v-popover:salaryExample>预览实例</span></p>
-          <el-popover
-            ref="salaryExample"
-            placement="right"
-            width="200"
-            trigger="click">
-            <img src="../../../assets/images/salary.png" width="200px" alt="">
-          </el-popover>
-          <el-button type="primary" @click="sendSalary" v-if="checkStatus === 'AUDITED' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">生成工资条</el-button>
-          <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">
-            <el-button type="primary" @click="seeRecord">查看发放记录</el-button>
-            <el-button type="info" @click="deleteSalary">删除发放</el-button>
+    <div class="box-contain">
+      <div class="box">
+        <div class="box-con">
+          <img src="../../../assets/images/bank.png" alt="" width="49px" height="50px">
+          <div class="box-fun">
+            <p class="box-title">银行代发</p>
+            <p class="tip">使用银行代发服务完成在线发薪</p>
+            <div v-if="!payrollStatus || payrollStatus ==='INIT' || payrollStatus ==='CANCEL' && privilegeVoList.includes('salary.compute.salaryCheck.payroll')">
+              <el-button type="primary" @click="sendData">提交代发数据</el-button>
+            </div>
+            <div v-else v-show="privilegeVoList.includes('salary.compute.salaryCheck.payroll')">
+              <el-button type="primary" @click="$router.push('/pay-batch')">前往代发</el-button>
+              <el-button type="primary" @click="cancelPayroll">撤销代发</el-button>
+            </div>
           </div>
         </div>
       </div>
-      <i class="el-icon-setting" @click="showSalarySet" v-if="privilegeVoList.includes('salary.compute.salaryCheck.providStubs')"></i>
+      <div class="box">
+        <div class="box-con">
+          <img src="../../../assets/images/item1.png" alt="" width="49px" height="50px">
+          <div class="box-fun">
+            <p class="box-title">银行报盘</p>
+            <p class="tip">导出姓名、银行卡号、实发工资</p>
+            <a :href="'/api/xsalary/salary/stubs/exportReport/'+checkId" style="color:#fff;" v-if="privilegeVoList.includes('salary.compute.salaryCheck.bankOffer')"><el-button type="primary">导出</el-button></a>
+          </div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box-con">
+          <img src="../../../assets/images/item2.png" alt="" width="49px" height="50px">
+          <div class="box-fun">
+            <p class="box-title">发放工资条</p>
+            <p class="tip">员工可在微信小程序中查看工资条<span class="seeExample" v-popover:salaryExample>预览实例</span></p>
+            <el-popover
+              ref="salaryExample"
+              placement="right"
+              width="200"
+              trigger="click">
+              <img src="../../../assets/images/salary.png" width="200px" alt="">
+            </el-popover>
+            <el-button type="primary" @click="sendSalary" v-if="checkStatus === 'AUDITED' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">生成工资条</el-button>
+            <div v-if="checkStatus === 'PAID' || checkStatus === 'FINISH' && privilegeVoList.includes('salary.compute.salaryCheck.providStubs')">
+              <el-button type="primary" @click="seeRecord">查看发放记录</el-button>
+              <el-button type="info" @click="deleteSalary">删除发放</el-button>
+            </div>
+          </div>
+        </div>
+        <i class="el-icon-setting" @click="showSalarySet" v-if="privilegeVoList.includes('salary.compute.salaryCheck.providStubs')"></i>
+      </div>
     </div>
     <right-pop :pop-show="popShow" :has-footer="false" popTitle="工资条设置" :popWidth="600">
       <div slot="pop-content">
@@ -225,20 +227,26 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/scss/helpers.scss";
 .payment {
-  margin-top:120px;
-  padding: 0px 40px 120px 40px;
-  display: flex;
+  width: 100%;
+  overflow: auto;
+  .box-contain{
+    width: 1300px;
+    margin: 120px auto;
+    padding:0px 10px;
+    /*padding: 0px 40px 120px 40px;*/
+    display: flex;
+    display:-webkit-box;
+  }
   .box{
-    width:160px;
-    margin:0 10px;
+    width:400px;
     height: 188px;
     position: relative;
     margin-bottom:30px;
     border:1px solid #EBEEF5;
     border-radius: 4px;
-    flex:1;
+    margin-right: 46px;
     .box-con{
-      margin-left:56px;
+      margin-left:30px;
       margin-top: 10px;
       padding-top: 40px;
       img{

@@ -10,7 +10,7 @@
             <div>
                 <el-row style="margin:40px 0;">
                     <span>请下载批量代付导入模板，按规定格式上传</span>
-                    <el-button size="mini" @click="handleDownloadTemplate">下载模板</el-button>
+                    <el-button size="small" @click="handleDownloadTemplate">下载模板</el-button>
                 </el-row>
                 <el-row v-loading="uploadLoading" element-loading-text="正在上传文件，请耐心等待....">
                     <el-col>

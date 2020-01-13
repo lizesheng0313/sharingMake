@@ -10,8 +10,20 @@
     <div class="flex-center">
       <div class="main-content">
         <el-button type="default" @click="dlgFilter = true">筛选</el-button>
-        <el-input placeholder="" v-model="searchFormData.id" prefix-icon="iconiconfonticonfontsousuo1 iconfont" class="search-input"></el-input>
-        <el-button type="primary" @click="handleSearch">查询</el-button>
+        <span class="picker-time">
+          <el-date-picker
+          v-model="searchFormData.completeTime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          :default-time="['00:00:00', '23:59:59']"
+          :unlink-panels="true"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="完成时间始"
+          end-placeholder="完成时间止"
+          :clearable="clearable"
+        ></el-date-picker>
+        </span>
+        <el-button type="primary" @click="changeCompleteTime">查询</el-button>
       </div>
       <el-button @click="handleExport" v-if="privilegeVoList.includes('salary.account.recharge.export')">导出</el-button>
     </div>
@@ -45,8 +57,7 @@
         :total="total"
       ></el-pagination>
     </div>
-
-    <el-dialog width="52%" center :close-on-click-modal="false" v :visible.sync="dlgFilter">
+    <el-dialog width="52%" center :close-on-click-modal="false" v :visible.sync="dlgFilter" class="select-dialog">
       <el-form
         label-position="right"
         label-width="100px"
@@ -81,18 +92,7 @@
             range-separator="至"
             start-placeholder="开始月份"
             end-placeholder="结束月份"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="完成时间：" prop="completeTime">
-          <el-date-picker
-            v-model="searchFormData.completeTime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            :default-time="['00:00:00', '23:59:59']"
-            :unlink-panels="true"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始月份"
-            end-placeholder="结束月份"
+            :clearable="clearable"
           ></el-date-picker>
         </el-form-item>
       </el-form>
@@ -130,7 +130,9 @@ export default {
       },
       tableList: [],
       dlgFilter: false,
-      screenHeight:document.body.clientHeight - 280
+      screenHeight:document.body.clientHeight - 280,
+      separator:"",
+      clearable:false,
     };
   },
   computed: {
@@ -186,15 +188,9 @@ export default {
       this.fetchTableList(1);
       this.dlgFilter = false;
     },
-    handleSearch() {
-      const param = {
-        currPage: 1,
-        pageSize: 10,
-        id: this.searchFormData.id
-      };
-      this.$store.dispatch("withdrawalPageStore/actionRecordslist", param).then(() => {
-        this.loading = false;
-      });
+    //开始结束时间筛选
+    changeCompleteTime() {
+      this.fetchTableList()
     },
     handleResetForm(formName) {
       this.searchFormData.startTime = null;
@@ -251,5 +247,18 @@ export default {
   .search-input{
     margin: 0 20px;
   }
+  .select-dialog{
+    .el-range-editor.el-input__inner {
+      line-height: 35px;
+      height: 35px;
+    }
+  }
+  .el-range-editor.el-input__inner {
+      line-height:39px;
+    }
+  .picker-time {
+    margin:0 20px;
+  }
 }
+
 </style>
