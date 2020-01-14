@@ -226,6 +226,7 @@ export default {
                 if (res.success) {
                     this.$store.dispatch("payManageStore/postReSend", paramsSend).then(res => {
                         if (res.success) {
+                            this.dlgEdite = false;
                             let newTab = window.open("about:blank");
                             let html = utils.createAutoCommitFormHtml(res.data.resp);
                             newTab.document.write(html);
