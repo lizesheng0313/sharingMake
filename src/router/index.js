@@ -12,6 +12,7 @@ import accountPageRouter from 'modules/account/router'
 import payManageRouter from 'modules/payManage/router'
 import withdrawal from 'modules/withdrawal/router'
 import resultRouter from 'modules/result/router'
+import socialFund from 'modules/socialFund/router'
 
 
 
@@ -37,7 +38,9 @@ let router = new Router({
     ...accountPageRouter,
     ...payManageRouter,
     ...withdrawal,
-    ...resultRouter
+    ...resultRouter,
+    ...socialFund
+
   ]
 })
 routerConfig(router)

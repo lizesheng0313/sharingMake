@@ -40,6 +40,13 @@ export default {
           url: "/home",
           index: 0,
           icon:"iconshouye"
+        },
+        {
+          businessCode: null,
+          name: "增减员",
+          url: "/attrition",
+          index: 0,
+          icon:"iconshouye"
         }
       ]
       }

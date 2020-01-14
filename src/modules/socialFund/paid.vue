@@ -4,7 +4,7 @@
       <header class="header main-title">
         <el-row type="flex">
           <el-col :span="12">
-            <span>扣缴义务人</span>
+            <span>扣缴义务人管理</span>
           </el-col>
         </el-row>
       </header>
@@ -23,7 +23,7 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="handleShowBox">新增</el-button>
+              <el-button type="primary" class="add-import" @click="handleShowBox" v-if="privilegeVoList.includes('salary.init.taxSubject.save')">新增</el-button>
             </div>
           </div>
           <div class="staff-table">
@@ -34,66 +34,69 @@
               :data="list"
               class="check-staff_table"
               :style="{width:screenWidth-285+'px'}"
+              :height="screenHeight"
               v-loading="loading"
+              border
             >
               <el-table-column label="序号" type="index"></el-table-column>
-              <el-table-column prop="taxSubName" label="扣缴义务人名称"></el-table-column>
-              <el-table-column prop="taxPayerNo" label="纳税人识别号"></el-table-column>
+              <el-table-column prop="taxSubName" label="扣缴义务人名称" width="200px" align="left">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>12">
+                    <span class="hiden-con">{{ scope.row.taxSubName }}</span>
+                  </el-tooltip>
+                  <span v-else>{{ scope.row.taxSubName }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="taxPayerNo" label="纳税人识别号" width="180px" align="left"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
               <el-table-column prop="remark" label="经办人姓名"></el-table-column>
-              <el-table-column prop="accreditStatus" label="授权状态"></el-table-column>
-              <el-table-column prop="failReason" label="未通过原因"></el-table-column>
-              <el-table-column label="操作" fixed="right">
+              <el-table-column prop="accreditStatus" label="验证状态">
                 <template slot-scope="scope">
-                  <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
-                  <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
+                  <span>{{scope.row.accreditStatus | accreditStatus}}</span>
                 </template>
-            </el-table-column>
+              </el-table-column>
+              <el-table-column prop="failReason" label="未通过原因" width="160px">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" v-if="scope.row.failReason && scope.row.failReason.length>10">
+                    <span class="hiden-con">{{ scope.row.failReason }}</span>
+                  </el-tooltip>
+                  <span v-else>{{ scope.row.failReason }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" fixed="right" width="160px">
+                <template slot-scope="scope">
+                  <span @click="handleQuery(scope.row)" v-if="scope.row.accreditStatus==='WAIT_ACCREDIT'" class="funStyle">获取反馈</span>
+                  <span v-else>
+                     <span @click="handleEditor(scope.row)" class="funStyle" v-if="privilegeVoList.includes('salary.init.taxSubject.save')">编辑</span>
+                     <span @click="handleDelete(scope.row.taxSubId)" class="funStyle" v-if="privilegeVoList.includes('salary.init.taxSubject.delete')">删除</span>
+                  </span>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </div>
       </div>
-      <el-dialog
-        :title="currentTypeName"
-        :visible.sync="isShowScreen"
-        width="480px"
-        center
-        class="diy-el_dialog"
-        :close-on-click-modal="closeModel"
-      >
-        <el-form
-          :rules="taxListRules"
-          label-width="130px"
-          ref="taxListForm"
-          class="addForm"
-          :model="newBodyFormData"
-        >
-          <el-form-item label="扣缴义务人名称" prop="taxSubName">
-            <el-input v-model="newBodyFormData.taxSubName"></el-input>
-          </el-form-item>
-          <el-form-item label="纳税人识别号" prop="taxPayerNo">
-            <el-input v-model="newBodyFormData.taxPayerNo"></el-input>
-          </el-form-item>
-          <el-form-item label="办税人员姓名" prop="remark">
-            <el-input v-model="newBodyFormData.remark"></el-input>
-          </el-form-item>
-          <el-form-item label="法定代表人" prop="legalName">
-            <el-input v-model="newBodyFormData.legalName"></el-input>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handleNewBody">确定</el-button>
-          <el-button @click="isShowScreen=false">取消</el-button>
-        </span>
-      </el-dialog>
     </div>
+    <right-pop :pop-show="popShow" :has-footer="false" popTitle="扣缴义务人" :popWidth="600">
+      <div slot="pop-content">
+        <paidEdit @hanleClose="hanleClose" :selectItem="selectItem"></paidEdit>
+      </div>
+    </right-pop>
+    <!-- 查询-->
+    <initFeedback ref="feedback" :sign="sign"></initFeedback>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
-
+import rightPop from '@/components/basic/rightPop'
+import paidEdit from './components/paidEdit'
+import initFeedback from './components/tool/initFeedback'
 export default {
-
+  components:{
+    rightPop,
+    paidEdit,
+    initFeedback
+  },
   data() {
     return {
       loading: false,
@@ -132,17 +135,26 @@ export default {
       },
       currentTypeName: "",
       list: [],
+      sign:"paid",
       isShowScreen: false,
       screenWidth: document.body.clientWidth,// 屏幕尺寸
+      screenHeight:document.body.clientHeight - 270,
       closeModel:false,
-      popShow:false,
+      popShow:{isshow:false},
+      selectItem:{}
     };
+  },
+  computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList
+    }),
   },
   mounted() {
     window.onresize = () => {
       return (() => {
         window.screenWidth = document.body.clientWidth;
         this.screenWidth = window.screenWidth;
+        this.screenHeight = document.body.clientHeight - 270;
       })();
     };
     this.getList();
@@ -150,35 +162,34 @@ export default {
   methods: {
     //新增
     handleShowBox() {
-      this.popShow = true;
-      // this.newBodyFormData.taxSubId = "";
-      // this.currentTypeName = "新增";
-      // this.isShowScreen = true;
-      // this.$nextTick(() => {
-      //   this.$refs.taxListForm.resetFields();
-      // });
+      this.selectItem = {};
+      this.popShow.isshow = true;
     },
     //编辑
     handleEditor(row) {
-      this.popShow = true
-      // this.$nextTick(() => {
-      //   this.newBodyFormData = { ...row };
-      //   this.$refs.taxListForm.clearValidate();
-      // });
+      this.selectItem = row;
+      this.popShow.isshow = true;
     },
-    handleNewBody() {
-      this.$refs.taxListForm.validate(valid => {
-        if (valid) {
-          this.$store
-            .dispatch("taxPageStore/actionDealTaxSubject", this.newBodyFormData)
-            .then(res => {
-              if (res.success) {
-                this.getList();
-                this.isShowScreen = false;
-              }
-            });
-        }
-      });
+    //获取反馈
+    handleQuery(obj){
+      let paramsObj = {
+        validParameter : {
+          legalName: obj.legalName,
+          remark: obj.remark,
+          taxPayerNo:obj.taxPayerNo,
+          taxSubId: obj.taxSubId,
+          taxSubName: obj.taxSubName,
+          pwd:obj.reportPwd
+        },
+        querytAction : "taxPageStore/actionAccreditQuery",
+        stopTip:"授权",
+        freeBackTip:'【授权反馈】'
+      }
+      this.$refs.feedback.show(true,paramsObj)
+    },
+    hanleClose(data){
+      this.popShow.isshow = false;
+      if(data){this.getList()}
     },
     handleSearch() {
       this.getList();
@@ -234,6 +245,9 @@ export default {
   .tax-search {
     margin-left: 20px;
   }
+  .el-input--prefix .el-input__inner{
+    padding:19px 20px;
+  }
   .header {
     border-bottom: 1px solid #ededed;
     .add-table {
@@ -243,7 +257,7 @@ export default {
     }
   }
   .tax-content {
-    padding: 30px;
+    padding: 20px 20px 0px 20px;
     .content-header {
       position: relative;
       font-size: 18px;
@@ -267,7 +281,6 @@ export default {
   .screening {
     .check-staff-menu {
       .search-input {
-        margin-left: 10px;
         width: 205px;
       }
     }
@@ -311,37 +324,6 @@ export default {
         cursor: pointer;
       }
     }
-  }
-}
-.screen-dialog {
-  .screening-box {
-    margin-bottom: 20px;
-    .el-col-6 {
-      text-align: right;
-    }
-    .el-col-24 {
-      margin-left: 15px;
-    }
-    span {
-      display: inline-block;
-      text-align: center;
-      border: 1px solid #bdbdbd;
-      border-radius: 5px;
-      margin-right: 10px;
-      padding: 5px 15px;
-      cursor: pointer;
-    }
-    .active {
-      color: $lineBorderPointer;
-      border: 1px solid $lineBorderPointer;
-    }
-  }
-  .el-diy-date .el-date-editor {
-    opacity: 1;
-    width: auto;
-  }
-  .el-input__inner {
-    height: auto;
   }
 }
 </style>

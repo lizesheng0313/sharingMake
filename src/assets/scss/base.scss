@@ -317,6 +317,21 @@ a {
 .el-table th > .cell {
   font-size: 13px;
 }
+//更多
+.more-choose {
+  color: $mainColor;
+  cursor: pointer;
+}
+.more-style{
+  color: $mainColor;
+  cursor: pointer;
+  line-height: 30px;
+  height: 30px;
+}
+.el-popover {
+  min-width: 140px !important;
+  text-align: center !important;
+}
 
 .clear-date {
   display: inline-block;
