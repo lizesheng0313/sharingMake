@@ -40,7 +40,13 @@
                         <el-table-column label="开户行" prop="openingBank"></el-table-column>
                         <el-table-column label="银行卡号" prop="bankCardNo" width="180"></el-table-column>
                         <el-table-column label="实发金额" prop="amount"></el-table-column>
-                        <el-table-column label="失败原因" prop="failReason"></el-table-column>
+                        <el-table-column label="失败原因" prop="failReason" width="170">
+                          <template slot-scope="scope">
+                            <el-tooltip class="item" effect="dark" :content="scope.row.failReason" placement="top-start" >
+                              <span class="hiden-con">{{ scope.row.failReason }}</span>
+                            </el-tooltip>
+                          </template>
+                        </el-table-column>
                         <el-table-column label="创建时间" prop="createTime" width="160"></el-table-column>
                         <el-table-column label="操作" width="140">
                             <template slot-scope="scope">
