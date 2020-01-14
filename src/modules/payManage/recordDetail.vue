@@ -62,10 +62,10 @@
         <el-dialog :title="editeTitle" :visible.sync="dlgEdite" width="550px">
             <el-form :model="dlgFormData" label-position="right" label-width="90px">
                 <el-form-item label="姓名" prop="realName">
-                    <el-input v-model="dlgFormData.realName" :disabled="true"></el-input>
+                    <el-input v-model="dlgFormData.realName" :disabled="editeRow.source == 'XST'"></el-input>
                 </el-form-item>
                 <el-form-item label="证件号码" prop="idCard">
-                    <el-input v-model="dlgFormData.idCard" :disabled="true"></el-input>
+                    <el-input v-model="dlgFormData.idCard" :disabled="editeRow.source == 'XST'"></el-input>
                 </el-form-item>
                 <el-form-item label="银行卡号" prop="bankCardNo">
                     <el-input v-model="dlgFormData.bankCardNo"></el-input>
@@ -103,6 +103,11 @@ export default {
                 {
                     status: "",
                     label: "订单总数",
+                    value: null
+                },
+                {
+                    status: "CHECK_SUCCESS",
+                    label: "校验通过",
                     value: null
                 },
                 {
@@ -172,12 +177,13 @@ export default {
             this.$store.dispatch("payManageStore/postRecordInfo", params).then(res => {
                 const { recordInfo } = this;
                 this.filterArr[0].value = recordInfo.orderNum; //订单总数
-                this.filterArr[1].value = recordInfo.checkFailNum; //校验失败
-                this.filterArr[2].value = recordInfo.payingNum; //出款中
-                this.filterArr[3].value = recordInfo.orderSuccessNum; //出款成功
-                this.filterArr[4].value = recordInfo.failNum; //出款失败
-                this.filterArr[5].value = recordInfo.rollBackNum; //已退汇
-                this.filterArr[6].value = recordInfo.closeNum; //关闭订单
+                this.filterArr[1].value = recordInfo.checkSuccessNum; //校验通过
+                this.filterArr[2].value = recordInfo.checkFailNum; //校验失败
+                this.filterArr[3].value = recordInfo.payingNum; //出款中
+                this.filterArr[4].value = recordInfo.orderSuccessNum; //出款成功
+                this.filterArr[5].value = recordInfo.failNum; //出款失败
+                this.filterArr[6].value = recordInfo.rollBackNum; //已退汇
+                this.filterArr[7].value = recordInfo.closeNum; //关闭订单
             });
         },
         fetchTableList(curr) {
@@ -222,18 +228,25 @@ export default {
                 totalAmount: editeRow.amount
             };
 
-            this.$store.dispatch("payManageStore/postOrderEdite", paramsEdite).then(res => {
-                if (res.success) {
-                    this.$store.dispatch("payManageStore/postReSend", paramsSend).then(res => {
-                        if (res.success) {
-                            this.dlgEdite = false;
-                            let newTab = window.open("about:blank");
-                            let html = utils.createAutoCommitFormHtml(res.data.resp);
-                            newTab.document.write(html);
-                        }
-                    });
-                }
-            });
+            this.$store
+                .dispatch("payManageStore/postOrderEdite", paramsEdite)
+                .then(res => {
+                    if (res.success) {
+                        this.$store.dispatch("payManageStore/postReSend", paramsSend).then(res => {
+                            if (res.success) {
+                                this.dlgEdite = false;
+                                let newTab = window.open("about:blank");
+                                let html = utils.createAutoCommitFormHtml(res.data.resp);
+                                newTab.document.write(html);
+                            }
+                        });
+                    }
+                })
+                .catch(res => {
+                    this.dlgEdite = false;
+                    this.fetchBatchInfo();
+                    this.fetchTableList();
+                });
         },
         handleCloseOrder(id) {
             this.$confirm("关闭订单后不可恢复，是否继续？", "是否关闭订单", {
