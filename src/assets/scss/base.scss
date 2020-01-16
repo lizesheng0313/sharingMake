@@ -371,6 +371,11 @@ a {
   }
 }
 
+.back-style {
+  display: inline-block;
+  cursor: pointer;
+  color: $mainColor;
+}
 .floating-menu {
   z-index: 120;
   padding: 4px 0;

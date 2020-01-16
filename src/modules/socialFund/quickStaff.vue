@@ -4,7 +4,8 @@
       <header class="header main-title">
         <el-row type="flex">
           <el-col :span="12">
-            <span>增减员</span>
+            <span @click="$router.go(-1)" class="back-style">返回</span>
+            <span>快速增减员</span>
           </el-col>
         </el-row>
       </header>
@@ -13,16 +14,6 @@
           <div class="clearfix check-staff-menu">
             <div class="left">
               <el-button type="default" @click="isShowScreening=true">筛选</el-button>
-            </div>
-            <div class="content-header head-date">
-              <el-date-picker
-                v-model="selectMonth"
-                @input="changeMonth"
-                type="month"
-                value-format="yyyy年MM月"
-                :editable="false"
-                :clearable="false"
-              ></el-date-picker>
             </div>
             <el-input
               placeholder="请输入姓名\工号\身份证号"
@@ -36,46 +27,20 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="goQuick">快速增减员</el-button>
-              <el-popover
-                ref="popMore"
-                placement="bottom-end"
-                width="60"
-                class="button-style"
-                trigger="hover">
-                <div class="funStyle more-style">增员导入</div>
-                <div class="funStyle more-style">减员导入</div>
-                <div class="funStyle more-style">编辑导入</div>
-                <el-button slot="reference" class="more-choose">批量操作</el-button>
-              </el-popover>
-              <el-popover
-                ref="popMore"
-                placement="bottom-end"
-                width="60"
-                trigger="hover">
-                <div class="funStyle more-style">增减员导出</div>
-                <div class="funStyle more-style">参保人员导出</div>
-                <el-button slot="reference" class="more-choose">更多</el-button>
-              </el-popover>
+              <el-button type="primary" class="add-import" @click="increateImport">增员导入</el-button>
+              <el-button type="primary" class="add-import" @click="decreateImport">减员导入</el-button>
+              <el-button class="add-import" @click="handleExport">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
             <span class="staff-total">
-              <span class="wait-report" @click="selectNum('')">
-                参保人数
-                <i :class="['num', allActive?'active':'']">{{ total }}</i>人
+              <span class="wait-report" @click="selectNum(true)">
+                入职未投保
+                <i :class="['num', uninsuredActive?'active':'']">{{ uninsuredCount?uninsuredCount:0 }}</i>人
               </span>
-              <span class="wait-report" @click="selectNum('NORMAL')">
-                本月增员
-                <i :class="['num', increaseActive?'active':'']">{{ increaseCount }}</i>人
-              </span>
-              <span class="wait-report" @click="selectNum('AWAIT_REPORT')">
-                本月减员
-                <i :class="['num', decreaseActive?'active':'']">{{ decreaseCount?decreaseCount:0 }}</i>人
-              </span>
-               <span class="wait-report" @click="selectNum('AWAIT_REPORT')">
-                已停保
-                <i :class="['num', stopActive?'active':'']">{{ stopCount?stopCount:0 }}</i>人
+              <span class="wait-report" @click="selectNum(false)">
+                入职已投保
+                <i :class="['num', !uninsuredActive?'active':'']">{{ insuredCount ? insuredCount:0 }}</i>人
               </span>
             </span>
           </div>
@@ -95,38 +60,48 @@
               </el-table-column>
               <el-table-column prop="name" label="姓名" width="140">
                 <template slot-scope="scope">
-                  <span class="table-name" @click="handleCollectionName(scope.row)" v-if="privilegeVoList.includes('salary.report.personReport.edit')">{{ scope.row.empName }}</span>
-                  <span class="table-name" v-else>{{ scope.row.empName }}</span>
+                  <span class="table-name">{{ scope.row.empName }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
               <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
               <el-table-column prop="idNo" label="公司名称"></el-table-column>
-              <el-table-column prop="empSex" label="参保状态" width="140">
+              <el-table-column prop="empSex" label="用工性质" width="140">
                 <template slot-scope="scope">{{ scope.row.empSex }}</template>
               </el-table-column>
-              <el-table-column prop="workerStatus" label="参保城市" width="140">
-                <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
-              </el-table-column>
-              <el-table-column prop="reportStatus" label="参保方案" width="140">
-                <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
-              </el-table-column>
-              <el-table-column prop="idValidStatus" label="社保起缴月份" width="140">
-                <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
-              </el-table-column>
-              <el-table-column prop="mobile" label="公积金期缴月份" width="140"></el-table-column>
+              <template v-if="uninsuredActive">
+                <el-table-column prop="workerStatus" label="用工性质" width="140">
+                  <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
+                </el-table-column>
+                <el-table-column prop="workerStatus" label="入职日期" width="140">
+                  <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
+                </el-table-column>
+                <el-table-column prop="reportStatus" label="户口所在城市" width="140">
+                  <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
+                </el-table-column>
+                <el-table-column prop="idValidStatus" label="户口性质" width="140">
+                  <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
+                </el-table-column>
+              </template>
+              <template v-else>
+                <el-table-column prop="workerStatus" label="离职日期" width="140">
+                  <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
+                </el-table-column>
+                <el-table-column prop="workerStatus" label="参保城市" width="140">
+                  <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
+                </el-table-column>
+                <el-table-column prop="reportStatus" label="参保方案" width="140">
+                  <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
+                </el-table-column>
+                <el-table-column prop="idValidStatus" label="社保起缴月份" width="140">
+                  <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
+                </el-table-column>
+              </template>
+
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
-                  <span class="funStyle">详情</span>
-                  <el-popover
-                    ref="popMore"
-                    placement="bottom-end"
-                    width="60"
-                    trigger="hover">
-                    <div class="funStyle more-style">减员</div>
-                    <div class="funStyle more-style">删除</div>
-                    <span slot="reference" class="more-choose">更多</span>
-                  </el-popover>
+                  <el-button type="text" v-if="uninsuredActive">社保减员</el-button>
+                  <el-button type="text" v-else>社保增员</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -157,27 +132,34 @@
               </el-form-item>
             </div>
             <div class="shortCon">
-              <el-form-item label="参保城市" label-width="20%">
+              <el-form-item label="用工性质" label-width="20%">
                 <el-select v-model="ruleForm.city" placeholder="请选择参保城市">
                   <el-option v-for="(item,index) in cityOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
-              <el-form-item label="参保方案" label-width="20%">
+              <el-form-item label="工作城市" label-width="20%">
                 <el-select v-model="ruleForm.plan" placeholder="请选择参保方案">
                   <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
-              <el-form-item label="参保月份" label-width="20%">
+              <el-form-item label="户口性质" label-width="20%">
+                <el-select v-model="ruleForm.plan" placeholder="请选择参保方案">
+                  <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </div>
+            <div class="shortCon" v-if="uninsuredActive">
+              <el-form-item label="入职日期" label-width="20%">
                 <el-date-picker v-model="ruleForm.insuredStart" type="month" placeholder="开始月份"></el-date-picker> 至
                 <el-date-picker v-model="ruleForm.insuredEnd" type="month" placeholder="结束月份"></el-date-picker>
               </el-form-item>
             </div>
-            <div class="shortCon">
-              <el-form-item label="停保月份" label-width="20%">
+            <div class="shortCon" v-else>
+              <el-form-item label="离职日期" label-width="20%">
                 <el-date-picker v-model="ruleForm.stopInsuranceStart" type="month" placeholder="选择月"></el-date-picker> 至
                 <el-date-picker v-model="ruleForm.stopInsuranceEnd" type="month" placeholder="选择月"></el-date-picker>
               </el-form-item>
@@ -215,25 +197,21 @@
         companyName:"",
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
-        selectMonth: defaultDate,
         list: [{name:"111"}],
         closeModel: false,
         isShowScreening:false,
         total:0,
-        allActive:true,
-        increaseActive:false,
-        increaseCount:0,
-        decreaseActive:false,
-        decreaseCount:0,
-        stopActive:false,
-        stopCount:0,
-        loading:false,
+        uninsuredActive:true,
+        insuredActive:false,
+        uninsuredCount:0,
+        insuredCount:0,
         cityOption:[
 
         ],
         planOption:[
 
         ],
+        loading:false
     };
     },
     components:{
@@ -259,17 +237,7 @@
     },
     methods: {
       selectNum(type){
-        //全部
-        if(type===""){ this.allActive = true; this.increaseActive = false; this.decreaseActive = false; this.stopActive = false }
-        //正常
-        if(type === "NORMAL"){this.allActive = false; this.increaseActive = true; this.decreaseActive = false; this.stopActive = false}
-        //待报送
-        if(type === "AWAIT_REPORT"){this.allActive = false; this.increaseActive = false; this.decreaseActive = true; this.stopActive = false}
-        //待反馈
-        if(type==="REPORTING"){ this.allActive = false; this.increaseActive = false; this.decreaseActive = false; this.stopActive = true }
-        //报送失败
-        this.ruleForm.reportStatus = type === "" ? [] : [type];
-        this.getList()
+        this.uninsuredActive = type
       },
       getList() {
         this.loading = true;
@@ -289,19 +257,6 @@
             }
           });
       },
-      goQuick(){
-        this.$router.push('/quickStaff')
-      },
-      //导出
-      handleExport(){
-        this.$store
-          .dispatch("taxPageStore/actionTaxEmpCollectNewListExport", this.ruleForm)
-      },
-      handleSizeChange(val) {
-        this.totalListForm.pageSize = val;
-        this.totalListForm.currPage = 1;
-        this.getList();
-      },
       changeMonth(){
 
       },
@@ -315,12 +270,20 @@
         }
         console.log(this.ruleForm)
       },
-      handleCheckTaxSubject(item) {
-        this.ruleForm.taxSubjectId = item.taxSubId;
-        this.reportForm.taxSubId = item.taxSubId;
-        this.reportForm.taxSubjectId = item.taxSubId;
-        this.currentTaxSubName = item.taxSubName;
-        this.ruleForm.currPage = 1;
+      increateImport(){
+
+      },
+      decreateImport(){
+
+      },
+      //导出
+      handleExport(){
+        this.$store
+          .dispatch("taxPageStore/actionTaxEmpCollectNewListExport", this.ruleForm)
+      },
+      handleSizeChange(val) {
+        this.totalListForm.pageSize = val;
+        this.totalListForm.currPage = 1;
         this.getList();
       },
       //翻页

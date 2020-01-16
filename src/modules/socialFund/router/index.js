@@ -1,4 +1,5 @@
 import attrition from '../attrition'
+import quickStaff from '../quickStaff'
 
 export default [
   {
@@ -8,5 +9,11 @@ export default [
       businessCode: "salary.init.taxTotalBase"
     }
   },
-
+  {
+    path: '/quickStaff',
+    component: quickStaff,
+    meta: {
+      businessCode: "salary.init.taxTotalBase"
+    }
+  },
 ]

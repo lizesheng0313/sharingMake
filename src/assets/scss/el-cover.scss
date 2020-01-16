@@ -59,10 +59,19 @@
   }
 }
 
-.collect,.attach,.recharge,.withdraw,.attrition{
+.collect,.attach,.recharge,.withdraw {
   .el-input--prefix .el-input__inner {
     font-size: 14px;
     padding: 19px 20px;
+  }
+  .search-input .el-input__prefix {
+    top: 4px;
+  }
+}
+.attrition {
+  .el-input--prefix .el-input__inner {
+    font-size: 14px;
+    padding: 19px 30px;
   }
   .search-input .el-input__prefix {
     top: 4px;
@@ -89,7 +98,7 @@
 
 
 .el-date-editor.el-input {
-  width: 130px;
+  width: 168px;
 }
 .sflary-el-step {
   .el-step__main {
