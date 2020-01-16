@@ -80,7 +80,7 @@
               </template>
            </el-table-column>
             <el-table-column label="操作" width="120">
-                <template slot-scope="scope">
+                <template slot-scope="scope" v-if="!['PAID','CLOSED'].includes(batchInfo.status)">
                     <el-button type="text" @click="handleEdite(scope.row)">编辑</el-button>
                     <el-button type="text" @click="handleDeleteOrder(scope.row.id)">删除</el-button>
                 </template>
@@ -254,14 +254,18 @@ export default {
             };
             params.id = this.dlgOrder.id;
             delete params.amount;
-            this.$store.dispatch("payManageStore/postOrderEdite", params).then(res => {
-                if (res.success) {
-                    this.$message.success("编辑成功");
+            this.$store
+                .dispatch("payManageStore/postOrderEdite", params)
+                .then(res => {
+                    if (res.success) {
+                        this.$message.success("编辑成功");
+                    }
+                })
+                .finally(err => {
                     this.dlgEdite = false;
                     this.fetchBatchInfo();
                     this.fetchTableList();
-                }
-            });
+                });
         },
         handleFilterStatus(status) {
             this.filterStatus = status;

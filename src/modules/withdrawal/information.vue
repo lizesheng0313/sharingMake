@@ -418,7 +418,7 @@ export default {
       //   this.submitText = "提交开户";
       //   return true;
       // }
-      const {type,bhaAuditStatus} = this.$route.query;
+      const {type,bhaAuditStatus,level} = this.$route.query;
 
       if(type == "add" || type == "right"){
         this.submitText = "提交开户";
@@ -430,7 +430,7 @@ export default {
           this.submitText = "";
           return false;
         }
-        if(bhaAuditStatus == 'PASS' || bhaAuditStatus == 'BACK'){
+        if((bhaAuditStatus == 'PASS' || bhaAuditStatus == 'BACK') && level == 1){
           this.submitText = "保存修改";
           return true;
         }
