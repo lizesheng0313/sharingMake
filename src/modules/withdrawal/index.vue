@@ -55,7 +55,7 @@
               @click="handleAccountDetails(scope.row)"
               v-if="scope.row.bhaAuditStatus=='PASS' && scope.row.platformUserNo"
             >账户详情</el-button>
-            <el-button type="text" size="mini" @click="handleOpenInformation(scope.row)" v-if="scope.row.platformUserNo && scope.row.level == 1">开户信息</el-button>
+            <el-button type="text" size="mini" @click="handleOpenInformation(scope.row)" v-if="scope.row.platformUserNo">开户信息</el-button>
             <el-button type="text" size="mini" @click="handleRightOpen(scope.row)" v-if="!scope.row.platformUserNo && privilegeVoList.includes('salary.account.psalaryAccount.open')">立即开户</el-button>
           </template>
         </el-table-column>
