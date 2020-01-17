@@ -1,5 +1,5 @@
 <template>
-  <div class="attrition">
+  <div class="quickStaff">
     <div class="tax el-diy-month">
       <header class="header main-title">
         <el-row type="flex">
@@ -13,7 +13,7 @@
         <div class="screening">
           <div class="clearfix check-staff-menu">
             <div class="left">
-              <el-button type="default" @click="isShowScreening=true">筛选</el-button>
+              <el-button type="default" @click="onShowScreen">筛选</el-button>
             </div>
             <el-input
               placeholder="请输入姓名\工号\身份证号"
@@ -27,8 +27,8 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="increateImport">增员导入</el-button>
-              <el-button type="primary" class="add-import" @click="decreateImport">减员导入</el-button>
+              <el-button type="primary" class="add-import" @click="increateImport" v-if="uninsuredActive">增员导入</el-button>
+              <el-button type="primary" class="add-import" @click="decreateImport" v-else>减员导入</el-button>
               <el-button class="add-import" @click="handleExport">导出</el-button>
             </div>
           </div>
@@ -45,14 +45,21 @@
             </span>
           </div>
           <div class="staff-table">
+            <div class="floating-menu" v-if="selectNameList.length>0">
+              <span>已选中{{selectNameList.length}}人</span>
+              <el-button size="small" class="button-mini" @click="batchIncreate" v-if="uninsuredActive">批量增员</el-button>
+              <el-button size="small" class="button-mini" @click="batchDecreate" v-else>批量减员</el-button>
+            </div>
             <el-table
               v-loading="loading"
               :data="list"
               class="check-staff_table"
               :height="screenHeight"
               :style="{width:screenWidth-255+'px'}"
+              @selection-change="handleSelectionPerson"
               border
             >
+              <el-table-column type="selection" width="55" fixed></el-table-column>
               <el-table-column
                 type="index"
                 label="编号"
@@ -60,7 +67,7 @@
               </el-table-column>
               <el-table-column prop="name" label="姓名" width="140">
                 <template slot-scope="scope">
-                  <span class="table-name">{{ scope.row.empName }}</span>
+                  <span>{{ scope.row.name }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
@@ -97,11 +104,10 @@
                   <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
                 </el-table-column>
               </template>
-
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
-                  <el-button type="text" v-if="uninsuredActive">社保减员</el-button>
-                  <el-button type="text" v-else>社保增员</el-button>
+                  <el-button v-if="uninsuredActive" type="text" @click="showSocialIncreate(scope.row)">社保增员</el-button>
+                  <el-button v-else type="text" @click="showSocialDecreate">社保减员</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -154,14 +160,14 @@
             </div>
             <div class="shortCon" v-if="uninsuredActive">
               <el-form-item label="入职日期" label-width="20%">
-                <el-date-picker v-model="ruleForm.insuredStart" type="month" placeholder="开始月份"></el-date-picker> 至
-                <el-date-picker v-model="ruleForm.insuredEnd" type="month" placeholder="结束月份"></el-date-picker>
+                <el-date-picker v-model="ruleForm.enterStart" type="month" placeholder="开始月份"></el-date-picker> 至
+                <el-date-picker v-model="ruleForm.enterEnd" type="month" placeholder="结束月份"></el-date-picker>
               </el-form-item>
             </div>
             <div class="shortCon" v-else>
               <el-form-item label="离职日期" label-width="20%">
-                <el-date-picker v-model="ruleForm.stopInsuranceStart" type="month" placeholder="选择月"></el-date-picker> 至
-                <el-date-picker v-model="ruleForm.stopInsuranceEnd" type="month" placeholder="选择月"></el-date-picker>
+                <el-date-picker v-model="ruleForm.leaveStart" type="month" placeholder="选择月"></el-date-picker> 至
+                <el-date-picker v-model="ruleForm.leaveEnd" type="month" placeholder="选择月"></el-date-picker>
               </el-form-item>
             </div>
           </el-form>
@@ -171,10 +177,16 @@
           <el-button @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
+      <!-- 社保增员 -->
+      <socialIncreace ref="socialIncreace" :nameList="selectNameList"></socialIncreace>
+      <!-- 社保减员 -->
+      <social-decreace ref="socialDecreace"></social-decreace>
     </div>
   </div>
 </template>
 <script>
+  import socialIncreace from './components/socialIncreace'
+  import socialDecreace from './components/socialDecrease'
   import { mapState } from "vuex";
   import * as AT from "./store/actionTypes";
   import fun from "@/util/fun";
@@ -189,33 +201,36 @@
           companyName:"",
           plan:"",
           city:"",
-          insuredStart:"",
-          insuredEnd:"",
-          stopInsuranceStart:"",
-          stopInsuranceEnd:"",
+          enterStart:"",
+          enterEnd:"",
+          leaveStart:"",
+          leaveEnd:"",
         },
-        companyName:"",
-        screenWidth: document.body.clientWidth,// 屏幕尺寸
-        screenHeight: document.body.clientHeight - 330,
-        list: [{name:"111"}],
-        closeModel: false,
-        isShowScreening:false,
-        total:0,
-        uninsuredActive:true,
-        insuredActive:false,
-        uninsuredCount:0,
-        insuredCount:0,
         cityOption:[
 
         ],
         planOption:[
 
         ],
-        loading:false
+        companyName:"",
+        screenWidth: document.body.clientWidth,// 屏幕尺寸
+        screenHeight: document.body.clientHeight - 330,
+        list: [{name:"妞妞"},{name:"丫丫"}],
+        closeModel: false,
+        isShowScreening:false,
+        isShowDecrease:false,
+        total:0,
+        uninsuredActive:true,
+        insuredActive:false,
+        uninsuredCount:0,
+        insuredCount:0,
+        loading:false,
+        selectNameList:[],
     };
     },
     components:{
-
+      socialIncreace,
+      socialDecreace
     },
     computed:{
       ...mapState({
@@ -263,6 +278,18 @@
       handleSearch(){
 
       },
+      //筛选
+      onShowScreen(){
+
+        this.isShowScreening = true
+        if(this.uninsuredActive){
+          this.ruleForm.leaveStart = ""
+          this.ruleForm.leaveEnd = ""
+        }else{
+          this.ruleForm.enterStart = ""
+          this.ruleForm.enterEnd = ""
+        }
+      },
       // 重置
       handleReset(){
         for(let key in this.ruleForm){
@@ -274,6 +301,35 @@
 
       },
       decreateImport(){
+
+      },
+      //增员导入
+      handleIncreateSocial(){
+        this.$refs.socialIncreaceForm.validate(valid => {
+
+        })
+      },
+      //批量选择
+      handleSelectionPerson(val){
+        this.selectNameList = val.map((item)=>item.name)
+        console.log(this.selectNameList)
+
+      },
+      //社保增员
+      showSocialIncreate(data){
+        let namelist = [data.name]
+        this.$refs.socialIncreace.show(namelist)
+      },
+      //社保减员
+      showSocialDecreate(){
+        this.$refs.socialDecreace.show()
+      },
+      //批量增员
+      batchIncreate(){
+        this.$refs.socialIncreace.show(this.selectNameList)
+      },
+      //批量减员
+      batchDecreate(){
 
       },
       //导出
@@ -296,7 +352,7 @@
 </script>
 <style lang="scss" scoped>
   @import "../../assets/scss/helpers.scss";
-  .attrition {
+  .quickStaff {
     .header {
       border-bottom: 1px solid #ededed;
       .add-table {
@@ -389,10 +445,20 @@
       }
     }
   }
-  .screen-dialog {
+  .screen-dialog,.social-increace-dialog {
+    .screening-wapper{
+      width: 560px;
+      margin: 0 auto;
+    }
     .shortCon{width:450px;}
     .el-select {
       width:100%;
+    }
+    .increase-tip{
+      padding:30px
+    }
+    .provident-month{
+      float:right;
     }
   }
 
