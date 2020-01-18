@@ -9,6 +9,9 @@
       :close-on-click-modal="closeModel"
     >
       <div class="screening-wapper">
+        <div class="name-con">
+          <span class="name-box" v-for="(item,index) in nameList" :key="index">{{ item }}、</span>
+        </div>
         <el-form :model="socialDecreaceForm" ref="socialDecreaceForm" label-width="140px" class="demo-ruleForm">
           <div class="shortCon">
             <el-form-item label="社保停缴月份" prop="socialMonth"
@@ -48,15 +51,13 @@ export default {
         },
         closeModel: false,
         isShowDecrease:false,
+        nameList:[],
     };
   },
   methods: {
-    show(data,params) {
+    show(nameList,params) {
       this.isShowDecrease = true;
-      if(data){
-      }
-      else{
-      }
+      this.nameList = nameList;
     },
     handleDecreateSocial(){
       this.$refs.socialDecreaceForm.validate(valid => {
@@ -73,5 +74,16 @@ export default {
       margin: 0 auto;
     }
     .shortCon{width:450px;}
+    .name-con{
+      margin:10px 0px 10px 40px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      .name-box{
+        padding-right: 10px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
   }
 </style>

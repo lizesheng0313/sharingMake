@@ -101,6 +101,9 @@ export default {
   .shortCon{width:450px;}
   .name-con{
     margin:10px 0px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     .name-box{
       padding-right: 10px;
       font-size: 16px;

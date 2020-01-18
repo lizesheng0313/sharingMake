@@ -5,6 +5,7 @@
         <el-row type="flex">
           <el-col :span="12">
             <span @click="$router.go(-1)" class="back-style">返回</span>
+            <span class="header-line">|</span>
             <span>快速增减员</span>
           </el-col>
         </el-row>
@@ -107,7 +108,7 @@
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
                   <el-button v-if="uninsuredActive" type="text" @click="showSocialIncreate(scope.row)">社保增员</el-button>
-                  <el-button v-else type="text" @click="showSocialDecreate">社保减员</el-button>
+                  <el-button v-else type="text" @click="showSocialDecreate(scope.row)">社保减员</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -321,8 +322,9 @@
         this.$refs.socialIncreace.show(namelist)
       },
       //社保减员
-      showSocialDecreate(){
-        this.$refs.socialDecreace.show()
+      showSocialDecreate(data){
+        let namelist = [data.name]
+        this.$refs.socialDecreace.show(namelist)
       },
       //批量增员
       batchIncreate(){
@@ -330,7 +332,7 @@
       },
       //批量减员
       batchDecreate(){
-
+        this.$refs.socialDecreace.show(this.selectNameList)
       },
       //导出
       handleExport(){

@@ -117,7 +117,7 @@
               <el-table-column prop="mobile" label="公积金期缴月份" width="140"></el-table-column>
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
-                  <span class="funStyle">详情</span>
+                  <span class="funStyle" @click="goDetail(scope.row)">详情</span>
                   <el-popover
                     ref="popMore"
                     placement="bottom-end"
@@ -291,6 +291,10 @@
       },
       goQuick(){
         this.$router.push('/quickStaff')
+      },
+      //详情
+      goDetail(){
+        this.$router.push('/attritionDetail')
       },
       //导出
       handleExport(){
