@@ -18,7 +18,9 @@
             <el-form-item label="参保方案"
                           prop="plan"
                           :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
-              <el-input v-model="socialIncreaceForm.plan"></el-input>
+              <el-select v-model="socialIncreaceForm.plan" placeholder="请选择参保方案">
+                <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              </el-select>
             </el-form-item>
           </div>
           <div class="shortCon">
@@ -72,6 +74,7 @@ export default {
         providentBase:"",
         providentMonthType:"1",
       },
+      planOption:[],
       isShowIncrease:false,
       closeModel: false,
       nameList:[]
@@ -109,6 +112,9 @@ export default {
       font-size: 16px;
       font-weight: bold;
     }
+  }
+  .el-select {
+    width: 100%;
   }
 }
 </style>

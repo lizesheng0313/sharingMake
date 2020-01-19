@@ -13,6 +13,7 @@ import payManageRouter from 'modules/payManage/router'
 import withdrawal from 'modules/withdrawal/router'
 import resultRouter from 'modules/result/router'
 import socialFund from 'modules/socialFund/router'
+import paymaster from 'modules/paymaster/router'
 
 
 
@@ -39,7 +40,8 @@ let router = new Router({
     ...payManageRouter,
     ...withdrawal,
     ...resultRouter,
-    ...socialFund
+    ...socialFund,
+    ...paymaster
 
   ]
 })

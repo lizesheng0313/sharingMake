@@ -140,21 +140,21 @@
             </div>
             <div class="shortCon">
               <el-form-item label="用工性质" label-width="20%">
-                <el-select v-model="ruleForm.city" placeholder="请选择参保城市">
+                <el-select v-model="ruleForm.city" placeholder="请选择用工性质">
                   <el-option v-for="(item,index) in cityOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
               <el-form-item label="工作城市" label-width="20%">
-                <el-select v-model="ruleForm.plan" placeholder="请选择参保方案">
+                <el-select v-model="ruleForm.plan" placeholder="请选择工作城市">
                   <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
               <el-form-item label="户口性质" label-width="20%">
-                <el-select v-model="ruleForm.plan" placeholder="请选择参保方案">
+                <el-select v-model="ruleForm.plan" placeholder="请选择户口性质">
                   <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                 </el-select>
               </el-form-item>

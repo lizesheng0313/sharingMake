@@ -4,7 +4,7 @@
       <header class="header main-title">
         <el-row type="flex">
           <el-col :span="12">
-            <span>增减员</span>
+            <span>员工信息</span>
           </el-col>
         </el-row>
       </header>
@@ -13,16 +13,6 @@
           <div class="clearfix check-staff-menu">
             <div class="left">
               <el-button type="default" @click="isShowScreening=true">筛选</el-button>
-            </div>
-            <div class="content-header head-date">
-              <el-date-picker
-                v-model="selectMonth"
-                @input="changeMonth"
-                type="month"
-                value-format="yyyy年MM月"
-                :editable="false"
-                :clearable="false"
-              ></el-date-picker>
             </div>
             <el-input
               placeholder="请输入姓名\工号\身份证号"
@@ -36,18 +26,7 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="goQuick">快速增减员</el-button>
-              <el-popover
-                ref="popMore"
-                placement="bottom-end"
-                width="60"
-                class="button-style"
-                trigger="hover">
-                <div class="funStyle more-style">增员导入</div>
-                <div class="funStyle more-style">减员导入</div>
-                <div class="funStyle more-style">编辑导入</div>
-                <el-button slot="reference" class="more-choose">批量操作</el-button>
-              </el-popover>
+              <el-button type="primary" class="add-import">新增人员</el-button>
               <el-popover
                 ref="popMore"
                 placement="bottom-end"
@@ -55,29 +34,12 @@
                 trigger="hover">
                 <div class="funStyle more-style">增减员导出</div>
                 <div class="funStyle more-style">参保人员导出</div>
-                <el-button slot="reference" class="more-choose">更多</el-button>
+                <el-button slot="reference" class="more-choose">导出</el-button>
               </el-popover>
             </div>
           </div>
           <div class="staff-situation">
-            <span class="staff-total">
-              <span class="wait-report" @click="selectNum('')">
-                参保人数
-                <i :class="['num', allActive?'active':'']">{{ total }}</i>人
-              </span>
-              <span class="wait-report" @click="selectNum('NORMAL')">
-                本月增员
-                <i :class="['num', increaseActive?'active':'']">{{ increaseCount }}</i>人
-              </span>
-              <span class="wait-report" @click="selectNum('AWAIT_REPORT')">
-                本月减员
-                <i :class="['num', decreaseActive?'active':'']">{{ decreaseCount?decreaseCount:0 }}</i>人
-              </span>
-               <span class="wait-report" @click="selectNum('AWAIT_REPORT')">
-                已停保
-                <i :class="['num', stopActive?'active':'']">{{ stopCount?stopCount:0 }}</i>人
-              </span>
-            </span>
+
           </div>
           <div class="staff-table">
             <el-table
@@ -141,54 +103,6 @@
           </div>
         </div>
       </div>
-      <!-- 筛选-->
-      <el-dialog
-        :visible.sync="isShowScreening"
-        width="52%"
-        center
-        class="screen-dialog"
-        :close-on-click-modal="closeModel"
-      >
-        <div class="screening-wapper">
-          <el-form :model="ruleForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
-            <div class="shortCon">
-              <el-form-item label="公司名称" label-width="20%">
-                <el-input v-model="ruleForm.companyName"></el-input>
-              </el-form-item>
-            </div>
-            <div class="shortCon">
-              <el-form-item label="参保城市" label-width="20%">
-                <el-select v-model="ruleForm.city" placeholder="请选择参保城市">
-                  <el-option v-for="(item,index) in cityOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
-                </el-select>
-              </el-form-item>
-            </div>
-            <div class="shortCon">
-              <el-form-item label="参保方案" label-width="20%">
-                <el-select v-model="ruleForm.plan" placeholder="请选择参保方案">
-                  <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
-                </el-select>
-              </el-form-item>
-            </div>
-            <div class="shortCon">
-              <el-form-item label="参保月份" label-width="20%">
-                <el-date-picker v-model="ruleForm.insuredStart" type="month" placeholder="开始月份"></el-date-picker> 至
-                <el-date-picker v-model="ruleForm.insuredEnd" type="month" placeholder="结束月份"></el-date-picker>
-              </el-form-item>
-            </div>
-            <div class="shortCon">
-              <el-form-item label="停保月份" label-width="20%">
-                <el-date-picker v-model="ruleForm.stopInsuranceStart" type="month" placeholder="选择月"></el-date-picker> 至
-                <el-date-picker v-model="ruleForm.stopInsuranceEnd" type="month" placeholder="选择月"></el-date-picker>
-              </el-form-item>
-            </div>
-          </el-form>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handleSearch">查询</el-button>
-          <el-button @click="handleReset">重置</el-button>
-        </span>
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -212,28 +126,14 @@
           stopInsuranceStart:"",
           stopInsuranceEnd:"",
         },
-        companyName:"",
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
         selectMonth: defaultDate,
-        list: [{name:"减员",type:'dec'},{name:"增员",type:'inc'}],
+        list: [{name:"减员",type:'dec'}],
         closeModel: false,
         isShowScreening:false,
         total:0,
-        allActive:true,
-        increaseActive:false,
-        increaseCount:0,
-        decreaseActive:false,
-        decreaseCount:0,
-        stopActive:false,
-        stopCount:0,
         loading:false,
-        cityOption:[
-
-        ],
-        planOption:[
-
-        ],
     };
     },
     components:{
@@ -258,19 +158,6 @@
       };
     },
     methods: {
-      selectNum(type){
-        //全部
-        if(type===""){ this.allActive = true; this.increaseActive = false; this.decreaseActive = false; this.stopActive = false }
-        //正常
-        if(type === "NORMAL"){this.allActive = false; this.increaseActive = true; this.decreaseActive = false; this.stopActive = false}
-        //待报送
-        if(type === "AWAIT_REPORT"){this.allActive = false; this.increaseActive = false; this.decreaseActive = true; this.stopActive = false}
-        //待反馈
-        if(type==="REPORTING"){ this.allActive = false; this.increaseActive = false; this.decreaseActive = false; this.stopActive = true }
-        //报送失败
-        this.ruleForm.reportStatus = type === "" ? [] : [type];
-        this.getList()
-      },
       getList() {
         this.loading = true;
         this.$store
@@ -280,21 +167,8 @@
               this.loading = false;
               this.total = res.data.count;
               this.list = res.data.data;
-              this.increaseCount = res.data.increaseCount;
-              this.decreaseCount = res.data.decreaseCount;
-              this.awaitReportCount = res.data.awaitReportCount;
-              this.normalCount = res.data.normalCount;
-              this.failReportCount = res.data.failReportCount;
-              this.awaitFeedBackCount = res.data.awaitFeedBackCount;
             }
           });
-      },
-      goQuick(){
-        this.$router.push('/quickStaff')
-      },
-      //详情
-      goDetail(data){
-        this.$router.push({path:'/attritionDetail',query:{type:data.type}})
       },
       //导出
       handleExport(){
@@ -305,9 +179,6 @@
         this.totalListForm.pageSize = val;
         this.totalListForm.currPage = 1;
         this.getList();
-      },
-      changeMonth(){
-
       },
       handleSearch(){
 

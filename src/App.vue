@@ -47,6 +47,13 @@ export default {
           url: "/attrition",
           index: 0,
           icon:"iconshouye"
+        },
+        {
+          businessCode: null,
+          name: "发薪人员",
+          url: "/employeeInfo",
+          index: 0,
+          icon:"iconshouye"
         }
       ]
       }
@@ -79,6 +86,7 @@ export default {
 <style lang="scss" scoped>
 .app-page {
   height: 100%;
+  background: #fff;
   background-size: 100% 100%;
   background-position: center center;
   .router-view {
@@ -100,7 +108,7 @@ export default {
   margin-left: 17px;
   background: #fff;
   overflow: hidden;
-  box-shadow: 3px 5px 15px #dae2ea;
+  /*box-shadow: 3px 5px 15px #dae2ea;*/
 }
 .bottom {
   text-align: center;
