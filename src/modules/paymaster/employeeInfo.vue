@@ -1,13 +1,6 @@
 <template>
   <div class="attrition">
     <div class="tax el-diy-month">
-      <header class="header main-title">
-        <el-row type="flex">
-          <el-col :span="12">
-            <span>员工信息</span>
-          </el-col>
-        </el-row>
-      </header>
       <div class="attrition-content">
         <div class="screening">
           <div class="clearfix check-staff-menu">
@@ -79,16 +72,8 @@
               <el-table-column prop="mobile" label="公积金期缴月份" width="140"></el-table-column>
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
-                  <span class="funStyle" @click="goDetail(scope.row)">详情</span>
-                  <el-popover
-                    ref="popMore"
-                    placement="bottom-end"
-                    width="60"
-                    trigger="hover">
-                    <div class="funStyle more-style">减员</div>
-                    <div class="funStyle more-style">删除</div>
-                    <span slot="reference" class="more-choose">更多</span>
-                  </el-popover>
+                  <span class="funStyle" @click="onChange">调动</span>
+                  <span class="funStyle">删除</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -101,14 +86,21 @@
               class="staff-page"
             ></el-pagination>
           </div>
+
         </div>
       </div>
     </div>
+    <right-pop :pop-show="popShow" :has-footer="false" popTitle="变更公司" :popWidth="600">
+      <div slot="pop-content">
+
+      </div>
+    </right-pop>
   </div>
 </template>
 <script>
   import { mapState } from "vuex";
   import * as AT from "./store/actionTypes";
+  import rightPop from '@/components/basic/rightPop'
   import fun from "@/util/fun";
   let date = fun.headDate();
   let month = new Date().getMonth() + 1;
@@ -117,6 +109,7 @@
   export default {
     data() {
       return {
+        activeName:"emplyeeInfo",
         ruleForm:{
           companyName:"",
           plan:"",
@@ -134,10 +127,13 @@
         isShowScreening:false,
         total:0,
         loading:false,
-    };
+        popShow:{
+          isshow:false
+        }
+      };
     },
     components:{
-
+      rightPop
     },
     computed:{
       ...mapState({
@@ -158,6 +154,12 @@
       };
     },
     methods: {
+      handleClick(){
+
+      },
+      onChange(){
+        this.popShow.isshow = true
+      },
       getList() {
         this.loading = true;
         this.$store

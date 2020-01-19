@@ -51,7 +51,7 @@ export default {
         {
           businessCode: null,
           name: "发薪人员",
-          url: "/employeeInfo",
+          url: "/payMaster",
           index: 0,
           icon:"iconshouye"
         }

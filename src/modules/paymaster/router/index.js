@@ -1,9 +1,9 @@
-import employeeInfo from '../employeeInfo'
+import payMaster from '../index'
 
 export default [
   {
-    path: '/employeeInfo',
-    component: employeeInfo,
+    path: '/payMaster',
+    component: payMaster,
     meta: {
       businessCode: "salary.init.taxTotalBase"
     }
