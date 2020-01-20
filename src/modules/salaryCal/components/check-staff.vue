@@ -18,6 +18,7 @@
             <i class="iconsanjiao iconfont"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="sync" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">同步本月发薪人员</el-dropdown-item>
             <el-dropdown-item command="delete" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">全部删除</el-dropdown-item>
             <el-dropdown-item command="export" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empExport')">导出</el-dropdown-item>
           </el-dropdown-menu>
@@ -37,6 +38,7 @@
         减少：
         <i>{{decNum || decNum ==0?this.decNum:"0"}}</i>人
       </span>
+      <span class="seeDetail" @click="$router.push('/inOrdeDetail')">查看增减明细</span>
     </div>
     <div class="staff-table">
       <!-- <div class="floating-menu">
@@ -205,8 +207,10 @@
 <script>
   import { apiCheckMember,apiImportMember,apiCheckMemberdelete,apiCheckMemberSummary,apiMemberErrorRecord} from '../store/api'
   import { mapState } from "vuex";
+  import RouterLink from "olading-ui/lib/mixins/router-link";
  export default {
-  data() {
+   components: {RouterLink},
+   data() {
     return {
       radio: 3,
       fileList: [],
@@ -427,8 +431,24 @@
               })
             }).catch(() => {});
         }
-      }else{
+      }
+      if(val === 'export'){
         window.location.href = "/api/salary/checkMember/export?checkId="+this.userForm.checkId+"&"+"key="+this.userForm.key
+      }
+      if(val === 'sync'){
+        this.$confirm("请确认是否重新同步本月算薪人员", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+          center:false
+        }).then(() => {
+            this.$store.dispatch('salaryCalStore/deleteCheckMemberDeleteAll',this.userForm.checkId).then(res=>{
+              if(res.code === "0000"){
+                this.loading();
+                this.$message.success("删除成功")
+              }
+            })
+          }).catch(() => {});
       }
     },
     //增员导入
@@ -478,6 +498,13 @@
       color: $mainColor;
       font-style: normal;
       padding: 0 3px;
+    }
+    .seeDetail{
+      display: inline-block;
+      margin-left: 10px;
+      color: $mainColor;
+      cursor: pointer;
+      font-size: 14px;
     }
   }
   .staff-table {

@@ -54,24 +54,28 @@
                     :value="item.value">
                   </el-option>
                 </el-select></span>
-                <span> <span class="weekend-style">至</span> {{this.endTime}}</span>
+                <span><span class="weekend-style">至</span> {{this.endTime}}</span>
               </el-form-item>
               <el-form-item label="发薪日期" prop="">
-                <span class="select-style"><el-select v-model="basicInfoForm.payMonth" placeholder="请选择">
-                  <el-option v-for="item in payMonthOptions"
-                             :key="item.value"
-                             :label="item.label"
-                             :value="item.value">
-                  </el-option>
-                </el-select></span>
-                <span class="select-style"><el-select v-model="basicInfoForm.payDay">
-                  <el-option
-                    v-for="item in payDay"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select></span>
+                <span class="select-style">
+                  <el-select v-model="basicInfoForm.payMonth" placeholder="请选择">
+                    <el-option v-for="item in payMonthOptions"
+                               :key="item.value"
+                               :label="item.label"
+                               :value="item.value">
+                    </el-option>
+                  </el-select>
+                </span>
+                <span class="select-style">
+                  <el-select v-model="basicInfoForm.payDay">
+                      <el-option
+                      v-for="item in payDay"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </span>
               </el-form-item>
               <el-form-item label="启动单月多次算发薪" v-if="basicInfoForm.taxRule !== 'YEAR_END_BONUS'">
                 <el-switch
