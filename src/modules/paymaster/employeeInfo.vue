@@ -1,5 +1,5 @@
 <template>
-  <div class="attrition">
+  <div class="employee-Info">
     <div class="tax el-diy-month">
       <div class="attrition-content">
         <div class="screening">
@@ -19,7 +19,7 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import">新增人员</el-button>
+              <el-button type="primary" class="add-import" @click="addEmployee">新增人员</el-button>
               <el-popover
                 ref="popMore"
                 placement="bottom-end"
@@ -31,8 +31,16 @@
               </el-popover>
             </div>
           </div>
-          <div class="staff-situation">
-
+          <div class="drop-down">
+            扣缴义务人:
+            <el-select v-model="ruleForm.taxSubId" placeholder="请选择">
+              <el-option
+                v-for="item in taxSubjectInfoList"
+                :key="item.taxSubId"
+                :label="item.taxSubName"
+                :value="item.taxSubId">
+              </el-option>
+            </el-select>
           </div>
           <div class="staff-table">
             <el-table
@@ -50,7 +58,7 @@
               </el-table-column>
               <el-table-column prop="name" label="姓名" width="140">
                 <template slot-scope="scope">
-                  <span class="table-name" @click="handleCollectionName(scope.row)" v-if="privilegeVoList.includes('salary.report.personReport.edit')">{{ scope.row.empName }}</span>
+                  <span class="table-name" @click="handleEmplayeeName(scope.row)" v-if="privilegeVoList.includes('salary.report.personReport.edit')">{{ scope.row.empName }}</span>
                   <span class="table-name" v-else>{{ scope.row.empName }}</span>
                 </template>
               </el-table-column>
@@ -72,7 +80,7 @@
               <el-table-column prop="mobile" label="公积金期缴月份" width="140"></el-table-column>
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
-                  <span class="funStyle" @click="onChange">调动</span>
+                  <span class="funStyle" @click="onChange(scope.row)">调动</span>
                   <span class="funStyle">删除</span>
                 </template>
               </el-table-column>
@@ -86,13 +94,12 @@
               class="staff-page"
             ></el-pagination>
           </div>
-
         </div>
       </div>
     </div>
     <right-pop :pop-show="popShow" :has-footer="false" popTitle="变更公司" :popWidth="600">
       <div slot="pop-content">
-
+        <companyChange @hanleClose="hanleClose" :companyChangeName="companyChangeName" :companyChangeIdCard="companyChangeIdCard"></companyChange>
       </div>
     </right-pop>
   </div>
@@ -101,6 +108,7 @@
   import { mapState } from "vuex";
   import * as AT from "./store/actionTypes";
   import rightPop from '@/components/basic/rightPop'
+  import companyChange from './components/companyChange'
   import fun from "@/util/fun";
   let date = fun.headDate();
   let month = new Date().getMonth() + 1;
@@ -110,19 +118,26 @@
     data() {
       return {
         activeName:"emplyeeInfo",
+        taxSubjectInfoList:[{
+          taxSubId: 0,
+          taxSubName: "全部"
+        }],
         ruleForm:{
           companyName:"",
           plan:"",
           city:"",
+          taxSubId:"",
           insuredStart:"",
           insuredEnd:"",
           stopInsuranceStart:"",
           stopInsuranceEnd:"",
         },
+        companyChangeName:"",
+        companyChangeIdCard:"",
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
         selectMonth: defaultDate,
-        list: [{name:"减员",type:'dec'}],
+        list: [{name:"马大哈",type:'dec',idCard:"777888999"}],
         closeModel: false,
         isShowScreening:false,
         total:0,
@@ -133,7 +148,8 @@
       };
     },
     components:{
-      rightPop
+      rightPop,
+      companyChange
     },
     computed:{
       ...mapState({
@@ -141,7 +157,7 @@
       }),
     },
     created(){
-
+      this.getList()
     },
     mounted() {
       const that = this;
@@ -157,8 +173,11 @@
       handleClick(){
 
       },
-      onChange(){
+      //调动
+      onChange(data){
         this.popShow.isshow = true
+        this.companyChangeIdCard = data.idCard
+        this.companyChangeName = data.name
       },
       getList() {
         this.loading = true;
@@ -171,6 +190,31 @@
               this.list = res.data.data;
             }
           });
+        this.getTaxSubjectInfoList()
+      },
+      //扣缴义务人列表
+      getTaxSubjectInfoList() {
+        this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
+          if (res.success) {
+            this.taxSubjectInfoList = [{'taxSubId':0,'taxSubName':"全部"}].concat(res.data);
+            this.ruleForm.taxSubId = this.taxSubjectInfoList[0].taxSubId
+          }
+        });
+      },
+      // 关闭更改侧滑框
+      hanleClose(isFresh) {
+        this.popShow.isshow = false
+        if(isFresh){
+          this.getList()
+        }
+      },
+      //新增人员
+      addEmployee() {
+        this.$router.push('/addEmployee')
+      },
+      //员工详情
+      handleEmplayeeName(data){
+        this.$router.push('/employeeDetail')
       },
       //导出
       handleExport(){
@@ -190,7 +234,6 @@
         for(let key in this.ruleForm){
           this.ruleForm[key] = ""
         }
-        console.log(this.ruleForm)
       },
       handleCheckTaxSubject(item) {
         this.ruleForm.taxSubjectId = item.taxSubId;
@@ -210,7 +253,7 @@
 </script>
 <style lang="scss" scoped>
   @import "../../assets/scss/helpers.scss";
-  .attrition {
+  .employee-Info {
     .header {
       border-bottom: 1px solid #ededed;
       .add-table {

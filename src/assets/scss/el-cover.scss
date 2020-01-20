@@ -348,7 +348,7 @@
     }
   }
 }
-.attrition-detail {
+.attrition-detail,.employee-detail,.add-employee {
   .el-input--suffix .el-input__inner,input[type="text"] {
     width: 300px;
   }
@@ -364,4 +364,17 @@
     }
   }
 }
-
+.company-change {
+  .el-input--prefix .el-input__inner {
+    padding: 14px 30px;
+  }
+}
+.employee-Info {
+  .drop-down {
+    margin: 10px 0px;
+    input[type="text"] {
+      border:none;
+      text-align: center;
+    }
+  }
+}

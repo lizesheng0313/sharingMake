@@ -44,20 +44,20 @@
               <div class="base-info-con">
                   <el-form label-width="140px" v-if="!isEdit">
                       <el-row>
-                        <el-col :span="12"><el-form-item label="姓名：">马大哈</el-form-item></el-col>
-                        <el-col :span="12"><el-form-item label="工号：">马大哈</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="参保方案：">马大哈</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="参保城市：">马大哈</el-form-item></el-col>
                       </el-row>
                       <el-row>
-                        <el-col :span="12"><el-form-item label="证件类型：">居民身份证</el-form-item></el-col>
-                        <el-col :span="12"><el-form-item label="证件号码：">101110198009080922</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="社保起缴月份：">居民身份证</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="员工社保基数：">101110198009080922</el-form-item></el-col>
                       </el-row>
                       <el-row>
-                        <el-col :span="12"><el-form-item label="户籍城市：">广东省广州市</el-form-item></el-col>
-                        <el-col :span="12"><el-form-item label="户口性质：">外阜城镇</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="公积金起缴月份：">广东省广州市</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="员工公积金基数：">外阜城镇</el-form-item></el-col>
                       </el-row>
                       <el-row>
-                        <el-col :span="12"><el-form-item label="公司名称：">北京阿拉钉科技有限公司</el-form-item></el-col>
-                        <el-col :span="12"><el-form-item label="用工性质：">全职</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="社保停缴月份：">北京阿拉钉科技有限公司</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="公积金停缴月份：">全职</el-form-item></el-col>
                       </el-row>
                       <el-row>
                         <el-col :span="12"><el-form-item label="入职日期：">2019-01-02</el-form-item></el-col>
@@ -89,8 +89,8 @@
                     </div>
                     <div style="flex:1">
                       <el-form-item label="员工社保基数" prop="socialBase" :rules="{ required: true, message: '请选择员工社保基数', trigger: 'blur'}">
-                      <el-input v-model="insuredForm.socialBase"></el-input>
-                    </el-form-item>
+                        <el-input v-model="insuredForm.socialBase"></el-input>
+                      </el-form-item>
                     </div>
                   </el-row>
                   <el-row style="display: flex">
@@ -287,7 +287,7 @@ export default {
     }
     .insured-info{
       .title{
-        margin: 0px 0px 10px 0px;
+        margin: 0px 0px 30px 0px;
       }
       .fun-right{
         float: right;
