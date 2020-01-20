@@ -12,24 +12,28 @@
         </el-row>
       </header>
       <employee-info v-if="activeName=='emplyeeInfo'"></employee-info>
+      <quickStaff v-if="activeName=='socialInceace'" :showTitle = "showTitle"></quickStaff>
     </div>
   </div>
 </template>
 <script>
   import { mapState } from "vuex";
   import employeeInfo from "./employeeInfo"
+  import quickStaff from "../socialFund/quickStaff"
   import * as AT from "./store/actionTypes";
   import fun from "@/util/fun";
   export default {
+    components:{
+      employeeInfo,
+      quickStaff
+    },
     data() {
       return {
         activeName:"emplyeeInfo",
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
+        showTitle:false
     };
-    },
-    components:{
-      employeeInfo
     },
     computed:{
       ...mapState({

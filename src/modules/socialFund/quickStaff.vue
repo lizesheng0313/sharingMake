@@ -1,7 +1,7 @@
 <template>
   <div class="quickStaff">
     <div class="tax el-diy-month">
-      <header class="header main-title">
+      <header class="header main-title" v-if="showTitle">
         <el-row type="flex">
           <el-col :span="12">
             <span @click="$router.go(-1)" class="back-style">返回</span>
@@ -196,43 +196,50 @@
   let defaultDate =
     date.year + "年" + (date.month >= 10 ? date.month : "0" + date.month) + "月";
   export default {
-    data() {
-      return {
-        ruleForm:{
-          companyName:"",
-          plan:"",
-          city:"",
-          enterStart:"",
-          enterEnd:"",
-          leaveStart:"",
-          leaveEnd:"",
-        },
-        cityOption:[
-
-        ],
-        planOption:[
-
-        ],
-        companyName:"",
-        screenWidth: document.body.clientWidth,// 屏幕尺寸
-        screenHeight: document.body.clientHeight - 330,
-        list: [{name:"妞妞"},{name:"丫丫"}],
-        closeModel: false,
-        isShowScreening:false,
-        isShowDecrease:false,
-        total:0,
-        uninsuredActive:true,
-        insuredActive:false,
-        uninsuredCount:0,
-        insuredCount:0,
-        loading:false,
-        selectNameList:[],
-    };
-    },
     components:{
       socialIncreace,
       socialDecreace
     },
+    props:{
+      showTitle:{
+        type:Boolean,
+        default:true,
+      }
+    },
+    data() {
+      return {
+          ruleForm:{
+            companyName:"",
+            plan:"",
+            city:"",
+            enterStart:"",
+            enterEnd:"",
+            leaveStart:"",
+            leaveEnd:"",
+          },
+          cityOption:[
+
+          ],
+          planOption:[
+
+          ],
+          companyName:"",
+          screenWidth: document.body.clientWidth,// 屏幕尺寸
+          screenHeight: document.body.clientHeight - 330,
+          list: [{name:"妞妞"},{name:"丫丫"}],
+          closeModel: false,
+          isShowScreening:false,
+          isShowDecrease:false,
+          total:0,
+          uninsuredActive:true,
+          insuredActive:false,
+          uninsuredCount:0,
+          insuredCount:0,
+          loading:false,
+          selectNameList:[],
+      };
+    },
+
     computed:{
       ...mapState({
         privilegeVoList:state=>state.privilegeVoList
