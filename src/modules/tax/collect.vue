@@ -37,6 +37,7 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
+              <el-button type="primary" class="add-import" @click="handleAddStaff">添加</el-button>
               <el-button type="primary" class="add-import" @click="handleReport"
                          v-if="privilegeVoList.includes('salary.report.personReport.sendReport')">报送</el-button>
               <el-button class="add-import" @click="handleReportInfo"
@@ -430,6 +431,9 @@ export default {
     handleExport(){
       this.$store
         .dispatch("taxPageStore/actionTaxEmpCollectNewListExport", this.ruleForm)
+    },
+    handleAddStaff(){
+
     },
     //报送
     handleReport() {

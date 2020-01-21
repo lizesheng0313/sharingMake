@@ -55,8 +55,7 @@ export default {
   },
   methods:{
     goBack(){
-      // let goUrl = this.goUrl ==="-1" ? this.$router.go(-1): this.$router.push("/salary-cal");
-      this.$router.go(-1)
+      this.goUrl ? this.$router.push(this.goUrl) :this.$router.go(-1);
     }
   }
 };

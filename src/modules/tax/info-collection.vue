@@ -46,6 +46,26 @@
                 <el-form-item label="姓名" prop="empName">
                   <el-input v-model="employeeFormData.empName" :disabled="checkSuccess"></el-input>
                 </el-form-item>
+                <el-form-item label="其他证件类型">
+                  <el-select v-model="employeeFormData.otherIdCardType" placeholder="请选择" >
+                    <el-option
+                      v-for="(value,key) in baseInfo.empSex"
+                      :key="key"
+                      :label="value"
+                      :value="key"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="出生国家" prop="birthCountry" :rules="{required: true, message: '出生国家不能为空', trigger: 'blur'}">
+                  <el-select v-model="employeeFormData.birthCountry" placeholder="请选择" >
+                    <el-option
+                      v-for="(value,key) in baseInfo.empSex"
+                      :key="key"
+                      :label="value"
+                      :value="key"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
                 <el-form-item label="性别" required>
                   <el-select v-model="employeeFormData.empSex" placeholder="请选择" :disabled="checkDisabled">
                     <el-option
@@ -79,7 +99,13 @@
                 <el-form-item label="国籍(地区)" prop="country" :disabled="checkSuccess">
                   <el-input value="中国" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="出生日期" prop="birthday">
+                <el-form-item label="其他证件号码" prop="otherIdCard">
+                  <el-input v-model="employeeFormData.otherIdCard"></el-input>
+                </el-form-item>
+                <el-form-item label="英文名" prop="englishName">
+                  <el-input v-model="employeeFormData.englishName" ></el-input>
+                </el-form-item>
+                <el-form-item label="出生日期" prop="englishName">
                   <el-date-picker
                     value-format="yyyy-MM-dd"
                     v-model="employeeFormData.birthday"
@@ -123,9 +149,17 @@
                     placeholder="选择日期"
                   ></el-date-picker>
                 </el-form-item>
+                <el-form-item label="首次入境时间" prop="empDay">
+                  <el-date-picker
+                    value-format="yyyy-MM-dd"
+                    v-model="employeeFormData.empDay"
+                    type="date"
+                    placeholder="选择日期"
+                  ></el-date-picker>
+                </el-form-item>
               </el-col>
               <el-col :span="7" class="right-input-box">
-                <el-form-item label="工号">
+                <el-form-item label="涉税事由" :rules="{required: true, message: '涉税事由不能为空', trigger: 'blur'}">
                   <el-input v-model="employeeFormData.empNo"></el-input>
                 </el-form-item>
                 <el-form-item
@@ -133,6 +167,14 @@
                   label="离职日期"
                   :class="{'is-required':employeeFormData.workerStatus=='NO_NORMAL'}"
                 >
+                  <el-date-picker
+                    value-format="yyyy-MM-dd"
+                    v-model="employeeFormData.leaveDay"
+                    type="date"
+                    placeholder="选择日期"
+                  ></el-date-picker>
+                </el-form-item>
+                <el-form-item label="预计离境日期" :rules="{required: true, message: '预计离境日期不能为空', trigger: 'blur'}">
                   <el-date-picker
                     value-format="yyyy-MM-dd"
                     v-model="employeeFormData.leaveDay"
@@ -151,10 +193,20 @@
                   <el-input v-model="employeeFormData.mobile"></el-input>
                 </el-form-item>
                 <el-form-item label="开户银行">
-                  <el-input v-model="employeeFormData.wageCardBank"></el-input>
+                  <el-select v-model="employeeFormData.wageCardBank" placeholder="请选择">
+                    <el-option
+                      v-for="(value,key) in baseInfo.workerType"
+                      :key="key"
+                      :label="value"
+                      :value="key"
+                    ></el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="7" class="right-input-box">
+                <el-form-item style="height: 40px">
+<!--                  <el-input v-model="employeeFormData.wageCardNum"></el-input>-->
+                </el-form-item>
                 <el-form-item label="银行账号">
                   <el-input v-model="employeeFormData.wageCardNum"></el-input>
                 </el-form-item>

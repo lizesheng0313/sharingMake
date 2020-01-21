@@ -35,9 +35,9 @@
             </el-steps>
         </div>
         <div class="view-content">
+          <check-staff v-if="active==0"></check-staff>
+          <staff-collect v-if="active==1"></staff-collect>
           <div v-if="salaryItem.taxRule === 'SALARY_PAY_RULE'">
-            <check-staff v-if="active==0"></check-staff>
-            <staff-collect v-if="active==1"></staff-collect>
             <attach v-if="active==2"></attach>
             <socialProvident v-if="active==3"></socialProvident>
             <calc-wages v-if="active==4"></calc-wages>
@@ -45,8 +45,6 @@
             <salarySend v-if="active==6" @changeActive="changeActive"></salarySend>
           </div>
          <div v-else>
-           <check-staff v-if="active==0"></check-staff>
-           <staff-collect v-if="active==1"></staff-collect>
            <calc-wages v-if="active==2"></calc-wages>
            <payment v-if="active==3" @changeActive="changeActive"></payment>
            <salarySend v-if="active==4" @changeActive="changeActive"></salarySend>
@@ -65,6 +63,7 @@ import payment from "./components/payment";
 import salarySend from "./components/salarySend";
 import attach from "./components/attach";
 import socialProvident from "./components/socialProvident"
+
 
 import { mapState } from "vuex";
 export default {
