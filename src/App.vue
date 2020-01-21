@@ -54,7 +54,14 @@ export default {
           url: "/payMaster",
           index: 0,
           icon:"iconshouye"
-        }
+        },{
+          businessCode: null,
+          name: "参保月度台账",
+          url: "/insuredAccount",
+          index: 0,
+          icon:"iconshouye"
+        },
+
       ]
       }
   },
