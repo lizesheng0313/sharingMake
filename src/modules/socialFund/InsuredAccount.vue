@@ -25,7 +25,7 @@
               ></el-date-picker>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import">生成月度台账</el-button>
+              <el-button type="primary" class="add-import" @click="isShowCreateAccount = true">生成月度台账</el-button>
               <el-button  class="add-import">导入月度台账</el-button>
             </div>
           </div>
@@ -38,17 +38,12 @@
               :style="{width:screenWidth-255+'px'}"
               border
             >
-              <el-table-column
-                type="index"
-                label="编号"
-                width="50">
-              </el-table-column>
-              <el-table-column prop="name" label="参保月份" width="140">
+              <el-table-column prop="month" label="参保月份" width="140">
                 <template slot-scope="scope">
-                  <span class="table-name">{{ scope.row.empName }}</span>
+                  <span class="table-name">{{ scope.row.month }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="empNo" label="公司名称" width="140"></el-table-column>
+              <el-table-column prop="companyName" label="公司名称" width="140"></el-table-column>
               <el-table-column prop="idNo" label="参保人数" width="180"></el-table-column>
               <el-table-column prop="idNo" label="本月增员人数" width="100"></el-table-column>
               <el-table-column prop="empSex" label="本月减员人数" width="100">
@@ -64,11 +59,11 @@
                 <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
               </el-table-column>
               <el-table-column prop="mobile" label="公司公积金合计" width="140"></el-table-column>
-              <el-table-column prop="mobile" label="台账来源" width="140"></el-table-column>
+              <el-table-column prop="source" label="台账来源" width="140"></el-table-column>
               <el-table-column prop="mobile" label="是否归档" width="140"></el-table-column>
-              <el-table-column label="操作" fixed="right" width="280px">
+              <el-table-column label="操作" fixed="right" width="160px">
                 <template slot-scope="scope">
-                  <span class="funStyle" @click="goDetail(scope.row)">归档</span>
+                  <span class="funStyle" @click="placeFile(scope.row)">归档</span>
                   <el-popover
                     ref="popMore"
                     placement="bottom-end"
@@ -91,6 +86,34 @@
               class="staff-page"
             ></el-pagination>
           </div>
+          <!-- 生成月度台账-->
+          <el-dialog
+            :visible.sync="isShowCreateAccount"
+            title="生成月度台账"
+            width="52%"
+            center
+            class="screen-dialog"
+            :close-on-click-modal="closeModel"
+          >
+            <div class="screening-wapper">
+              <el-form :model="createForm" ref="createForm" label-width="100px" class="demo-ruleForm">
+                <div class="shortCon">
+                  <el-form-item label="台账月份" label-width="20%" prop="month" :rules="{required: true, message: '请选择台账月份', trigger: 'blur'}">
+                    <el-date-picker v-model="createForm.month" type="month" placeholder="请选择"></el-date-picker>
+                  </el-form-item>
+                  <el-form-item label="公司范围" label-width="20%" prop="area" :rules="{required: true, message: '请选择公司范围', trigger: 'blur'}">
+                    <el-select v-model="createForm.area" placeholder="请选择公司范围">
+                      <el-option v-for="(item,index) in areaOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="handleCreate">确定</el-button>
+                    <el-button @click="isShowCreateAccount = false">取消</el-button>
+                  </span>
+                </div>
+              </el-form>
+            </div>
+          </el-dialog>
         </div>
       </div>
     </div>
@@ -108,13 +131,19 @@
           pageSize:"20",
           month:""
         },
+        createForm:{
+          month:"",
+          area:"",
+        },
+        isShowCreateAccount:false,
         companyList:[],
         loading:false,
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
-        list: [{name:"减员",type:'dec'},{name:"增员",type:'inc'}],
+        list: [{name:"减员",companyName:"123",month:"12",type:'dec',source:"create"},{month:"11",name:"增员",companyName:"123",type:'inc',source:"import"}],
         closeModel: false,
         total:0,
+        areaOption:[]
     };
     },
     components:{
@@ -157,7 +186,28 @@
             }
           });
       },
-      //导出
+      //重新生成
+      handleCreate(){
+        this.$refs['createForm'].validate(valid => {
+          if(valid){
+            console.log("111")
+          }
+        })
+      },
+      //归档
+      placeFile(){
+        this.$confirm('是否归档公司本月社保台账，薪资计算时能获取已归档的社保公积金数据?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+        });
+      },
       handleSizeChange(val) {
         this.totalListForm.pageSize = val;
         this.totalListForm.currPage = 1;
@@ -196,6 +246,16 @@
           top: 3px;
           z-index: 0;
         }
+      }
+    }
+    .screen-dialog {
+      .shortCon{width:450px;
+        margin: 0 auto;}
+      .dialog-footer{
+        display: inline-block;
+        width: 100%;
+        margin-top: 10px;
+        text-align: center;
       }
     }
     .screening {
