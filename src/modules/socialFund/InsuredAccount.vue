@@ -40,7 +40,7 @@
             >
               <el-table-column prop="month" label="参保月份" width="140">
                 <template slot-scope="scope">
-                  <span class="table-name">{{ scope.row.month }}</span>
+                  <span class="table-name" @click="goAccountDetail(scope.row)">{{ scope.row.month }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="companyName" label="公司名称" width="140"></el-table-column>
@@ -207,6 +207,10 @@
           });
         }).catch(() => {
         });
+      },
+      //生成、导入台账明细
+      goAccountDetail(data){
+        this.$router.push({path:'/insuredAccountDetail',query:{source:data.source}})
       },
       handleSizeChange(val) {
         this.totalListForm.pageSize = val;

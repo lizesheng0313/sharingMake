@@ -2,6 +2,7 @@ import attrition from '../attrition'
 import quickStaff from '../quickStaff'
 import attritionDetail from '../attritionDetail'
 import insuredAccount from '../insuredAccount'
+import insuredAccountDetail from '../insuredAccountDetail'
 
 export default [
   {
@@ -30,6 +31,13 @@ export default [
     component: insuredAccount,
     meta: {
       businessCode: "salary.init.insuredAccount"
+    }
+  },
+  {
+    path: '/insuredAccountDetail',
+    component: insuredAccountDetail,
+    meta: {
+      businessCode: "salary.init.insuredAccountDetail"
     }
   }
 ]
