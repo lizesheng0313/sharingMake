@@ -60,7 +60,13 @@ export default {
           url: "/insuredAccount",
           index: 0,
           icon:"iconshouye"
-        },
+        },{
+          businessCode: null,
+          name: "参保方案",
+          url: "/insuredPlan",
+          index: 0,
+          icon:"iconshouye"
+        }
 
       ]
       }

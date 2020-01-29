@@ -4,7 +4,6 @@
       :fsTitle="'查看详情'"
       :bgColor="'#fff'"
       class="info-collection"
-      :goUrl="'-1'"
     >
       <div slot="fs-container">
           <div class="attrition-detail-con">
