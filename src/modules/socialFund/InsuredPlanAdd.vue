@@ -31,9 +31,10 @@
           <div class="social-plan">
             <div class="social-plan-title">
               <span class="plan-title">社保方案</span>
-              <span class="plan-tip">北京有2个社保方案供您参保 <span class="choose-plan">选择方案</span></span>
+              <span class="plan-tip">北京有2个社保方案供您参保 <span class="choose-plan" @click="choosePlan">选择方案</span></span>
             </div>
             <div class="social-plan-table">
+              <insuranceTypeAdd :iconStyle="iconStyle" :iconTitle="iconTitle" :iconTitleStyle="iconTitleStyle" class="insurance-type-add"></insuranceTypeAdd>
               <el-table :data="socailList" border>
                 <el-table-column prop="month" label=" " >
                   <template slot-scope="scope">
@@ -100,14 +101,39 @@
         </el-form>
       </div>
     </div>
+    <!-- 选择方案 -->
+    <el-dialog :visible.sync="isShowChoosePlan" title="选择方案" width="600px" center class="screen-dialog" :close-on-click-modal="closeModel">
+      <div class="screening-wapper">
+        <el-form :model="choosePlanForm" ref="choosePlanForm" label-width="120px" >
+          <div class="shortCon">
+            <el-form-item label="社保方案">
+              <el-select v-model="choosePlanForm.socialPlan" placeholder="请选择社保方案" width="246px">
+                <el-option v-for="(item,index) in socialOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="公积金方案">
+              <el-select v-model="choosePlanForm.fundPlan" placeholder="请选择公积金方案">
+                <el-option v-for="(item,index) in fundOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              </el-select>
+            </el-form-item>
+            <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="handleChoosePlan">确定</el-button>
+              <el-button @click="isShowChoosePlan = false">取消</el-button>
+            </span>
+          </div>
+        </el-form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
   import { mapState } from "vuex";
   import * as AT from "./store/actionTypes";
   import fun from "@/util/fun";
+  import insuranceTypeAdd from "./components/InsuredPlanAdd/insuranceTypeAdd"
   export default {
     components:{
+      insuranceTypeAdd
     },
     data() {
       return {
@@ -135,8 +161,24 @@
             label:"四舍五入至分",
             value:"1"
           }
-        ]
-
+        ],
+        closeModel:false,
+        isShowChoosePlan:false,
+        socialOption:[],
+        fundOption:[],
+        choosePlanForm:{
+          socialPlan:"",
+          fundPlan:"",
+        },
+        iconStyle:{
+          'font-size':'20px',
+          'color':'#108EE9'
+        },
+        iconTitle:"添加险种",
+        iconTitleStyle:{
+          'font-size':'14px',
+          'color':'#108EE9'
+        }
       };
     },
 
@@ -158,13 +200,19 @@
       };
     },
     methods: {
+      choosePlan(){
+        this.isShowChoosePlan = true;
+      },
+      handleChoosePlan(){
 
+      }
     }
   };
 </script>
 <style lang="scss" scoped>
   @import "../../assets/scss/helpers.scss";
   .insured-account-add {
+    height: 100%;
     .header {
       border-bottom: 1px solid #ededed;
       .add-table {
@@ -196,14 +244,30 @@
           border-radius: 4px;
           margin-left: 20px;
         }
+        .insurance-type-add {
+          position: relative;
+          left:26px;
+          top:36px;
+          z-index: 9999;
+        }
         .choose-plan{
           color:$mainColor;
           cursor:pointer;
           padding-left: 10px;
         }
         .social-plan-table {
-          margin: 20px 20px 0px 0px;
+          margin: 0px 20px 0px 0px;
         }
+      }
+    }
+    .screen-dialog {
+      .shortCon{width:370px;
+        margin: 0 auto;}
+      .dialog-footer{
+        display: inline-block;
+        width: 100%;
+        margin-top: 10px;
+        text-align: center;
       }
     }
   }
