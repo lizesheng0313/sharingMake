@@ -55,7 +55,9 @@ export default {
   },
   methods:{
     goBack(){
+      console.log(this.goUrl)
       this.goUrl ? this.$router.push(this.goUrl) :this.$router.go(-1);
+
     }
   }
 };
