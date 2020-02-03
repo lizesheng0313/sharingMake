@@ -21,7 +21,7 @@
             <div class="right">
               <el-button type="primary" class="add-import" @click="addEmployee">新增人员</el-button>
               <el-button type="primary" class="add-import" @click="batchImport">批量导入</el-button>
-              <el-button  class="more-choose" @click="handleExport">导出</el-button>
+              <el-button  class="more-choose" @click="isShowExport = true">导出</el-button>
             </div>
           </div>
           <div class="drop-down">
@@ -96,7 +96,7 @@
         <companyChange @hanleClose="hanleClose" :companyChangeName="companyChangeName" :companyChangeIdCard="companyChangeIdCard"></companyChange>
       </div>
     </right-pop>
-    <!-- 筛选-->
+<!--    筛选-->
     <el-dialog
       title=""
       :visible.sync="isShowScreening"
@@ -189,6 +189,27 @@
         <el-button @click="resetSreen">重置</el-button>
       </span>
     </el-dialog>
+<!--    导出-->
+    <el-dialog
+      title="选择导出项"
+      :visible.sync="isShowExport"
+      width="600px"
+      left
+      class="exportDialog"
+      :close-on-click-modal="closeModel"
+    >
+      <div>
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="checkAllBaseInfo"><b>基本信息</b></el-checkbox>
+        <div style="margin:10px 0px; border-bottom:1px solid #E5E5E5"></div>
+        <el-checkbox-group v-model="checkedBaseInfo" @change="checkBaseInfo">
+         <el-checkbox v-for="item in baseOptions" :label="item" :key="item" class="checkBoxStyle">{{item}}</el-checkbox>
+        </el-checkbox-group>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click ="handleExport">确定</el-button>
+        <el-button @click="isShowExport = false">取消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -274,7 +295,14 @@
         loading:false,
         popShow:{
           isshow:false
-        }
+        },
+        checkAll:false,
+        isShowExport:false,
+        baseCheckAll: false,
+        checkedBaseInfo: ['工号', '姓名', '身份证号', '部门'],
+        baseOptions:[ '姓名','工号', '证件类型','证件号码', '性别',"出生日期","国籍","手机号码","最高学历","参加工作日期","户口性质","户口所在城市","婚姻状态","民族","工资卡开户银行","工资银行账号"],
+        companyOptions:["公司名称","用工性质","部门","岗位","入职日期","工作城市","是否转正","转正日期","员工状态","最后工作日"],
+        isIndeterminate: false,
       };
     },
     components:{
@@ -329,6 +357,7 @@
         this.ruleForm.queryFilterParam.emplyNature = val
         console.log(val)
       },
+      //员工特征
       handleEmploymentStatus(val){
         this.ruleForm.queryFilterParam.emplyStatus = val
         console.log(val)
@@ -373,9 +402,19 @@
       batchImport(){
 
       },
+      //人员基本信息
+      checkAllBaseInfo(val){
+        this.checkedBaseInfo = val ? this.baseOptions : [];
+        this.isIndeterminate = false;
+      },
+      checkBaseInfo(value){
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.baseOptions.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.baseOptions.length;
+      },
       //导出
       handleExport(){
-
+        console.log(this.checkedBaseInfo)
       },
       handleSizeChange(val) {
         this.ruleForm.pageSize = val;
@@ -508,6 +547,11 @@
       width:100%;
     }
   }
-
+  .exportDialog{
+    .checkBoxStyle{
+      display: inline-block;
+      padding:5px 0px;
+    }
+  }
 </style>
 
