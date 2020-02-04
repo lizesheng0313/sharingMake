@@ -51,8 +51,7 @@
               </el-table-column>
               <el-table-column prop="name" label="姓名" width="140">
                 <template slot-scope="scope">
-                  <span class="table-name" @click="handleEmplayeeName(scope.row)" v-if="privilegeVoList.includes('salary.report.personReport.edit')">{{ scope.row.empName }}</span>
-                  <span class="table-name" v-else>{{ scope.row.empName }}</span>
+                  <span class="table-name" @click="handleEmplayeeName(scope.row)">{{ scope.row.name }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>

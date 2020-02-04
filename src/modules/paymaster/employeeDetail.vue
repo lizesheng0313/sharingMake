@@ -11,7 +11,11 @@
             <div class="base-info">
               <span class="title">基本信息</span>
               <span class="fun-right">
-                      <el-button type="primary" @click="isBaseEdit = true">编辑</el-button>
+                 <span v-if="isBaseEdit">
+                   <el-button type="primary" @click="saveBaseInfo">保存</el-button>
+                   <el-button @click="cancelBaseEdit">取消</el-button>
+                 </span>
+                 <el-button type="primary" @click="isBaseEdit = true" v-else>编辑</el-button>
               </span>
             </div>
             <div class="base-info-con">
@@ -157,19 +161,19 @@
                             </el-form-item>
                         </div>
                     </el-row>
-                    <div style="text-align: center;margin:20px 0px;">
-                      <el-button type="primary" @click="saveBaseInfo">保存</el-button>
-                      <el-button @click="cancelBaseEdit">取消</el-button>
-                    </div>
                 </el-form>
             </div>
             <div class="insured-info">
                 <span class="title">参保信息</span>
                 <span class="fun-right">
-                    <el-button type="primary" @click="isInsuredEdit = true">编辑</el-button>
+                    <span v-if="isInsuredEdit">
+                      <el-button type="primary" @click="saveInsuredInfo">保存</el-button>
+                      <el-button @click="isInsuredEdit = false">取消</el-button>
+                    </span>
+                    <span v-else><el-button type="primary" @click="isInsuredEdit = true">编辑</el-button></span>
                 </span>
             </div>
-             <div class="insured-info-con">
+            <div class="insured-info-con">
                   <el-form label-width="140px" v-if="!isInsuredEdit">
                       <el-row>
                         <el-col :span="12"><el-form-item label="姓名：">马大哈</el-form-item></el-col>
@@ -261,10 +265,6 @@
                           </el-form-item>
                         </div>
                       </el-row>
-                      <div style="text-align: center;margin:20px 0px;">
-                        <el-button type="primary" @click="saveInsuredInfo">保存</el-button>
-                        <el-button @click="isInsuredEdit = false">取消</el-button>
-                      </div>
                 </el-form>
               </div>
           </div>
