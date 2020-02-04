@@ -383,3 +383,15 @@
     text-align: right;
   }
 }
+.el-autocomplete-suggestion {
+  display: none;
+}
+.salary-area {
+  input[type="text"]{
+    height: 28px;
+  }
+  .el-tabs__item{
+    padding-left: 0 10px;
+  }
+}
+

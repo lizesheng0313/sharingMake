@@ -10,12 +10,11 @@
       </el-row>
     </header>
     <div class="salarySet_con">
-      <el-steps :active="active"  class="step-style"  align-center>
-        <el-step title="开始"  icon="el-icon-caret-right"></el-step>
-        <el-step title="① 基本信息"  icon="el-icon-edit"></el-step>
-        <el-step title="② 薪资项目"  icon="el-icon-edit-outline"
-        ></el-step>
-        <el-step title="完成"  icon="el-icon-circle-check"></el-step>
+      <el-steps :active="active" class="step-style" align-center>
+        <el-step title="开始" icon="el-icon-caret-right"></el-step>
+        <el-step title="① 基本信息" icon="el-icon-edit"></el-step>
+        <el-step title="② 薪资项目" icon="el-icon-edit-outline"></el-step>
+        <el-step title="完成" icon="el-icon-circle-check"></el-step>
       </el-steps>
 <!--      <el-steps :active="1">-->
 <!--        <el-step title="步骤 1" icon="el-icon-edit"></el-step>-->
@@ -30,7 +29,7 @@
                 <el-input v-model="basicInfoForm.name"></el-input>
               </el-form-item>
               <el-form-item label="计税规则" prop="taxRule" class="taxRule">
-                <el-select v-model="basicInfoForm.taxRule" placeholder="请选择" @change="selectMonth" :disabled=isEdit>
+                <el-select v-model="basicInfoForm.taxRule" placeholder="请选择" @change="selectMonth" :disabled = isEdit>
                   <el-option v-for="item in taxRuleOptions"
                              :key="item.value"
                              :label="item.label"
@@ -77,6 +76,19 @@
                   </el-select>
                 </span>
               </el-form-item>
+              <el-form-item label="算薪人员范围" prop="">
+                <el-input v-model="basicInfoForm.salaryArea" @focus="showSalaryArea"></el-input>
+              </el-form-item>
+              <el-form-item label="增加过滤范围" prop="" class="taxRule">
+                <el-select v-model="basicInfoForm.filterArea" multiple placeholder="请选择">
+                  <el-option
+                    v-for="item in salaryAreaOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="启动单月多次算发薪" v-if="basicInfoForm.taxRule !== 'YEAR_END_BONUS'">
                 <el-switch
                   v-model="basicInfoForm.enableMiltSalary"
@@ -97,7 +109,7 @@
 <!--        </el-tab-pane>-->
 <!--        <el-tab-pane label="薪资项目" name="secend" :disabled="salaryItemDisabled" v-loading="salaryItemLoding">-->
           <div class="salary-item">
-               <div v-for="(items,indexs) in tableData" :key="indexs" v-loading="salaryItemLoding" v-if="active === 2">
+            <div v-for="(items,indexs) in tableData" :key="indexs" v-loading="salaryItemLoding" v-if="active === 2">
             <div class="person-info">
               <span class="title">{{items[0]['group']}}</span>
               <span class="person-info-fun" @click="salaryItemDetailShow(items[0]['group'],false)">
@@ -162,14 +174,18 @@
           <el-button @click="salaryItemDetailVisible = false">取 消</el-button>
         </span>
     </el-dialog>
+    <salary-area ref="salaryArea" @sendSalayArea="getSalayArea"></salary-area>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import draggable from 'vuedraggable'
+import salaryArea from './components/salaryset/salaryArea'
 import { apiSaveSalaryRule,apiSalaryItemInfo,saveSalaryItems,deleteSalaryItems,updateSalaryItems,apiSalaryItemsSort} from './store/api'
 export default {
-  components: {},
+  components: {
+    salaryArea
+  },
   data() {
     return {
       basicInfoForm:{
@@ -179,6 +195,8 @@ export default {
         startDay:1,//算新周开始日
         payMonth:null,//发薪月
         payDay:null,//发薪日
+        salaryArea:"",//算薪人员范围
+        filterArea:"",
         enableMiltSalary:"N"
         },
       basicInfoRule:{
@@ -227,6 +245,25 @@ export default {
           value: 'NEXT_MONTH',
           label: '下月'
         }
+      ],
+      salaryAreaOptions:[
+        {
+          value: '全职',
+          label: '全职'
+        }, {
+          value: '兼职',
+          label: '兼职'
+        }, {
+          value: '实习',
+          label: '实习'
+        },{
+          value: '劳务派遣',
+          label: '劳务派遣'
+        },
+        {
+          value: '退休返聘',
+          label: '退休返聘'
+        },
       ],
       days:[],
       payDay:[],
@@ -280,6 +317,7 @@ export default {
   },
   components: {
     draggable,
+    salaryArea,
   },
   computed:{
     ...mapState("salaryCalStore", {
@@ -400,6 +438,14 @@ export default {
         this.$refs['salaryItemDetailForm']?this.$refs['salaryItemDetailForm'].resetFields():"";
         this.salaryItemDetailForm.id = null;
       }
+    },
+    //算薪范围
+    showSalaryArea(){
+      this.$refs.salaryArea.isShowSalaryArea = true
+    },
+    getSalayArea(data){
+      this.basicInfoForm.salaryArea = data;
+      console.log(data)
     },
     //新增工资项
     setSalaryItem(){

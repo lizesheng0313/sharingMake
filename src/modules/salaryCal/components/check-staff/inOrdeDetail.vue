@@ -94,10 +94,10 @@
                 <span>{{scope.row.bankNo}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" fixed="right">
+            <el-table-column label="操作" fixed="right" width="240px">
               <template slot-scope="scope">
-                <el-button size="mini" type="text" @click="handleDelete([scope.row.id])" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">删除算薪</el-button>
-                <el-button size="mini" type="text" @click="handleDelete([scope.row.id])" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">添加算薪</el-button>
+                <el-button size="mini" type="text" @click="handleDelete(scope.row.id)" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">删除算薪</el-button>
+                <el-button size="mini" type="text" @click="handleAdd(scope.row.id)" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">添加算薪</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -161,6 +161,12 @@
       //     this.count = res.data.count;
       //   }
       // })
+    },
+    handleAdd(){
+
+    },
+    handleDelete(){
+
     },
     searchUser(){
 
