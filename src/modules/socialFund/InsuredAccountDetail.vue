@@ -28,7 +28,7 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" v-if="source==='create'">社保增员</el-button>
+              <el-button type="primary" class="add-import" v-if="source==='create'" @click="showSocialIncreate">社保增员</el-button>
               <el-button type="primary" class="add-import" v-else>导入</el-button>
               <el-button class="add-import" @click="handleExport">导出</el-button>
             </div>
@@ -171,6 +171,8 @@
           <payBackImport :selectItem="selectItem" @hanleClose="hanleCloseImport"></payBackImport>
         </div>
       </right-pop>
+      <!-- 社保增员-->
+      <socialIncreace ref="socialIncreace" :selectEmployee="true"></socialIncreace>
     </div>
   </div>
 </template>
@@ -181,6 +183,7 @@
   import payBackImport from "./components/InsuredAccountDetail/paybackImport"
   import rightPop from '@/components/basic/rightPop'
   import fun from "@/util/fun";
+  import socialIncreace from './components/socialIncreace'
   let date = fun.headDate();
   let month = new Date().getMonth() + 1;
   let defaultDate =
@@ -190,6 +193,7 @@
       payBackCreate,
       payBackImport,
       rightPop,
+      socialIncreace
     },
     data() {
       return {
@@ -266,6 +270,10 @@
           if(!['isGk','isBj'].includes(key))
           this.ruleForm[key] = ""
         }
+      },
+      //社保增员
+      showSocialIncreate(){
+        this.$refs.socialIncreace.show([])
       },
       //导出
       handleExport(){

@@ -10,10 +10,22 @@
     >
       <div class="screening-wapper">
         <div class="increase-tip">温馨提示：若参保人基数/方案不同，请选择【批量增员】方式导入实现增员</div>
-        <div class="name-con">
+        <div class="name-con" v-if="!selectEmployee">
           <span class="name-box" v-for="(item,index) in nameList" :key="index">{{ item }}、</span>
         </div>
         <el-form :model="socialIncreaceForm" ref="socialIncreaceForm" label-width="140px" class="demo-ruleForm">
+          <div class="shortCon" v-if="selectEmployee">
+            <el-form-item label="人员" prop="employee" :rules="{required: true, message: '人员不能为空', trigger: 'blur'}">
+              <el-select v-model="socialIncreaceForm.employee" filterable placeholder="请选择人员">
+                <el-option
+                  v-for="item in employeeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
           <div class="shortCon">
             <el-form-item label="参保方案"
                           prop="plan"
@@ -64,6 +76,12 @@
 </template>
 <script>
 export default {
+  props:{
+    selectEmployee:{
+      type:Boolean,
+      default:false
+    }
+  },
   data() {
     return {
       socialIncreaceForm:{
@@ -73,8 +91,13 @@ export default {
         providentMonth:"",
         providentBase:"",
         providentMonthType:"1",
+        employee:""
       },
       planOption:[],
+      employeeOptions:[{
+        label:"马大哈",
+        value:"123"
+      }],
       isShowIncrease:false,
       closeModel: false,
       nameList:[]
