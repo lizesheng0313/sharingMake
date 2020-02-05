@@ -3,7 +3,7 @@
     <el-dialog
       title="增加人员"
       :visible.sync="isShowAddStaff"
-      width="52%"
+      width="54%"
       center
       class="diy-el_dialog"
       :close-on-click-modal="closeModel"
@@ -50,11 +50,14 @@
       </div>
       <div class="choose-con">
           <div class="choose-title">已选 <span class="staff-style">{{ checkedPerson.length }}人</span></div>
-        <div v-for="(item,index) in checkedPerson" :key="index" class="choose-item">
-            <span>{{ item.name }}</span>
-            <span class="emNo">{{ item.emNo }}</span>
-            <i class="el-icon-circle-close" @click="removeStaff(item)"></i>
-        </div>
+          <div class="choose-item-con">
+              <div v-for="(item,index) in checkedPerson" :key="index" class="choose-item">
+                <span>{{ item.name }}</span>
+                <span class="emNo">{{ item.emNo }}</span>
+                <i class="el-icon-circle-close" @click="removeStaff(item)"></i>
+              </div>
+          </div>
+
       </div>
     </div>
     <div class="dialog-footer">
@@ -96,7 +99,22 @@ export default {
       closeModel:false,
       staffTable:[
         {name:"哈哈",emNo:"101012"},
-        {name:"哈哈",emNo:"101012"},
+        {name:"哈哈",emNo:"101013"},
+        {name:"哈哈",emNo:"101014"},
+        {name:"哈哈",emNo:"101015"},
+        {name:"哈哈",emNo:"101016"},
+        {name:"哈哈",emNo:"101017"},
+        {name:"哈哈",emNo:"101018"},
+        {name:"哈哈",emNo:"101019"},
+        {name:"哈哈",emNo:"101022"},
+        {name:"哈哈",emNo:"101032"},
+        {name:"哈哈",emNo:"101042"},
+        {name:"哈哈",emNo:"101052"},
+        {name:"哈哈",emNo:"101062"},
+        {name:"哈哈",emNo:"101082"},
+        {name:"哈哈",emNo:"101082"},
+        {name:"哈哈",emNo:"101092"},
+
       ],
       checkedPerson:[],
     };
@@ -127,7 +145,7 @@ export default {
     }
     .choose-con{
       padding:0px 10px;
-      width: 22%;
+      width: 24%;
       .choose-title{
         height: 34px;
         line-height: 34px;
@@ -138,23 +156,30 @@ export default {
           float: right;
         }
       }
-      .choose-item{
-        line-height: 24px;
-        height: 24px;
-        .emNo{
+      .choose-item-con{
+        height: 300px;
+        overflow-y: auto;
+        .choose-item{
+          line-height: 24px;
+          height: 24px;
+          .emNo{
+            display: inline-block;
+            margin: 0px 26px 0px 6px;
+          }
+          .el-icon-circle-close{
+            float: right;
+            margin: 6px 2px 0px 0px;
+            font-size: 16px;
+            font-weight: bold;
+            display:none;
+            cursor: pointer;
+          }
+        }
+        .choose-item:hover .el-icon-circle-close{
           display: inline-block;
-          margin: 0px 26px 0px 6px;
-        }
-        .el-icon-circle-close{
-          font-size: 16px;
-          font-weight: bold;
-          display:none;
-          cursor: pointer;
         }
       }
-      .choose-item:hover .el-icon-circle-close{
-        display: inline-block;
-      }
+
     }
   }
 
