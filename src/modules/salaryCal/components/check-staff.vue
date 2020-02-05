@@ -11,6 +11,7 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
+        <el-button type="primary" @click="$refs.addStaff.isShowAddStaff = true">添加人员</el-button>
         <el-button type="primary" @click="showIncrease" class="add-import" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empAdd')">增减员导入</el-button>
         <el-dropdown trigger="click" @command="handleDropdown">
           <el-button type="default">
@@ -202,14 +203,19 @@
 <!--        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>-->
       </span>
     </el-dialog>
+    <add-staff ref="addStaff"></add-staff>
   </div>
 </template>
 <script>
   import { apiCheckMember,apiImportMember,apiCheckMemberdelete,apiCheckMemberSummary,apiMemberErrorRecord} from '../store/api'
   import { mapState } from "vuex";
   import RouterLink from "olading-ui/lib/mixins/router-link";
+  import addStaff from "@/components/tool/addStaff";
  export default {
-   components: {RouterLink},
+   components: {
+     RouterLink,
+     addStaff
+   },
    data() {
     return {
       radio: 3,

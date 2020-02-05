@@ -76,7 +76,7 @@
                   </el-select>
                 </span>
               </el-form-item>
-              <el-form-item label="算薪人员范围" prop="">
+              <el-form-item label="算薪人员范围" prop="salaryArea" >
                 <el-input v-model="basicInfoForm.salaryArea" @focus="showSalaryArea"></el-input>
               </el-form-item>
               <el-form-item label="增加过滤范围" prop="" class="taxRule">
@@ -88,6 +88,9 @@
                     :value="item.value">
                   </el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item label="无需算薪人员">
+                <el-input v-model="basicInfoForm.unNeedSalary" @focus="$refs.unNeedSalary.isShowUnNeedSalary = true"></el-input>
               </el-form-item>
               <el-form-item label="启动单月多次算发薪" v-if="basicInfoForm.taxRule !== 'YEAR_END_BONUS'">
                 <el-switch
@@ -175,16 +178,19 @@
         </span>
     </el-dialog>
     <salary-area ref="salaryArea" @sendSalayArea="getSalayArea"></salary-area>
+    <un-need-salary ref="unNeedSalary" @sendUnNeedSalary="getUnNeedSalary"></un-need-salary>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import draggable from 'vuedraggable'
 import salaryArea from './components/salaryset/salaryArea'
+import unNeedSalary from './components/salaryset/unNeedSalary'
 import { apiSaveSalaryRule,apiSalaryItemInfo,saveSalaryItems,deleteSalaryItems,updateSalaryItems,apiSalaryItemsSort} from './store/api'
 export default {
   components: {
-    salaryArea
+    salaryArea,
+    unNeedSalary
   },
   data() {
     return {
@@ -196,7 +202,8 @@ export default {
         payMonth:null,//发薪月
         payDay:null,//发薪日
         salaryArea:"",//算薪人员范围
-        filterArea:"",
+        filterArea:"",//过滤范围
+        unNeedSalary:"",//无需算薪人员
         enableMiltSalary:"N"
         },
       basicInfoRule:{
@@ -212,6 +219,9 @@ export default {
         payDay: [
           { required: true, message: '请选择日', trigger: 'change' }
         ],
+        salaryArea:[
+          { required: true, message: '请选择算薪人员范围', trigger: 'blur' },
+        ]
       },
       startDayOptions:[
         {
@@ -318,6 +328,7 @@ export default {
   components: {
     draggable,
     salaryArea,
+    unNeedSalary
   },
   computed:{
     ...mapState("salaryCalStore", {
@@ -445,7 +456,9 @@ export default {
     },
     getSalayArea(data){
       this.basicInfoForm.salaryArea = data;
-      console.log(data)
+    },
+    getUnNeedSalary(data){
+      this.basicInfoForm.unNeedSalary = data;
     },
     //新增工资项
     setSalaryItem(){

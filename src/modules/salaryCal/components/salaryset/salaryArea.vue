@@ -1,5 +1,5 @@
 <template>
-  <div class="salary-area">
+  <div class="salary-area"  @click="showSearch = false">
     <el-dialog
       title="请选择范围"
       :visible.sync="isShowSalaryArea"
@@ -11,19 +11,19 @@
     >
       <div class="company-box">
         <div class="company-box-con all">
-          <el-tabs v-model="chooseType" @tab-click="handleClick">
+          <el-tabs v-model="chooseType">
             <el-tab-pane label="公司" name="company"></el-tab-pane>
             <el-tab-pane label="人员" name="employee"></el-tab-pane>
           </el-tabs>
           <span v-if="chooseType === 'employee'">
-             <span style="display: inline-block;width:100px;position:absolute;top:6px;right:10px">
-                <el-input v-if="showSearch" v-model="searchCon" :trigger-on-focus="focus" placeholder="姓名搜索" class="salary-area-input"
-                                 @blur="showSearch = false"
+             <span class="input-style">
+                <el-input v-if="showSearch" v-model="searchCon" placeholder="姓名搜索" class="salary-area-input"
+                  @click.stop.native="showSearch = true"
                 ></el-input>
              </span>
-            <i class="el-icon-search" v-if="!showSearch" @click="showSearch = true"></i>
+            <i class="el-icon-search" v-if="!showSearch" @click.stop="showSearch = true"></i>
           </span>
-          <div @click="showSearch = false">
+          <div>
               <div style="margin-bottom: 10px" v-if="chooseType === 'company'">全部公司</div>
               <div v-else style="margin-bottom: 10px">
                   <el-select v-model="company" placeholder="请选择公司" style="margin-bottom: 10px;border:none">
@@ -32,16 +32,18 @@
               </div>
               <el-checkbox :indeterminate="chooseTypeObj[chooseType]['isIndeterminate']" v-model="chooseTypeObj[chooseType]['checkAll']" @change="handleCheckAll">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>
-              <el-checkbox-group v-model="chooseTypeObj[chooseType]['checkedCities']" @change="handleCheckedCities">
+              <el-checkbox-group v-model="chooseTypeObj[chooseType]['checkedCities']" @change="handleCheckedCities" class="check-con">
                   <el-checkbox v-for="city in chooseTypeObj[chooseType]['cities']" :label="city" :key="city" class="check-style">{{ city }}</el-checkbox>
               </el-checkbox-group>
           </div>
         </div>
         <div class="company-box-con choose">
               <div class="choose-title">已选：<span class="clear" @click="hanleClearAll">清除</span></div>
-              <div v-for="(item,index) in chooseTypeObj[chooseType]['checkedCities']" :key="index" class="choose-item">
-                {{ item }}
-                <i class="el-icon-circle-close" @click="handleRemoveItem(item)"></i>
+              <div class="choose-con">
+                <div v-for="(item,index) in chooseTypeObj[chooseType]['checkedCities']" :key="index" class="choose-item">
+                  {{ item }}
+                  <i class="el-icon-circle-close" @click="handleRemoveItem(item)"></i>
+                </div>
               </div>
         </div>
       </div>
@@ -70,7 +72,7 @@ export default {
         "company":{
           checkAll: false,
           checkedCities: [],
-          cities: ['上海', '北京', '广州', '深圳'],
+          cities: ['上海', '北京', '广州', '深圳',"厦门","河北","山东"],
           isIndeterminate: false
         },
         "employee":{
@@ -124,11 +126,10 @@ export default {
         })
       }
       this.$emit("sendSalayArea",sendStr)
-      console.log(this.chooseTypeObj[this.chooseType]['checkedCities'])
       this.isShowSalaryArea = false;
     },
     handleClick(){
-
+      this.chooseTypeObj[this.chooseType]['checkedCities'] = []
     }
   }
 };
@@ -150,6 +151,14 @@ export default {
         display: block;
         margin-bottom: 10px;
       }
+      .check-con{
+        height: 140px;
+        overflow-y: auto;
+      }
+      .choose-con{
+        height: 200px;
+        overflow-y: auto;
+      }
       .choose-title{
         border-bottom:1.2px solid #E4E7ED;
         padding:10px 0px;
@@ -167,6 +176,7 @@ export default {
       .el-icon-circle-close{
         display: none;
         float: right;
+        margin-top: 6px;
       }
       .choose-item:hover .el-icon-circle-close{
         display: inline-block;
@@ -174,6 +184,13 @@ export default {
     }
     .all{
       position: relative;
+      .input-style{
+        display: inline-block;
+        width:120px;
+        position:absolute;
+        top:7px;
+        right:10px;
+      }
     }
     .el-icon-search{
       position:absolute;
