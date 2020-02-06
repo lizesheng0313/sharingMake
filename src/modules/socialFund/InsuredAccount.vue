@@ -210,7 +210,7 @@
       },
       //生成、导入台账明细
       goAccountDetail(data){
-        this.$router.push({path:'/insuredAccountDetail',query:{source:data.source}})
+        this.$router.push({path:'/insuredAccountDetailed',query:{source:data.source}})
       },
       handleSizeChange(val) {
         this.totalListForm.pageSize = val;

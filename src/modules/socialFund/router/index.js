@@ -3,6 +3,7 @@ import quickStaff from '../quickStaff'
 import attritionDetail from '../attritionDetail'
 import insuredAccount from '../insuredAccount'
 import insuredAccountDetail from '../insuredAccountDetail'
+import insuredAccountDetailed from '../insuredAccountDetailed'
 import insuredPlan from '../insuredPlan'
 import insuredPlanAdd from '../insuredPlanAdd'
 
@@ -38,8 +39,15 @@ export default [
   {
     path: '/insuredAccountDetail',
     component: insuredAccountDetail,
+      meta: {
+        businessCode: "salary.init.insuredAccountDetail"
+      }
+  },
+  {
+    path: '/insuredAccountDetailed',
+    component: insuredAccountDetailed,
     meta: {
-      businessCode: "salary.init.insuredAccountDetail"
+      businessCode: "salary.init.insuredAccountDetailed"
     }
   },
   {
