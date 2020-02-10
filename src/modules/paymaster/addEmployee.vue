@@ -309,7 +309,6 @@ export default {
       otherIdCardTypeOption:[],
       birthCountryOption:[],
       taxReasonOption:[],
-
     };
   },
   mounted() {

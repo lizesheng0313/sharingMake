@@ -25,8 +25,8 @@
             </div>
           </div>
           <div class="drop-down">
-            扣缴义务人:
-            <el-select v-model="ruleForm.taxSubId" placeholder="请选择">
+            公司名称:
+            <el-select v-model="ruleForm.queryFilterParam.taxSubId" placeholder="请选择" @change="changeSubTaxId">
               <el-option
                 v-for="item in taxSubjectInfoList"
                 :key="item.taxSubId"
@@ -51,25 +51,29 @@
               </el-table-column>
               <el-table-column prop="name" label="姓名" width="140">
                 <template slot-scope="scope">
-                  <span class="table-name" @click="handleEmplayeeName(scope.row)">{{ scope.row.name }}</span>
+                  <span class="table-name" @click="handleEmplayeeName(scope.row)">{{ scope.row.empName }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
               <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
-              <el-table-column prop="idNo" label="公司名称"></el-table-column>
-              <el-table-column prop="empSex" label="参保状态" width="140">
-                <template slot-scope="scope">{{ scope.row.empSex }}</template>
+              <el-table-column prop="taxSubName" label="公司名称" width="180">
+                <template slot-scope="scope">
+                  <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName && scope.row.taxSubName.length>10">
+                    <span class="hiden-con">{{ scope.row.taxSubName }}</span>
+                  </el-tooltip>
+                  <span v-else>{{ scope.row.taxSubName }}</span>
+                </template>
               </el-table-column>
-              <el-table-column prop="workerStatus" label="参保城市" width="140">
-                <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
+              <el-table-column prop="empType" label="用工性质" width="140">
+                <template slot-scope="scope">{{ scope.row.empType }}</template>
               </el-table-column>
-              <el-table-column prop="reportStatus" label="参保方案" width="140">
-                <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
+              <el-table-column prop="empStatus" label="员工状态" width="140">
+                <template slot-scope="scope">{{ scope.row.empStatus }}</template>
               </el-table-column>
-              <el-table-column prop="idValidStatus" label="社保起缴月份" width="140">
-                <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
+              <el-table-column prop="idValidStatus" label="入职日期" width="140">
+                <template slot-scope="scope">{{ scope.row.empDay }}</template>
               </el-table-column>
-              <el-table-column prop="mobile" label="公积金期缴月份" width="140"></el-table-column>
+              <el-table-column prop="turnRegularDat" label="转正日期" width="140"></el-table-column>
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
                   <span class="funStyle" @click="onChange(scope.row)">变更</span>
@@ -92,7 +96,7 @@
 <!-- 变更公司-->
     <right-pop :pop-show="popShow" :has-footer="false" popTitle="变更公司" :popWidth="600">
       <div slot="pop-content">
-        <companyChange @hanleClose="hanleClose" :companyChangeName="companyChangeName" :companyChangeIdCard="companyChangeIdCard"></companyChange>
+        <companyChange @hanleClose="hanleClose" :companyItem="companyItem" :companyOption="taxSubjectInfoList"></companyChange>
       </div>
     </right-pop>
 <!--    筛选-->
@@ -107,12 +111,12 @@
       <el-form :model="ruleForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
           <el-form-item label="用工性质" label-width="38%">
-            <radios :screenOption="employNatureOption" @handleRadio="handleEmploymentNature"></radios>
+            <radios :screenOption="employNatureOption" @handleRadio="handleEnumEmpTypes"> </radios>
           </el-form-item>
         </div>
         <div class="shortCon">
           <el-form-item label="员工状态" label-width="38%">
-            <radios :screenOption="employStatusOption" @handleRadio="handleEmploymentStatus"></radios>
+            <radios :screenOption="employStatusOption" @handleRadio="handleEnumEmpStatuses"></radios>
           </el-form-item>
         </div>
         <div class="shortCon">
@@ -122,7 +126,7 @@
         </div>
         <div class="shortCon">
           <el-form-item label="岗位" label-width="38%">
-            <el-input v-model="ruleForm.queryFilterParam.jobTitle"></el-input>
+            <el-input v-model="ruleForm.queryFilterParam.positionName"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
@@ -146,10 +150,10 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="是否转正" label-width="22%">
-          <el-radio-group v-model="ruleForm.queryFilterParam.isCorrect" size="small">
-            <el-radio-button label="null">不限</el-radio-button>
-            <el-radio-button label="yes">是</el-radio-button>
-            <el-radio-button label="no">否</el-radio-button>
+          <el-radio-group v-model="ruleForm.queryFilterParam.regularEmpYn" size="small">
+            <el-radio-button label="">不限</el-radio-button>
+            <el-radio-button label="1">是</el-radio-button>
+            <el-radio-button label="0">否</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="转正日期" label-width="22%">
@@ -214,6 +218,7 @@
 <script>
   import { mapState } from "vuex";
   import * as AT from "./store/actionTypes";
+  import * as constData from "./util/constData"
   import rightPop from '@/components/basic/rightPop'
   import companyChange from './components/companyChange'
   import cityCascader from '@/components/tool/cityCascader'
@@ -233,62 +238,32 @@
         }],
         isShowScreening:false,
         ruleForm:{
-          taxSubId:"",
           key:"",
           currPage:1,
           pageSize:20,
           queryFilterParam:{
-            taxSubId:"",
+            enumEmpTypes:[],//用工性质，
+            enumEmpStatuses:[],//员工状态
             departName:"",//部门
-            jobTitle:"",//岗位
-            workCity:"",//工作地点
-            enterStartTime:"",
+            positionName:"",//岗位
+            taxSubId:"",
+            workCity:"",//工作城市
+            enterStartTime:"",//入职筛选开始时间
             enterEndTime:"",
-            isCorrect:"null",
-            correctStartTime:"",
-            correctEndTime:"",
+            regularEmpYn:"",//是否转正
+            turnRegularStartTime:"",//转正开始时间
+            turnRegularEndTime:"",
             lastEmployStartTime:"",
             lastEmployEndTime:"",
-            emplyNature:[],//用工类型
-            emplyStatus:[],
           },
         },
-        employNatureOption:[
-          {
-            label:"全职",
-            value:"FULL_TIME"
-          },{
-            label:"兼职",
-            value:"PART_TIME"
-          },{
-            label:"实习",
-            value:"PRACTICE"
-          },{
-            label:"劳务",
-            value:"LABOUR"
-          },{
-            label:"退休返聘",
-            value:"RE_EMPLOY"
-          }
-        ],
-        employStatusOption:[
-          {
-            label:"在职",
-            value:"FULL_TIME"
-          },{
-            label:"离职",
-            value:"PART_TIME"
-          },{
-            label:"退休",
-            value:"PRACTICE"
-          }
-        ],
-        companyChangeName:"",
-        companyChangeIdCard:"",
+        employNatureOption:constData.employNatureOption,
+        employStatusOption:constData.employStatusOption,
+        companyItem:"",
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
         selectMonth: defaultDate,
-        list: [{name:"马大哈",type:'dec',idCard:"777888999"}],
+        list: [],
         closeModel: false,
         total:0,
         loading:false,
@@ -317,6 +292,8 @@
     },
     created(){
       this.getList()
+      //公司列表
+      this.getTaxSubjectInfoList()
     },
     mounted() {
       const that = this;
@@ -335,35 +312,32 @@
       //调动
       onChange(data){
         this.popShow.isshow = true
-        this.companyChangeIdCard = data.idCard
-        this.companyChangeName = data.name
+        this.companyItem = data
       },
       getList() {
         this.loading = true;
-        // this.$store
-        //   .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
-        //   .then(res => {
-        //     if (res.success) {
-              this.loading = false;
-        //       this.total = res.data.count;
-        //       this.list = res.data.data;
-        //     }
-        //   });
-        // this.getTaxSubjectInfoList()
+        this.$store
+          .dispatch("payMasterStore/actionGetEmployeeList", this.ruleForm)
+          .then(res => {
+            if(res.success){
+              this.list = res.data
+              this.loading = false
+            }
+          });
       },
       //用工性质
-      handleEmploymentNature(val){
-        this.ruleForm.queryFilterParam.emplyNature = val
+      handleEnumEmpTypes(val){
+        this.ruleForm.queryFilterParam.enumEmpTypes = val
         console.log(val)
       },
       //员工特征
-      handleEmploymentStatus(val){
-        this.ruleForm.queryFilterParam.emplyStatus = val
+      handleEnumEmpStatuses(val){
+        this.ruleForm.queryFilterParam.enumEmpStatuses = val
         console.log(val)
       },
       //筛选查询
       selectScreen(){
-
+        this.getList()
       },
       changeCity(val){
         this.ruleForm.queryFilterParam.workCity = val;
@@ -377,10 +351,14 @@
       getTaxSubjectInfoList() {
         this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
           if (res.success) {
-            this.taxSubjectInfoList = [{'taxSubId':0,'taxSubName':"全部"}].concat(res.data);
-            this.ruleForm.taxSubId = this.taxSubjectInfoList[0].taxSubId
+            this.taxSubjectInfoList = [{'taxSubId':"",'taxSubName':"全部"}].concat(res.data);
+            this.ruleForm.queryFilterParam.taxSubId = this.taxSubjectInfoList[0].taxSubId
           }
         });
+      },
+      //切换扣缴义务人
+      changeSubTaxId(){
+        this.getList()
       },
       // 关闭更改侧滑框
       hanleClose(isFresh) {
@@ -395,7 +373,7 @@
       },
       //员工详情
       handleEmplayeeName(data){
-        this.$router.push('/employeeDetail')
+        this.$router.push({path:'/employeeDetail',query:{compEmpId:data.compEmpId}})
       },
       //批量导入
       batchImport(){
@@ -428,14 +406,6 @@
         for(let key in this.ruleForm){
           this.ruleForm[key] = ""
         }
-      },
-      handleCheckTaxSubject(item) {
-        this.ruleForm.taxSubjectId = item.taxSubId;
-        this.reportForm.taxSubId = item.taxSubId;
-        this.reportForm.taxSubjectId = item.taxSubId;
-        this.currentTaxSubName = item.taxSubName;
-        this.ruleForm.currPage = 1;
-        this.getList();
       },
       //翻页
       handleSelectionChange(val) {

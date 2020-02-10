@@ -21,6 +21,10 @@ export default {
     };
   },
   created(){
+    this.$store
+      .dispatch("payMasterStore/actionGetCity").then(res=>{
+        console.log("111")
+    })
     this.pro.forEach((item,index)=>{
       let proItem = {}
       proItem.value = proItem.label = item;

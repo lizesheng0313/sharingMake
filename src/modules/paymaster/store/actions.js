@@ -1,28 +1,30 @@
-import { apiTaxTotalBaseList,apiDelTaxTotalBase,apidownloadTemplate,apiImportTaxTotalBaseSuccess,apiExportErrorRecord} from './api'
+import { apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange} from './api'
 
-//累计应税所得额初始化-集合列表
-export const actionTaxTotalBaseList = ({ dispatch },ruleForm) => {
-    return apiTaxTotalBaseList(ruleForm)
+//发薪人员、员工信息列表
+export const actionGetEmployeeList = ({ dispatch },form) => {
+  return apiPostEmployeeList(form)
+}
+//发薪人员、员工详情
+export const actionGetEmployee = ({ dispatch },id) => {
+    return apiGetEmployee(id)
 }
 
-//累计应税所得额初始化--删除
-export const actionDelTaxTotalBase = ({ dispatch },idsForm) => {
-    return apiDelTaxTotalBase(idsForm)
+//发薪人员、员工详情、保存员工基本信息
+export const actionSaveEmployee = ({ dispatch },form) => {
+  return apiPostEmployee(form)
 }
 
-//累计应税所得额初始化-下载模版
-export const actionDownloadTemplate = ({ dispatch }) => {
-    return apidownloadTemplate()
+//发薪人员、员工详情、保存公司信息
+export const actionSaveCompany = ({ dispatch },form) => {
+  return apiPostCompany(form)
+}
+//调动
+export const actionCompanyChange = ({ dispatch },form) => {
+  return apiPostCompanyChange(form)
 }
 
-//累计应税所得额初始化-导入成功数据
-export const actionImportTaxTotalBaseSuccess = ({ dispatch },ruleForm) => {
-    return apiImportTaxTotalBaseSuccess(ruleForm)
+//城市
+export const actionGetCity= ({ dispatch }) => {
+  return apiGetCity()
 }
-
-//累计应税所得额初始化-导出错误记录
-export const getExportErrorRecord = ({ dispatch },ruleForm) => {
-    return apiExportErrorRecord(ruleForm)
-}
-
 
