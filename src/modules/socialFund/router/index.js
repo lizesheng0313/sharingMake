@@ -1,11 +1,11 @@
 import attrition from '../attrition'
 import quickStaff from '../quickStaff'
 import attritionDetail from '../attritionDetail'
-import insuredAccount from '../insuredAccount'
-import insuredAccountDetail from '../insuredAccountDetail'
-import insuredAccountDetailed from '../insuredAccountDetailed'
-import insuredPlan from '../insuredPlan'
-import insuredPlanAdd from '../insuredPlanAdd'
+import insuredAccount from '../InsuredAccount'
+import insuredAccountDetail from '../InsuredAccountDetail'
+import insuredAccountDetailed from '../InsuredAccountDetailed'
+import insuredPlan from '../InsuredPlan'
+import insuredPlanAdd from '../InsuredPlanAdd'
 
 export default [
   {
