@@ -140,7 +140,9 @@
         </div>
         <div class="shortCon">
           <el-form-item label="工作城市" label-width="38%">
-            <cityCascader @changeCity = "changeCity"></cityCascader>
+            <el-select v-model="ruleForm.queryFilterParam.workCity" placeholder="请选择" filterable>
+              <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
+            </el-select>
           </el-form-item>
         </div>
         <el-form-item label="入职日期" label-width="22%">
@@ -160,7 +162,7 @@
         </el-form-item>
         <el-form-item label="是否转正" label-width="22%">
           <el-radio-group v-model="ruleForm.queryFilterParam.regularEmpYn" size="small">
-            <el-radio-button label="">不限</el-radio-button>
+            <el-radio-button label=-1>不限</el-radio-button>
             <el-radio-button label="1">是</el-radio-button>
             <el-radio-button label="0">否</el-radio-button>
           </el-radio-group>
@@ -259,7 +261,7 @@
             workCity:"",//工作城市
             enterStartTime:"",//入职筛选开始时间
             enterEndTime:"",
-            regularEmpYn:"",//是否转正
+            regularEmpYn:-1,//是否转正
             turnRegularStartTime:"",//转正开始时间
             turnRegularEndTime:"",
             lastEmployStartTime:"",
@@ -291,12 +293,12 @@
     components:{
       rightPop,
       companyChange,
-      cityCascader,
       radios,
     },
     computed:{
       ...mapState({
-        privilegeVoList:state=>state.privilegeVoList
+        privilegeVoList:state=>state.privilegeVoList,
+        cityList:state=>state.cityList
       }),
     },
     created(){
@@ -337,20 +339,15 @@
       //用工性质
       handleEnumEmpTypes(val){
         this.ruleForm.queryFilterParam.enumEmpTypes = val
-        console.log(val)
       },
       //员工特征
       handleEnumEmpStatuses(val){
         this.ruleForm.queryFilterParam.enumEmpStatuses = val
-        console.log(val)
       },
       //筛选查询
       selectScreen(){
         this.getList()
-      },
-      changeCity(val){
-        this.ruleForm.queryFilterParam.workCity = val;
-        console.log(this.ruleForm.queryFilterParam.workCity)
+        this.isShowScreening = false
       },
       //筛选重置
       resetSreen(){

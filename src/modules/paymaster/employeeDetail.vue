@@ -345,9 +345,6 @@ export default {
     };
   },
   computed: {
-    ...mapState("taxPageStore", {
-      personnelCollection: state => state.personnelCollection
-    }),
     ...mapState({
       countryList:state=>state.countryList,
       cityList:state=>state.cityList,

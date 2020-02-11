@@ -27,8 +27,8 @@
             <el-date-picker v-model="changeCompanyForm.empDay" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
           </el-form-item>
           <el-form-item label="工作城市">
-            <el-select v-model="changeCompanyForm.workCity" placeholder="请选择工作城市">
-              <el-option v-for="(item,index) in workCityOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+            <el-select v-model="changeCompanyForm.workCity" placeholder="请选择工作城市" filterable>
+              <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="是否转正" prop="regularEmpYn" :rules="{required: true, message: '请选择', trigger: 'blur'}">
@@ -55,10 +55,6 @@ export default {
       type: Object,
       default:""
     },
-    // companyOption:{
-    //   type: Array,
-    //   default:[]
-    // }
   },
   data() {
     return {
@@ -69,7 +65,7 @@ export default {
         positionName:"",
         empDay:"",//入职日期
         workCity:"",
-        regularEmpYn:"",
+        regularEmpYn:-1,
         zzDay:"",
       },
       enumEmpTypeOption:constData.enumEmpTypeOption,
@@ -82,11 +78,16 @@ export default {
   },
   computed:{
     ...mapState({
-      taxSubjectInfoList:state=>state.taxSubjectInfoList
+      taxSubjectInfoList:state=>state.taxSubjectInfoList,
+      cityList:state=>state.cityList
     })
   },
   created(){
     this.companyOptions = this.taxSubjectInfoList
+    for(let key in this.changeCompanyForm){
+      this.changeCompanyForm[key] = this.companyItem[key]
+    }
+    this.changeCompanyForm.companyName = this.companyItem.taxSubId
   },
   mounted() {
 

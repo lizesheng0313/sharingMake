@@ -1,4 +1,4 @@
-import { apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks} from './api'
+import { apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
 
 //发薪人员、员工信息列表
 export const actionGetEmployeeList = ({ dispatch },form) => {
@@ -36,5 +36,10 @@ export const actionGetCountries= ({ dispatch }) => {
 //银行
 export const actionGetBanks= ({ dispatch }) => {
   return apiGetBanks()
+}
+
+//新增员工信息
+export const actionAddEmployees= ({ dispatch },form) => {
+  return apiPostEmployees(form)
 }
 

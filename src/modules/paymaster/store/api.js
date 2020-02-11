@@ -65,3 +65,12 @@ export function apiGetBanks(){
     method: 'get',
   })
 }
+
+//新增员工信息
+export function apiPostEmployees(form) {
+  return fetch({
+    url: '/api/xsalary/enterprise/employees',
+    method: 'post',
+    data:form
+  })
+}

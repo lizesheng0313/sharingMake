@@ -100,7 +100,7 @@ export const enumEmpTypeOption = [
 export const regularEmpYnOption = [
   {
     label:"不限",
-    value:"-1"
+    value:-1
   },{
     label:"是",
     value:"true"
@@ -139,3 +139,23 @@ export const householdRegistrationTypeOption = [
     value:"VILLAGE"
   }
 ]
+//涉税事由
+export const taxReasonOption = [
+  {
+    label:"任职受雇",
+    value:"EMPLOYMENT"
+  },{
+    label:"提供临时劳务",
+    value:"TEMPORARY_LABOR"
+  },{
+    label:"转让财产",
+    value:"TRANSFER_PROPERTY"
+  },{
+    label:"从事投资和经营活动",
+    value:"INVEST"
+  },{
+    label:"其他",
+    value:"OTHER"
+  },
+]
+
