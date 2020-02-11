@@ -64,6 +64,13 @@ export function apiSalaryRuleList(date) {
     }
   })
 }
+//工资表设置扣缴义务人人员
+export function apiEnterpriseEmployees(taxSubId) {
+  return fetch({
+    url: '/api/xsalary/enterprise/'+taxSubId+'/rangeEmployees',
+    method: 'get',
+  })
+}
 //启动薪资核算
 export function apiInitSalaryCheck(form) {
   return fetch({

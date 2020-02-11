@@ -12,7 +12,7 @@
           <div class="clearfix insured-plan-menu">
             <el-input
               placeholder="请输入姓名\工号\身份证号"
-              v-model="ruleForm.nameOrMore"
+              v-model="ruleForm.insuredName"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               @keyup.enter.native="handleSearch"
               clearable
@@ -52,19 +52,17 @@
   import { mapState } from "vuex";
   import * as AT from "./store/actionTypes";
   import fun from "@/util/fun";
-  let date = fun.headDate();
-  let month = new Date().getMonth() + 1;
-  let defaultDate =
-    date.year + "年" + (date.month >= 10 ? date.month : "0" + date.month) + "月";
   export default {
     data() {
       return {
         ruleForm:{
-          nameOrMore:"",
+          insuredName:"",
+          currPage:"1",
+          pageSize:"1000",
         },
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
-        list: [{name:"减员",type:'dec'},{name:"增员",type:'inc'}],
+        list: [],
         loading:false,
     };
     },
@@ -77,7 +75,14 @@
       }),
     },
     created(){
-
+      this.$store
+        .dispatch("socialFundStore/actionInsuredProjectList", this.ruleForm)
+        .then(res => {
+          if(res.success){
+            this.list = res.data.data
+            this.loading = false
+          }
+        });
     },
     mounted() {
       const that = this;

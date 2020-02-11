@@ -20,24 +20,24 @@
              </span>
              <i class="el-icon-search" v-if="!showSearch" @click.stop="showSearch = true"></i>
           </div>
-          <el-select v-model="company" placeholder="请选择公司" style="margin-bottom: 10px;border:none">
-             <el-option v-for="item in companyOptions" key="item.value" :label="item.label" :value="item.value"></el-option>
+          <el-select v-model="company" placeholder="请选择公司" style="margin-bottom: 10px;border:none" @change="changCompany">
+            <el-option v-for="item in taxSubjectInfoList" :key="item.taxSubId" :label="item.taxSubName" :value="item.taxSubId"></el-option>
           </el-select>
           <div>
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAll">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>
-              <el-checkbox-group v-model="checkedCities" @change="handleCheckedCities" class="check-con">
-                  <el-checkbox v-for="(city,index) in cities" :label="city" :key="index" class="check-style">{{ city }}</el-checkbox>
+              <el-checkbox-group v-model="checkedLists" @change="handleCheckedCities" class="check-con">
+                  <el-checkbox v-for="(item,index) in lists" :label="item" :key="index" class="check-style">{{ item.name }}</el-checkbox>
               </el-checkbox-group>
           </div>
         </div>
         <div class="company-box-con choose">
               <div class="choose-title">已选：<span class="clear" @click="hanleClearAll">清除</span></div>
               <div class="choose-con">
-                  <div v-for="(item,index) in checkedCities" :key="index" class="choose-item">
-                  {{ item }}
-                  <i class="el-icon-circle-close" @click="handleRemoveItem(item)"></i>
-              </div>
+                  <div v-for="(item,index) in checkedLists" :key="index" class="choose-item">
+                      {{ item.name }}
+                      <i class="el-icon-circle-close" @click="handleRemoveItem(item)"></i>
+                  </div>
               </div>
 
         </div>
@@ -50,6 +50,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
   },
@@ -58,58 +59,87 @@ export default {
       closeModel:false,
       isShowUnNeedSalary:false,
       checkAll: false,
-      checkedCities: [],
-      cities: ['张三', '李四', '赵武','张三', '李四', '赵武','张三', '李四', '赵武'],
-      allCitys:['张三', '李四', '赵武'],
+      checkedLists: [],
+      lists: [],
+      allLists:[],
       isIndeterminate: false,
       searchCon:"",
       focus:false,
       showSearch:false,
-      companyOptions: [{
-        value: '1',
-        label: '懒猫'
-      }],
-      company:"1",
+      company:0,
+      taxSubId:""
     };
+  },
+  computed:{
+    ...mapState({
+      taxSubjectInfoList:state=>state.taxSubjectInfoList,
+    }),
   },
   watch:{
     searchCon:function(){
       if(this.searchCon.trim()){
-        this.cities = this.allCitys.filter(item=>item.indexOf(this.searchCon)!= -1)
+        this.lists = this.allLists.filter(item=>item['name'].indexOf(this.searchCon)!= -1)
       }else{
-        this.cities = this.allCitys
+        this.lists = this.allLists
       }
     },
   },
   created(){
-
+    // 获取人员列表
+    this.taxSubId = this.taxSubjectInfoList[0]['taxSubId']
+    this.getEmployList()
   },
   methods: {
+    getEmployList(){
+      this.$store
+        .dispatch("salaryCalStore/actionGetEnterpriseEmployees", this.taxSubId)
+        .then(res => {
+          let emplyeeList = res.data
+          emplyeeList.forEach(item=>{
+            item.name = item.empName+`(${item.empId})`;
+            item.id = item.empId;
+          })
+           this.lists = this.allLists = emplyeeList
+        })
+    },
+    changCompany(){
+      this.getEmployList()
+    },
     handleCheckAll(val) {
-      this.checkedCities = val ? this.cities : [];
+      this.checkedLists = val ? this.lists : [];
       this.isIndeterminate = false;
     },
     handleCheckedCities(value) {
       let checkedCount = value.length;
-      this.checkAll = checkedCount === this.cities.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      this.checkAll = checkedCount === this.lists.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.lists.length;
     },
     handleRemoveItem(item){
-      this.checkedCities = this.checkedCities.filter(ite=>ite != item)
+      this.checkedLists = this.checkedLists.filter(ite=>ite != item)
+      if(this.checkedLists.length === 0){
+        this.isIndeterminate = false; //选择部分标志
+        this.checkAll = false // 全选标志t
+      }
     },
     hanleClearAll(){
-      this.checkedCities = [];
+      this.checkedLists = [];
       this.isIndeterminate = false; //选择部分标志
       this.checkAll = false // 全选标志
     },
     handleSubmit(){
-      let sendStr = " ";
-      if(this.checkedCities){
-        this.checkedCities.forEach(item=>{
-          sendStr+=item+' '
+      let sendStr = "";
+      let excludeEmpList = []
+      if(this.checkedLists){
+        this.checkedLists.forEach(item=>{
+          sendStr+=item.name+'、'
+          excludeEmpList.push(item.id)
         })
+        sendStr = sendStr.substring(0,sendStr.length-1)
       }
-      this.$emit("sendUnNeedSalary",sendStr)
+      this.$emit("sendUnNeedSalary",{
+        sendStr,
+        excludeEmpList,
+      })
       this.isShowUnNeedSalary = false;
     },
   }

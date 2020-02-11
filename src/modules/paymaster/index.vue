@@ -37,7 +37,8 @@
     },
     computed:{
       ...mapState({
-        privilegeVoList:state=>state.privilegeVoList
+        privilegeVoList:state=>state.privilegeVoList,
+        taxSubjectInfoList:state=>state.taxSubjectInfoList,
       }),
     },
     created(){

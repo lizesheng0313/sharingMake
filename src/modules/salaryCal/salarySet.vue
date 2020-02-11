@@ -201,9 +201,12 @@ export default {
         startDay:1,//算新周开始日
         payMonth:null,//发薪月
         payDay:null,//发薪日
+        taxSubList:[],//算薪人员范围-公司id
+        empList:[],//算薪人员范围-人员id
         salaryArea:"",//算薪人员范围
         filterArea:"",//过滤范围
         unNeedSalary:"",//无需算薪人员
+        excludeEmpList:[],//无需算薪人员List
         enableMiltSalary:"N"
         },
       basicInfoRule:{
@@ -454,11 +457,17 @@ export default {
     showSalaryArea(){
       this.$refs.salaryArea.isShowSalaryArea = true
     },
+    //算薪范围数据
     getSalayArea(data){
-      this.basicInfoForm.salaryArea = data;
+      this.basicInfoForm.salaryArea = data.sendStr;
+      this.basicInfoForm.taxSubList = data.taxSubList;
+      this.basicInfoForm.empList = data.empList;
+      this.$refs['basicInfoForm'].validateField('salaryArea')
     },
+    //无需算薪人员
     getUnNeedSalary(data){
-      this.basicInfoForm.unNeedSalary = data;
+      this.basicInfoForm.unNeedSalary = data.sendStr;
+      this.basicInfoForm.excludeEmpList = data.excludeEmpList;
     },
     //新增工资项
     setSalaryItem(){

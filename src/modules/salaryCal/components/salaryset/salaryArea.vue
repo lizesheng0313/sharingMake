@@ -26,22 +26,24 @@
           <div>
               <div style="margin-bottom: 10px" v-if="chooseType === 'company'">全部公司</div>
               <div v-else style="margin-bottom: 10px">
-                  <el-select v-model="company" placeholder="请选择公司" style="margin-bottom: 10px;border:none">
-                    <el-option v-for="item in companyOptions" key="item.value" :label="item.label" :value="item.value"></el-option>
+                  <el-select v-model="company" placeholder="请选择公司" style="margin-bottom: 10px;border:none" @change="changCompany">
+                    <el-option v-for="(item,index) in taxSubjectInfoList" :key="index" :label="item.taxSubName" :value="item.taxSubId"></el-option>
                   </el-select>
               </div>
               <el-checkbox :indeterminate="chooseTypeObj[chooseType]['isIndeterminate']" v-model="chooseTypeObj[chooseType]['checkAll']" @change="handleCheckAll">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>
-              <el-checkbox-group v-model="chooseTypeObj[chooseType]['checkedCities']" @change="handleCheckedCities" class="check-con">
-                  <el-checkbox v-for="city in chooseTypeObj[chooseType]['cities']" :label="city" :key="city" class="check-style">{{ city }}</el-checkbox>
+              <el-checkbox-group v-model="chooseTypeObj[chooseType]['checkedLists']" @change="handleCheckedCities" class="check-con">
+                  <el-checkbox v-for="item in chooseTypeObj[chooseType]['lists']" :label="item" :key="item.id" class="check-style">{{ item.name }}</el-checkbox>
               </el-checkbox-group>
           </div>
         </div>
+
         <div class="company-box-con choose">
               <div class="choose-title">已选：<span class="clear" @click="hanleClearAll">清除</span></div>
               <div class="choose-con">
-                <div v-for="(item,index) in chooseTypeObj[chooseType]['checkedCities']" :key="index" class="choose-item">
-                  {{ item }}
+                <div v-for="(item,index) in chooseTypeObj['company']['checkedLists'].concat(chooseTypeObj['employee']['checkedLists'])"
+                     :key="index" class="choose-item">
+                  {{ item.name }}
                   <i class="el-icon-circle-close" @click="handleRemoveItem(item)"></i>
                 </div>
               </div>
@@ -55,6 +57,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
   },
@@ -63,74 +66,117 @@ export default {
       closeModel:false,
       isShowSalaryArea:false,
       chooseType:"company",
-      companyOptions: [{
-        value: '1',
-        label: '懒猫'
-      }],
-      company:"1",
+      company:0,
       chooseTypeObj:{
         "company":{
           checkAll: false,
-          checkedCities: [],
-          cities: ['上海', '北京', '广州', '深圳',"厦门","河北","山东"],
+          checkedLists: [],
+          lists:[],
           isIndeterminate: false
         },
         "employee":{
           checkAll: false,
-          checkedCities: [],
-          cities: ['张三', '李四', '赵武'],
-          allCitys:['张三', '李四', '赵武'],
+          checkedLists: [],
+          lists: [],
+          allLists:[],
           isIndeterminate: false,
         }
       },
+      taxSubId:"",
       searchCon:"",
       focus:false,
       showSearch:false,
     };
   },
+  computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList,
+      taxSubjectInfoList:state=>state.taxSubjectInfoList,
+    }),
+  },
   watch:{
     searchCon:function(){
       if(this.searchCon.trim()){
-        this.chooseTypeObj.employee.cities = this.chooseTypeObj.employee.allCitys.filter(item=>item.indexOf(this.searchCon)!= -1)
+        this.chooseTypeObj.employee.lists = this.chooseTypeObj.employee.allLists.filter(item=>item['name'].indexOf(this.searchCon)!= -1)
       }else{
-        this.chooseTypeObj.employee.cities = this.chooseTypeObj.employee.allCitys
+        this.chooseTypeObj.employee.lists = this.chooseTypeObj.employee.allLists
       }
     },
   },
   created(){
+  // 获取人员列表
+    this.taxSubId = this.taxSubjectInfoList[0]['taxSubId']
+    this.getEmployList()
 
+  // 公司列表
+    let taxSubjectInfoList =this.taxSubjectInfoList.filter(item=>item.taxSubId !== 0)
+    taxSubjectInfoList.forEach(item=>{
+      item.name =item.taxSubName;
+      item.id = item.taxSubId;
+      item.type = "company";
+    })
+    this.chooseTypeObj.company.lists = taxSubjectInfoList
   },
   methods: {
+    getEmployList(){
+      this.$store
+        .dispatch("salaryCalStore/actionGetEnterpriseEmployees", this.taxSubId)
+        .then(res => {
+          if(res.success){
+            let emplyeeList = res.data
+            emplyeeList.forEach(item=>{
+              item.name = item.empName+`(${item.empId})`;
+              item.id = item.empId;
+              item.type = "employee";
+            })
+            this.chooseTypeObj.employee.lists = this.chooseTypeObj.employee.allLists = emplyeeList
+          }
+        })
+    },
+    changCompany(){
+      this.getEmployList()
+    },
     handleCheckAll(val) {
-      this.chooseTypeObj[this.chooseType]['checkedCities'] = val ? this.chooseTypeObj[this.chooseType]['cities'] : [];
+      this.chooseTypeObj[this.chooseType]['checkedLists'] = val ? this.chooseTypeObj[this.chooseType]['lists'] : [];
       this.chooseTypeObj[this.chooseType]['isIndeterminate'] = false;
     },
     handleCheckedCities(value) {
       let checkedCount = value.length;
-      this.chooseTypeObj[this.chooseType]['checkAll'] = checkedCount === this.chooseTypeObj[this.chooseType]['cities'].length;
-      this.chooseTypeObj[this.chooseType]['isIndeterminate'] = checkedCount > 0 && checkedCount < this.chooseTypeObj[this.chooseType]['cities'].length;
+      this.chooseTypeObj[this.chooseType]['checkAll'] = checkedCount === this.chooseTypeObj[this.chooseType]['lists'].length;
+      this.chooseTypeObj[this.chooseType]['isIndeterminate'] = checkedCount > 0 && checkedCount < this.chooseTypeObj[this.chooseType]['lists'].length;
     },
     handleRemoveItem(item){
-      this.chooseTypeObj[this.chooseType]['checkedCities'] = this.chooseTypeObj[this.chooseType]['checkedCities'].filter(ite=>ite != item)
+      this.chooseTypeObj[item.type]['checkedLists'] = this.chooseTypeObj[item.type]['checkedLists'].filter(ite=>ite.id != item.id)
+      if(this.chooseTypeObj[item.type]['checkedLists'].length === 0){
+        this.chooseTypeObj[item.type]['isIndeterminate'] = false;//选择部分标志
+        this.chooseTypeObj[item.type]['checkAll'] = false // 全选标志
+      }
     },
     hanleClearAll(){
-      this.chooseTypeObj[this.chooseType]['checkedCities'] = [];
-      this.chooseTypeObj[this.chooseType]['isIndeterminate'] = false; //选择部分标志
-      this.chooseTypeObj[this.chooseType]['checkAll'] = false // 全选标志
+      for(let key in this.chooseTypeObj){
+        this.chooseTypeObj[key]['checkedLists'] = []
+        this.chooseTypeObj[key]['isIndeterminate'] = false;//选择部分标志
+        this.chooseTypeObj[key]['checkAll'] = false // 全选标志
+      }
     },
     handleSubmit(){
-      let sendStr = " ";
-      if(this.chooseTypeObj[this.chooseType]['checkedCities']){
-        this.chooseTypeObj[this.chooseType]['checkedCities'].forEach(item=>{
-          sendStr+=item+' '
+      let sendStr = "";
+      let allLists = this.chooseTypeObj['company']['checkedLists'].concat(this.chooseTypeObj['employee']['checkedLists'])
+      if(allLists.length>0){
+        allLists.forEach(item=>{
+          sendStr+=item.name+' 、'
         })
+        sendStr = sendStr.substring(0,sendStr.length-1)
       }
-      this.$emit("sendSalayArea",sendStr)
+      let taxSubList = this.chooseTypeObj["company"]['checkedLists'].map(item=>item.id)
+      let empList = this.chooseTypeObj["employee"]['checkedLists'].map(item=>item.id)
+      this.$emit("sendSalayArea",{
+        taxSubList,
+        sendStr,
+        empList,
+      })
       this.isShowSalaryArea = false;
     },
-    handleClick(){
-      this.chooseTypeObj[this.chooseType]['checkedCities'] = []
-    }
   }
 };
 </script>
