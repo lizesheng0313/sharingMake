@@ -33,7 +33,8 @@ export default new Vuex.Store({
   state: {
     token: '',
     isShowApp: true,
-    privilegeVoList:[]
+    privilegeVoList:[],
+    taxSubjectInfoList:[],
   },
   mutations,
   actions,

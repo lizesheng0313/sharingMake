@@ -210,7 +210,7 @@
                         <div style="flex:1">
                           <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'blur'}">
                             <el-select v-model="insuredForm.empType" placeholder="请选择">
-                              <el-option v-for="(item,index) in employNatureOption" :label="item.label" :value="item.value" :key="index"></el-option>
+                              <el-option v-for="(item,index) in enumEmpTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
@@ -346,7 +346,7 @@ export default {
       companyOption:[],
       workerTypeOption:constData.workerType,
       regularEmpYnOption:constData.regularEmpYnOption,
-      employNatureOption:constData.employNatureOption,
+      enumEmpTypeOption:constData.enumEmpTypeOption,
       empStatusOption:constData.employStatusOption,
       showTable:false,
     };

@@ -64,7 +64,7 @@ export const idType = [
   }
 ]
 //用工性质
-export const employNatureOption = [
+export const enumEmpTypeOption = [
   {
     label:"全职",
     value:"FULL_TIME"

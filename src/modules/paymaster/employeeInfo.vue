@@ -111,7 +111,7 @@
       <el-form :model="ruleForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
           <el-form-item label="用工性质" label-width="38%">
-            <radios :screenOption="employNatureOption" @handleRadio="handleEnumEmpTypes"> </radios>
+            <radios :screenOption="enumEmpTypeOption" @handleRadio="handleEnumEmpTypes"> </radios>
           </el-form-item>
         </div>
         <div class="shortCon">
@@ -257,7 +257,7 @@
             lastEmployEndTime:"",
           },
         },
-        employNatureOption:constData.employNatureOption,
+        enumEmpTypeOption:constData.enumEmpTypeOption,
         employStatusOption:constData.employStatusOption,
         companyItem:"",
         screenWidth: document.body.clientWidth,// 屏幕尺寸
@@ -351,7 +351,7 @@
       getTaxSubjectInfoList() {
         this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
           if (res.success) {
-            this.taxSubjectInfoList = [{'taxSubId':"",'taxSubName':"全部"}].concat(res.data);
+            this.taxSubjectInfoList = [{'taxSubId':0,'taxSubName':"全部"}].concat(res.data);
             this.ruleForm.queryFilterParam.taxSubId = this.taxSubjectInfoList[0].taxSubId
           }
         });

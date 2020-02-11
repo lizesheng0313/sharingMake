@@ -9,5 +9,9 @@ export default {
     },
     [AT.SET_PRIVILIGEVOLiST](state,value){
       state.privilegeVoList = value
-    }
+    },
+    [AT.SET_TAXSUBJECTINFOLIST](state,value){
+      state.taxSubjectInfoList = value
+    },
+
 }

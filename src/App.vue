@@ -88,11 +88,21 @@ export default {
     // this.mainMenu = privilegeGroupTreeVO
     // let privilegeVOList0 = privilegeVOList.map(it=>it.code);
     // this.$store.commit(AT.SET_PRIVILIGEVOLiST,privilegeVOList0);
+
+   //  公司名称列表
+    this.getTaxSubjectInfoList()
   },
   mounted() {
   },
   methods:{
-
+    getTaxSubjectInfoList() {
+      this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
+        if (res.success) {
+          let taxSubjectInfoList = [{'taxSubId':0,'taxSubName':"全部"}].concat(res.data);
+          this.$store.commit(AT.SET_TAXSUBJECTINFOLIST,taxSubjectInfoList);
+        }
+      });
+    },
   },
 };
 </script>

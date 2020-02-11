@@ -3,21 +3,20 @@
         <el-form
           label-width="100px"
           ref="changeCompanyForm"
-          class="addForm"
           :model="changeCompanyForm"
         >
           <el-form-item label="姓名">{{ companyItem.empName }}</el-form-item>
           <el-form-item label="身份证号">{{ companyItem.idNo }}</el-form-item>
           <el-form-item label="公司名称" prop="companyName" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
             <el-select v-model="changeCompanyForm.companyName" placeholder="请选择公司名称">
-              <el-option v-for="(item,index) in companyOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              <el-option v-for="(item,index) in companyOptions" :label="item.label" :value="item.value" :key="index"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'blur'}">
             <el-select v-model="changeCompanyForm.empType" placeholder="请选择用工性质">
-              <el-option v-for="(item,index) in employmentNatureOption" :label="item.label" :value="item.value" :key="index"></el-option>
+              <el-option v-for="(item,index) in enumEmpTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
             </el-select>
-<!--            <span>{{ employmentNatureOption }}</span>-->
+            <span>{{ enumEmpTypeOption }}</span>
           </el-form-item>
           <el-form-item label="部门" prop="deptName">
             <el-input v-model="changeCompanyForm.deptName"></el-input>
@@ -46,7 +45,6 @@
           <el-button type="primary" @click="handleNewBody">确定</el-button>
           <el-button @click="handleCancel(false)">取消</el-button>
         </span>
-
     </div>
 </template>
 <script>
@@ -54,20 +52,21 @@ import { mapState } from "vuex";
 import * as constData from "../util/constData"
 export default {
   props: {
-    companyItem: {
-      type: Object,
-      default:""
-    },
-    companyOption:{
-      type: Array,
-      default:[]
-    }
+    // companyItem: {
+    //   type: Object,
+    //   default:""
+    // },
+    // companyOption:{
+    //   type: Array,
+    //   default:[]
+    // }
   },
   data() {
     return {
+      companyItem:{},
       changeCompanyForm: {
-        companyName: "12",
-        empType:"FULL_TIME",
+        companyName: "",
+        empType:"",
         deptName:"",//部门
         positionName:"",
         empDay:"",//入职日期
@@ -75,15 +74,15 @@ export default {
         regularEmpYn:"",
         zzDay:"",
       },
-      employmentNatureOption:constData.employNatureOption,
+      enumEmpTypeOption:constData.enumEmpTypeOption,
       workCityOption:[],
-      regularEmpYnOptions:constData.regularEmpYnOption,
+      regularEmpYnOptions:[],
+      companyOptions:[{label:"全部",value:"1"}],
       closeModel:false,
       checked:true
     };
   },
   created(){
-    console.log(this.companyItem)
   },
   mounted() {
 
