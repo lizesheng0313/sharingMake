@@ -94,11 +94,20 @@
       </div>
     </div>
 <!-- 变更公司-->
-    <right-pop :pop-show="popShow" :has-footer="false" popTitle="变更公司" :popWidth="600">
-      <div slot="pop-content">
+<!--    <right-pop :pop-show="popShow" :has-footer="false" popTitle="变更公司" :popWidth="600">-->
+<!--      <div slot="pop-content">-->
+    <el-dialog
+      title="选择导出项"
+      :visible.sync="popShow.isshow"
+      width="600px"
+      left
+      class="exportDialog"
+      :close-on-click-modal="closeModel"
+    >
         <companyChange @hanleClose="hanleClose" :companyItem="companyItem" :companyOption="taxSubjectInfoList"></companyChange>
-      </div>
-    </right-pop>
+    </el-dialog>
+<!--      </div>-->
+<!--    </right-pop>-->
 <!--    筛选-->
     <el-dialog
       title=""

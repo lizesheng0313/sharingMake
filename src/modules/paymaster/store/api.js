@@ -50,3 +50,18 @@ export function apiPostCompanyChange(form) {
     data:form
   })
 }
+
+//国籍列表
+export function apiGetCountries(){
+  return fetch({
+    url: '/api/xsalary/enterprise/employee/countries',
+    method: 'get',
+  })
+}
+//银行列表
+export function apiGetBanks(){
+  return fetch({
+    url: '/api/xsalary/enterprise/employee/banks',
+    method: 'get',
+  })
+}

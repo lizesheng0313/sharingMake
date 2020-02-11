@@ -35,6 +35,8 @@ export default new Vuex.Store({
     isShowApp: true,
     privilegeVoList:[],
     taxSubjectInfoList:[],
+    countryList:[],
+    bankList:[],
   },
   mutations,
   actions,

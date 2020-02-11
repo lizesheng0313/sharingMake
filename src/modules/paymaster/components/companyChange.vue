@@ -9,14 +9,13 @@
           <el-form-item label="身份证号">{{ companyItem.idNo }}</el-form-item>
           <el-form-item label="公司名称" prop="companyName" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
             <el-select v-model="changeCompanyForm.companyName" placeholder="请选择公司名称">
-              <el-option v-for="(item,index) in companyOptions" :label="item.label" :value="item.value" :key="index"></el-option>
+              <el-option v-for="(item,index) in companyOptions" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'blur'}">
             <el-select v-model="changeCompanyForm.empType" placeholder="请选择用工性质">
               <el-option v-for="(item,index) in enumEmpTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
             </el-select>
-            <span>{{ enumEmpTypeOption }}</span>
           </el-form-item>
           <el-form-item label="部门" prop="deptName">
             <el-input v-model="changeCompanyForm.deptName"></el-input>
@@ -25,7 +24,7 @@
             <el-input v-model="changeCompanyForm.positionName"></el-input>
           </el-form-item>
           <el-form-item label="入职日期" prop="empDay" :rules="{required: true, message: '请选择入职日期', trigger: 'blur'}">
-            <el-date-picker v-model="changeCompanyForm.empDay" type="date" placeholder="请选择"></el-date-picker>
+            <el-date-picker v-model="changeCompanyForm.empDay" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
           </el-form-item>
           <el-form-item label="工作城市">
             <el-select v-model="changeCompanyForm.workCity" placeholder="请选择工作城市">
@@ -38,7 +37,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="转正日期">
-            <el-date-picker v-model="changeCompanyForm.zzDay" type="date" placeholder="请选择"></el-date-picker>
+            <el-date-picker v-model="changeCompanyForm.zzDay" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
           </el-form-item>
         </el-form>
         <span slot="footer" class="con-footer">
@@ -52,10 +51,10 @@ import { mapState } from "vuex";
 import * as constData from "../util/constData"
 export default {
   props: {
-    // companyItem: {
-    //   type: Object,
-    //   default:""
-    // },
+    companyItem: {
+      type: Object,
+      default:""
+    },
     // companyOption:{
     //   type: Array,
     //   default:[]
@@ -63,7 +62,6 @@ export default {
   },
   data() {
     return {
-      companyItem:{},
       changeCompanyForm: {
         companyName: "",
         empType:"",
@@ -76,13 +74,19 @@ export default {
       },
       enumEmpTypeOption:constData.enumEmpTypeOption,
       workCityOption:[],
-      regularEmpYnOptions:[],
+      regularEmpYnOptions:constData.regularEmpYnOption,
       companyOptions:[{label:"全部",value:"1"}],
       closeModel:false,
       checked:true
     };
   },
+  computed:{
+    ...mapState({
+      taxSubjectInfoList:state=>state.taxSubjectInfoList
+    })
+  },
   created(){
+    this.companyOptions = this.taxSubjectInfoList
   },
   mounted() {
 

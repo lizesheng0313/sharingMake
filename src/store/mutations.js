@@ -13,5 +13,14 @@ export default {
     [AT.SET_TAXSUBJECTINFOLIST](state,value){
       state.taxSubjectInfoList = value
     },
+    [AT.SET_COUNTRYLIST](state,value){
+      state.countryList = value
+    },
+    [AT.SET_BANKLIST](state,value){
+      state.bankList = value
+    },
+    [AT.SET_CITYLIST](state,value){
+      state.cityList = value
+    },
 
 }

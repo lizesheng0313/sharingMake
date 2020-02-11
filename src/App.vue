@@ -91,6 +91,15 @@ export default {
 
    //  公司名称列表
     this.getTaxSubjectInfoList()
+
+  // 国籍列表
+    this.getCountriesList()
+
+  // 银行列表
+    this.getBankList()
+
+  // 城市列表
+    this.getCityList()
   },
   mounted() {
   },
@@ -103,6 +112,28 @@ export default {
         }
       });
     },
+    getCountriesList(){
+      this.$store
+        .dispatch("payMasterStore/actionGetCountries")
+        .then(res => {
+          this.$store.commit(AT.SET_COUNTRYLIST,res.data);
+
+        })
+    },
+    getBankList(){
+      this.$store
+        .dispatch("payMasterStore/actionGetBanks")
+        .then(res => {
+          this.$store.commit(AT.SET_BANKLIST,res.data);
+        })
+    },
+    getCityList(){
+      this.$store
+        .dispatch("payMasterStore/actionGetCity")
+        .then(res=>{
+          this.$store.commit(AT.SET_CITYLIST,res.data);
+      })
+    }
   },
 };
 </script>

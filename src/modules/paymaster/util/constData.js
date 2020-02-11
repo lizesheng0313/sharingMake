@@ -100,12 +100,42 @@ export const enumEmpTypeOption = [
 export const regularEmpYnOption = [
   {
     label:"不限",
-    value:""
+    value:"-1"
   },{
     label:"是",
     value:"true"
   },{
     label:"否",
     value:"false"
+  }
+]
+
+//最高学历
+export const educationOption = [
+  {
+    label:"博士研究生",
+    value:"DR"
+  },{
+    label:"硕士研究生",
+    value:"MASTER"
+  },{
+    label:"大学本科",
+    value:"REGULAR"
+  },{
+      label:"大学专科",
+      value:"JUNIOR"
+  },{
+      label:"其他",
+      value:"OTHER"
+  },
+]
+// 户口性质
+export const householdRegistrationTypeOption = [
+  {
+    label:"城镇户口",
+    value:"CITY"
+  },{
+    label:"农村户口",
+    value:"VILLAGE"
   }
 ]

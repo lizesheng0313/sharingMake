@@ -96,8 +96,8 @@
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="国籍（地区）" prop="country" :rules="{required: true, message: '国籍不能为空', trigger: 'blur'}">
-                            <el-select v-model="baseForm.country" placeholder="请选择国籍">
-                              <el-option v-for="(item,index) in countryOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                            <el-select v-model="baseForm.country" placeholder="请选择国籍" filterable>
+                              <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
@@ -131,8 +131,8 @@
                         </div>
                         <div style="flex:1">
                             <el-form-item label="户口所在城市：">
-                              <el-select v-model="baseForm.householdCountry" placeholder="请选择户口所在城市">
-                                <el-option v-for="(item,index) in householdCountryOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                              <el-select v-model="baseForm.householdCountry" placeholder="请选择户口所在城市" filterable>
+                                <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                               </el-select>
                             </el-form-item>
                         </div>
@@ -272,8 +272,8 @@
                     <el-row style="display: flex">
                       <div style="flex:1">
                         <el-form-item label="工作城市" prop="empStatus">
-                          <el-select v-model="insuredForm.workCity" placeholder="请选择">
-                            <el-option v-for="(item,index) in empStatusOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                          <el-select v-model="insuredForm.workCity" placeholder="请选择" filterable>
+                            <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                           </el-select>
                         </el-form-item>
                       </div>
@@ -294,11 +294,6 @@ import { mapState } from "vuex";
 export default {
   components: {
     fullScreen
-  },
-  computed: {
-    ...mapState("taxPageStore", {
-      personnelCollection: state => state.personnelCollection
-    }),
   },
   data() {
     const t = this;
@@ -326,10 +321,8 @@ export default {
       },
       idTypeOption:constData.idType,//证件类型
       enumEmpSexOption:constData.empSex,
-      countryOption:[],//国籍
-      educationOption:[],//最高学历
-      householdRegistrationTypeOption:[],//户口性质
-      householdCountryOption:[],
+      educationOption:constData.educationOption,//最高学历
+      householdRegistrationTypeOption:constData.householdRegistrationTypeOption,//户口性质
       insuredForm:{
         companyName: "",
         empType:"",
@@ -350,6 +343,15 @@ export default {
       empStatusOption:constData.employStatusOption,
       showTable:false,
     };
+  },
+  computed: {
+    ...mapState("taxPageStore", {
+      personnelCollection: state => state.personnelCollection
+    }),
+    ...mapState({
+      countryList:state=>state.countryList,
+      cityList:state=>state.cityList,
+    })
   },
   created(){
     this.$store.dispatch("payMasterStore/actionGetEmployee",this.compEmpId).then(res=>{
