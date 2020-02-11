@@ -12,7 +12,7 @@ import { taxPaidStore } from '../modules/taxPaid/store'
 import { payManageStore } from '@/modules/payManage/store'
 import { accountPageStore } from "@/modules/account/store"
 import { withdrawalPageStore } from "@/modules/withdrawal/store"
-import { payMasterStore } from "@/modules/payMaster/store"
+import { payMasterStore } from "@/modules/paymaster/store"
 Vue.use(Vuex)
 
 import mutations from './mutations'
