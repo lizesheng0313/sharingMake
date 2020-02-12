@@ -73,3 +73,22 @@ export const subTaxReportType = {
   "PERSON_PAY_RULE": "劳务报酬所得申报",
   "TOTAL_RULE": "综合所得预扣预缴表"
 }
+
+export const enumEmpTypeOption = [
+  {
+    label:"全职",
+    value:"FULL_TIME"
+  },{
+    label:"兼职",
+    value:"PART_TIME"
+  },{
+    label:"实习",
+    value:"PRACTICE"
+  },{
+    label:"劳务",
+    value:"LABOUR"
+  },{
+    label:"退休返聘",
+    value:"RE_EMPLOY"
+  }
+]

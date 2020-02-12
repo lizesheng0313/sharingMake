@@ -76,13 +76,15 @@
                   </el-select>
                 </span>
               </el-form-item>
-              <el-form-item label="算薪人员范围" prop="salaryArea" >
-                <el-input v-model="basicInfoForm.salaryArea" @focus="showSalaryArea"></el-input>
+              <el-form-item label="算薪人员范围" prop="salaryArea"
+                            :rules="{ required: !this.basicInfoForm.allTaxSub, message: '请选择算薪人员范围', trigger: 'blur' }">
+                  <el-input v-model="basicInfoForm.salaryArea" @focus="showSalaryArea" :disabled="basicInfoForm.allTaxSub"></el-input>
+                  <el-checkbox v-model="basicInfoForm.allTaxSub" class="checkAllStyle">选择全部</el-checkbox>
               </el-form-item>
               <el-form-item label="增加过滤范围" prop="" class="taxRule">
-                <el-select v-model="basicInfoForm.filterArea" multiple placeholder="请选择">
+                <el-select v-model="basicInfoForm.employType" multiple placeholder="请选择">
                   <el-option
-                    v-for="item in salaryAreaOptions"
+                    v-for="item in employTypeOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value">
@@ -120,7 +122,7 @@
                 <span>新增</span>
               </span>
             </div>
-            <draggable animation=150  v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
+            <draggable animation=150 v-model="tableData[indexs]" @change="changeDragger(tableData[indexs])">
               <el-row v-for="(item,index) in items" :key="index">
                 <el-col :span="2">
                   <el-tooltip class="item" effect="dark" content="拖动调整排序" placement="top-start">
@@ -132,7 +134,7 @@
                 <el-col :span="11"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
                 <el-col :span="2">
                   <div class="grid-content bg-purple">
-                    <el-button  plain size="mini"  @click="deleteItem(item.id)" v-if="item.canDelete">删除</el-button>
+                    <el-button  plain size="mini" @click="deleteItem(item.id)" v-if="item.canDelete">删除</el-button>
                     <el-button  plain size="mini" v-else @click="changeStatus(item)">{{item.enable?'禁用':'启用'}}</el-button>
                   </div>
                 </el-col>
@@ -186,6 +188,7 @@ import { mapState } from "vuex";
 import draggable from 'vuedraggable'
 import salaryArea from './components/salaryset/salaryArea'
 import unNeedSalary from './components/salaryset/unNeedSalary'
+import * as constData from "./util/constData"
 import { apiSaveSalaryRule,apiSalaryItemInfo,saveSalaryItems,deleteSalaryItems,updateSalaryItems,apiSalaryItemsSort} from './store/api'
 export default {
   components: {
@@ -204,7 +207,8 @@ export default {
         taxSubList:[],//算薪人员范围-公司id
         empList:[],//算薪人员范围-人员id
         salaryArea:"",//算薪人员范围
-        filterArea:"",//过滤范围
+        allTaxSub:false,
+        employType:[],//用工特征
         unNeedSalary:"",//无需算薪人员
         excludeEmpList:[],//无需算薪人员List
         enableMiltSalary:"N"
@@ -222,9 +226,6 @@ export default {
         payDay: [
           { required: true, message: '请选择日', trigger: 'change' }
         ],
-        salaryArea:[
-          { required: true, message: '请选择算薪人员范围', trigger: 'blur' },
-        ]
       },
       startDayOptions:[
         {
@@ -259,26 +260,8 @@ export default {
           label: '下月'
         }
       ],
-      salaryAreaOptions:[
-        {
-          value: '全职',
-          label: '全职'
-        }, {
-          value: '兼职',
-          label: '兼职'
-        }, {
-          value: '实习',
-          label: '实习'
-        },{
-          value: '劳务派遣',
-          label: '劳务派遣'
-        },
-        {
-          value: '退休返聘',
-          label: '退休返聘'
-        },
-      ],
       days:[],
+      employTypeOptions:constData.enumEmpTypeOption,
       payDay:[],
       endTime:"",
       salaryItemDetailVisible:false,
@@ -402,6 +385,7 @@ export default {
     //保存基本信息
     SaveSalaryRule(){
       this.$refs['basicInfoForm'].validate((valid) => {
+        console.log(this.basicInfoForm)
         if(valid){
           this.basicInfoForm.name = this.basicInfoForm.name.trim();
           this.basicInfoForm.id =  this.isEdit ? this.sendBasicInfoForm.id:null;
@@ -522,6 +506,9 @@ export default {
 @import "../../assets/scss/helpers.scss";
 .salarySet-page {
   height:calc(100vh - 90px);
+  .checkAllStyle{
+    position: absolute;right:-120px;
+  }
   .step-style{
     width:100%;
     margin: 30px auto;

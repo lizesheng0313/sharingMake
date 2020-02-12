@@ -7,8 +7,8 @@
         >
           <el-form-item label="姓名">{{ companyItem.empName }}</el-form-item>
           <el-form-item label="身份证号">{{ companyItem.idNo }}</el-form-item>
-          <el-form-item label="公司名称" prop="companyName" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
-            <el-select v-model="changeCompanyForm.companyName" placeholder="请选择公司名称">
+          <el-form-item label="公司名称" prop="taxSubId" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
+            <el-select v-model="changeCompanyForm.taxSubId" placeholder="请选择公司名称">
               <el-option v-for="(item,index) in companyOptions" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
           </el-form-item>
@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       changeCompanyForm: {
-        companyName: "",
+        taxSubId: "",
         empType:"",
         deptName:"",//部门
         positionName:"",
@@ -85,9 +85,8 @@ export default {
   created(){
     this.companyOptions = this.taxSubjectInfoList
     for(let key in this.changeCompanyForm){
-      this.changeCompanyForm[key] = this.companyItem[key]
+      this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
     }
-    this.changeCompanyForm.companyName = this.companyItem.taxSubId
   },
   mounted() {
 

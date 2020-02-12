@@ -1,4 +1,6 @@
-import { fetch, fetchFile } from 'request/fetch'
+import { fetch, fetchFile} from 'request/fetch'
+
+import oldFetch from "request/oldFetch";
 
 //发薪人员、员工信息列表
 export function apiPostEmployeeList(form) {
@@ -6,6 +8,16 @@ export function apiPostEmployeeList(form) {
     url: '/api/xsalary/enterprise/employeesList',
     method: 'post',
     data:form
+  })
+}
+
+//发薪人员导出
+export function apiPostEmployeesExport(form) {
+  return oldFetch({
+    url: 'xsalary/enterprise/employees/export',
+    method: 'post',
+    data:form,
+    responseType: 'blob'
   })
 }
 

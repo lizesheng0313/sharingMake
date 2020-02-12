@@ -48,7 +48,7 @@
                         </div>
                         <div style="flex:1">
                             <el-form-item label="出生日期：" prop="birthday" :rules="{required: true, message: '出生日期不能为空', trigger: 'blur'}">
-                              <el-date-picker v-model="baseForm.birthday" type="date" placeholder="请选择"></el-date-picker>
+                              <el-date-picker v-model="baseForm.birthday" type="date" placeholder="请选择" value-format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                         </div>
                     </el-row>
@@ -76,7 +76,7 @@
                         </div>
                         <div style="flex:1">
                             <el-form-item label="参加工作日期：">
-                              <el-date-picker v-model="baseForm.inWorkDay" type="date" placeholder="请选择"></el-date-picker>
+                              <el-date-picker v-model="baseForm.inWorkDay" type="date" placeholder="请选择" value-format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                         </div>
                     </el-row>
@@ -168,8 +168,8 @@
                     </div>
                     <el-row style="display: flex">
                       <div style="flex:1">
-                        <el-form-item label="公司名称" prop="compId" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
-                          <el-select v-model="baseForm.compId" placeholder="请选择公司名称">
+                        <el-form-item label="公司名称" prop="taxSubId" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
+                          <el-select v-model="baseForm.taxSubId" placeholder="请选择公司名称">
                             <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                           </el-select>
                         </el-form-item>
@@ -195,7 +195,7 @@
                     <el-row style="display: flex">
                       <div style="flex:1">
                         <el-form-item label="入职日期" prop="empDay" :rules="{required: true, message: '请选择入职日期', trigger: 'blur'}">
-                          <el-date-picker v-model="baseForm.empDay" type="date" placeholder="请选择"></el-date-picker>
+                          <el-date-picker v-model="baseForm.empDay" type="date" placeholder="请选择" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                       </div>
                       <div style="flex:1">
@@ -216,7 +216,7 @@
                       </div>
                       <div style="flex:1">
                         <el-form-item label="转正日期" prop="zzDay">
-                          <el-date-picker v-model="baseForm.zzDay" type="date" placeholder="请选择"></el-date-picker>
+                          <el-date-picker v-model="baseForm.zzDay" type="date" placeholder="请选择" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                       </div>
                     </el-row>
@@ -280,7 +280,7 @@ export default {
         firstEntryTime:"",
         expectLeaveTime:"",
 
-        compId:"",//公司名称
+        taxSubId:"",//公司名称
         empType:"",
         deptName:"",
         positionName:"",

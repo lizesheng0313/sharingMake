@@ -212,11 +212,11 @@
       class="exportDialog"
       :close-on-click-modal="closeModel"
     >
-      <div>
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="checkAllBaseInfo"><b>基本信息</b></el-checkbox>
+      <div v-for="(item,index) in checkAllList" :style="{marginTop:index!=0?'10px':''}">
+        <el-checkbox :indeterminate="item.isIndeterminate" v-model="item.checkAll" @change="checkAllInfo(index)"><b>{{ item.title }}</b></el-checkbox>
         <div style="margin:10px 0px; border-bottom:1px solid #E5E5E5"></div>
-        <el-checkbox-group v-model="checkedBaseInfo" @change="checkBaseInfo">
-         <el-checkbox v-for="item in baseOptions" :label="item" :key="item" class="checkBoxStyle">{{item}}</el-checkbox>
+        <el-checkbox-group v-model="item.checkedInfo" @change="checkInfo(index)">
+         <el-checkbox v-for="it in item.options" :label="it" :key="it" class="checkBoxStyle">{{it}}</el-checkbox>
         </el-checkbox-group>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -283,11 +283,22 @@
         },
         checkAll:false,
         isShowExport:false,
-        baseCheckAll: false,
-        checkedBaseInfo: ['工号', '姓名', '身份证号', '部门'],
-        baseOptions:[ '姓名','工号', '证件类型','证件号码', '性别',"出生日期","国籍","手机号码","最高学历","参加工作日期","户口性质","户口所在城市","婚姻状态","民族","工资卡开户银行","工资银行账号"],
-        companyOptions:["公司名称","用工性质","部门","岗位","入职日期","工作城市","是否转正","转正日期","员工状态","最后工作日"],
-        isIndeterminate: false,
+        checkAllList:[
+          {
+            title:"基本信息",
+            checkAll:true,
+            checkedInfo:[ '姓名','工号', '证件类型','证件号码', '性别',"出生日期","国籍","手机号码","最高学历","参加工作日期","户口性质","户口所在城市","婚姻状态","民族","工资卡开户银行","工资银行账号"],
+            options:[ '姓名','工号', '证件类型','证件号码', '性别',"出生日期","国籍","手机号码","最高学历","参加工作日期","户口性质","户口所在城市","婚姻状态","民族","工资卡开户银行","工资银行账号"],
+            isIndeterminate: false,
+          },
+          {
+            title:"公司信息",
+            checkAll:true,
+            checkedInfo:["公司名称","用工性质","部门","岗位","入职日期","工作城市","是否转正","转正日期","员工状态","最后工作日"],
+            options:["公司名称","用工性质","部门","岗位","入职日期","工作城市","是否转正","转正日期","员工状态","最后工作日"],
+            isIndeterminate: false,
+          }
+        ],
       };
     },
     components:{
@@ -386,18 +397,26 @@
 
       },
       //人员基本信息
-      checkAllBaseInfo(val){
-        this.checkedBaseInfo = val ? this.baseOptions : [];
-        this.isIndeterminate = false;
+      checkAllInfo(index){
+        this.checkAllList[index]['checkedInfo'] = this.checkAllList[index]['checkAll'] ? this.checkAllList[index]['options'] : [];
+        this.checkAllList[index]['isIndeterminate'] = false;
       },
-      checkBaseInfo(value){
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.baseOptions.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.baseOptions.length;
+      checkInfo(index){
+        let checkedCount = this.checkAllList[index]['checkedInfo'].length;
+        this.checkAllList[index]['checkAll'] = checkedCount === this.checkAllList[index]['options'].length;
+        this.checkAllList[index]['isIndeterminate'] = checkedCount > 0 && checkedCount < this.checkAllList[index]['options'].length;
       },
       //导出
       handleExport(){
-        console.log(this.checkedBaseInfo)
+        let exportCompEmpItems = this.checkAllList[0]['checkedInfo']
+       let exportCompInfoItems = this.checkAllList[1]['checkedInfo']
+        this.$store.dispatch("payMasterStore/actionEmployeeExport",{
+           exportCompEmpItems,
+           exportCompInfoItems,
+           queryParam:this.ruleForm
+        }).then(res => {
+          this.isShowExport = false
+        })
       },
       handleSizeChange(val) {
         this.ruleForm.pageSize = val;
