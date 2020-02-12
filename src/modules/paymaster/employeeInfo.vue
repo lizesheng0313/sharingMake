@@ -77,7 +77,7 @@
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
                   <span class="funStyle" @click="onChange(scope.row)">变更</span>
-                  <span class="funStyle">删除</span>
+                  <span class="funStyle" @click="handleDelete(scope.row)">删除</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -224,6 +224,22 @@
         <el-button @click="isShowExport = false">取消</el-button>
       </span>
     </el-dialog>
+<!--    导入-->
+    <import-data
+      ref="import"
+      :radioList="radioList"
+      :title="'新增导入'"
+      :apiCheck="'/api/xsalary/salary/socialProvident/verify'"
+      :apiDownloadLog="'salaryCalStore/actionSocialProvidentRecord'"
+      :apiDownloadTemplate="'salaryCalStore/actionSocialProvidentTemplate'"
+      :parameterData="parameterData"
+      sendRadio="BY_EMP_NO"
+      @changeRadioValue="changeRadioValue"
+      :impoartAction="'salaryCalStore/actionSocialProvident'"
+      @getLoading="getList"
+      :uploadFileData="uploadFileData"
+      :tips="'说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资'"
+    ></import-data>
   </div>
 </template>
 <script>
@@ -232,7 +248,7 @@
   import * as constData from "./util/constData"
   import rightPop from '@/components/basic/rightPop'
   import companyChange from './components/companyChange'
-  import cityCascader from '@/components/tool/cityCascader'
+  import importData from "@/components/tool/importData";
   import radios from '@/components/tool/radios'
   import fun from "@/util/fun";
   let date = fun.headDate();
@@ -299,12 +315,24 @@
             isIndeterminate: false,
           }
         ],
+         radioList: [
+            { lable: "BY_EMP_NO", title: "通过员工工号匹配人员" },
+            { lable: "BY_ID_NO", title: "通过身份证匹配人员" }
+          ],
+         parameterData: {
+            'importType':'BY_EMP_NO'
+          },
+         uploadFileData: {
+          uuid: "",
+          importType:"BY_EMP_NO"
+        },
       };
     },
     components:{
       rightPop,
       companyChange,
       radios,
+      importData
     },
     computed:{
       ...mapState({
@@ -346,6 +374,32 @@
               this.loading = false
             }
           });
+      },
+      //批量导入
+      batchImport(){
+        this.$refs.import.show();
+      },
+      //导入 按钮切换
+      changeRadioValue(val) {
+        this.parameterData.importType = val;
+        this.uploadFileData.importType= val;
+      },
+      //删除
+      handleDelete(data){
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store
+            .dispatch("payMasterStore/actionDeleteEmployee", data.compEmpId)
+              .then(res => {
+                if(res.success){
+                  this.$message({type: 'success', message: '删除成功!'});
+                  this.getList()
+                }
+              });
+              }).catch(() => {})
       },
       //用工性质
       handleEnumEmpTypes(val){
@@ -392,10 +446,6 @@
       handleEmplayeeName(data){
         this.$router.push({path:'/employeeDetail',query:{compEmpId:data.compEmpId}})
       },
-      //批量导入
-      batchImport(){
-
-      },
       //人员基本信息
       checkAllInfo(index){
         this.checkAllList[index]['checkedInfo'] = this.checkAllList[index]['checkAll'] ? this.checkAllList[index]['options'] : [];
@@ -424,13 +474,7 @@
         this.getList();
       },
       handleSearch(){
-
-      },
-      // 重置
-      handleReset(){
-        for(let key in this.ruleForm){
-          this.ruleForm[key] = ""
-        }
+        this.getList()
       },
       //翻页
       handleSelectionChange(val) {

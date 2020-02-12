@@ -176,7 +176,9 @@
                       </div>
                       <div style="flex:1">
                         <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'blur'}">
-                          <el-date-picker v-model="baseForm.empType" type="month" placeholder="请选择"></el-date-picker>
+                          <el-select v-model="baseForm.empType">
+                            <el-option v-for="(item,index) in enumEmpTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
+                          </el-select>
                         </el-form-item>
                       </div>
                     </el-row>
@@ -290,6 +292,7 @@ export default {
         zzDay:"",
         workCity:"",
       },
+      enumEmpTypeOption:constData.enumEmpTypeOption,
       idCardTypeOption:constData.idType,
       sexOption:constData.empSex,
       topEduOption:constData.educationOption,
@@ -317,7 +320,10 @@ export default {
           this.$store
             .dispatch("payMasterStore/actionAddEmployees", this.baseForm)
             .then(res => {
-              console.log(res)
+              if(res.success){
+                this.$message.success("保存成功")
+                this.$router.go(-1)
+              }
             })
         }
       })

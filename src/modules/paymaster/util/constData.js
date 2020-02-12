@@ -100,13 +100,13 @@ export const enumEmpTypeOption = [
 export const regularEmpYnOption = [
   {
     label:"不限",
-    value:-1
+    value:"-1"
   },{
     label:"是",
-    value:"true"
+    value:"1"
   },{
     label:"否",
-    value:"false"
+    value:"0"
   }
 ]
 

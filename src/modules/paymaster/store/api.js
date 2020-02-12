@@ -20,7 +20,13 @@ export function apiPostEmployeesExport(form) {
     responseType: 'blob'
   })
 }
-
+//发薪人员导删除
+export function apiDeleteEmployee(id) {
+  return oldFetch({
+    url: 'xsalary/enterprise/deleteEmployee/'+id,
+    method: 'delete',
+  })
+}
 //发薪人员、员工详情
 export function apiGetEmployee(id) {
   return fetch({

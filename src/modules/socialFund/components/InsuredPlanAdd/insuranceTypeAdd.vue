@@ -7,7 +7,7 @@
     <transition name="el-zoom-in-top">
       <div v-show="show3" class="transition-box">
         <el-checkbox-group v-model="checkedType" @change="handleCheckedType">
-          <div v-for="item in typeOption" style="line-height: 20px"><el-checkbox :label="label" :key="item.label">{{ item.label }}</el-checkbox></div>
+          <div v-for="(item,index) in typeOption" style="line-height: 20px"><el-checkbox :label="item.label" :key="index">{{ item.label }}</el-checkbox></div>
         </el-checkbox-group>
       </div>
     </transition>

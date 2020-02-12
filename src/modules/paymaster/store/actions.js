@@ -1,4 +1,4 @@
-import { apiPostEmployeesExport,apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
+import { apiDeleteEmployee,apiPostEmployeesExport,apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
 import {apiBatchList, apiCreateSalary} from "../../payManage/store/api";
 import * as AT from "../../payManage/store/actionTypes";
 
@@ -10,7 +10,10 @@ export const actionGetEmployeeList = ({ dispatch },form) => {
 export const actionEmployeeExport = ({ commit }, formData) => {
   return apiPostEmployeesExport(formData).then(res => res);
 };
-
+//发薪人员 删除
+export const actionDeleteEmployee = ({ commit }, id) => {
+  return apiDeleteEmployee(id).then(res => res);
+};
 //发薪人员、员工详情
 export const actionGetEmployee = ({ dispatch },id) => {
     return apiGetEmployee(id)

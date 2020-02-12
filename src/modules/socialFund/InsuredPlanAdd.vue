@@ -14,29 +14,27 @@
         <el-form label-width="100px" :model="insuredForm" ref="insuredForms">
           <el-row style="display: flex;width:800px;margin-top: 20px">
             <div style="flex:1">
-              <el-form-item label="参保方案" prop="plan" :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
-                <el-select v-model="insuredForm.plan" placeholder="请选择参保方案">
-                  <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              <el-form-item label="参保城市：" prop="city" :rules="{required: true, message: '参保城市不能为空', trigger: 'blur'}">
+                <el-select v-model="insuredForm.city" placeholder="请选择参保城市" filterable @change="changeCity">
+                  <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div style="flex:1">
-              <el-form-item label="参保城市：" prop="city" :rules="{required: true, message: '参保城市不能为空', trigger: 'blur'}">
-                <el-select v-model="insuredForm.city" placeholder="请选择参保城市">
-                  <el-option v-for="(item,index) in cityOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
-                </el-select>
+              <el-form-item label="参保方案名称" prop="plan" :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
+                <el-input v-model="insuredForm.plan"></el-input>
               </el-form-item>
             </div>
           </el-row>
           <div class="social-plan">
             <div class="social-plan-title">
               <span class="plan-title">社保方案</span>
-              <span class="plan-tip">北京有2个社保方案供您参保 <span class="choose-plan" @click="choosePlan">选择方案</span></span>
+              <span class="plan-tip" v-if="planOption.length>0">有{{ planOption.length }}个社保方案供您参保 <span class="choose-plan" @click="choosePlan">选择方案</span></span>
             </div>
             <div class="social-plan-table">
               <insuranceTypeAdd :iconStyle="iconStyle" :iconTitle="iconTitle" :iconTitleStyle="iconTitleStyle" class="insurance-type-add"></insuranceTypeAdd>
               <el-table :data="socailList" border>
-                <el-table-column prop="month" label=" " >
+                <el-table-column prop="month" label="*">
                   <template slot-scope="scope">
                     <span>{{ scope.row.type }}</span>
                   </template>
@@ -106,14 +104,9 @@
       <div class="screening-wapper">
         <el-form :model="choosePlanForm" ref="choosePlanForm" label-width="120px" >
           <div class="shortCon">
-            <el-form-item label="社保方案">
-              <el-select v-model="choosePlanForm.socialPlan" placeholder="请选择社保方案" width="246px">
-                <el-option v-for="(item,index) in socialOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="公积金方案">
-              <el-select v-model="choosePlanForm.fundPlan" placeholder="请选择公积金方案">
-                <el-option v-for="(item,index) in fundOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+            <el-form-item label="参保方案" :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
+              <el-select v-model="choosePlanForm.plan" placeholder="请选择公积金方案">
+                <el-option v-for="(item,index) in planOption" :label="item.insuredName" :value="item.id" :key="index"></el-option>
               </el-select>
             </el-form-item>
             <span slot="footer" class="dialog-footer">
@@ -142,7 +135,7 @@
           city:""
         },
         planOption:[],
-        cityOption:[],
+        chooseCityName:"",
         socailList:[
           {
             type:"养老保险",
@@ -167,8 +160,7 @@
         socialOption:[],
         fundOption:[],
         choosePlanForm:{
-          socialPlan:"",
-          fundPlan:"",
+          plan:"",
         },
         iconStyle:{
           'font-size':'20px',
@@ -181,11 +173,11 @@
         }
       };
     },
-
     computed:{
       ...mapState({
-        privilegeVoList:state=>state.privilegeVoList
-      }),
+        privilegeVoList:state=>state.privilegeVoList,
+        cityList:state=>state.cityList,
+      })
     },
     created(){
     },
@@ -203,8 +195,16 @@
       choosePlan(){
         this.isShowChoosePlan = true;
       },
+      changeCity(value){
+        this.$store
+          .dispatch("socialFundStore/actionInsuredGetBase", value)
+          .then(res => {
+            if(res.success){
+             this.planOption = res.data
+            }
+          });
+      },
       handleChoosePlan(){
-
       }
     }
   };
