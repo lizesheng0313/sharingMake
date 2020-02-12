@@ -1,4 +1,4 @@
-import { apiInsuredProjectList,apiInsuredGetBase} from './api'
+import { apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
 
 //參保列表
 export const actionInsuredProjectList = ({ dispatch },ruleForm) => {
@@ -7,6 +7,11 @@ export const actionInsuredProjectList = ({ dispatch },ruleForm) => {
 //參保列表
 export const actionInsuredGetBase = ({ dispatch },id) => {
     return apiInsuredGetBase(id)
+}
+
+//参保详情
+export const actionInsuredGetInfo = ({ dispatch },id) => {
+  return apiInsuredGetInfo(id)
 }
 
 

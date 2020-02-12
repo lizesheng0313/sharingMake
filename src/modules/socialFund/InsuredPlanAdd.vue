@@ -26,44 +26,130 @@
               </el-form-item>
             </div>
           </el-row>
-          <div class="social-plan">
+          <div class="social-plan" >
             <div class="social-plan-title">
               <span class="plan-title">社保方案</span>
               <span class="plan-tip" v-if="planOption.length>0">有{{ planOption.length }}个社保方案供您参保 <span class="choose-plan" @click="choosePlan">选择方案</span></span>
             </div>
             <div class="social-plan-table">
-              <insuranceTypeAdd :iconStyle="iconStyle" :iconTitle="iconTitle" :iconTitleStyle="iconTitleStyle" class="insurance-type-add"></insuranceTypeAdd>
-              <el-table :data="socailList" border>
+                <el-popover ref="socialPlan" placement="bottom" width="200" trigger="click">
+                  <el-checkbox-group v-model="socialCheckedType" @change="handleSocialType">
+                    <div v-for="(item,index) in socialOption" style="line-height: 20px">
+                      <el-checkbox :label="item.value" :key="index">{{ item.label }}</el-checkbox>
+                    </div>
+                  </el-checkbox-group>
+                </el-popover>
+                <el-button v-popover:socialPlan type="text" size="mini" class="insurance-type-add" @click="handleSocial">
+                  <i class="el-icon-circle-plus-outline" :style="iconStyle"></i>
+                  <span>选择险种</span>
+                </el-button>
+                <el-table :data="socialInsuranceList" border>
+                  <el-table-column prop="month" label=" ">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.insuranceType | insuranceType}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="基数下限">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.baseNumberMin" class="input-right"/>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="基数上限">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.baseNumberMax" class="input-right"/>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="个人比例">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.personScale" class="input-right"/>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="个人固定金额">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.personFixedAmount" class="input-right"/>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="个人尾数规则">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.personMantissaRule" placeholder="请选择">
+                        <el-option
+                          v-for="item in ruleOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="公司比例">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.companyRatiol" class="input-right"/>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="公司比例">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.compScale" class="input-right"/>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="公司尾数规则">
+                    <template slot-scope="scope">
+                      <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
+                        <el-option
+                          v-for="item in ruleOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-table-column>
+                </el-table>
+            </div>
+
+            <div class="social-plan-title" style="margin-top: 20px;overflow: hidden"><span class="plan-title">公积金方案</span></div>
+            <div class="social-plan-table">
+              <el-popover ref="fundPlan" placement="bottom" width="160" trigger="click">
+                <el-checkbox-group v-model="fundCheckedType" @change="handleFundType">
+                  <div v-for="(item,index) in fundOption" style="line-height: 20px" >
+                    <el-checkbox :label="item.value" :key="index">{{ item.label }}</el-checkbox>
+                  </div>
+                </el-checkbox-group>
+              </el-popover>
+              <el-button v-popover:fundPlan type="text" size="mini" class="insurance-type-add" @click="handleFund">
+                <i class="el-icon-circle-plus-outline" :style="iconStyle"></i>
+                <span>选择险种</span>
+              </el-button>
+              <el-table :data="accumulationFundList" border>
                 <el-table-column prop="month" label=" ">
                   <template slot-scope="scope">
-                    <span>{{ scope.row.type }}</span>
+                    <span>{{ scope.row.insuranceType | insuranceType}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="基数下限">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.baseDown" class="input-right"/>
+                    <el-input v-model="scope.row.baseNumberMin" class="input-right"/>
                   </template>
                 </el-table-column>
                 <el-table-column label="基数上限">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.baseUp" class="input-right"/>
+                    <el-input v-model="scope.row.baseNumberMax" class="input-right"/>
                   </template>
                 </el-table-column>
                 <el-table-column label="个人比例">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.personelRatiol" class="input-right"/>
+                    <el-input v-model="scope.row.personScale" class="input-right"/>
                   </template>
                 </el-table-column>
                 <el-table-column label="个人固定金额">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.personelMoney" class="input-right"/>
+                    <el-input v-model="scope.row.personFixedAmount" class="input-right"/>
                   </template>
                 </el-table-column>
                 <el-table-column label="个人尾数规则">
                   <template slot-scope="scope">
-                    <el-select v-model="scope.row.personRule" placeholder="请选择">
+                    <el-select v-model="scope.row.personMantissaRule" placeholder="请选择">
                       <el-option
-                        v-for="item in socailRule"
+                        v-for="item in ruleOption"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
@@ -78,14 +164,14 @@
                 </el-table-column>
                 <el-table-column label="公司比例">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.companyMoney" class="input-right"/>
+                    <el-input v-model="scope.row.compScale" class="input-right"/>
                   </template>
                 </el-table-column>
                 <el-table-column label="公司尾数规则">
                   <template slot-scope="scope">
-                    <el-select v-model="scope.row.companyRule" placeholder="请选择">
+                    <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
                       <el-option
-                        v-for="item in socailRule"
+                        v-for="item in ruleOption"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
@@ -121,12 +207,11 @@
 </template>
 <script>
   import { mapState } from "vuex";
-  import * as AT from "./store/actionTypes";
   import fun from "@/util/fun";
-  import insuranceTypeAdd from "./components/InsuredPlanAdd/insuranceTypeAdd"
+  import * as constData from "./util/constData"
   export default {
     components:{
-      insuranceTypeAdd
+
     },
     data() {
       return {
@@ -136,29 +221,15 @@
         },
         planOption:[],
         chooseCityName:"",
-        socailList:[
-          {
-            type:"养老保险",
-            baseDown:"9%",
-            baseUp:"8%",
-            personelRatiol:"8%",
-            personelMoney:"100",
-            personRule:"",
-            companyRatiol:"8%",
-            companyMoney:"122",
-            companyRule:"",
-          }
-        ],
-        socailRule:[
-          {
-            label:"四舍五入至分",
-            value:"1"
-          }
-        ],
+        socialInsuranceList:[],
+        accumulationFundList:[],
+        ruleOption:constData.ruleOption,
         closeModel:false,
         isShowChoosePlan:false,
-        socialOption:[],
-        fundOption:[],
+        socialOption:constData.insuranceType,
+        socialCheckedType:[],
+        fundOption:constData.insuranceType,
+        fundCheckedType:[],
         choosePlanForm:{
           plan:"",
         },
@@ -166,11 +237,6 @@
           'font-size':'20px',
           'color':'#108EE9'
         },
-        iconTitle:"添加险种",
-        iconTitleStyle:{
-          'font-size':'14px',
-          'color':'#108EE9'
-        }
       };
     },
     computed:{
@@ -195,17 +261,71 @@
       choosePlan(){
         this.isShowChoosePlan = true;
       },
+      //社保选择险种
+      handleSocialType(value){
+        let socialType = this.socialInsuranceList.map(item=>item.insuranceType)
+        if(value.length < socialType.length){
+          this.socialInsuranceList = this.socialInsuranceList.filter(item=>value.includes(item.insuranceType))
+        }else{
+          this.socialInsuranceList.push({
+            insuranceType: value[value.length-1],
+            baseNumberMax: "00.00",
+            baseNumberMin: "00.00",
+            compFixedAmount: "0.00",
+            compMantissaRule: "",
+            compScale: "00.00",
+            insuredProjectType: "",
+            personFixedAmount: "00.00",
+            personMantissaRule: "",
+            personScale: "00.00"
+          })
+        }
+      },
+      handleSocial(){
+        this.socialCheckedType = this.socialInsuranceList.map(item=>item.insuranceType)
+      },
+      handleFundType(value){
+        let fundType = this.accumulationFundList.map(item=>item.insuranceType)
+        if(value.length < fundType.length){
+          this.accumulationFundList = this.accumulationFundList.filter(item=>value.includes(item.insuranceType))
+        }else{
+          this.accumulationFundList.push({
+            insuranceType: value[value.length-1],
+            baseNumberMax: "00.00",
+            baseNumberMin: "00.00",
+            compFixedAmount: "0.00",
+            compMantissaRule: "",
+            compScale: "00.00",
+            insuredProjectType: "",
+            personFixedAmount: "00.00",
+            personMantissaRule: "",
+            personScale: "00.00"
+          })
+        }
+      },
+      handleFund(){
+        this.fundCheckedType = this.accumulationFundList.map(item=>item.insuranceType)
+      },
       changeCity(value){
         this.$store
           .dispatch("socialFundStore/actionInsuredGetBase", value)
           .then(res => {
             if(res.success){
               this.planOption = res.data
-              console.log(this.planOption)
             }
           });
       },
       handleChoosePlan(){
+        this.$store
+          .dispatch("socialFundStore/actionInsuredGetInfo", this.choosePlanForm.plan)
+          .then(res => {
+            if(res.success){
+              let data = res.data;
+              this.socialInsuranceList = data.socialInsuranceList
+              this.accumulationFundList = data.accumulationFundList
+              this.isShowChoosePlan = false
+            }
+          });
       }
     }
   };
@@ -249,7 +369,7 @@
           position: relative;
           left:26px;
           top:36px;
-          z-index: 9999;
+          z-index: 1222;
         }
         .choose-plan{
           color:$mainColor;

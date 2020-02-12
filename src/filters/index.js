@@ -177,6 +177,44 @@ const reportType = (val) => {
     }
   }
 };
+
+ const insuranceType = (val) => {
+  switch (val) {
+    case 'ENDOWMENT_INSURANCE': {
+      return '养老保险';
+    }
+    case 'MEDICAL_INSURANCE': {
+      return '医疗保险';
+    }
+    case 'UNEMPLOYMENT_INSURANCE': {
+      return '失业保险';
+    }
+    case 'INJURY_INSURANCE': {
+      return '工伤保险';
+    }
+    case 'BIRTH_INSURANCE': {
+      return '生育保险';
+    }
+    case 'SERIOUS_DISEASE_TREATMENT': {
+      return '大病医疗';
+    }
+    case 'COMPENSATORY_ENDOWMENT_INSURANCE': {
+      return '补充养老保险';
+    }
+    case 'COMPENSATORY_MEDICAL_INSURANCE': {
+      return '补充医疗保险';
+    }
+    case 'COMPENSATORY_UNEMPLOYMENT_INSURANCE': {
+      return '补充失业保险';
+    }
+    case 'ACCUMULATION_FUND': {
+      return '公积金';
+    }
+    case 'COMPENSATORY_ACCUMULATION_FUND': {
+      return '补偿公积金';
+    }
+  }
+};
 export default {
   resetDate,
   texRule,
@@ -186,5 +224,6 @@ export default {
   countryType,
   accreditStatus,
   dateStyle,
+  insuranceType,
   reportType
 }

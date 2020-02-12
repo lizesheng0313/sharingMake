@@ -16,8 +16,12 @@ export function apiInsuredGetBase(id) {
   })
 }
 //参保方案 详情
-
-
+export function apiInsuredGetInfo(id) {
+  return oldFetch({
+    url: 'xsalary/insuredProject/manage/getInfo/'+id,
+    method: 'get',
+  })
+}
 
 
 
