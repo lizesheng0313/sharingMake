@@ -11,7 +11,7 @@
         </el-row>
       </header>
       <div class="account-add-con">
-        <el-form label-width="100px" :model="insuredForm" ref="insuredForms">
+        <el-form label-width="120px" :model="insuredForm" ref="insuredForms">
           <el-row style="display: flex;width:800px;margin-top: 20px">
             <div style="flex:1">
               <el-form-item label="参保城市：" prop="city" :rules="{required: true, message: '参保城市不能为空', trigger: 'blur'}">
@@ -34,7 +34,7 @@
             <div class="social-plan-table">
               <insuranceTypeAdd :iconStyle="iconStyle" :iconTitle="iconTitle" :iconTitleStyle="iconTitleStyle" class="insurance-type-add"></insuranceTypeAdd>
               <el-table :data="socailList" border>
-                <el-table-column prop="month" label="*">
+                <el-table-column prop="month" label=" ">
                   <template slot-scope="scope">
                     <span>{{ scope.row.type }}</span>
                   </template>
@@ -105,7 +105,7 @@
         <el-form :model="choosePlanForm" ref="choosePlanForm" label-width="120px" >
           <div class="shortCon">
             <el-form-item label="参保方案" :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
-              <el-select v-model="choosePlanForm.plan" placeholder="请选择公积金方案">
+              <el-select v-model="choosePlanForm.plan" placeholder="请选择参保方案">
                 <el-option v-for="(item,index) in planOption" :label="item.insuredName" :value="item.id" :key="index"></el-option>
               </el-select>
             </el-form-item>
@@ -200,7 +200,8 @@
           .dispatch("socialFundStore/actionInsuredGetBase", value)
           .then(res => {
             if(res.success){
-             this.planOption = res.data
+              this.planOption = res.data
+              console.log(this.planOption)
             }
           });
       },

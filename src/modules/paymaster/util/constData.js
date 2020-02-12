@@ -86,13 +86,13 @@ export const enumEmpTypeOption = [
   export const employStatusOption = [
   {
     label:"在职",
-    value:"FULL_TIME"
+    value:"ON_THE_JOB"
   },{
     label:"离职",
-    value:"PART_TIME"
+    value:"DIMISSION"
   },{
     label:"退休",
-    value:"PRACTICE"
+    value:"RETIRED"
   }
 ]
 

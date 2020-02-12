@@ -302,6 +302,8 @@ export default {
       isInsuredEdit:false,
       compEmpId:this.$route.query.compEmpId,
       baseForm:{
+        compEmpId:this.$route.query.compEmpId,
+        bankId:"",
         empName:"",
         empNo:"",
         idType:"PRC_ID",
@@ -324,7 +326,8 @@ export default {
       educationOption:constData.educationOption,//最高学历
       householdRegistrationTypeOption:constData.householdRegistrationTypeOption,//户口性质
       insuredForm:{
-        companyName: "",
+        empId:"",
+        taxSubId:"",
         empType:"",
         deptName:"",//部门
         positionName:"",//岗位

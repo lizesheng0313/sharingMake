@@ -15,6 +15,8 @@ export function apiInsuredGetBase(id) {
     method: 'get',
   })
 }
+//参保方案 详情
+
 
 
 
