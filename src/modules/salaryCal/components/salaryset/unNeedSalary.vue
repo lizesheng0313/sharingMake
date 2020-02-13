@@ -84,13 +84,16 @@ export default {
       }
     },
   },
-  created(){
-    // 获取人员列表
-    this.taxSubId = this.taxSubjectInfoList[0]['taxSubId']
-    this.getEmployList()
+  created() {
   },
   methods: {
-    getEmployList(){
+    sendData(data){
+      this.isShowUnNeedSalary = true
+      // 获取人员列表
+      this.taxSubId = this.taxSubjectInfoList[0]['taxSubId']
+      this.getEmployList(data)
+    },
+    getEmployList(data){
       this.$store
         .dispatch("salaryCalStore/actionGetEnterpriseEmployees", this.taxSubId)
         .then(res => {
@@ -99,7 +102,10 @@ export default {
             item.name = item.empName+`(${item.empId})`;
             item.id = item.empId;
           })
-           this.lists = this.allLists = emplyeeList
+          if(data){
+            this.lists = this.allLists = emplyeeList
+            this.checkedLists = this.lists.filter(item=>data.includes(item.empId))
+          }
         })
     },
     changCompany(){

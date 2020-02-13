@@ -29,7 +29,7 @@
                 <el-input v-model="basicInfoForm.name"></el-input>
               </el-form-item>
               <el-form-item label="计税规则" prop="taxRule" class="taxRule">
-                <el-select v-model="basicInfoForm.taxRule" placeholder="请选择" @change="selectMonth" :disabled = isEdit>
+                <el-select v-model="basicInfoForm.taxRule" placeholder="请选择" @change="selectMonth" :disabled ="isEdit">
                   <el-option v-for="item in taxRuleOptions"
                              :key="item.value"
                              :label="item.label"
@@ -81,18 +81,18 @@
                   <el-input v-model="basicInfoForm.salaryArea" @focus="showSalaryArea" :disabled="basicInfoForm.allTaxSub"></el-input>
                   <el-checkbox v-model="basicInfoForm.allTaxSub" class="checkAllStyle">选择全部</el-checkbox>
               </el-form-item>
-              <el-form-item label="增加过滤范围" prop="" class="taxRule">
+              <el-form-item label="增加过滤范围" class="taxRule">
                 <el-select v-model="basicInfoForm.employType" multiple placeholder="请选择">
                   <el-option
-                    v-for="item in employTypeOptions"
-                    :key="item.value"
+                    v-for="(item,index) in employTypeOption"
+                    :key="index"
                     :label="item.label"
                     :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="无需算薪人员">
-                <el-input v-model="basicInfoForm.unNeedSalary" @focus="$refs.unNeedSalary.isShowUnNeedSalary = true"></el-input>
+                <el-input v-model="basicInfoForm.unNeedSalary" @focus="showUnNeedSalary"></el-input>
               </el-form-item>
               <el-form-item label="启动单月多次算发薪" v-if="basicInfoForm.taxRule !== 'YEAR_END_BONUS'">
                 <el-switch
@@ -197,6 +197,7 @@ export default {
   },
   data() {
     return {
+      employType:[],
       basicInfoForm:{
         name:"",
         taxRule:"SALARY_PAY_RULE",//计税规则
@@ -208,7 +209,7 @@ export default {
         empList:[],//算薪人员范围-人员id
         salaryArea:"",//算薪人员范围
         allTaxSub:false,
-        employType:[],//用工特征
+        employType:[],
         unNeedSalary:"",//无需算薪人员
         excludeEmpList:[],//无需算薪人员List
         enableMiltSalary:"N"
@@ -261,7 +262,24 @@ export default {
         }
       ],
       days:[],
-      employTypeOptions:constData.enumEmpTypeOption,
+      employTypeOption:[
+          {
+            label:"全职",
+            value:"FULL_TIME"
+          },{
+          label:"兼职",
+          value:"PART_TIME"
+        },{
+          label:"实习",
+          value:"PRACTICE"
+        },{
+          label:"劳务",
+          value:"LABOUR"
+        },{
+          label:"退休返聘",
+          value:"RE_EMPLOY"
+        }
+      ],
       payDay:[],
       endTime:"",
       salaryItemDetailVisible:false,
@@ -305,10 +323,12 @@ export default {
       salaryItemDisabled:true,
       tableData:[],
       salaryItemLoding:false,
-      isEdit: this.$route.query.isEdit,
+      isEdit: false,
       isSet:this.$route.query.isSet,
       closeModel:false,
       active:1,
+      isEditSalaryArea:false,
+      isEditExcludeEmpList:false
     };
   },
   components: {
@@ -324,22 +344,51 @@ export default {
   },
   watch:{
   },
+  created(){
+      this.isEdit = ['true',true].includes(this.$route.query.isEdit)
+  },
   mounted(){
    // 初始化算新周期日
     for(let i=1;i<=28;i++){this.days.push({value:i,label:i+'号'})}
     this.getEndTime(this.basicInfoForm.startMonth,this.basicInfoForm.startDay);
+
    //  初始化发薪日
     this.payDay = [{value:0,label:"最后工作日"}];
     for(let i=1;i<=31;i++){this.payDay.push({value:i,label:i+'号'})}
    // 第二步骤刷新
     if(this.rouleId){ this.ruleId = this.rouleId; this.salaryItemDisabled = false; }
+
     //编辑工资表
     if(this.isEdit && this.sendBasicInfoForm){
         for(let key in this.basicInfoForm){
-          this.basicInfoForm[key] = this.sendBasicInfoForm[key];
+          if(this.sendBasicInfoForm[key]){this.basicInfoForm[key] = this.sendBasicInfoForm[key];}
         }
        this.active = 2;
        this.onTabClick()
+      // 算薪人员范围
+      let salaryAreaC="";
+      let salaryAreaE = "";
+      let unNeedSalary ="";
+      if(!this.isEditSalaryArea){
+        if(this.sendBasicInfoForm['taxSubList'].length>0){
+          salaryAreaC = this.sendBasicInfoForm['taxSubList'].map(item=>item.taxSubName).join('、')
+          let list = this.sendBasicInfoForm['taxSubList'].map(item=>item.taxSubId);
+          this.basicInfoForm.taxSubList = list;
+        }
+        if(this.sendBasicInfoForm.empList.length>0){
+          let empList = this.sendBasicInfoForm['empList'].map(item=>item.empId);
+          this.basicInfoForm.empList = empList
+          this.sendBasicInfoForm['empList'].forEach(item=>{salaryAreaE+=`${item.empName}(${item.empId})、`})
+        }
+        this.basicInfoForm.salaryArea = salaryAreaE + salaryAreaC;
+      }
+      // 无需算薪人员范围
+      if(this.sendBasicInfoForm['excludeEmpList'].length>0 && !this.isEditExcludeEmpList){
+        this.sendBasicInfoForm['empList'].forEach(item=>{unNeedSalary+=`${item.empName}(${item.empId})、`})
+        this.basicInfoForm.unNeedSalary = unNeedSalary.substring(0,unNeedSalary.length-1)
+        let excludeEmpList = this.sendBasicInfoForm['excludeEmpList'].map(item=>item.empId);
+        this.basicInfoForm.excludeEmpList = excludeEmpList
+      }
     }
   },
   methods:{
@@ -385,10 +434,9 @@ export default {
     //保存基本信息
     SaveSalaryRule(){
       this.$refs['basicInfoForm'].validate((valid) => {
-        console.log(this.basicInfoForm)
         if(valid){
           this.basicInfoForm.name = this.basicInfoForm.name.trim();
-          this.basicInfoForm.id =  this.isEdit ? this.sendBasicInfoForm.id:null;
+          this.basicInfoForm.id = this.isEdit ? this.sendBasicInfoForm.id:null;
           apiSaveSalaryRule(this.basicInfoForm)
             .then(res=>{
               if(res.code == "0000"){
@@ -439,7 +487,7 @@ export default {
     },
     //算薪范围
     showSalaryArea(){
-      this.$refs.salaryArea.isShowSalaryArea = true
+      this.$refs.salaryArea.sendData(this.basicInfoForm.taxSubList,this.basicInfoForm.empList)
     },
     //算薪范围数据
     getSalayArea(data){
@@ -447,11 +495,16 @@ export default {
       this.basicInfoForm.taxSubList = data.taxSubList;
       this.basicInfoForm.empList = data.empList;
       this.$refs['basicInfoForm'].validateField('salaryArea')
+      this.isEditSalaryArea = true
     },
     //无需算薪人员
+    showUnNeedSalary(){
+      this.$refs.unNeedSalary.sendData(this.basicInfoForm.excludeEmpList)
+    },
     getUnNeedSalary(data){
       this.basicInfoForm.unNeedSalary = data.sendStr;
       this.basicInfoForm.excludeEmpList = data.excludeEmpList;
+      this.isEditExcludeEmpList = true;
     },
     //新增工资项
     setSalaryItem(){

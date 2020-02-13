@@ -84,10 +84,15 @@ export default {
     })
   },
   created(){
-    this.companyOptions = this.taxSubjectInfoList
-    for(let key in this.changeCompanyForm){
-      this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
-    }
+    this.$store.dispatch("payMasterStore/actionGetEmployee",this.companyItem.compEmpId).then(res=>{
+      if(res.success){
+        let data = res.data;
+        for(let key in this.changeCompanyForm){
+          data[key]?this.changeCompanyForm[key] = data[key]:""
+        }
+      }
+    })
+
   },
   mounted() {
 

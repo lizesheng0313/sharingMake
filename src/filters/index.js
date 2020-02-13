@@ -75,7 +75,40 @@ const filterEmpType = (val) => {
     }
   }
 };
-
+//学历
+const filterEducation = (val) => {
+  switch (val) {
+    case 'DR': {
+      return '博士研究生';
+    }
+    case 'MASTER': {
+      return '硕士研究生';
+    }
+    case 'REGULAR': {
+      return '大学本科';
+    }
+    case 'JUNIOR': {
+      return '大学专科';
+    }
+    case 'OTHER': {
+      return '其他';
+    }
+  }
+};
+//员工状态
+export const filterEmployStatus = (val) =>{
+  switch (val) {//仲裁类别
+    case 'ON_THE_JOB': {
+      return '在职';
+    }
+    case 'DIMISSION': {
+      return '离职';
+    }
+    case 'RETIRED': {
+      return '退休';
+    }
+  }
+}
 const filterType = (val) => {
   switch (val) {//仲裁类别
     case 'SYSYEM': {
@@ -178,6 +211,17 @@ const reportType = (val) => {
   }
 };
 
+//性别
+const filterEmpSex = (val) => {
+  switch (val) {
+    case 'MALE': {
+      return '男';
+    }
+    case 'FEMALE': {
+      return '女';
+    }
+  }
+};
  const insuranceType = (val) => {
   switch (val) {
     case 'ENDOWMENT_INSURANCE': {
@@ -215,6 +259,47 @@ const reportType = (val) => {
     }
   }
 };
+//证件类型
+const filterIdType = (val) => {
+  switch (val) {
+    case 'PRC_ID': {
+      return '居民身份证';
+    }
+    case 'COMPATRIOTS_CARD': {
+      return '港澳居民来往内地通行证';
+    }
+    case 'FORMOSA_CARD': {
+      return '台湾居民来往大陆通行证';
+    }
+    case 'CHINA_PASSPORT': {
+      return '中国护照';
+    }
+    case 'FOREIGN_PASSPORT': {
+      return '外国护照';
+    }
+    case 'FORMOSA_PRC_ID': {
+      return '台湾居民居住证';
+    }
+    case 'MACAU_PRC_ID': {
+      return '港澳居民居住证';
+    }
+    case 'FOREIGN_PRC_ID':{
+      return '外国人永久居留身份证';
+    }
+    case 'FOREIGN_WORK_PERMIT_A': {
+      return '外国人工作许可证（A类）';
+    }
+    case 'FOREIGN_WORK_PERMIT_B': {
+      return '外国人工作许可证（B类）';
+    }
+    case 'FOREIGN_WORK_PERMIT_C': {
+      return '外国人工作许可证（C类）';
+    }
+    case 'OTHER': {
+      return '其他';
+    }
+  }
+};
 export default {
   resetDate,
   texRule,
@@ -225,5 +310,9 @@ export default {
   accreditStatus,
   dateStyle,
   insuranceType,
-  reportType
+  reportType,
+  filterEmployStatus,
+  filterEmpSex,
+  filterIdType,
+  filterEducation
 }

@@ -102,7 +102,6 @@ export default {
   },
   created(){
     this.StepArr = this.salaryItem.taxRule === 'SALARY_PAY_RULE' ? this.normalStepArr : this.salaryStepArr
-    console.log(this.StepArr.length)
   },
   mounted(){
   },

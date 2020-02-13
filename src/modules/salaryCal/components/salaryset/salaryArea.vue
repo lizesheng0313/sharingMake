@@ -70,7 +70,7 @@ export default {
       chooseTypeObj:{
         "company":{
           checkAll: false,
-          checkedLists: [],
+          checkedLists: [105],
           lists:[],
           isIndeterminate: false
         },
@@ -104,21 +104,30 @@ export default {
     },
   },
   created(){
-  // 获取人员列表
-    this.taxSubId = this.taxSubjectInfoList[0]['taxSubId']
-    this.getEmployList()
 
-  // 公司列表
-    let taxSubjectInfoList =this.taxSubjectInfoList.filter(item=>item.taxSubId !== 0)
-    taxSubjectInfoList.forEach(item=>{
-      item.name =item.taxSubName;
-      item.id = item.taxSubId;
-      item.type = "company";
-    })
-    this.chooseTypeObj.company.lists = taxSubjectInfoList
   },
   methods: {
-    getEmployList(){
+    sendData(companyData,emplyeeData){
+      this.isShowSalaryArea = true
+      // 获取人员列表
+      this.taxSubId = this.taxSubjectInfoList[0]['taxSubId']
+      this.getEmployList(emplyeeData)
+
+      // 公司列表
+      let taxSubjectInfoList =this.taxSubjectInfoList.filter(item=>item.taxSubId !== 0)
+      taxSubjectInfoList.forEach(item=>{
+        item.name =item.taxSubName;
+        item.id = item.taxSubId;
+        item.type = "company";
+      })
+      this.chooseTypeObj.company.lists = taxSubjectInfoList
+
+      //公司信息回显
+      this.chooseTypeObj.company.checkedLists = this.chooseTypeObj.company.lists.filter(item=>companyData.includes(item.taxSubId))
+      this.chooseTypeObj.company.isIndeterminate = companyData.length<this.chooseTypeObj.company.lists.length
+      this.chooseTypeObj.company.checkAll = companyData.length=this.chooseTypeObj.company.lists.length
+    },
+    getEmployList(emplyeeData){
       this.$store
         .dispatch("salaryCalStore/actionGetEnterpriseEmployees", this.taxSubId)
         .then(res => {
@@ -130,6 +139,12 @@ export default {
               item.type = "employee";
             })
             this.chooseTypeObj.employee.lists = this.chooseTypeObj.employee.allLists = emplyeeList
+            //数据回显
+            if(emplyeeData){
+              this.chooseTypeObj.employee.checkedLists = this.chooseTypeObj.employee.lists.filter(item=>emplyeeData.includes(item.empId))
+              this.chooseTypeObj.employee.isIndeterminate = emplyeeData.length<this.chooseTypeObj.employee.lists.length
+              this.chooseTypeObj.employee.checkAll = emplyeeData.length=this.chooseTypeObj.employee.lists.length
+            }
           }
         })
     },

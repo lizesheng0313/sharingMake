@@ -24,11 +24,11 @@
                       <el-col :span="12"><el-form-item label="工号：">{{ this.baseForm.empNo}}</el-form-item></el-col>
                   </el-row>
                   <el-row>
-                      <el-col :span="12"><el-form-item label="证件类型：">{{ this.baseForm.idCardType}}</el-form-item></el-col>
+                      <el-col :span="12"><el-form-item label="证件类型：">{{ this.baseForm.idCardType | filterIdType}}</el-form-item></el-col>
                       <el-col :span="12"><el-form-item label="证件号码：">{{ this.baseForm.idCard }}</el-form-item></el-col>
                   </el-row>
                   <el-row>
-                      <el-col :span="12"><el-form-item label="性别：">{{ this.baseForm.enumEmpSex}}</el-form-item></el-col>
+                      <el-col :span="12"><el-form-item label="性别：">{{ this.baseForm.enumEmpSex | filterEmpSex}}</el-form-item></el-col>
                       <el-col :span="12"><el-form-item label="出生日期：">{{ this.baseForm.birthday }}</el-form-item></el-col>
                   </el-row>
                   <el-row>
@@ -36,7 +36,7 @@
                       <el-col :span="12"><el-form-item label="手机号码：">{{ this.baseForm.mobile}}</el-form-item></el-col>
                   </el-row>
                   <el-row>
-                      <el-col :span="12"><el-form-item label="最高学历：">{{ this.baseForm.education }}</el-form-item></el-col>
+                      <el-col :span="12"><el-form-item label="最高学历：">{{ this.baseForm.education | filterEducation }}</el-form-item></el-col>
                       <el-col :span="12"><el-form-item label="参加工作日期：">{{ this.baseForm.inWorkDay }}</el-form-item></el-col>
                   </el-row>
                   <el-row>

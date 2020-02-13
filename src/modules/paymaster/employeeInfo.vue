@@ -65,10 +65,10 @@
                 </template>
               </el-table-column>
               <el-table-column prop="empType" label="用工性质" width="140">
-                <template slot-scope="scope">{{ scope.row.empType }}</template>
+                <template slot-scope="scope">{{ scope.row.empType | filterEmpType }}</template>
               </el-table-column>
               <el-table-column prop="empStatus" label="员工状态" width="140">
-                <template slot-scope="scope">{{ scope.row.empStatus }}</template>
+                <template slot-scope="scope">{{ scope.row.empStatus | filterEmployStatus }}</template>
               </el-table-column>
               <el-table-column prop="idValidStatus" label="入职日期" width="140">
                 <template slot-scope="scope">{{ scope.row.empDay }}</template>
