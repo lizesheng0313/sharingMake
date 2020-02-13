@@ -134,8 +134,8 @@
                 <el-col :span="11"><div class="grid-content bg-purple-light">{{item.typeDesc}}</div></el-col>
                 <el-col :span="2">
                   <div class="grid-content bg-purple">
-                    <el-button  plain size="mini" @click="deleteItem(item.id)" v-if="item.canDelete">删除</el-button>
-                    <el-button  plain size="mini" v-else @click="changeStatus(item)">{{item.enable?'禁用':'启用'}}</el-button>
+                    <el-button  plain size="small" @click="deleteItem(item.id)" v-if="item.canDelete">删除</el-button>
+                    <el-button  plain size="small" v-else @click="changeStatus(item)">{{item.enable?'禁用':'启用'}}</el-button>
                   </div>
                 </el-col>
               </el-row>
