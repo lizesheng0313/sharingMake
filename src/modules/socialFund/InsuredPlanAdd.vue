@@ -11,18 +11,18 @@
         </el-row>
       </header>
       <div class="account-add-con">
-        <el-form label-width="120px" :model="insuredForm" ref="insuredForms">
+        <el-form label-width="120px" :model="insuredForm" ref="insuredForm">
           <el-row style="display: flex;width:800px;margin-top: 20px">
             <div style="flex:1">
-              <el-form-item label="参保城市：" prop="city" :rules="{required: true, message: '参保城市不能为空', trigger: 'blur'}">
-                <el-select v-model="insuredForm.city" placeholder="请选择参保城市" filterable @change="changeCity">
+              <el-form-item label="参保城市：" prop="insuredCity" :rules="{required: true, message: '参保城市不能为空', trigger: 'blur'}">
+                <el-select v-model="insuredForm.insuredCity" placeholder="请选择参保城市" filterable @change="changeCity">
                   <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div style="flex:1">
-              <el-form-item label="参保方案名称" prop="plan" :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
-                <el-input v-model="insuredForm.plan"></el-input>
+              <el-form-item label="参保方案名称" prop="planName" :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
+                <el-input v-model="insuredForm.planName"></el-input>
               </el-form-item>
             </div>
           </el-row>
@@ -61,7 +61,10 @@
                   </el-table-column>
                   <el-table-column label="个人比例">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.personScale" class="input-right"/>
+                      <div style="display: flex">
+                        <el-input v-model="scope.row.personScale" class="input-right"/>
+                        <span style="line-height: 32px">%</span>
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column label="个人固定金额">
@@ -83,7 +86,10 @@
                   </el-table-column>
                   <el-table-column label="公司比例">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.companyRatiol" class="input-right"/>
+                      <div style="display: flex">
+                        <el-input v-model="scope.row.compScale" class="input-right"/>
+                        <span style="line-height: 32px">%</span>
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column label="公司比例">
@@ -106,7 +112,10 @@
                 </el-table>
             </div>
 
-            <div class="social-plan-title" style="margin-top: 20px;overflow: hidden"><span class="plan-title">公积金方案</span></div>
+            <div class="social-plan-title" style="margin-top: 20px;overflow: hidden">
+              <span class="plan-title">公积金方案</span>
+              <el-checkbox v-model="accumulationFundYn" style="margin-left: 20px">是否缴纳公积金</el-checkbox>
+            </div>
             <div class="social-plan-table">
               <el-popover ref="fundPlan" placement="bottom" width="160" trigger="click">
                 <el-checkbox-group v-model="fundCheckedType" @change="handleFundType">
@@ -135,9 +144,12 @@
                     <el-input v-model="scope.row.baseNumberMax" class="input-right"/>
                   </template>
                 </el-table-column>
-                <el-table-column label="个人比例">
+                <el-table-column label="个人比例" width="100">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.personScale" class="input-right"/>
+                    <div style="display: flex">
+                      <el-input v-model="scope.row.personScale" class="input-right"/>
+                      <span style="line-height: 32px">%</span>
+                    </div>
                   </template>
                 </el-table-column>
                 <el-table-column label="个人固定金额">
@@ -157,14 +169,12 @@
                     </el-select>
                   </template>
                 </el-table-column>
-                <el-table-column label="公司比例">
+                <el-table-column label="公司比例" width="100">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.companyRatiol" class="input-right"/>
-                  </template>
-                </el-table-column>
-                <el-table-column label="公司比例">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.compScale" class="input-right"/>
+                    <div style="display: flex">
+                      <el-input v-model="scope.row.compScale" class="input-right"/>
+                      <span style="line-height: 32px">%</span>
+                    </div>
                   </template>
                 </el-table-column>
                 <el-table-column label="公司尾数规则">
@@ -183,6 +193,10 @@
             </div>
           </div>
         </el-form>
+        <div class="foot-btn">
+          <el-button type="primary" @click="handleSave">保存</el-button>
+          <el-button @click="handleCancel">取消</el-button>
+        </div>
       </div>
     </div>
     <!-- 选择方案 -->
@@ -191,7 +205,7 @@
         <el-form :model="choosePlanForm" ref="choosePlanForm" label-width="120px" >
           <div class="shortCon">
             <el-form-item label="参保方案" :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
-              <el-select v-model="choosePlanForm.plan" placeholder="请选择参保方案">
+              <el-select v-model="choosePlanForm.baseInsuredId" placeholder="请选择参保方案">
                 <el-option v-for="(item,index) in planOption" :label="item.insuredName" :value="item.id" :key="index"></el-option>
               </el-select>
             </el-form-item>
@@ -216,9 +230,10 @@
     data() {
       return {
         insuredForm:{
-          plan:"",
-          city:""
+          planName:"",
+          insuredCity:""
         },
+        id:this.$route.query.id,
         planOption:[],
         chooseCityName:"",
         socialInsuranceList:[],
@@ -231,8 +246,9 @@
         fundOption:constData.insuranceType,
         fundCheckedType:[],
         choosePlanForm:{
-          plan:"",
+          baseInsuredId:"",
         },
+        accumulationFundYn:false,//是否缴纳公积金
         iconStyle:{
           'font-size':'20px',
           'color':'#108EE9'
@@ -246,6 +262,22 @@
       })
     },
     created(){
+      if(this.id){
+        this.$store
+          .dispatch("socialFundStore/actionInsuredGetEditInfo", this.id)
+          .then(res => {
+            if(res.success){
+              let data = res.data;
+              this.socialInsuranceList = data.socialInsuranceList;
+              this.accumulationFundList = data.accumulationFundList;
+              this.accumulationFundYn = data.accumulationFundYn;
+              this.insuredForm.planName = data.insuredName;
+              this.choosePlanForm.baseInsuredId = data.baseInsuredId;
+              this.insuredForm.insuredCity = data.insuredCity;
+              this.changeCity(this.insuredForm.insuredCity)
+            }
+          })
+      }
     },
     mounted() {
       const that = this;
@@ -272,12 +304,11 @@
             baseNumberMax: "00.00",
             baseNumberMin: "00.00",
             compFixedAmount: "0.00",
-            compMantissaRule: "",
-            compScale: "00.00",
-            insuredProjectType: "",
+            compMantissaRule: "ROUND_UNTIL_FEN",
+            compScale: "0",
             personFixedAmount: "00.00",
-            personMantissaRule: "",
-            personScale: "00.00"
+            personMantissaRule: "ROUND_UNTIL_FEN",
+            personScale: "0"
           })
         }
       },
@@ -294,12 +325,11 @@
             baseNumberMax: "00.00",
             baseNumberMin: "00.00",
             compFixedAmount: "0.00",
-            compMantissaRule: "",
-            compScale: "00.00",
-            insuredProjectType: "",
+            compMantissaRule: "ROUND_UNTIL_FEN",
+            compScale: "0",
             personFixedAmount: "00.00",
-            personMantissaRule: "",
-            personScale: "00.00"
+            personMantissaRule: "ROUND_UNTIL_FEN",
+            personScale: "0",
           })
         }
       },
@@ -315,9 +345,10 @@
             }
           });
       },
+      //选择参保方案
       handleChoosePlan(){
         this.$store
-          .dispatch("socialFundStore/actionInsuredGetInfo", this.choosePlanForm.plan)
+          .dispatch("socialFundStore/actionInsuredGetInfo", this.choosePlanForm.baseInsuredId)
           .then(res => {
             if(res.success){
               let data = res.data;
@@ -326,6 +357,31 @@
               this.isShowChoosePlan = false
             }
           });
+      },
+      handleSave(){
+          this.$refs['insuredForm'].validate(valid => {
+            if(valid){
+              this.$store
+                .dispatch("socialFundStore/actionInsuredProjectSave",{
+                  accumulationFundList:this.accumulationFundList,
+                  accumulationFundYn:this.accumulationFundYn,
+                  insuredName:this.insuredForm.planName,
+                  baseInsuredId:this.choosePlanForm.baseInsuredId,
+                  insuredCity:this.insuredForm.insuredCity,
+                  socialInsuranceList:this.socialInsuranceList,
+                  id:this.id,
+                })
+                .then(res => {
+                    if(res.success){
+                      this.$message.success("保存成功")
+                      this.$router.go(-1)
+                    }
+                })
+            }
+          })
+      },
+      handleCancel(){
+        this.$router.go(-1)
       }
     }
   };
@@ -390,6 +446,10 @@
         margin-top: 10px;
         text-align: center;
       }
+    }
+    .foot-btn{
+      margin-top: 20px;
+      text-align: center;
     }
   }
 

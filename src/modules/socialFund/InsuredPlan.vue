@@ -12,7 +12,7 @@
           <div class="clearfix insured-plan-menu">
             <el-input
               placeholder="请输入姓名\工号\身份证号"
-              v-model="ruleForm.insuredName"
+              v-model="ruleForm.compInsuredName"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               @keyup.enter.native="handleSearch"
               clearable
@@ -32,10 +32,10 @@
               border
             >
               <el-table-column type="index" label="编号" width="50"></el-table-column>
-              <el-table-column prop="name" label="参保方案"></el-table-column>
-              <el-table-column prop="empNo" label="参保城市"></el-table-column>
-              <el-table-column prop="idNo" label="使用人数"></el-table-column>
-              <el-table-column prop="idNo" label="最近修改日期"></el-table-column>
+              <el-table-column prop="insuredName" label="参保方案"></el-table-column>
+              <el-table-column prop="insuredCity" label="参保城市"></el-table-column>
+              <el-table-column prop="usedNumber" label="使用人数"></el-table-column>
+              <el-table-column prop="updateTime" label="最近修改日期"></el-table-column>
               <el-table-column label="操作" fixed="right" width="140px">
                 <template slot-scope="scope">
                   <span class="funStyle" @click="editPlan(scope.row)">编辑</span>
@@ -56,7 +56,7 @@
     data() {
       return {
         ruleForm:{
-          insuredName:"",
+          compInsuredName:"",
           currPage:"1",
           pageSize:"1000",
         },
@@ -75,14 +75,7 @@
       }),
     },
     created(){
-      this.$store
-        .dispatch("socialFundStore/actionInsuredProjectList", this.ruleForm)
-        .then(res => {
-          if(res.success){
-            this.list = res.data.data
-            this.loading = false
-          }
-        });
+      this.getList()
     },
     mounted() {
       const that = this;
@@ -97,15 +90,37 @@
     methods: {
       getList() {
         this.loading = true;
+        this.$store
+          .dispatch("socialFundStore/actionInsuredProjectMList", this.ruleForm)
+          .then(res => {
+            if(res.success){
+              this.list = res.data.data
+              this.loading = false
+            }
+          });
+
       },
       handleSearch(){
-
+        this.getList()
       },
       editPlan(data){
-
+        this.$router.push({path:'/insuredPlanAdd',query:{id:data.id}})
       },
       deletePlan(data){
-
+        this.$confirm('是否删除参保方案！', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store
+            .dispatch("socialFundStore/actionInsuredDel", data.id)
+            .then(res => {
+              if(res.success){
+                this.$message({type: 'success', message: '删除成功!'});
+                this.getList()
+              }
+            });
+        }).catch(() => {});
       },
       //新增方案
       addInsuredPlan(){

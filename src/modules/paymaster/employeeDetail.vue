@@ -376,13 +376,6 @@ export default {
         }
       });
     },
-    saveInfo() {
-      this.$refs['baseForm'].validate(valid => {
-        if(valid){
-          console.log("111")
-        }
-      })
-    },
     //保存基本信息信息
     saveBaseInfo(){
       this.$refs['baseForm'].validate(valid => {
