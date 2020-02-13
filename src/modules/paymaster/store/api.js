@@ -92,3 +92,28 @@ export function apiPostEmployees(form) {
     data:form
   })
 }
+
+//导入模板下载
+export function apiEmployeesTemplate() {
+  return oldFetch({
+    url: 'xsalary/enterprise/employee/template/download',
+    method: 'post',
+    responseType: 'blob'
+  })
+}
+
+//导入下载错误日志
+export function apiEmployeesVerifyErrorLog(id) {
+  return oldFetch({
+    url: 'xsalary/enterprise/employees/importVerifyErrorLog/'+id,
+    method: 'get',
+    responseType: 'blob'
+  })
+}
+
+export function apiEmployeesImport() {
+  return oldFetch({
+    url: 'xsalary/enterprise/employees/import',
+    method: 'post',
+  })
+}

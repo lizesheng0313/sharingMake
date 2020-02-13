@@ -1,4 +1,4 @@
-import { apiDeleteEmployee,apiPostEmployeesExport,apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
+import { apiEmployeesImport,apiEmployeesVerifyErrorLog,apiEmployeesTemplate,apiDeleteEmployee,apiPostEmployeesExport,apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
 import {apiBatchList, apiCreateSalary} from "../../payManage/store/api";
 import * as AT from "../../payManage/store/actionTypes";
 
@@ -53,3 +53,16 @@ export const actionAddEmployees= ({ dispatch },form) => {
   return apiPostEmployees(form)
 }
 
+//新增模板下载
+export const actionEmployeesTemplate= ({ dispatch }) => {
+  return apiEmployeesTemplate()
+}
+
+//导入错误日志下载
+export const actionEmployeesVerifyErrorLog= ({ dispatch },id) => {
+  return apiEmployeesVerifyErrorLog(id)
+}
+//增员导入
+export const actionEmployeesImport= ({ dispatch }) => {
+  return apiEmployeesImport()
+}
