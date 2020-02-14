@@ -1,5 +1,13 @@
 import { fetch,fetchFile } from 'request/fetch'
 import oldfetch from 'request/oldFetch'
+
+//薪资核算-同步数据
+export function apiSyncSalaryEmp(id) {
+  return fetch({
+    url: '/api/xsalary/salary/syncSalaryEmp/'+id,
+    method: 'get',
+  })
+}
 //保存基本信息
 export function apiSaveSalaryRule(form) {
   return fetch({

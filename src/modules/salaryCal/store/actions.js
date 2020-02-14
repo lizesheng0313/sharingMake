@@ -1,5 +1,8 @@
-import { apiEnterpriseEmployees,apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery,apiSocialProvidentExport,apiCheckEmpReportStatus,apiPayrollCredit,apiSalaryCheckFailRecord,apiSalaryCheckFailRecordExport,apiPayrollCreditCancel,apiGetAdditionalListExport,apiPayrollCreditExport,apiTips} from './api'
+import { apiSyncSalaryEmp,apiEnterpriseEmployees,apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery,apiSocialProvidentExport,apiCheckEmpReportStatus,apiPayrollCredit,apiSalaryCheckFailRecord,apiSalaryCheckFailRecordExport,apiPayrollCreditCancel,apiGetAdditionalListExport,apiPayrollCreditExport,apiTips} from './api'
 
+export const actionSyncSalaryEmp = ({ dispatch },id) => {
+  return apiSyncSalaryEmp(id);
+}
 export const actionGetSalaryStatus = ({ dispatch },id) => {
   return apiGetSalaryStatus(id);
 }
