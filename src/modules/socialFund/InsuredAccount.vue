@@ -93,10 +93,10 @@
               <el-form :model="createForm" ref="createForm" label-width="100px" class="demo-ruleForm">
                 <div class="shortCon">
                   <el-form-item label="台账月份" label-width="20%" prop="month" :rules="{required: true, message: '请选择台账月份', trigger: 'blur'}">
-                    <el-date-picker v-model="createForm.month" type="month" placeholder="请选择"></el-date-picker>
+                    <el-date-picker v-model="createForm.month" type="month" value-format="yyyy-MM" placeholder="请选择"></el-date-picker>
                   </el-form-item>
-                  <el-form-item label="公司范围" label-width="20%" prop="taxSubId" :rules="{required: true, message: '请选择公司范围', trigger: 'blur'}">
-                    <el-select v-model="createForm.taxSubId" placeholder="请选择公司范围">
+                  <el-form-item label="公司范围" label-width="20%" prop="taxSubList" :rules="{required: true, message: '请选择公司范围', trigger: 'blur'}">
+                    <el-select v-model="createForm.taxSubList" multiple placeholder="请选择公司范围">
                       <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
@@ -127,7 +127,7 @@
           queryMonth:""
         },
         createForm:{
-          taxSubId:"",
+          taxSubList:"",
           month:"",
         },
         isShowCreateAccount:false,
@@ -189,7 +189,7 @@
         }).then(() => {
           this.$store
             .dispatch("payMasterStore/actionSaveMonthlyLedger", {
-              taxSubId:data.taxSubId,
+              taxSubList:[data.taxSubId],
               month:data.currentMonth,
             })
             .then(res => {
