@@ -11,22 +11,23 @@
       <div class="insured-account-content">
         <div class="screening">
           <div class="clearfix check-staff-menu">
-            <el-select v-model="ruleForm.companyName" placeholder="公司名称">
-              <el-option v-for="(item,index) in companyList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+            <el-select v-model="ruleForm.taxSubId" placeholder="公司名称" @change="getList">
+              <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
             <div class="content-header head-date">
               <el-date-picker
-                v-model="ruleForm.month"
+                v-model="ruleForm.queryMonth"
                 type="month"
                 placeholder="参保月份"
-                value-format="yyyy年MM月"
+                value-format="yyyy-MM-dd"
                 :editable="false"
                 :clearable="false"
+                @change="getList"
               ></el-date-picker>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="isShowCreateAccount = true">生成月度台账</el-button>
-              <el-button  class="add-import">导入月度台账</el-button>
+              <el-button type="primary" class="add-import" @click="handleShowCreate(false)">生成月度台账</el-button>
+              <el-button class="add-import">导入月度台账</el-button>
             </div>
           </div>
           <div class="staff-table">
@@ -40,38 +41,31 @@
             >
               <el-table-column prop="month" label="参保月份" width="140">
                 <template slot-scope="scope">
-                  <span class="table-name" @click="goAccountDetail(scope.row)">{{ scope.row.month }}</span>
+                  <span class="table-name" @click="goAccountDetail(scope.row)">{{ scope.row.currentMonth }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="companyName" label="公司名称" width="140"></el-table-column>
-              <el-table-column prop="idNo" label="参保人数" width="180"></el-table-column>
-              <el-table-column prop="idNo" label="本月增员人数" width="100"></el-table-column>
-              <el-table-column prop="empSex" label="本月减员人数" width="100">
-                <template slot-scope="scope">{{ scope.row.empSex }}</template>
+              <el-table-column prop="taxSubName" label="公司名称" width="140"></el-table-column>
+              <el-table-column prop="insuredPersonCount" label="参保人数" width="180"></el-table-column>
+              <el-table-column prop="currentMonthAdd" label="本月增员人数" width="100"></el-table-column>
+              <el-table-column prop="currentMonthSub" label="本月减员人数" width="100"></el-table-column>
+              <el-table-column prop="personSocialSumAmount" label="个人社保合计" width="140"></el-table-column>
+              <el-table-column prop="compSocialSumAmount" label="公司社保合计" width="140"></el-table-column>
+              <el-table-column prop="personFundSumAmount" label="个人公积金合计" width="140"></el-table-column>
+              <el-table-column prop="compFundSumAmount" label="公司公积金合计" width="140"></el-table-column>
+              <el-table-column prop="isarchive" label="是否归档" width="140">
+                <template slot-scope="scope">{{ scope.row.isarchive ?"是":"否" }}</template>
               </el-table-column>
-              <el-table-column prop="workerStatus" label="个人社保合计" width="140">
-                <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
-              </el-table-column>
-              <el-table-column prop="reportStatus" label="公司社保合计" width="140">
-                <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
-              </el-table-column>
-              <el-table-column prop="idValidStatus" label="个人公积金合计" width="140">
-                <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
-              </el-table-column>
-              <el-table-column prop="mobile" label="公司公积金合计" width="140"></el-table-column>
-              <el-table-column prop="source" label="台账来源" width="140"></el-table-column>
-              <el-table-column prop="mobile" label="是否归档" width="140"></el-table-column>
               <el-table-column label="操作" fixed="right" width="160px">
                 <template slot-scope="scope">
-                  <span class="funStyle" @click="placeFile(scope.row)">归档</span>
+                  <span class="funStyle" @click="placeFile(scope.row)">{{ scope.row.isarchive?'归档':"取消归档" }}</span>
                   <el-popover
                     ref="popMore"
                     placement="bottom-end"
                     width="60"
                     trigger="hover">
-                    <div class="funStyle more-style">重新生成</div>
+                    <div class="funStyle more-style" @click="handleReCreate(scope.row)" v-if="!scope.row.isarchive">重新生成</div>
                     <div class="funStyle more-style">导出</div>
-                    <div class="funStyle more-style">删除</div>
+                    <div class="funStyle more-style" v-if="!scope.row.isarchive">删除</div>
                     <span slot="reference" class="more-choose">更多</span>
                   </el-popover>
                 </template>
@@ -101,11 +95,12 @@
                   <el-form-item label="台账月份" label-width="20%" prop="month" :rules="{required: true, message: '请选择台账月份', trigger: 'blur'}">
                     <el-date-picker v-model="createForm.month" type="month" placeholder="请选择"></el-date-picker>
                   </el-form-item>
-                  <el-form-item label="公司范围" label-width="20%" prop="area" :rules="{required: true, message: '请选择公司范围', trigger: 'blur'}">
-                    <el-select v-model="createForm.area" placeholder="请选择公司范围">
-                      <el-option v-for="(item,index) in areaOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                  <el-form-item label="公司范围" label-width="20%" prop="taxSubId" :rules="{required: true, message: '请选择公司范围', trigger: 'blur'}">
+                    <el-select v-model="createForm.taxSubId" placeholder="请选择公司范围">
+                      <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
+                  <div style="color: #333;font-size: 13px;margin-left: 20px;margin-top: -10px">只能选择所选月份没有月度台账的公司</div>
                   <span slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="handleCreate">确定</el-button>
                     <el-button @click="isShowCreateAccount = false">取消</el-button>
@@ -126,21 +121,20 @@
     data() {
       return {
         ruleForm:{
-          companyName:"",
+          taxSubId:0,
           currPage:"1",
           pageSize:"20",
-          month:""
+          queryMonth:""
         },
         createForm:{
+          taxSubId:"",
           month:"",
-          area:"",
         },
         isShowCreateAccount:false,
-        companyList:[],
         loading:false,
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
-        list: [{name:"减员",companyName:"123",month:"12",type:'dec',source:"create"},{month:"11",name:"增员",companyName:"123",type:'inc',source:"import"}],
+        list: [],
         closeModel: false,
         total:0,
         areaOption:[]
@@ -151,11 +145,12 @@
     },
     computed:{
       ...mapState({
-        privilegeVoList:state=>state.privilegeVoList
+        privilegeVoList:state=>state.privilegeVoList,
+        taxSubjectInfoList:state=>state.taxSubjectInfoList
       }),
     },
     created(){
-
+      this.getList()
     },
     mounted() {
       const that = this;
@@ -171,40 +166,76 @@
       getList() {
         this.loading = true;
         this.$store
-          .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
+          .dispatch("payMasterStore/actionGetCompMonthlyLedgerList", this.ruleForm)
           .then(res => {
+            this.loading = false
             if (res.success) {
-              this.loading = false;
-              this.total = res.data.count;
               this.list = res.data.data;
-              this.increaseCount = res.data.increaseCount;
-              this.decreaseCount = res.data.decreaseCount;
-              this.awaitReportCount = res.data.awaitReportCount;
-              this.normalCount = res.data.normalCount;
-              this.failReportCount = res.data.failReportCount;
-              this.awaitFeedBackCount = res.data.awaitFeedBackCount;
+              this.loading = false;
             }
           });
       },
-      //重新生成
-      handleCreate(){
-        this.$refs['createForm'].validate(valid => {
-          if(valid){
-            console.log("111")
-          }
-        })
+      //生成展示
+      handleShowCreate(){
+        this.isShowCreateAccount = true
+        this.$refs['createForm']?this.$refs['createForm'].clearValidate():"";
       },
-      //归档
-      placeFile(){
-        this.$confirm('是否归档公司本月社保台账，薪资计算时能获取已归档的社保公积金数据?', '提示', {
+      //重新生成
+      handleReCreate(data){
+        this.$confirm("是否重新生成公司本月月度台账！", '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          this.$store
+            .dispatch("payMasterStore/actionSaveMonthlyLedger", {
+              taxSubId:data.taxSubId,
+              month:data.currentMonth,
+            })
+            .then(res => {
+              if(res.success){
+                this.getList()
+              }
+            })
+        }).catch(() => {
+        });
+      },
+      //生成操作
+      handleCreate(){
+        this.$refs['createForm'].validate(valid => {
+          if(valid){
+            this.$store
+              .dispatch("payMasterStore/actionSaveMonthlyLedger", this.createForm)
+              .then(res => {
+                  if(res.success){
+                    this.getList()
+                    this.isShowCreateAccount = false
+                  }
+              })
+          }
+        })
+      },
+      //归档
+      placeFile(data){
+        let title = data.isarchive?"是否取消存档本月社保台账，取消后薪资计算时不能获取社保数据":"是否归档公司本月社保台账，薪资计算时能获取已归档的社保公积金数据?";
+        this.$confirm(title, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store
+            .dispatch("payMasterStore/actionArchiveMonthlyLedger",{
+              archiveType:data.isarchive?'CANCEL_ARCHIVE':"ARCHIVE",
+              month:data.currentMonth,
+              taxSubId:data.taxSubId
+            })
+            .then(res => {
+              if(res.success){
+                this.$message.success("操作成功")
+                this.getList()
+              }
+            })
+
         }).catch(() => {
         });
       },

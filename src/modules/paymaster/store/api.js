@@ -110,10 +110,35 @@ export function apiEmployeesVerifyErrorLog(id) {
     responseType: 'blob'
   })
 }
-
+//增员导入
 export function apiEmployeesImport() {
   return oldFetch({
     url: 'xsalary/enterprise/employees/import',
     method: 'post',
+  })
+}
+
+//参保月度台账、公司信息列表
+export function apiGetCompMonthlyLedgerList(form) {
+  return fetch({
+    url: 'api/xsalary/monthlyLedger/getCompMonthlyLedgerList',
+    method: 'get',
+    data:form
+  })
+}
+//参保月度台账、生成月度台账
+export function apiSaveMonthlyLedger(form) {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/saveMonthlyLedger',
+    method: 'post',
+    data:form
+  })
+}
+//参保月度台账、归档
+export function apiArchiveMonthlyLedger(form) {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/archiveMonthlyLedger',
+    method: 'post',
+    data:form
   })
 }
