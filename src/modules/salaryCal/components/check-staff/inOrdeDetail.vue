@@ -19,7 +19,7 @@
         <div class="clearfix check-staff-menu">
           <el-input
             placeholder="请输入姓名\工号\身份证号"
-            v-model="userForm.key"
+            v-model="key"
             prefix-icon="iconiconfonticonfontsousuo1 iconfont"
             clearable
             class="search-input left"
@@ -51,7 +51,7 @@
           >
             <el-table-column label="姓名" width="104px" :show-overflow-tooltip="true">
               <template slot-scope="scope">
-                <span>{{scope.row.name}}</span>
+                <span>{{scope.row.empName}}</span>
               </template>
             </el-table-column>
             <el-table-column label="工号" width="100px" :show-overflow-tooltip="true">
@@ -61,12 +61,12 @@
             </el-table-column>
             <el-table-column  label="手机号" width="160px">
               <template slot-scope="scope">
-                <span>{{scope.row.phoneNo}}</span>
+                <span>{{scope.row.mobile}}</span>
               </template>
             </el-table-column>
             <el-table-column label="部门" width="160x" :show-overflow-tooltip="true">
               <template slot-scope="scope">
-                <span>{{scope.row.departName}}</span>
+                <span>{{scope.row.deptName}}</span>
               </template>
             </el-table-column>
             <el-table-column  label="员工类型">
@@ -76,28 +76,34 @@
             </el-table-column>
             <el-table-column label="状态" width="160x" :show-overflow-tooltip="true">
               <template slot-scope="scope">
-                <span>{{scope.row.jobTitle}}</span>
+                <span>{{scope.row.empStatus | filterEmployStatus}}</span>
               </template>
             </el-table-column>
             <el-table-column  label="入职时间" width="160px">
               <template slot-scope="scope">
-                <span>{{scope.row.empStartDate?scope.row.empStartDate.split(" ")[0]:""}}</span>
+                <span>{{ scope.row.empDay }}</span>
               </template>
             </el-table-column>
             <el-table-column  label="最后工作日" width="140px" :show-overflow-tooltip="true">
               <template slot-scope="scope">
-                <span>{{scope.row.bank}}</span>
+                <span>{{ scope.row.leaveDay }}</span>
               </template>
             </el-table-column>
             <el-table-column  label="对比上月" width="180px">
               <template slot-scope="scope">
-                <span>{{scope.row.bankNo}}</span>
+                <span>{{ scope.row.compareLastMonthOperation }}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" width="240px">
               <template slot-scope="scope">
-                <el-button size="mini" type="text" @click="handleDelete(scope.row.id)" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">删除算薪</el-button>
-                <el-button size="mini" type="text" @click="handleAdd(scope.row.id)" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">添加算薪</el-button>
+                <el-button size="mini" type="text" @click="handleDelete(scope.row)"
+                           :disabled="setWarning"
+                           v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')"
+                           v-show="scope.row.compareLastMonthOperation=='增加'">删除算薪</el-button>
+                <el-button size="mini" type="text" @click="handleAdd(scope.row)"
+                           :disabled="setWarning"
+                           v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')"
+                           v-show="scope.row.compareLastMonthOperation=='减少'">添加算薪</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -114,11 +120,9 @@
    components: { RouterLink,fullScreen},
    data() {
     return {
-      userForm:{
-
-      },
       id:this.$route.query.id,
-      userList:[{name:1212}],
+      key:"",
+      userList:[],
       myHeaders:{Authorization:this.$store.state.token},
       screenWidth: document.body.clientWidth, // 屏幕尺寸
       screenHeight: document.body.clientHeight - 280,
@@ -128,6 +132,7 @@
       decNum:0,
       incNum:0,
       closeModel:false,
+      setWarning:false
     };
   },
   computed:{
@@ -155,20 +160,38 @@
   methods: {
     loading(){
       this.$store.dispatch('salaryCalStore/actionSalaryDetailCheckMembers',{
-        checkId:this.id
+        checkId:this.id,
+        key:this.key,
       }).then(res=>{
         this.userLoading = false;
-        console.log(res)
+        this.userList = res.data.data;
       })
     },
-    handleAdd(){
-
+    handleAdd(data){
+      this.$store.dispatch('salaryCalStore/actionSalaryAddDetailCheckMembers',data.compEmpId).then(res=>{
+        if(res.success){
+          this.loading()
+        }
+      })
     },
-    handleDelete(){
-
+    handleDelete(data){
+      this.$store.dispatch('salaryCalStore/actionSalaryDetailCheckMembersDelete',data.compEmpId).then(res=>{
+        if(res.success){
+          this.loading()
+        }
+      })
+    },
+    //当前工资表状态
+    getSalaryStatus(){
+      this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.id).then(res=>{
+        if(res.code === "0000"){
+          this.checkStatus = res.data.checkStatus;
+          this.setWarning = (this.checkStatus ==='AUDITED' || this.checkStatus ==='PAID' || this.checkStatus ==='FINISH');
+        }
+      })
     },
     searchUser(){
-
+      this.loading()
     },
     refresh(){
       this.$router.go(0)

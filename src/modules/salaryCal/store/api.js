@@ -10,6 +10,21 @@ export function apiSalaryDetailCheckMembers(form) {
     params:form
   })
 }
+
+//删除算薪
+export function apiSalaryDetailCheckMembersDelete(id) {
+  return fetch({
+    url: '/api/xsalary/salary/salaryDetailCheckMembers/delete/'+id,
+    method: 'delete',
+  })
+}
+//添加算薪
+export function apiSalaryAddDetailCheckMembers(id) {
+  return fetch({
+    url: '/api/xsalary/salary/salaryAddDetailCheckMembers/'+id,
+    method: 'delete',
+  })
+}
 //薪资核算-同步数据
 export function apiSyncSalaryEmp(id) {
   return fetch({
