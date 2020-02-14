@@ -11,40 +11,40 @@
     <div class="add-staff-con">
       <div class="table-con">
           <div class="select-con">
-              <el-select v-model="company" placeholder="请选择公司">
-                <el-option v-for="item in companyOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-select v-model="addForm.taxSubId" placeholder="请选择公司" @change="getList()">
+                <el-option v-for="item in taxSubjectInfoList" :key="item.taxSubId" :label="item.taxSubName" :value="item.taxSubId"></el-option>
               </el-select>
-              <el-select v-model="workNature" placeholder="请选择用工性质">
-                <el-option v-for="item in workNatureOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-select v-model="addForm.empType" placeholder="用工性质" @change="getList()">
+                <el-option v-for="item in enumEmpTypeOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
-              <el-select v-model="workStatus" placeholder="请选择用工状态">
-                <el-option v-for="item in workStatusOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-select v-model="addForm.enumEmpStatus" placeholder="员工状态" @change="getList()">
+                <el-option v-for="item in employStatusOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
-              <el-input v-model="search" placeholder="姓名/工号"></el-input>
+              <el-input v-model="addForm.key" placeholder="姓名/工号" @keyup.enter.native="getList()"></el-input>
           </div>
           <el-table :data="staffTable" ref="staffTable" tooltip-effect="dark" height="300px" style="width:100%;margin-top: 10px"
                     @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="55" fixed="left"></el-table-column>
               <el-table-column label="姓名" width="120">
-                <template slot-scope="scope">{{ scope.row.name }}</template>
+                <template slot-scope="scope">{{ scope.row.empName }}</template>
               </el-table-column>
               <el-table-column label="工号" width="80">
-                <template slot-scope="scope">{{ scope.row.emNo }}</template>
+                <template slot-scope="scope">{{ scope.row.empNo }}</template>
               </el-table-column>
               <el-table-column label="部门" width="80">
-                <template slot-scope="scope">{{ scope.row.name }}</template>
+                <template slot-scope="scope">{{ scope.row.deptName }}</template>
               </el-table-column>
               <el-table-column label="用工性质" width="80">
-                <template slot-scope="scope">{{ scope.row.name }}</template>
+                <template slot-scope="scope">{{ scope.row.empType | filterEmpType}}</template>
               </el-table-column>
               <el-table-column label="人员状态" width="80">
-                <template slot-scope="scope">{{ scope.row.name }}</template>
+                <template slot-scope="scope">{{ scope.row.empStatus | filterEmployStatus}}</template>
               </el-table-column>
               <el-table-column label="入职日期" width="120">
-                <template slot-scope="scope">{{ scope.row.name }}</template>
+                <template slot-scope="scope">{{ scope.row.empDay }}</template>
               </el-table-column>
               <el-table-column label="最后工作日" width="120">
-                <template slot-scope="scope">{{ scope.row.name }}</template>
+                <template slot-scope="scope">{{ scope.row.leaveDay }}</template>
               </el-table-column>
           </el-table>
       </div>
@@ -52,8 +52,8 @@
           <div class="choose-title">已选 <span class="staff-style">{{ checkedPerson.length }}人</span></div>
           <div class="choose-item-con">
               <div v-for="(item,index) in checkedPerson" :key="index" class="choose-item">
-                <span>{{ item.name }}</span>
-                <span class="emNo">{{ item.emNo }}</span>
+                <span>{{ item.empName }}</span>
+                <span class="emNo">{{ item.empNo }}</span>
                 <i class="el-icon-circle-close" @click="removeStaff(item)"></i>
               </div>
           </div>
@@ -68,67 +68,73 @@
   </div>
 </template>
 <script>
+  import * as constData from "../../modules/paymaster/util/constData"
+  import { mapState } from "vuex";
 export default {
   props: {
   },
   data() {
     return {
-      company:"1",
-      companyOptions:[
-        {
-          label:"阿拉丁",
-          value:"1"
-        }
-      ],
-      workNature:"1",
-      workNatureOptions:[
-        {
-          label:"全部用工",
-          value:"1"
-        }
-      ],
-      workStatus:"1",
-      workStatusOptions:[
-        {
-          label:"全部状态",
-          value:"1"
-        }
-      ],
-      search:"",
+      addForm:{
+        checkId:"",
+        taxSubId:0,//公司
+        empType:"",//用工性质
+        enumEmpStatus:"",//人员状态
+        key:"",
+      },
+      companyOptions:[],
+      enumEmpTypeOption:constData.enumEmpTypeOption,//用工性质
+      employStatusOption:constData.employStatusOption,//员工状态
       isShowAddStaff: false,
       closeModel:false,
-      staffTable:[
-        {name:"哈哈",emNo:"101012"},
-        {name:"哈哈",emNo:"101013"},
-        {name:"哈哈",emNo:"101014"},
-        {name:"哈哈",emNo:"101015"},
-        {name:"哈哈",emNo:"101016"},
-        {name:"哈哈",emNo:"101017"},
-        {name:"哈哈",emNo:"101018"},
-        {name:"哈哈",emNo:"101019"},
-        {name:"哈哈",emNo:"101022"},
-        {name:"哈哈",emNo:"101032"},
-        {name:"哈哈",emNo:"101042"},
-        {name:"哈哈",emNo:"101052"},
-        {name:"哈哈",emNo:"101062"},
-        {name:"哈哈",emNo:"101082"},
-        {name:"哈哈",emNo:"101082"},
-        {name:"哈哈",emNo:"101092"},
-
-      ],
+      staffTable:[],
       checkedPerson:[],
+      compEmpIds:[],
     };
   },
+  computed:{
+    ...mapState({
+      privilegeVoList:state=>state.privilegeVoList,
+      taxSubjectInfoList:state=>state.taxSubjectInfoList,
+    }),
+  },
+  created(){
+  },
   methods: {
+    getList(checkId){
+      checkId?this.addForm.checkId = checkId:"";
+      this.isShowAddStaff = true
+      this.$store.dispatch('salaryCalStore/actionSalaryAddEmpList',this.addForm)
+        .then(res=>{
+          this.staffTable = res.data;
+        })
+    },
     removeStaff(item){
       this.checkedPerson=this.checkedPerson.filter(ite=>ite.emNo!=item.emNo)
       this.$refs.staffTable.toggleRowSelection(item,false);
     },
     handleSubmit(){
+      this.$store.dispatch('salaryCalStore/actionAddSalaryEmp',{
+          checkId:this.addForm.checkId,
+          compEmpIds:this.compEmpIds,
+          key:this.addForm.key,
+          queryFilterParam:{
+            "empType":this.addForm.empType,
+            "enumEmpStatus":this.addForm.enumEmpStatus,
+            "taxSubId": this.addForm.taxSubId
+          }
+      }).then(res=>{
+          if(res.success){
+            this.isShowAddStaff = false
+            this.$message.success("添加成功")
+            this.$emit("freshList")
+          }
+        })
 
     },
     handleSelectionChange(data){
       this.checkedPerson = data;
+      this.compEmpIds = data.map(item=>item.empId)
     },
   }
 };

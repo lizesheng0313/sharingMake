@@ -11,7 +11,7 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="$refs.addStaff.isShowAddStaff = true" :disabled="setWarning">添加人员</el-button>
+        <el-button type="primary" @click="$refs.addStaff.getList($route.query.id)" :disabled="setWarning">添加人员</el-button>
         <el-button type="primary" @click="showIncrease" class="add-import" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empAdd')">增减员导入</el-button>
         <el-dropdown trigger="click" @command="handleDropdown">
           <el-button type="default">
@@ -39,7 +39,7 @@
         减少：
         <i>{{decNum || decNum ==0?this.decNum:"0"}}</i>人
       </span>
-      <span class="seeDetail" @click="$router.push('/inOrdeDetail')">查看增减明细</span>
+      <span class="seeDetail" @click="$router.push({path:'/inOrdeDetail',query:{id:$route.query.id}})">查看增减明细</span>
     </div>
     <div class="staff-table">
       <!-- <div class="floating-menu">
@@ -203,7 +203,7 @@
 <!--        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>-->
       </span>
     </el-dialog>
-    <add-staff ref="addStaff"></add-staff>
+    <add-staff ref="addStaff" :id="$route.query.id" @freshList="loading()"></add-staff>
     <!--   同步本月发薪人员 -->
     <el-dialog
       :visible.sync="isShowSyncEmployee"

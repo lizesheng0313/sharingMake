@@ -111,12 +111,13 @@
   import fullScreen from "@/components/full-screen/index";
   import RouterLink from "olading-ui/lib/mixins/router-link";
  export default {
-   components: {RouterLink,fullScreen},
+   components: { RouterLink,fullScreen},
    data() {
     return {
       userForm:{
 
       },
+      id:this.$route.query.id,
       userList:[{name:1212}],
       myHeaders:{Authorization:this.$store.state.token},
       screenWidth: document.body.clientWidth, // 屏幕尺寸
@@ -153,14 +154,12 @@
   },
   methods: {
     loading(){
-      this.userLoading = false;
-      // apiCheckMember(this.userForm).then(res=>{
-      //   if(res.code === "0000"){
-      //     this.userLoading = false;
-      //     this.userList = res.data.data;
-      //     this.count = res.data.count;
-      //   }
-      // })
+      this.$store.dispatch('salaryCalStore/actionSalaryDetailCheckMembers',{
+        checkId:this.id
+      }).then(res=>{
+        this.userLoading = false;
+        console.log(res)
+      })
     },
     handleAdd(){
 

@@ -1,11 +1,38 @@
 import { fetch,fetchFile } from 'request/fetch'
 import oldfetch from 'request/oldFetch'
 
+
+//增减员明细
+export function apiSalaryDetailCheckMembers(form) {
+  return fetch({
+    url: '/api/xsalary/salary/salaryDetailCheckMembers',
+    method: 'get',
+    params:form
+  })
+}
 //薪资核算-同步数据
 export function apiSyncSalaryEmp(id) {
   return fetch({
     url: '/api/xsalary/salary/syncSalaryEmp/'+id,
     method: 'get',
+  })
+}
+
+//可添加发薪人员列表
+export function apiSalaryAddEmpList(form) {
+  return fetch({
+    url: '/api/xsalary/salary/salaryAddEmpList',
+    method: 'get',
+    params:form
+  })
+}
+
+//可添加发薪人员列表 添加
+export function apiAddSalaryEmp(form) {
+  return fetch({
+    url: '/api/xsalary/salary/addSalaryEmp',
+    method: 'post',
+    data:form
   })
 }
 //保存基本信息
