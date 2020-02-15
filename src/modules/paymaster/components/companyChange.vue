@@ -9,7 +9,7 @@
           <el-form-item label="身份证号">{{ companyItem.idNo }}</el-form-item>
           <el-form-item label="公司名称" prop="taxSubId" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
             <el-select v-model="changeCompanyForm.taxSubId" placeholder="请选择公司名称">
-              <el-option v-for="(item,index) in companyOptions" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'blur'}">
@@ -72,7 +72,6 @@ export default {
       enumEmpTypeOption:constData.enumEmpTypeOption,
       workCityOption:[],
       regularEmpYnOptions:constData.regularEmpYnOption,
-      companyOptions:[{label:"全部",value:"1"}],
       closeModel:false,
       checked:true
     };
@@ -83,15 +82,12 @@ export default {
       cityList:state=>state.cityList
     })
   },
-  created(){
-    this.$store.dispatch("payMasterStore/actionGetEmployee",this.companyItem.compEmpId).then(res=>{
-      if(res.success){
-        let data = res.data;
-        for(let key in this.changeCompanyForm){
-          data[key]?this.changeCompanyForm[key] = data[key]:""
-        }
+  watch:{
+    companyItem:function(){
+      for(let key in this.changeCompanyForm){
+        this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
       }
-    })
+    }
 
   },
   mounted() {
@@ -130,7 +126,7 @@ export default {
   padding:0px 20px;
   .con-footer{
     position: absolute;
-    bottom:20px;
+    bottom:10px;
     left:40%;
   }
   .el-date-editor.el-input,.el-select {
