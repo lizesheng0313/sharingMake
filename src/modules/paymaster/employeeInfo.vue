@@ -36,13 +36,8 @@
             </el-select>
           </div>
           <div class="staff-table">
-            <el-table
-              v-loading="loading"
-              :data="list"
-              class="check-staff_table"
-              :height="screenHeight"
-              :style="{width:screenWidth-255+'px'}"
-              border
+            <el-table v-loading="loading" :data="list" class="check-staff_table" :height="screenHeight"
+                      :style="{width:screenWidth-255+'px'}" border
             >
               <el-table-column
                 type="index"
@@ -220,7 +215,7 @@
       :apiDownloadLog="'payMasterStore/actionEmployeesVerifyErrorLog'"
       :apiDownloadTemplate="'payMasterStore/actionEmployeesTemplate'"
       :parameterData="parameterData"
-      sendRadio="BY_EMP_NO"
+      sendRadio="BY_ID_NO"
       @changeRadioValue="changeRadioValue"
       :impoartAction="'payMasterStore/actionEmployeesImport'"
       @getLoading="getList"
@@ -301,15 +296,14 @@
           }
         ],
          radioList: [
-            { lable: "BY_EMP_NO", title: "通过员工工号匹配人员" },
             { lable: "BY_ID_NO", title: "通过身份证匹配人员" }
           ],
          parameterData: {
-            'importType':'BY_EMP_NO'
+            'importType':'BY_ID_NO'
           },
          uploadFileData: {
           uuid: "",
-          importType:"BY_EMP_NO"
+          importType:"BY_ID_NO"
         },
       };
     },

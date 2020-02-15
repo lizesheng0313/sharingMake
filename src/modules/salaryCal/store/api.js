@@ -186,7 +186,7 @@ export function apiCheckMemberDeleteAll(checkId) {
     },
   })
 }
-
+//核对人员较上月变化数
 export function apiCheckMemberSummary(checkId) {
   return fetch({
     url: '/api/xsalary/salary/checkMember/summary/'+checkId,

@@ -156,6 +156,7 @@
       })();
     };
     this.loading();
+    this.getSummer();
   },
   methods: {
     loading(){
@@ -165,6 +166,16 @@
       }).then(res=>{
         this.userLoading = false;
         this.userList = res.data.data;
+      })
+    },
+    getSummer(){
+      this.$store.dispatch('salaryCalStore/actionCheckMemberSummary',this.id).then(res=>{
+        if(res.success){
+          let data = res.data;
+          this.decNum = data.decNum?data.decNum:0;
+          this.incNum = data.incNum?data.incNum:0;
+          this.total = data.total?data.total:0;
+        }
       })
     },
     handleAdd(data){
