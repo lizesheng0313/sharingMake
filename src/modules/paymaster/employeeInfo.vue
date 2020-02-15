@@ -94,13 +94,7 @@
       </div>
     </div>
 <!-- 变更公司-->
-      <el-drawer
-        :visible.sync="popShow.isshow"
-        :with-header="false"
-        >
-        <span class="drawer-title">变更公司</span>
-        <companyChange @hanleClose="hanleClose" :companyItem="companyItem" :companyOption="taxSubjectInfoList"></companyChange>
-      </el-drawer>
+      <companyChange @getList="getList"  :companyOption="taxSubjectInfoList" ref="companyChange"></companyChange>
 <!--    筛选-->
     <el-dialog
       title=""
@@ -287,9 +281,7 @@
         closeModel: false,
         total:0,
         loading:false,
-        popShow:{
-          isshow:false
-        },
+        isShowCompany:false,
         checkAll:false,
         isShowExport:false,
         checkAllList:[
@@ -354,8 +346,8 @@
       },
       //调动
       onChange(data){
-        this.popShow.isshow = true
         this.companyItem = data
+        this.$refs.companyChange.showCompany(data)
       },
       getList() {
         this.loading = true;
@@ -426,7 +418,6 @@
       },
       // 关闭更改侧滑框
       hanleClose(isFresh) {
-        this.popShow.isshow = false
         if(isFresh){
           this.getList()
         }

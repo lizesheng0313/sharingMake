@@ -1,5 +1,11 @@
 <template>
   <div class="company-change">
+    <el-drawer
+      :visible.sync="isShowCompany"
+      :with-header="false"
+      ref="companyChange"
+    >
+        <span class="drawer-title">变更公司</span>
         <el-form
           label-width="100px"
           ref="changeCompanyForm"
@@ -40,10 +46,11 @@
             <el-date-picker v-model="changeCompanyForm.zzDay" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
           </el-form-item>
         </el-form>
-        <span slot="footer" class="con-footer">
+        <span class="con-footer">
           <el-button type="primary" @click="handleNewBody">确定</el-button>
           <el-button @click="handleCancel(false)">取消</el-button>
         </span>
+    </el-drawer>
     </div>
 </template>
 <script>
@@ -51,13 +58,10 @@ import { mapState } from "vuex";
 import * as constData from "../util/constData"
 export default {
   props: {
-    companyItem: {
-      type: Object,
-      default:""
-    },
   },
   data() {
     return {
+      isShowCompany:false,
       changeCompanyForm: {
         empId:"",
         taxSubId: "",
@@ -73,7 +77,8 @@ export default {
       workCityOption:[],
       regularEmpYnOptions:constData.regularEmpYnOption,
       closeModel:false,
-      checked:true
+      checked:true,
+      companyItem:{}
     };
   },
   computed:{
@@ -83,21 +88,20 @@ export default {
     })
   },
   watch:{
-    companyItem:function(){
-      for(let key in this.changeCompanyForm){
-        this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
-      }
-    }
+
+  },
+  created(){
 
   },
   mounted() {
 
   },
   methods: {
-    //子组件触发刷新
-    freshList(data,isClose){
-      if((data === this.sign) && isClose){
-        this.handleCancel(true)
+    showCompany(data){
+      this.isShowCompany = true;
+      this.companyItem = data
+      for(let key in this.changeCompanyForm){
+        this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
       }
     },
     //更改
@@ -105,17 +109,21 @@ export default {
       this.$refs.changeCompanyForm.validate(valid => {
         if(valid){
           this.$store
-            .dispatch("payMasterStore/actionCompanyChange", this.changeCompanyForm)
+            .dispatch("payMasterStore/actionSaveCompany", this.changeCompanyForm)
               .then(res => {
-                console.log(res)
+                if(res.success){
+                  this.isShowCompany = false
+                  this.$message.success("变更成功")
+                  this.$emit("getList",true)
+                }
               })
 
         }
       })
 
     },
-    handleCancel(data){
-      this.$emit("hanleClose",data)
+    handleCancel(){
+      this.isShowCompany = false
     }
   }
 };
