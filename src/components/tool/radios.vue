@@ -37,7 +37,7 @@ export default {
       }
     },
     //不限制用工类型
-    changeNoType(val){
+    changeNoType(){
       this.noEnumEmpType = null;
       this.enumEmpType = [];
       this.$emit("handleRadio",[])

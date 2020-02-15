@@ -125,7 +125,7 @@
       userList:[],
       myHeaders:{Authorization:this.$store.state.token},
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      screenHeight: document.body.clientHeight - 280,
+      screenHeight: document.body.clientHeight - 200,
       isShowIncrease: false,
       count:0,
       userLoading:false,
@@ -152,7 +152,7 @@
       return (() => {
         window.screenWidth = document.body.clientWidth;
         that.screenWidth = window.screenWidth;
-        that.screenHeight = document.body.clientHeight - 330;
+        that.screenHeight = document.body.clientHeight - 200;
       })();
     };
     this.loading();
