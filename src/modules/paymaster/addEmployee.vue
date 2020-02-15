@@ -34,7 +34,7 @@
                         </div>
                          <div style="flex:1">
                         <el-form-item label="证件号码：" prop="idNo" :rules="{required: true, validator: this.validIdNo, trigger: 'blur'}">
-                          <el-input v-model="baseForm.idNo"></el-input>
+                          <el-input v-model="baseForm.idNo" @blur="checkIdCard"></el-input>
                         </el-form-item>
                       </div>
                     </el-row>
@@ -362,6 +362,13 @@ export default {
       }else{
         callback('身份证信息不能为空')
       }
+    },
+    checkIdCard(){
+      this.$store
+        .dispatch("payMasterStore/actionEmployeeIdCard", this.baseForm.idNo)
+        .then(res=>{
+          console.log(res)
+        })
     },
     //证件类型控制显示
     changeIdType(value){

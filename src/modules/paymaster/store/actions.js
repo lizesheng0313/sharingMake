@@ -1,4 +1,4 @@
-import { apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiEmployeesImport,apiEmployeesVerifyErrorLog,apiEmployeesTemplate,apiDeleteEmployee,apiPostEmployeesExport,apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
+import { apiEmployeeIdCard,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiEmployeesImport,apiEmployeesVerifyErrorLog,apiEmployeesTemplate,apiDeleteEmployee,apiPostEmployeesExport,apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
 import {apiBatchList, apiCreateSalary} from "../../payManage/store/api";
 import * as AT from "../../payManage/store/actionTypes";
 
@@ -66,6 +66,11 @@ export const actionEmployeesVerifyErrorLog= ({ dispatch },id) => {
 export const actionEmployeesImport= ({ dispatch }) => {
   return apiEmployeesImport()
 }
+//校验身份证号
+export const actionEmployeeIdCard= ({ dispatch },idCard) => {
+  return apiEmployeeIdCard(idCard)
+}
+
 //参保台账企业信息
 export const actionGetCompMonthlyLedgerList= ({ dispatch },form) => {
   return apiGetCompMonthlyLedgerList(form)
@@ -74,7 +79,6 @@ export const actionGetCompMonthlyLedgerList= ({ dispatch },form) => {
 export const actionSaveMonthlyLedger= ({ dispatch },form) => {
   return apiSaveMonthlyLedger(form)
 }
-
 //参保台账归档
 export const actionArchiveMonthlyLedger= ({ dispatch },form) => {
   return apiArchiveMonthlyLedger(form)

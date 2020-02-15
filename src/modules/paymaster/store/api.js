@@ -118,6 +118,13 @@ export function apiEmployeesImport() {
   })
 }
 
+//校验身份证号
+export function apiEmployeeIdCard(idCard) {
+  return oldFetch({
+    url: 'xsalary/enterprise/employee/'+idCard,
+    method: 'get',
+  })
+}
 //参保月度台账、公司信息列表
 export function apiGetCompMonthlyLedgerList(form) {
   return fetch({
