@@ -68,7 +68,7 @@
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="证件类型" prop="idType" :rules="{required: true, message: '证件类型不能为空', trigger: 'blur'}">
-                            <el-select v-model="baseForm.idType" placeholder="请选择证件类型">
+                            <el-select v-model="baseForm.idType" placeholder="请选择证件类型" @change="changeIdType">
                               <el-option v-for="(item,index) in idTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
@@ -97,7 +97,7 @@
                         <div style="flex:1">
                           <el-form-item label="国籍（地区）" prop="country" :rules="{required: true, message: '国籍不能为空', trigger: 'blur'}">
                             <el-select v-model="baseForm.country" placeholder="请选择国籍" filterable>
-                              <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index"></el-option>
+                              <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index" :disabled="!canSelectCoutry.includes(item)"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
@@ -265,7 +265,7 @@
                         </div>
                         <div style="flex:1">
                           <el-form-item label="最后工作日" prop="leaveDay">
-                            <el-date-picker v-model="insuredForm.leaveDay" type="date" placeholder="请选择"></el-date-picker>
+                            <el-date-picker v-model="insuredForm.leaveDay" type="date" placeholder="请选择" :disabled="insuredForm.empStatus==='ON_THE_JOB'"></el-date-picker>
                           </el-form-item>
                         </div>
                       </el-row>
@@ -321,6 +321,7 @@ export default {
         wageCardBank:"",//工资卡开发银行
         wageCardNum:"",//工资银行账号
       },
+      canSelectCoutry:[],
       idTypeOption:constData.idType,//证件类型
       enumEmpSexOption:constData.empSex,
       educationOption:constData.educationOption,//最高学历
@@ -341,7 +342,15 @@ export default {
       },
       companyOption:[],
       workerTypeOption:constData.workerType,
-      regularEmpYnOption:constData.regularEmpYnOption,
+      regularEmpYnOption:[
+        {
+          label:"是",
+          value:"1"
+        },{
+          label:"否",
+          value:"0"
+        }
+      ],
       enumEmpTypeOption:constData.enumEmpTypeOption,
       empStatusOption:constData.employStatusOption,
       showTable:false,
@@ -368,6 +377,36 @@ export default {
   mounted() {
   },
   methods: {
+    //证件类型控制显示
+    changeIdType(value){
+      switch (value) {
+        case "PRC_ID"://居民身份证
+        case "CHINA_PASSPORT":
+          this.baseForm.country = "中国" ;this.canSelectCoutry = ['中国']
+          break;
+        case "COMPATRIOTS_CARD'": //港澳居民来往内地通行证、港澳居民居住证
+        case "MACAU_PRC_ID":
+          this.baseForm.country = "" ;this.canSelectCoutry = ['中国香港','中国澳门']
+          break;
+        case "FORMOSA_CARD": //台湾居民来往大陆通行证
+        case "FORMOSA_PRC_ID": //台湾居民居住证
+          this.baseForm.country = "中国台湾" ;this.canSelectCoutry = ['中国台湾']
+          break;
+        case "FOREIGN_PASSPORT": //外国护照
+        case "FOREIGN_PRC_ID"://外国人永久居留身份证
+        case "FOREIGN_WORK_PERMIT_A":// 外国人工作许可证（A类）
+        case "FOREIGN_WORK_PERMIT_B"://外国人工作许可证（B类）
+        case "FOREIGN_WORK_PERMIT_C"://外国人工作许可证（C类
+          this.baseForm.country = "" ;
+          this.canSelectCoutry = this.countryList.filter(item=>!['中国香港','中国','中国澳门'].includes(item))
+          break;
+      }
+      if(!['PRC_ID','CHINA_PASSPORT','COMPATRIOTS_CARD','FORMOSA_PRC_ID','FORMOSA_PRC_ID',
+        'FOREIGN_PASSPORT','FOREIGN_PRC_ID','FOREIGN_WORK_PERMIT_A','FOREIGN_WORK_PERMIT_B','FOREIGN_WORK_PERMIT_C'].includes(value)){
+        this.baseForm.country = "" ;this.canSelectCoutry = this.countryList
+      }
+
+    },
     //扣缴义务人列表
     getTaxSubjectInfoList() {
       this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {

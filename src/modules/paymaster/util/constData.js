@@ -32,8 +32,8 @@ export const idType = [
     label:"港澳居民来往内地通行证",
     value:"COMPATRIOTS_CARD"
   }, {
-    label:"FORMOSA_CARD",
-    value:"台湾居民来往大陆通行证"
+    label:"台湾居民来往大陆通行证",
+    value:"FORMOSA_CARD"
   },{
     label:"中国护照",
     value:"CHINA_PASSPORT"
