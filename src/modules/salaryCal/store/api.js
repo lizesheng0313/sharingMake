@@ -22,7 +22,7 @@ export function apiSalaryDetailCheckMembersDelete(id) {
 export function apiSalaryAddDetailCheckMembers(id) {
   return fetch({
     url: '/api/xsalary/salary/salaryAddDetailCheckMembers/'+id,
-    method: 'delete',
+    method: 'get',
   })
 }
 //薪资核算-同步数据

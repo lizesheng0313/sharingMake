@@ -14,7 +14,6 @@ export const actionSalaryAddDetailCheckMembers = ({ dispatch },id) => {
   return apiSalaryAddDetailCheckMembers(id);
 }
 
-
 //可添加发薪人员列表
 export const actionSalaryAddEmpList = ({ dispatch },form) => {
   return apiSalaryAddEmpList(form);
