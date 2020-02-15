@@ -24,8 +24,8 @@
                       <el-col :span="12"><el-form-item label="工号：">{{ this.baseForm.empNo}}</el-form-item></el-col>
                   </el-row>
                   <el-row>
-                      <el-col :span="12"><el-form-item label="证件类型：">{{ this.baseForm.idCardType | filterIdType}}</el-form-item></el-col>
-                      <el-col :span="12"><el-form-item label="证件号码：">{{ this.baseForm.idCard }}</el-form-item></el-col>
+                      <el-col :span="12"><el-form-item label="证件类型：">{{ this.baseForm.idType | filterIdType}}</el-form-item></el-col>
+                      <el-col :span="12"><el-form-item label="证件号码：">{{ this.baseForm.idNo }}</el-form-item></el-col>
                   </el-row>
                   <el-row>
                       <el-col :span="12"><el-form-item label="性别：">{{ this.baseForm.enumEmpSex | filterEmpSex}}</el-form-item></el-col>
@@ -40,8 +40,8 @@
                       <el-col :span="12"><el-form-item label="参加工作日期：">{{ this.baseForm.inWorkDay }}</el-form-item></el-col>
                   </el-row>
                   <el-row>
-                      <el-col :span="12"><el-form-item label="户口性质：">{{ this.baseForm.householdRegistrationType}}</el-form-item></el-col>
-                      <el-col :span="12"><el-form-item label="户口所在城市：">{{ this.baseForm.householdCountry }}</el-form-item></el-col>
+                      <el-col :span="12"><el-form-item label="户口性质：">{{ this.baseForm.householdRegistrationType | householdRegistrationType}}</el-form-item></el-col>
+                      <el-col :span="12"><el-form-item label="户口所在城市：">{{ this.baseForm.householdCountryFront }}</el-form-item></el-col>
                   </el-row>
                   <el-row>
                       <el-col :span="12"><el-form-item label="婚姻状态：">{{ this.baseForm.maritalStatus}}</el-form-item></el-col>
@@ -56,7 +56,7 @@
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="姓名" prop="empName" :rules="{required: true, message: '姓名不能为空', trigger: 'blur'}">
-                            <el-input v-model="baseForm.empName"></el-input>
+                            <el-input v-model="baseForm.empName" :disabled="!checkStatus"></el-input>
                           </el-form-item>
                         </div>
                         <div style="flex:1">
@@ -67,22 +67,22 @@
                     </el-row>
                     <el-row style="display: flex">
                         <div style="flex:1">
-                          <el-form-item label="证件类型" prop="idType" :rules="{required: true, message: '证件类型不能为空', trigger: 'blur'}">
-                            <el-select v-model="baseForm.idType" placeholder="请选择证件类型" @change="changeIdType">
+                          <el-form-item label="证件类型" prop="idType" :rules="{required: true, message: '证件类型不能为空', trigger: 'change'}">
+                            <el-select v-model="baseForm.idType" placeholder="请选择证件类型" @change="changeIdType" :disabled="!checkStatus">
                               <el-option v-for="(item,index) in idTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
                          <div style="flex:1">
-                        <el-form-item label="证件号码：" prop="idNo" :rules="{required: true, message: '证件号码不能为空', trigger: 'blur'}">
-                          <el-input v-model="baseForm.idNo"></el-input>
+                        <el-form-item label="证件号码：" prop="idNo" :rules="{required: true, validator:this.validIdNo, trigger: 'blur'}">
+                          <el-input v-model="baseForm.idNo" :disabled="!checkStatus"></el-input>
                         </el-form-item>
                       </div>
                     </el-row>
                     <el-row style="display: flex">
                         <div style="flex:1">
-                          <el-form-item label="性别" prop="enumEmpSex" :rules="{required: true, message: '性别不能为空', trigger: 'blur'}">
-                            <el-select v-model="baseForm.enumEmpSex" placeholder="请选择性别">
+                          <el-form-item label="性别" prop="enumEmpSex" :rules="{required: true, message: '性别不能为空', trigger: 'change'}">
+                            <el-select v-model="baseForm.enumEmpSex" placeholder="请选择性别" :disabled="!checkStatus">
                               <el-option v-for="(item,index) in enumEmpSexOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
@@ -95,8 +95,8 @@
                     </el-row>
                     <el-row style="display: flex">
                         <div style="flex:1">
-                          <el-form-item label="国籍（地区）" prop="country" :rules="{required: true, message: '国籍不能为空', trigger: 'blur'}">
-                            <el-select v-model="baseForm.country" placeholder="请选择国籍" filterable>
+                          <el-form-item label="国籍（地区）" prop="country" :rules="{required: true, message: '国籍不能为空', trigger: 'chang'}">
+                            <el-select v-model="baseForm.country" placeholder="请选择国籍" filterable :disabled="!checkStatus">
                               <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index" :disabled="!canSelectCoutry.includes(item)"></el-option>
                             </el-select>
                           </el-form-item>
@@ -117,7 +117,7 @@
                         </div>
                         <div style="flex:1">
                             <el-form-item label="参加工作日期：">
-                              <el-date-picker v-model="baseForm.inWorkDay" type="date"  value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
+                              <el-date-picker v-model="baseForm.inWorkDay" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
                             </el-form-item>
                         </div>
                     </el-row>
@@ -175,8 +175,8 @@
             <div class="insured-info-con">
                   <el-form label-width="140px" v-if="!isInsuredEdit">
                       <el-row>
-                        <el-col :span="12"><el-form-item label="公司名称：">{{ this.insuredForm.companyName}}</el-form-item></el-col>
-                        <el-col :span="12"><el-form-item label="用工性质：">{{ this.insuredForm.empType }}</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="公司名称：">{{ this.insuredForm.taxSubName}}</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="用工性质：">{{ this.insuredForm.empType | filterEmpType }}</el-form-item></el-col>
                       </el-row>
                       <el-row>
                         <el-col :span="12"><el-form-item label="部门：">{{this.insuredForm.deptName}}</el-form-item></el-col>
@@ -184,31 +184,31 @@
                       </el-row>
                       <el-row>
                         <el-col :span="12"><el-form-item label="入职日期：">{{ this.insuredForm.empDay}}</el-form-item></el-col>
-                        <el-col :span="12"><el-form-item label="任职受雇从业类型：">{{this.insuredForm.workerType}}</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="任职受雇从业类型：">{{this.insuredForm.workerType | workType}}</el-form-item></el-col>
                       </el-row>
                       <el-row>
                         <el-col :span="12"><el-form-item label="是否转正：">{{this.insuredForm.regularEmpYn }}</el-form-item></el-col>
                         <el-col :span="12"><el-form-item label="转正日期：">{{ this.insuredForm.zzDay }}</el-form-item></el-col>
                       </el-row>
                       <el-row>
-                        <el-col :span="12"><el-form-item label="员工状态：">{{ this.insuredForm.empStatus }}</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="员工状态：">{{ this.insuredForm.empStatus | filterEmployStatus }}</el-form-item></el-col>
                         <el-col :span="12"><el-form-item label="最后工作日：">{{ this.insuredForm.leaveDay}}</el-form-item></el-col>
                       </el-row>
                     <el-row>
-                      <el-col :span="12"><el-form-item label="工作城市：">{{ this.insuredForm.workCity }}</el-form-item></el-col>
+                      <el-col :span="12"><el-form-item label="工作城市：">{{ this.insuredForm.workCityFront }}</el-form-item></el-col>
                     </el-row>
                   </el-form>
                   <el-form label-width="150px" :model="insuredForm" ref="insuredForm" v-else>
                       <el-row style="display: flex">
                         <div style="flex:1">
-                          <el-form-item label="公司名称" prop="companyName" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
-                            <el-select v-model="insuredForm.companyName" placeholder="请选择公司名称">
+                          <el-form-item label="公司名称" prop="taxSubId" :rules="{required: true, message: '请选择公司名称', trigger: 'change'}">
+                            <el-select v-model="insuredForm.taxSubId" placeholder="请选择公司名称" :disabled="!checkStatus">
                               <el-option v-for="(item,index) in companyOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
                         <div style="flex:1">
-                          <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'blur'}">
+                          <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'change'}">
                             <el-select v-model="insuredForm.empType" placeholder="请选择">
                               <el-option v-for="(item,index) in enumEmpTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
@@ -230,12 +230,12 @@
                       <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="入职日期" prop="empDay" :rules="{required: true, message: '请选择入职日期', trigger: 'blur'}">
-                            <el-date-picker v-model="insuredForm.empDay" type="date"  value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
+                            <el-date-picker v-model="insuredForm.empDay" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
                           </el-form-item>
                         </div>
                         <div style="flex:1">
                           <el-form-item label="任职受雇从业类型" prop="workerType">
-                            <el-select v-model="insuredForm.workerType" placeholder="请选择任职受雇从业类型" :rules="{required: true, message: '请选择任职受贿类型', trigger: 'blur'}">
+                            <el-select v-model="insuredForm.workerType" placeholder="请选择任职受雇从业类型" :rules="{required: true, message: '请选择任职受贿类型', trigger: 'change'}">
                               <el-option v-for="(item,index) in workerTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
@@ -243,7 +243,7 @@
                       </el-row>
                       <el-row style="display: flex">
                         <div style="flex:1">
-                          <el-form-item label="是否转正" prop="regularEmpYn" :rules="{required: true, message: '请选择', trigger: 'blur'}">
+                          <el-form-item label="是否转正" prop="regularEmpYn" :rules="{required: true, message: '请选择', trigger: 'change'}">
                             <el-select v-model="insuredForm.regularEmpYn" placeholder="请选择">
                               <el-option v-for="(item,index) in regularEmpYnOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
@@ -251,13 +251,13 @@
                         </div>
                         <div style="flex:1">
                           <el-form-item label="转正日期" prop="zzDay">
-                            <el-date-picker v-model="insuredForm.zzDay" type="date"  value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
+                            <el-date-picker v-model="insuredForm.zzDay" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
                           </el-form-item>
                         </div>
                       </el-row>
                       <el-row style="display: flex">
                         <div style="flex:1">
-                          <el-form-item label="员工状态" prop="empStatus" :rules="{required: true, message: '请选择', trigger: 'blur'}">
+                          <el-form-item label="员工状态" prop="empStatus" :rules="{required: true, message: '请选择', trigger: 'change'}">
                             <el-select v-model="insuredForm.empStatus" placeholder="请选择">
                               <el-option v-for="(item,index) in empStatusOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
@@ -316,11 +316,14 @@ export default {
         inWorkDay:"",
         householdRegistrationType:"",//户口性质
         householdCountry:"",//户口所在城市
+        householdCountryFront:"",
         maritalStatus:"",
         nationality:"",
         wageCardBank:"",//工资卡开发银行
         wageCardNum:"",//工资银行账号
       },
+      checkReference:false,//公司信息是否被引用
+      checkStatus:false,//不可被编辑
       canSelectCoutry:[],
       idTypeOption:constData.idType,//证件类型
       enumEmpSexOption:constData.empSex,
@@ -329,6 +332,7 @@ export default {
       insuredForm:{
         empId:"",
         taxSubId:"",
+        taxSubName:"",
         empType:"",
         deptName:"",//部门
         positionName:"",//岗位
@@ -339,6 +343,7 @@ export default {
         empStatus:"",//员工状态
         leaveDay:"",//最后工作日
         workCity:"",//工作城市
+        workCityFront:"",
       },
       companyOption:[],
       workerTypeOption:constData.workerType,
@@ -363,20 +368,69 @@ export default {
     })
   },
   created(){
-    this.$store.dispatch("payMasterStore/actionGetEmployee",this.compEmpId).then(res=>{
-      if(res.success){
-        let data = res.data;
-        for(let key in this.baseForm) {this.baseForm[key] = data[key]}
-        for(let key in this.insuredForm) {this.insuredForm[key] = data[key]}
-      }
-    })
+    this.getInfo()
     //公司列表
     this.getTaxSubjectInfoList()
-
   },
   mounted() {
   },
   methods: {
+    validIdNo(rule, value, callback){
+      if(value){
+        switch (this.baseForm.idType) {
+          case "PRC_ID"://居民身份证
+            var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            if(!regIdNo.test(value)){
+              callback(new Error('居民身份证号录入不正确'));
+            }else{callback();}
+            break;
+          case "CHINA_PASSPORT"://中国护照
+            if(value.length != 9){
+              callback(new Error('中国护照的证件号码必须9位，且只含数字和字母'));
+            }else{callback();}
+            break;
+          case "COMPATRIOTS_CARD"://港澳居民来往内地通行证
+            if(!(value.length == 9 || value.length == 11)){
+              callback(new Error('证件号码长度不对，且必须是数字和字母组合'));
+            }else{callback();}
+            break;
+          case "FORMOSA_CARD"://台湾居民来往大陆通行证
+            if(value.length != 8){
+              callback(new Error('台湾居民来往大陆通行证的证件号码必须8位数字'));
+            }else{callback();}
+            break;
+          case "MACAU_PRC_ID"://港澳居民居住证
+            if(value.length != 18){
+              callback(new Error('港澳居民居住证的证件号码必须18位'));
+            }else{callback();}
+            break;
+          case "FORMOSA_PRC_ID"://台湾居民居住证
+            if(value.length != 18){
+              callback(new Error('台湾居民居住证的证件号码必须18位'));
+              console.log(111)
+            }else{callback();}
+            break;
+          case "FOREIGN_PRC_ID"://外国人永久居留身份证
+            if(value.length != 15){
+              callback(new Error('外国人永久居留身份证的证件号码必须15位'));
+            }else{callback();}
+            break;
+        }
+      }else{
+        callback('身份证信息不能为空')
+      }
+    },
+    getInfo(){
+      this.$store.dispatch("payMasterStore/actionGetEmployee",this.compEmpId).then(res=>{
+        if(res.success){
+          let data = res.data;
+          this.checkReference = data.checkReference//公司信息是否被引用,可编辑
+          this.checkStatus = data.checkStatus//不可被编辑
+          for(let key in this.baseForm) {this.baseForm[key] = data[key]}
+          for(let key in this.insuredForm) {this.insuredForm[key] = data[key]}
+        }
+      })
+    },
     //证件类型控制显示
     changeIdType(value){
       switch (value) {
@@ -422,7 +476,11 @@ export default {
           this.$store
             .dispatch("payMasterStore/actionSaveEmployee", this.baseForm)
             .then(res => {
-              console.log(res)
+              if(res.success){
+                this.getInfo()
+                this.isBaseEdit = false;
+                this.$message.success("基本信息保存成功")
+              }
             })
         }
       })
@@ -434,7 +492,11 @@ export default {
           this.$store
             .dispatch("payMasterStore/actionSaveCompany", this.insuredForm)
             .then(res => {
-              console.log(res)
+              if(res.success){
+                this.getInfo()
+                this.isInsuredEdit = false
+                this.$message.success("参保信息保存成功")
+              }
             })
         }
       })

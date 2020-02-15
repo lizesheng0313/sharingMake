@@ -27,20 +27,20 @@
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="证件类型" prop="idType" :rules="{required: true, message: '证件类型不能为空', trigger: 'blur'}">
-                            <el-select v-model="baseForm.idType" placeholder="请选择证件类型">
+                            <el-select v-model="baseForm.idType" placeholder="请选择证件类型" @change="changeIdType">
                               <el-option v-for="(item,index) in idCardTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
                          <div style="flex:1">
-                        <el-form-item label="证件号码：" prop="idNo" :rules="{required: true, message: '证件号码不能为空', trigger: 'blur'}">
+                        <el-form-item label="证件号码：" prop="idNo" :rules="{required: true, validator: this.validIdNo, trigger: 'blur'}">
                           <el-input v-model="baseForm.idNo"></el-input>
                         </el-form-item>
                       </div>
                     </el-row>
                     <el-row style="display: flex">
                         <div style="flex:1">
-                          <el-form-item label="性别" prop="empSex" :rules="{required: true, message: '性别不能为空', trigger: 'blur'}">
+                          <el-form-item label="性别" prop="empSex" :rules="{required: true, message: '性别不能为空', trigger: 'change'}">
                             <el-select v-model="baseForm.empSex" placeholder="请选择性别">
                               <el-option v-for="(item,index) in sexOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
@@ -56,7 +56,7 @@
                         <div style="flex:1">
                           <el-form-item label="国籍（地区）" prop="country" :rules="{required: true, message: '国籍不能为空', trigger: 'blur'}">
                             <el-select v-model="baseForm.country" placeholder="请选择国籍">
-                              <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index"></el-option>
+                              <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index" :disabled="!canSelectCoutry.includes(item)"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
@@ -124,7 +124,7 @@
                       <div style="flex:1">
                         <el-form-item label="其他证件类型" >
                           <el-select v-model="baseForm.otherIdType" placeholder="请选择其他证件类型">
-                            <el-option v-for="(item,index) in otherIdCardTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
+                            <el-option v-for="(item,index) in otherIdCardTypeOption" :label="item.label" :value="item.value" :key="index" :disabled="!canSelectotherIdType.includes(item.value)"></el-option>
                           </el-select>
                         </el-form-item>
                       </div>
@@ -144,7 +144,7 @@
                       </div>
                       <div style="flex:1">
                         <el-form-item label="涉税事由：">
-                          <el-select v-model="baseForm.taxRelatedReason" placeholder="请选择涉税事由">
+                          <el-select v-model="baseForm.taxRelatedReason" placeholder="请选择涉税事由" multiple>
                             <el-option v-for="(item,index) in taxReasonOption" :label="item.label" :value="item.value" :key="index"></el-option>
                           </el-select>
                         </el-form-item>
@@ -210,14 +210,14 @@
                     </el-row>
                     <el-row style="display: flex">
                       <div style="flex:1">
-                        <el-form-item label="是否转正" prop="regularEmpYn" :rules="{required: true, message: '请选择', trigger: 'blur'}">
+                        <el-form-item label="是否转正" prop="regularEmpYn" :rules="{required: true, message: '请选择是否转正', trigger: 'blur'}">
                           <el-select v-model="baseForm.regularEmpYn" placeholder="请选择">
                             <el-option v-for="(item,index) in isFullWorkOption" :label="item.label" :value="item.value" :key="index"></el-option>
                           </el-select>
                         </el-form-item>
                       </div>
                       <div style="flex:1">
-                        <el-form-item label="转正日期" prop="zzDay">
+                        <el-form-item label="转正日期" prop="zzDay" :rules="{required: baseForm.regularEmpYn ==='1', message: '请选择转正日期', trigger: 'blur'}">
                           <el-date-picker v-model="baseForm.zzDay" type="date" placeholder="请选择" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                       </div>
@@ -261,7 +261,7 @@ export default {
       baseForm:{
         empName:"",
         empNo:"",
-        idType:"",
+        idType:"PRC_ID",
         idNo:"",
         empSex:"",
         birthday:"",
@@ -292,6 +292,8 @@ export default {
         zzDay:"",
         workCity:"",
       },
+      canSelectCoutry:[],
+      canSelectotherIdType:[],//其他证件类型
       enumEmpTypeOption:constData.enumEmpTypeOption,
       idCardTypeOption:constData.idType,
       sexOption:constData.empSex,
@@ -313,7 +315,101 @@ export default {
   mounted() {
 
   },
+  created(){
+    this.changeIdType(this.baseForm.idType)
+  },
   methods: {
+    validIdNo(rule, value, callback){
+      if(value){
+        switch (this.baseForm.idType) {
+          case "PRC_ID"://居民身份证
+            var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            if(!regIdNo.test(value)){
+              callback(new Error('居民身份证号录入不正确'));
+            }else{callback();}
+            break;
+          case "CHINA_PASSPORT"://中国护照
+            if(value.length != 9){
+              callback(new Error('中国护照的证件号码必须9位，且只含数字和字母'));
+            }else{callback();}
+            break;
+          case "COMPATRIOTS_CARD"://港澳居民来往内地通行证
+            if(!(value.length == 9 || value.length == 11)){
+              callback(new Error('证件号码长度不对，且必须是数字和字母组合'));
+            }else{callback();}
+            break;
+          case "FORMOSA_CARD"://台湾居民来往大陆通行证
+            if(value.length != 8){
+              callback(new Error('台湾居民来往大陆通行证的证件号码必须8位数字'));
+            }else{callback();}
+            break;
+          case "MACAU_PRC_ID"://港澳居民居住证
+            if(value.length != 18){
+              callback(new Error('港澳居民居住证的证件号码必须18位'));
+            }else{callback();}
+            break;
+          case "FORMOSA_PRC_ID"://台湾居民居住证
+            if(value.length != 18){
+              callback(new Error('台湾居民居住证的证件号码必须18位'));
+            }else{callback();}
+            break;
+          case "FOREIGN_PRC_ID"://外国人永久居留身份证
+            if(value.length != 15){
+              callback(new Error('外国人永久居留身份证的证件号码必须15位'));
+            }else{callback();}
+            break;
+        }
+      }else{
+        callback('身份证信息不能为空')
+      }
+    },
+    //证件类型控制显示
+    changeIdType(value){
+      switch (value) {
+        case "PRC_ID"://居民身份证
+          this.baseForm.country = "中国" ;this.canSelectCoutry = ['中国'];
+          this.baseForm.otherIdType = "";this.canSelectotherIdType = [];
+          break;
+        case "CHINA_PASSPORT": //中国护照
+          this.baseForm.country = "中国" ;this.canSelectCoutry = ['中国']
+          this.baseForm.otherIdType = "中国护照";this.canSelectotherIdType = ['中国护照']
+          break;
+        case "COMPATRIOTS_CARD'": //港澳居民来往内地通行证
+          this.baseForm.country = "" ;this.canSelectCoutry = ['中国香港','中国澳门']
+          this.baseForm.otherIdType = "MACAU_PRC_ID";this.canSelectotherIdType = ['MACAU_PRC_ID']
+          break;
+        case "MACAU_PRC_ID"://港澳居民居住证
+          this.baseForm.country = "" ;this.canSelectCoutry = ['中国香港','中国澳门']
+          this.baseForm.otherIdType = "COMPATRIOTS_CARD";this.canSelectotherIdType = ['COMPATRIOTS_CARD']
+          break;
+        case "FORMOSA_CARD": //台湾居民来往大陆通行证
+          this.baseForm.country = "中国台湾" ;this.canSelectCoutry = ['中国台湾']
+          this.baseForm.otherIdType = "FORMOSA_PRC_ID";this.canSelectotherIdType = ['FORMOSA_PRC_ID']
+          break;
+        case "FORMOSA_PRC_ID": //台湾居民居住证
+          this.baseForm.country = "中国台湾" ;this.canSelectCoutry = ['中国台湾']
+          this.baseForm.otherIdType = "FORMOSA_CARD";this.canSelectotherIdType = ['FORMOSA_CARD']
+          break;
+        case "FOREIGN_PASSPORT": //外国护照
+          this.baseForm.country = "" ;
+          this.canSelectCoutry = this.countryList.filter(item=>!['中国香港','中国','中国澳门'].includes(item))
+          this.baseForm.otherIdType = "";this.canSelectotherIdType = ['外国人永久居留身份证','外国人工作许可证（A类）','外国人工作许可证（B类）','外国人工作许可证（C类)']
+          break;
+        case "FOREIGN_PRC_ID"://外国人永久居留身份证
+        case "FOREIGN_WORK_PERMIT_A":// 外国人工作许可证（A类）
+        case "FOREIGN_WORK_PERMIT_B"://外国人工作许可证（B类）
+        case "FOREIGN_WORK_PERMIT_C"://外国人工作许可证（C类
+          this.baseForm.country = "" ;
+          this.canSelectCoutry = this.countryList.filter(item=>!['中国香港','中国','中国澳门'].includes(item))
+          this.baseForm.otherIdType = "外国护照";this.canSelectotherIdType = ['外国护照']
+          break;
+      }
+      if(!['PRC_ID','CHINA_PASSPORT','COMPATRIOTS_CARD','FORMOSA_PRC_ID','FORMOSA_PRC_ID',
+        'FOREIGN_PASSPORT','FOREIGN_PRC_ID','FOREIGN_WORK_PERMIT_A','FOREIGN_WORK_PERMIT_B','FOREIGN_WORK_PERMIT_C'].includes(value)){
+        this.baseForm.country = "" ;this.canSelectCoutry = this.countryList
+      }
+
+    },
     saveInfo() {
       this.$refs['baseForm'].validate(valid => {
         if(valid){

@@ -109,6 +109,17 @@ export const filterEmployStatus = (val) =>{
     }
   }
 }
+//户口性质
+const householdRegistrationType = (val) => {
+  switch (val) {//仲裁类别
+    case 'CITY': {
+      return '城镇户口';
+    }
+    case 'FAVILLAGEIL': {
+      return '农村户口';
+    }
+  }
+};
 const filterType = (val) => {
   switch (val) {//仲裁类别
     case 'SYSYEM': {
@@ -300,6 +311,18 @@ const filterIdType = (val) => {
     }
   }
 };
+
+// 任职受雇从业类型
+const workType = (val) => {
+  switch (val) {
+    case 'EMPLOYEE': {
+      return '雇员';
+    }
+    case 'OTHER': {
+      return '其他';
+    }
+  }
+};
 export default {
   resetDate,
   texRule,
@@ -314,5 +337,7 @@ export default {
   filterEmployStatus,
   filterEmpSex,
   filterIdType,
-  filterEducation
+  filterEducation,
+  householdRegistrationType,
+  workType,
 }
