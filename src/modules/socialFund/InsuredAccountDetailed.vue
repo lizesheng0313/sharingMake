@@ -174,7 +174,7 @@
           </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button type="primary" @click="getList">查询</el-button>
           <el-button @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
@@ -268,7 +268,8 @@
         this.$store
           .dispatch("socialFundStore/actionEmpMonthlyLedgerList", this.ruleForm)
           .then(res=>{
-            console.log(console.log(res))
+            this.loading = false
+            console.log(res)
           })
 
       },

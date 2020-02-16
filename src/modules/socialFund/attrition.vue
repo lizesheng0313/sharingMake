@@ -61,21 +61,9 @@
           </div>
           <div class="staff-situation">
             <span class="staff-total">
-              <span class="wait-report" @click="selectNum('')">
-                参保人数
-                <i :class="['num', allActive?'active':'']">{{ total }}</i>人
-              </span>
-              <span class="wait-report" @click="selectNum('NORMAL')">
-                本月增员
-                <i :class="['num', increaseActive?'active':'']">{{ increaseCount }}</i>人
-              </span>
-              <span class="wait-report" @click="selectNum('AWAIT_REPORT')">
-                本月减员
-                <i :class="['num', decreaseActive?'active':'']">{{ decreaseCount?decreaseCount:0 }}</i>人
-              </span>
-               <span class="wait-report" @click="selectNum('AWAIT_REPORT')">
-                已停保
-                <i :class="['num', stopActive?'active':'']">{{ stopCount?stopCount:0 }}</i>人
+              <span v-for="(item,index) in numSelect" :class="['wait-report',item.isHasBorder?'left-border':'']" :key="index" @click="selectNum(item)">
+                {{ item.label}}
+                <i :class="['num', item.isActive?'active':'']">{{ item.value }}</i>人
               </span>
             </span>
           </div>
@@ -100,19 +88,19 @@
                 </template>
               </el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
-              <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
-              <el-table-column prop="idNo" label="公司名称"></el-table-column>
-              <el-table-column prop="empSex" label="参保状态" width="140">
-                <template slot-scope="scope">{{ scope.row.empSex }}</template>
+              <el-table-column prop="idCard" label="证件号码" width="180"></el-table-column>
+              <el-table-column prop="compName" label="公司名称"></el-table-column>
+              <el-table-column prop="insuredStatus" label="参保状态" width="140">
+                <template slot-scope="scope">{{ scope.row.insuredCity }}</template>
               </el-table-column>
-              <el-table-column prop="workerStatus" label="参保城市" width="140">
-                <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
+              <el-table-column prop="insuredCity" label="参保城市" width="140">
+                <template slot-scope="scope">{{ scope.row.insuredCity }}</template>
               </el-table-column>
-              <el-table-column prop="reportStatus" label="参保方案" width="140">
-                <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
+              <el-table-column prop="compInsuredName" label="参保方案" width="140">
+                <template slot-scope="scope">{{ scope.row.compInsuredName }}</template>
               </el-table-column>
               <el-table-column prop="idValidStatus" label="社保起缴月份" width="140">
-                <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
+                <template slot-scope="scope">{{ scope.row.socialInsuranceStartMonth }}</template>
               </el-table-column>
               <el-table-column prop="mobile" label="公积金期缴月份" width="140"></el-table-column>
               <el-table-column label="操作" fixed="right" width="280px">
@@ -153,14 +141,14 @@
           <el-form :model="ruleForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
             <div class="shortCon">
               <el-form-item label="公司名称" label-width="20%">
-                <el-select v-model="ruleForm.param.insuredCity" placeholder="请选择参保城市" filterable @change="changeCity">
+                <el-select v-model="ruleForm.param.insuredCity" placeholder="请选择参保城市" filterable>
                   <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
               <el-form-item label="参保城市" label-width="20%">
-                <el-select v-model="ruleForm.city" placeholder="请选择参保城市">
+                <el-select v-model="ruleForm.city" placeholder="请选择参保城市" @change="changeCity">
                   <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -179,18 +167,6 @@
                 </el-select>
               </el-form-item>
             </div>
-<!--            <div class="shortCon">-->
-<!--              <el-form-item label="参保月份" label-width="20%">-->
-<!--                <el-date-picker v-model="ruleForm.insuredStart" type="month" placeholder="开始月份"></el-date-picker> 至-->
-<!--                <el-date-picker v-model="ruleForm.insuredEnd" type="month" placeholder="结束月份"></el-date-picker>-->
-<!--              </el-form-item>-->
-<!--            </div>-->
-<!--            <div class="shortCon">-->
-<!--              <el-form-item label="停保月份" label-width="20%">-->
-<!--                <el-date-picker v-model="ruleForm.stopInsuranceStart" type="month" placeholder="选择月"></el-date-picker> 至-->
-<!--                <el-date-picker v-model="ruleForm.stopInsuranceEnd" type="month" placeholder="选择月"></el-date-picker>-->
-<!--              </el-form-item>-->
-<!--            </div>-->
           </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -207,15 +183,16 @@
   let date = fun.headDate();
   let month = new Date().getMonth() + 1;
   let defaultDate =
-    date.year + "-" + (date.month >= 10 ? date.month : "0" + date.month) + "月";
+    date.year + "-" + (date.month >= 10 ? date.month : "0" + date.month);
   export default {
     data() {
       return {
         ruleForm:{
           key:"",
-          pageSize:"",
-          currentPage:"",
+          pageSize:1,
+          currPage:1,
           startMonth:defaultDate,
+          statusFlag:"0",
           param:{
             compId:"",//公司Id
             compInsuredId:"",//参保方案Id
@@ -225,20 +202,22 @@
         },
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
-        list: [{name:"减员",type:'dec'},{name:"增员",type:'inc'}],
+        list: [],
         closeModel: false,
         isShowScreening:false,
         total:0,
-        allActive:true,
-        increaseActive:false,
-        increaseCount:0,
-        decreaseActive:false,
-        decreaseCount:0,
-        stopActive:false,
-        stopCount:0,
         loading:false,
+        numSelect:[],
         planOption:[],
-        insuredStatusOption:[],
+        insuredStatusOption:[
+          {
+            label:"参保中",
+            value:"INSURED_ING"
+          },{
+            label:"已停保",
+            value:"INSURED_STOP"
+          }],
+
     };
     },
     components:{
@@ -252,7 +231,7 @@
       }),
     },
     created(){
-
+      this.getList()
     },
     mounted() {
       const that = this;
@@ -265,39 +244,41 @@
       };
     },
     methods: {
-      selectNum(type){
-        //全部
-        if(type===""){ this.allActive = true; this.increaseActive = false; this.decreaseActive = false; this.stopActive = false }
-        //正常
-        if(type === "NORMAL"){this.allActive = false; this.increaseActive = true; this.decreaseActive = false; this.stopActive = false}
-        //待报送
-        if(type === "AWAIT_REPORT"){this.allActive = false; this.increaseActive = false; this.decreaseActive = true; this.stopActive = false}
-        //待反馈
-        if(type==="REPORTING"){ this.allActive = false; this.increaseActive = false; this.decreaseActive = false; this.stopActive = true }
-        //报送失败
-        this.ruleForm.reportStatus = type === "" ? [] : [type];
-        this.getList()
+      //选择数字
+      selectNum(data){
+       this.numSelect.forEach(it=>{it.isActive = false})
+       data.isActive = true
+       this.ruleForm.statusFlag = data.value;
+       this.getList('selectNum')
       },
-      getList() {
-        this.loading = true;
+      getList(selectNum) {
+        this.loading = false;
         this.$store
-          .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
+          .dispatch("socialFundStore/actionFloatEmployeeList", this.ruleForm)
           .then(res => {
             if (res.success) {
               this.loading = false;
-              this.total = res.data.count;
-              this.list = res.data.data;
-              this.increaseCount = res.data.increaseCount;
-              this.decreaseCount = res.data.decreaseCount;
-              this.awaitReportCount = res.data.awaitReportCount;
-              this.normalCount = res.data.normalCount;
-              this.failReportCount = res.data.failReportCount;
-              this.awaitFeedBackCount = res.data.awaitFeedBackCount;
+              let responseData = res.data;
+              this.total = responseData.pageResponse.count;
+              this.list = responseData.pageResponse.data;
+              if(!selectNum){
+                this.numSelect = [
+                  { label:"全部", value:responseData.num, isActive:true, isHasBorder:false },
+                  { label:"本月社保：缴纳中", value:responseData.sitaxNum, isActive:false, isHasBorder:true },
+                  { label:"增员", value:responseData.sidecreaseNum, isActive:false, isHasBorder:false },
+                  { label:"减员", value:responseData.siincreaseNum, isActive:false, isHasBorder:false },
+                  { label:"本月公积金：缴纳中", value:responseData.aftaxNum, isActive:false, isHasBorder:true },
+                  { label:"增员", value:responseData.afincreaseNum, isActive:false, isHasBorder:false },
+                  { label:"减员", value:responseData.afdecreaseNum, isActive:false, isHasBorder:false },
+                ]
+              }
             }
           });
       },
+      //筛选
       handleScreen(){
-
+        this.getList()
+        this.isShowScreening = false;
       },
       goQuick(){
         this.$router.push('/quickStaff')
@@ -322,6 +303,7 @@
           .then(res => {
             if(res.success){
               this.planOption = res.data
+              console.log(res)
             }
           });
       },
@@ -431,8 +413,10 @@
       }
     }
     .wait-report{
-      margin-right:20px;
+      margin-right:10px;
       cursor: pointer;
+      padding-left: 10px;
+      height:20px;
       .num{
         font-weight: bold;
         color: $mainColor;
@@ -440,6 +424,9 @@
       .active{
         color:#e6a23c;
       }
+    }
+    .left-border{
+      border-left:1.2px solid #c6c6c6;
     }
   }
   .screen-dialog {

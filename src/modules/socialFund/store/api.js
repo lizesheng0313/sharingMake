@@ -86,4 +86,13 @@ export function apiEmpMonthlyLedgerList(form) {
     data:form
   })
 }
+//快速增减员列表
+export function apiFloatEmployeeList(form) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/manage/list',
+    method: 'post',
+    data:form
+  })
+}
+
 
