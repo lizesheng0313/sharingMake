@@ -6,7 +6,7 @@
           <el-col :span="12">
             <span @click="$router.go(-1)" class="back-style">返回</span>
             <span class="header-line">|</span>
-            <span>参保月度台账</span>
+            <span>{{insuredAccoundItem.currentMonth}}参保月度台账</span>
           </el-col>
         </el-row>
       </header>
@@ -63,56 +63,38 @@
                 label="编号"
                 width="50">
               </el-table-column>
-              <el-table-column prop="name" label="姓名" width="140">
+              <el-table-column prop="name" label="姓名" width="120">
                 <template slot-scope="scope">
-                  <span>{{ scope.row.name }}</span>
+                  <span>{{ scope.row.empName }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
-              <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
-              <el-table-column prop="idNo" label="公司名称"></el-table-column>
+              <el-table-column prop="empNo" label="工号" width="100"></el-table-column>
+              <el-table-column prop="idNo" label="证件号码" width="160"></el-table-column>
+              <el-table-column prop="taxSubName" label="公司名称" width="120"></el-table-column>
               <el-table-column prop="empSex" label="参保城市" width="140">
-                <template slot-scope="scope">{{ scope.row.empSex }}</template>
+                <template slot-scope="scope">{{ scope.row.insuredCity }}</template>
               </el-table-column>
-              <el-table-column prop="empSex" label="数据来源" width="140">
-                <template slot-scope="scope">{{ scope.row.empSex }}</template>
+              <el-table-column prop="workerStatus" label="参保方案" width="120">
+                <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
               </el-table-column>
-              <el-table-column prop="empSex" label="含补缴" width="140">
-                <template slot-scope="scope">{{ scope.row.empSex }}</template>
+              <el-table-column prop="empSex" label="数据来源" width="80">
+                <template slot-scope="scope">{{ scope.row.ledgerSource ==='IMPORT_LEDGER'?'导入':'生成' }}</template>
               </el-table-column>
-              <template>
-                <el-table-column prop="workerStatus" label="参保方案" width="140">
-                  <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
-                </el-table-column>
-                <el-table-column prop="workerStatus" label="是否含补缴" width="140">
-                  <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
-                </el-table-column>
-                <el-table-column prop="reportStatus" label="个人社保合计" width="140">
-                  <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
-                </el-table-column>
-                <el-table-column prop="idValidStatus" label="单位社保合计" width="140">
-                  <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
-                </el-table-column>
-                <el-table-column prop="idValidStatus" label="个人公积金合计" width="140">
-                  <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
-                </el-table-column>
-                <el-table-column prop="idValidStatus" label="单位公积金合计" width="140">
-                  <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
-                </el-table-column>
-              </template>
-              <el-table-column label="操作" fixed="right" width="160px">
+              <el-table-column prop="empSex" label="含补缴" width="80">
+                <template slot-scope="scope">{{ scope.row.supplementaryPayFlag == 1 ?"是":"否" }}</template>
+              </el-table-column>
+              <el-table-column prop="realPersonSocilTotal" label="个人社保合计" width="120"></el-table-column>
+              <el-table-column prop="realCompSocialTotal" label="单位社保合计" width="120"></el-table-column>
+              <el-table-column prop="realPersonFundTotal" label="个人公积金合计" width="120"></el-table-column>
+              <el-table-column prop="realCompFundTotal" label="单位公积金合计" width="120"></el-table-column>
+              <el-table-column label="操作" fixed="right" width="120px">
                 <template slot-scope="scope">
                   <el-button type="text" @click="goInsureAccountDetail(scope.row)">详情</el-button>
-                  <el-button type="text" @click="paybackCreate(scope.row)" v-if="source === 'create'">补缴</el-button>
-                  <el-popover
-                    ref="popMore"
-                    placement="bottom-end"
-                    width="60"
-                    trigger="hover"
-                    v-else
-                  >
+                  <el-button type="text" @click="paybackCreate(scope.row)" v-if="scope.row.ledgerSource === 'GENERATE_LEDGER'">补缴</el-button>
+                  <el-popover ref="popMore" placement="bottom-end" width="60" trigger="hover" v-else>
                     <div class="funStyle more-style" @click="paybackImport(scope.row)">补缴</div>
-                    <div class="funStyle more-style" @click="handleDelete(scope.row)">删除</div>
+                    <div class="funStyle more-style" @click="handleDelete
+                    (scope.row)">删除</div>
                     <span slot="reference" class="more-choose">更多</span>
                   </el-popover>
                 </template>
@@ -236,6 +218,7 @@
         uninsuredCount:0,
         insuredCount:0,
         loading:false,
+        createPlanOption:[],
       };
     },
     computed:{
@@ -268,8 +251,9 @@
         this.$store
           .dispatch("socialFundStore/actionEmpMonthlyLedgerList", this.ruleForm)
           .then(res=>{
-            this.loading = false
-            console.log(res)
+            this.loading = false;
+            this.list = res.data.data;
+            this.total = res.data.count;
           })
 
       },
@@ -295,7 +279,7 @@
       },
       //重新生成
       handleRecreate(){
-        this.$confirm("是否重新生成公司本月社保月度台账", "提示",
+        this.$confirm("是否重新生成公司本月社保月度台账！", "提示",
           {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
@@ -305,7 +289,7 @@
         ).then(() => {
           this.$store
             .dispatch("socialFundStore/actionSaveMonthlyLedger", {
-              taxSubList:this.ruleForm.taxSubId,
+              taxSubList:[this.ruleForm.taxSubId],
               month:this.ruleForm.queryMonth,
             })
             .then(res => {
@@ -323,16 +307,35 @@
         this.$router.push('/insuredAccountDetail')
       },
       //补缴(生成)
-      paybackCreate(){
-        this.$refs.paybackCreate.show()
+      paybackCreate(data){
+        let insuredCity = data.insuredCity ? data.insuredCity :"110000"
+        this.$refs.paybackCreate.show(insuredCity)
       },
       //补缴(导入)
       paybackImport(data){
         this.popShow.isshow = true;
         this.selectItem = data;
       },
-      handleDelete(){
-
+      handleDelete(data){
+        this.$confirm(" 是否删除所选记录！", "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+            center:false
+          }
+        ).then(() => {
+            this.$store
+              .dispatch("socialFundStore/actionEmpMonthlyLedgerDelete",{
+                id:data.id,
+                month:this.ruleForm.queryMonth
+              })
+              .then(res=>{
+                  if(res.success){
+                    this.getList()
+                  }
+              })
+           }).catch(() => {})
       },
       //更新
       reFreshList(){

@@ -86,6 +86,24 @@ export function apiEmpMonthlyLedgerList(form) {
     data:form
   })
 }
+//月度台账补缴删除
+export function apiEmpMonthlyLedgerDelete(form) {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/deleteSupplementMonthly',
+    method: 'post',
+    data:form
+  })
+}
+
+//月度台账补缴
+export function apiEmpMonthlyLedgerSupple(form) {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/supplementMonthlyLedger',
+    method: 'post',
+    data:form
+  })
+}
+
 //快速增减员列表
 export function apiFloatEmployeeList(form) {
   return fetch({
