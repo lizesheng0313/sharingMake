@@ -6,7 +6,7 @@
           <el-col :span="12">
             <span @click="$router.go(-1)" class="back-style">返回</span>
             <span class="header-line">|</span>
-            <span>{{insuredAccoundItem.currentMonth}}参保月度台账</span>
+            <span>{{ insuredAccoundItem.currentMonth }}参保月度台账</span>
           </el-col>
         </el-row>
       </header>
@@ -161,11 +161,7 @@
         </span>
       </el-dialog>
       <payBackCreate ref="paybackCreate" @reFreshList = "reFreshList"></payBackCreate>
-      <right-pop :pop-show="popShow" :has-footer="false" popTitle="补缴" :popWidth="600">
-        <div slot="pop-content">
-          <payBackImport :selectItem="selectItem" @hanleClose="hanleCloseImport"></payBackImport>
-        </div>
-      </right-pop>
+      <payBackImport ref="payBackImport" :selectItem="selectItem" @hanleClose="hanleCloseImport"></payBackImport>
     </div>
   </div>
 </template>
@@ -313,7 +309,7 @@
       },
       //补缴(导入)
       paybackImport(data){
-        this.popShow.isshow = true;
+        this.$refs.payBackImport.show(data)
         this.selectItem = data;
       },
       handleDelete(data){
