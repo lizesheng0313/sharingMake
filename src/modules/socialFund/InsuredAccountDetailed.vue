@@ -18,31 +18,34 @@
             </div>
             <el-input
               placeholder="请输入姓名\工号\身份证号"
-              v-model="ruleForm.nameOrMore"
+              v-model="ruleForm.key"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               @keyup.enter.native="handleSearch"
               clearable
               class="search-input"
             ></el-input>
             <div class="select" style="display: inline-block">
-              <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
+              <el-button type="primary" class="tax-search" @click="getList">查询</el-button>
             </div>
             <div class="right">
-<!--              <el-button type="primary" class="add-import" @click="showSocialIncreate">社保增员</el-button>-->
-              <el-button type="primary" class="add-import" v-if="source==='create'" @click="handleRecreate">重新生成</el-button>
+              <el-button type="primary" class="add-import" v-if="insuredAccoundItem.isarchive" @click="handleRecreate">重新生成</el-button>
               <el-button type="primary" class="add-import" v-else>导入</el-button>
               <el-button class="add-import" @click="handleExport">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
             <span class="staff-total">
-              <span class="wait-report" @click="selectNum(true)">
-                入职未投保
-                <i :class="['num', uninsuredActive?'active':'']">{{ uninsuredCount?uninsuredCount:0 }}</i>人
+              <span class="wait-report">
+                参保人数
+                <i>{{ uninsuredCount }}</i>人
               </span>
-              <span class="wait-report" @click="selectNum(false)">
-                入职已投保
-                <i :class="['num', !uninsuredActive?'active':'']">{{ insuredCount ? insuredCount:0 }}</i>人
+              <span class="wait-report">
+                本月增员
+                <i>{{ insuredCount}}</i>人
+              </span>
+              <span class="wait-report">
+                本月减员
+                <i class="num">{{ insuredCount}}</i>人
               </span>
             </span>
           </div>
@@ -71,17 +74,29 @@
               <el-table-column prop="empSex" label="参保城市" width="140">
                 <template slot-scope="scope">{{ scope.row.empSex }}</template>
               </el-table-column>
-              <template v-if="uninsuredActive">
+              <el-table-column prop="empSex" label="数据来源" width="140">
+                <template slot-scope="scope">{{ scope.row.empSex }}</template>
+              </el-table-column>
+              <el-table-column prop="empSex" label="含补缴" width="140">
+                <template slot-scope="scope">{{ scope.row.empSex }}</template>
+              </el-table-column>
+              <template>
                 <el-table-column prop="workerStatus" label="参保方案" width="140">
                   <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
                 </el-table-column>
                 <el-table-column prop="workerStatus" label="是否含补缴" width="140">
                   <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
                 </el-table-column>
-                <el-table-column prop="reportStatus" label="养老个人缴费" width="140">
+                <el-table-column prop="reportStatus" label="个人社保合计" width="140">
                   <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
                 </el-table-column>
-                <el-table-column prop="idValidStatus" label="养老医疗缴费" width="140">
+                <el-table-column prop="idValidStatus" label="单位社保合计" width="140">
+                  <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
+                </el-table-column>
+                <el-table-column prop="idValidStatus" label="个人公积金合计" width="140">
+                  <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
+                </el-table-column>
+                <el-table-column prop="idValidStatus" label="单位公积金合计" width="140">
                   <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
                 </el-table-column>
               </template>
@@ -125,39 +140,34 @@
         <div class="screening-wapper">
           <el-form :model="ruleForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
             <div class="shortCon">
-              <el-form-item label="公司名称" label-width="20%">
-                <el-input v-model="ruleForm.companyName" placeholder="请选择公司名称"></el-input>
-              </el-form-item>
-            </div>
-            <div class="shortCon">
-              <el-form-item label="参保城市" label-width="20%">
-                <el-select v-model="ruleForm.city" placeholder="请选择用工性质">
-                  <el-option v-for="(item,index) in cityOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              <el-form-item label="参保城市" label-width="20%" >
+                <el-select v-model="ruleForm.queryFilterParam.insuredCity" placeholder="请选择参保城市" filterable @change="changeCity">
+                  <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
               <el-form-item label="参保方案" label-width="20%">
-                <el-select v-model="ruleForm.plan" placeholder="请选择工作城市">
-                  <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                <el-select v-model="ruleForm.plan" placeholder="参保方案">
+                  <el-option v-for="(item,index) in planOption" :label="item.insuredName" :value="item.id" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
-              <el-form-item label="是否挂靠" label-width="20%">
-                <el-radio-group v-model="ruleForm.isGk" class="radio-right">
+              <el-form-item label="数据来源" label-width="20%">
+                <el-radio-group v-model="ruleForm.queryFilterParam.ledgerSource" class="radio-right">
                   <el-radio-button label="null" class="radio-all">不限</el-radio-button>
-                  <el-radio-button label="true" class="radio-all-right">是</el-radio-button>
-                  <el-radio-button label="false">否</el-radio-button>
+                  <el-radio-button label="GENERATE_LEDGER" class="radio-all-right">生成</el-radio-button>
+                  <el-radio-button label="IMPORT_LEDGER">导入</el-radio-button>
                 </el-radio-group>
               </el-form-item>
             </div>
             <div class="shortCon" >
-              <el-form-item label="是否补缴" label-width="20%">
-                <el-radio-group v-model="ruleForm.isBj" class="radio-right">
+              <el-form-item label="是否含补缴" label-width="20%">
+                <el-radio-group v-model="ruleForm.queryFilterParam.supplementPayFlag" class="radio-right">
                   <el-radio-button label="null" class="radio-all">不限</el-radio-button>
-                  <el-radio-button label="true" class="radio-all-right">是</el-radio-button>
-                  <el-radio-button label="false">否</el-radio-button>
+                  <el-radio-button label="1" class="radio-all-right">是</el-radio-button>
+                  <el-radio-button label="0">否</el-radio-button>
                 </el-radio-group>
               </el-form-item>
             </div>
@@ -174,8 +184,6 @@
           <payBackImport :selectItem="selectItem" @hanleClose="hanleCloseImport"></payBackImport>
         </div>
       </right-pop>
-      <!-- 社保增员-->
-      <socialIncreace ref="socialIncreace" :selectEmployee="true"></socialIncreace>
     </div>
   </div>
 </template>
@@ -207,40 +215,42 @@
         },
         selectItem:{},
         ruleForm:{
-          companyName:"",
-          plan:"",
-          city:"",
-          isGk:null,
-          isBj:null
-        },
-        cityOption:[
-
-        ],
-        planOption:[
-          {
-            label:"111",
-            value:"111"
+          queryMonth:"",
+          taxSubId:"",
+          currPage:"",
+          pageSize:"",
+          key:"",
+          queryFilterParam:{
+            compInsuredId:"",
+            insuredCity:"",
+            ledgerSource:null,//来源
+            supplementPayFlag:null//是否补缴
           }
-        ],
+        },
+        planOption:[],
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
-        list: [{name:"妞妞",idcard:"123456789123456789"},{name:"丫丫"}],
+        list: [],
         closeModel: false,
         total:0,
-        uninsuredActive:true,
-        insuredActive:false,
         uninsuredCount:0,
         insuredCount:0,
         loading:false,
       };
     },
-
     computed:{
       ...mapState({
-        privilegeVoList:state=>state.privilegeVoList
+        privilegeVoList:state=>state.privilegeVoList,
+        cityList:state=>state.cityList
+      }),
+      ...mapState("socialFundStore", {
+        insuredAccoundItem: state => state.insuredAccoundItem
       }),
     },
     created(){
+      this.getList()
+      this.ruleForm.queryMonth= this.insuredAccoundItem.currentMonth;
+      this.ruleForm.taxSubId= this.insuredAccoundItem.taxSubId;
     },
     mounted() {
       const that = this;
@@ -253,15 +263,23 @@
       };
     },
     methods: {
-      selectNum(type){
-        this.uninsuredActive = type
-      },
       getList() {
         this.loading = true;
-        console.log('111')
-      },
-      handleSearch(){
+        this.$store
+          .dispatch("socialFundStore/actionEmpMonthlyLedgerList", this.ruleForm)
+          .then(res=>{
+            console.log(console.log(res))
+          })
 
+      },
+      changeCity(value){
+        this.$store
+          .dispatch("socialFundStore/actionInsuredGetBase", value)
+          .then(res => {
+            if(res.success){
+              this.planOption = res.data
+            }
+          });
       },
       //筛选
       onShowScreen(){
@@ -269,14 +287,10 @@
       },
       // 重置
       handleReset(){
-        for(let key in this.ruleForm){
-          if(!['isGk','isBj'].includes(key))
-          this.ruleForm[key] = ""
-        }
-      },
-      //社保增员
-      showSocialIncreate(){
-        this.$refs.socialIncreace.show([])
+        this.ruleForm.queryFilterParam.compInsuredId="";
+        this.ruleForm.queryFilterParam.insuredCity="";
+        this.ruleForm.queryFilterParam.ledgerSource=null;//来源
+        this.ruleForm.queryFilterParam.supplementPayFlag=null;//是否补缴
       },
       //重新生成
       handleRecreate(){
@@ -288,7 +302,16 @@
             center:false
           }
         ).then(() => {
-
+          this.$store
+            .dispatch("socialFundStore/actionSaveMonthlyLedger", {
+              taxSubList:this.ruleForm.taxSubId,
+              month:this.ruleForm.queryMonth,
+            })
+            .then(res => {
+              if(res.success){
+                this.getList()
+              }
+            })
         }).catch(() => {})
       },
       //导出
@@ -318,8 +341,8 @@
         this.popShow.isshow = false
       },
       handleSizeChange(val) {
-        this.totalListForm.pageSize = val;
-        this.totalListForm.currPage = 1;
+        this.ruleForm.pageSize = val;
+        this.ruleForm.currPage = 1;
         this.getList();
       },
       //翻页
@@ -392,14 +415,6 @@
     }
     .wait-report{
       margin-right:20px;
-      cursor: pointer;
-      .num{
-        font-weight: bold;
-        color: $mainColor;
-      }
-      .active{
-        color:#e6a23c;
-      }
     }
   }
   .screen-dialog{

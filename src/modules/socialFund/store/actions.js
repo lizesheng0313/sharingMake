@@ -1,4 +1,4 @@
-import { apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
+import { apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
 
 // 参保 方案列表
 export const actionInsuredProjectMList = ({ dispatch },ruleForm) => {
@@ -32,4 +32,21 @@ export const actionInsuredGetInfo = ({ dispatch },id) => {
 //参保详情 保存
 export const actionInsuredProjectSave = ({ dispatch },ruleForm) => {
   return apiInsuredProjectSave(ruleForm)
+}
+
+//参保台账企业信息
+export const actionGetCompMonthlyLedgerList= ({ dispatch },form) => {
+  return apiGetCompMonthlyLedgerList(form)
+}
+//参保台账生成
+export const actionSaveMonthlyLedger= ({ dispatch },form) => {
+  return apiSaveMonthlyLedger(form)
+}
+//参保台账归档
+export const actionArchiveMonthlyLedger= ({ dispatch },form) => {
+  return apiArchiveMonthlyLedger(form)
+}
+//参保月度台账、员工列表
+export const actionEmpMonthlyLedgerList= ({ dispatch },form) => {
+  return apiEmpMonthlyLedgerList(form)
 }

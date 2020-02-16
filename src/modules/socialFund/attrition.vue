@@ -16,10 +16,10 @@
             </div>
             <div class="content-header head-date">
               <el-date-picker
-                v-model="selectMonth"
-                @input="changeMonth"
+                v-model="ruleForm.startMonth"
+                @input="getList"
                 type="month"
-                value-format="yyyy年MM月"
+                value-format="yyyy-MM"
                 :editable="false"
                 :clearable="false"
               ></el-date-picker>
@@ -28,12 +28,12 @@
               placeholder="请输入姓名\工号\身份证号"
               v-model="ruleForm.nameOrMore"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
-              @keyup.enter.native="handleSearch"
+              @keyup.enter.native="getList"
               clearable
               class="search-input"
             ></el-input>
             <div class="select" style="display: inline-block">
-              <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
+              <el-button type="primary" class="tax-search" @click="getList">查询</el-button>
             </div>
             <div class="right">
               <el-button type="primary" class="add-import" @click="goQuick">快速增减员</el-button>
@@ -153,39 +153,48 @@
           <el-form :model="ruleForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
             <div class="shortCon">
               <el-form-item label="公司名称" label-width="20%">
-                <el-input v-model="ruleForm.companyName"></el-input>
+                <el-select v-model="ruleForm.param.insuredCity" placeholder="请选择参保城市" filterable @change="changeCity">
+                  <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
               <el-form-item label="参保城市" label-width="20%">
                 <el-select v-model="ruleForm.city" placeholder="请选择参保城市">
-                  <el-option v-for="(item,index) in cityOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                  <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
               <el-form-item label="参保方案" label-width="20%">
                 <el-select v-model="ruleForm.plan" placeholder="请选择参保方案">
-                  <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                  <el-option v-for="(item,index) in planOption" :label="item.insuredName" :value="item.id" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
-              <el-form-item label="参保月份" label-width="20%">
-                <el-date-picker v-model="ruleForm.insuredStart" type="month" placeholder="开始月份"></el-date-picker> 至
-                <el-date-picker v-model="ruleForm.insuredEnd" type="month" placeholder="结束月份"></el-date-picker>
+              <el-form-item label="参保状态" label-width="20%">
+                <el-select v-model="ruleForm.param.insuredStatus" placeholder="请选择参保状态">
+                  <el-option v-for="(item,index) in insuredStatusOption" :label="item.label" :value="item.value" :key="index"></el-option>
+                </el-select>
               </el-form-item>
             </div>
-            <div class="shortCon">
-              <el-form-item label="停保月份" label-width="20%">
-                <el-date-picker v-model="ruleForm.stopInsuranceStart" type="month" placeholder="选择月"></el-date-picker> 至
-                <el-date-picker v-model="ruleForm.stopInsuranceEnd" type="month" placeholder="选择月"></el-date-picker>
-              </el-form-item>
-            </div>
+<!--            <div class="shortCon">-->
+<!--              <el-form-item label="参保月份" label-width="20%">-->
+<!--                <el-date-picker v-model="ruleForm.insuredStart" type="month" placeholder="开始月份"></el-date-picker> 至-->
+<!--                <el-date-picker v-model="ruleForm.insuredEnd" type="month" placeholder="结束月份"></el-date-picker>-->
+<!--              </el-form-item>-->
+<!--            </div>-->
+<!--            <div class="shortCon">-->
+<!--              <el-form-item label="停保月份" label-width="20%">-->
+<!--                <el-date-picker v-model="ruleForm.stopInsuranceStart" type="month" placeholder="选择月"></el-date-picker> 至-->
+<!--                <el-date-picker v-model="ruleForm.stopInsuranceEnd" type="month" placeholder="选择月"></el-date-picker>-->
+<!--              </el-form-item>-->
+<!--            </div>-->
           </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button type="primary" @click="handleScreen">查询</el-button>
           <el-button @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
@@ -194,28 +203,28 @@
 </template>
 <script>
   import { mapState } from "vuex";
-  import * as AT from "./store/actionTypes";
   import fun from "@/util/fun";
   let date = fun.headDate();
   let month = new Date().getMonth() + 1;
   let defaultDate =
-    date.year + "年" + (date.month >= 10 ? date.month : "0" + date.month) + "月";
+    date.year + "-" + (date.month >= 10 ? date.month : "0" + date.month) + "月";
   export default {
     data() {
       return {
         ruleForm:{
-          companyName:"",
-          plan:"",
-          city:"",
-          insuredStart:"",
-          insuredEnd:"",
-          stopInsuranceStart:"",
-          stopInsuranceEnd:"",
+          key:"",
+          pageSize:"",
+          currentPage:"",
+          startMonth:defaultDate,
+          param:{
+            compId:"",//公司Id
+            compInsuredId:"",//参保方案Id
+            insuredCity:"",//参保城市
+            insuredStatus:"",//参保状态
+          }
         },
-        companyName:"",
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
-        selectMonth: defaultDate,
         list: [{name:"减员",type:'dec'},{name:"增员",type:'inc'}],
         closeModel: false,
         isShowScreening:false,
@@ -228,12 +237,8 @@
         stopActive:false,
         stopCount:0,
         loading:false,
-        cityOption:[
-
-        ],
-        planOption:[
-
-        ],
+        planOption:[],
+        insuredStatusOption:[],
     };
     },
     components:{
@@ -241,7 +246,9 @@
     },
     computed:{
       ...mapState({
-        privilegeVoList:state=>state.privilegeVoList
+        privilegeVoList:state=>state.privilegeVoList,
+        cityList:state=>state.cityList,
+        taxSubjectInfoList:state=>state.taxSubjectInfoList,
       }),
     },
     created(){
@@ -289,6 +296,9 @@
             }
           });
       },
+      handleScreen(){
+
+      },
       goQuick(){
         this.$router.push('/quickStaff')
       },
@@ -306,18 +316,20 @@
         this.totalListForm.currPage = 1;
         this.getList();
       },
-      changeMonth(){
-
-      },
-      handleSearch(){
-
+      changeCity(value){
+        this.$store
+          .dispatch("socialFundStore/actionInsuredGetBase", value)
+          .then(res => {
+            if(res.success){
+              this.planOption = res.data
+            }
+          });
       },
       // 重置
       handleReset(){
         for(let key in this.ruleForm){
           this.ruleForm[key] = ""
         }
-        console.log(this.ruleForm)
       },
       handleCheckTaxSubject(item) {
         this.ruleForm.taxSubjectId = item.taxSubId;

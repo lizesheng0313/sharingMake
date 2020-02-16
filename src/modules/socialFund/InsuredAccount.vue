@@ -166,7 +166,7 @@
       getList() {
         this.loading = true;
         this.$store
-          .dispatch("payMasterStore/actionGetCompMonthlyLedgerList", this.ruleForm)
+          .dispatch("socialFundStore/actionGetCompMonthlyLedgerList", this.ruleForm)
           .then(res => {
             this.loading = false
             if (res.success) {
@@ -188,7 +188,7 @@
           type: 'warning'
         }).then(() => {
           this.$store
-            .dispatch("payMasterStore/actionSaveMonthlyLedger", {
+            .dispatch("socialFundStore/actionSaveMonthlyLedger", {
               taxSubList:[data.taxSubId],
               month:data.currentMonth,
             })
@@ -205,7 +205,7 @@
         this.$refs['createForm'].validate(valid => {
           if(valid){
             this.$store
-              .dispatch("payMasterStore/actionSaveMonthlyLedger", this.createForm)
+              .dispatch("socialFundStore/actionSaveMonthlyLedger", this.createForm)
               .then(res => {
                   if(res.success){
                     this.getList()
@@ -224,7 +224,7 @@
           type: 'warning'
         }).then(() => {
           this.$store
-            .dispatch("payMasterStore/actionArchiveMonthlyLedger",{
+            .dispatch("socialFundStore/actionArchiveMonthlyLedger",{
               archiveType:data.isarchive?'CANCEL_ARCHIVE':"ARCHIVE",
               month:data.currentMonth,
               taxSubId:data.taxSubId
@@ -241,7 +241,8 @@
       },
       //生成、导入台账明细
       goAccountDetail(data){
-        this.$router.push({path:'/insuredAccountDetailed',query:{source:data.source}})
+        this.$store.commit("socialFundStore/GET_INSUREDACCOUNTITEM",data);
+        this.$router.push('/insuredAccountDetailed')
       },
       handleSizeChange(val) {
         this.totalListForm.pageSize = val;

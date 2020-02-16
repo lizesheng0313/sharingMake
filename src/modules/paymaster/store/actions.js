@@ -1,7 +1,4 @@
-import { apiEmployeeIdCard,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiEmployeesImport,apiEmployeesVerifyErrorLog,apiEmployeesTemplate,apiDeleteEmployee,apiPostEmployeesExport,apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
-import {apiBatchList, apiCreateSalary} from "../../payManage/store/api";
-import * as AT from "../../payManage/store/actionTypes";
-
+import { apiEmployeeIdCard,apiEmployeesImport,apiEmployeesVerifyErrorLog,apiEmployeesTemplate,apiDeleteEmployee,apiPostEmployeesExport,apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
 //发薪人员、员工信息列表
 export const actionGetEmployeeList = ({ dispatch },form) => {
   return apiPostEmployeeList(form)
@@ -71,17 +68,5 @@ export const actionEmployeeIdCard= ({ dispatch },idCard) => {
   return apiEmployeeIdCard(idCard)
 }
 
-//参保台账企业信息
-export const actionGetCompMonthlyLedgerList= ({ dispatch },form) => {
-  return apiGetCompMonthlyLedgerList(form)
-}
-//参保台账生成
-export const actionSaveMonthlyLedger= ({ dispatch },form) => {
-  return apiSaveMonthlyLedger(form)
-}
-//参保台账归档
-export const actionArchiveMonthlyLedger= ({ dispatch },form) => {
-  return apiArchiveMonthlyLedger(form)
-}
 
 
