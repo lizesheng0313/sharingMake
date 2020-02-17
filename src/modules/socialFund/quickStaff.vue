@@ -266,7 +266,7 @@
           .then(res => {
             if (res.success) {
               this.loading = false;
-              this.list = res.data.data;
+              this.list = res.data.data.data;
               this.total = res.data.count;
               res.data.entryUninsuredNum ? this.entryUninsuredNum = res.data.entryUninsuredNum :""
               res.data.dimissionInsuredNum ? this.dimissionInsuredNum = res.data.dimissionInsuredNum : "";

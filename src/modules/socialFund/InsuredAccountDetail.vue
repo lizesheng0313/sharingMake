@@ -11,78 +11,46 @@
               <div class="base-info-con">
                   <el-form label-width="140px">
                       <el-row>
-                          <el-col :span="12"><el-form-item label="姓名：">马大哈</el-form-item></el-col>
-                          <el-col :span="12"><el-form-item label="工号：">马大哈</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="姓名：">{{ insuredInfo.empName}}</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="工号：">{{ insuredInfo.empNo}}</el-form-item></el-col>
                       </el-row>
                       <el-row>
-                          <el-col :span="12"><el-form-item label="证件类型：">居民身份证</el-form-item></el-col>
-                          <el-col :span="12"><el-form-item label="证件号码：">101110198009080922</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="证件类型：">{{ insuredInfo.idType | filterIdType}}</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="证件号码：">{{ insuredInfo.idNo}}</el-form-item></el-col>
                       </el-row>
                       <el-row>
-                          <el-col :span="12"><el-form-item label="户籍城市：">广东省广州市</el-form-item></el-col>
-                          <el-col :span="12"><el-form-item label="户口性质：">外阜城镇</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="户籍城市：">{{ insuredInfo.householdCountry}}</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="户口性质：">{{ insuredInfo.householdRegistrationType | householdRegistrationType }}</el-form-item></el-col>
                       </el-row>
                       <el-row>
-                          <el-col :span="12"><el-form-item label="公司名称：">北京阿拉钉科技有限公司</el-form-item></el-col>
-                          <el-col :span="12"><el-form-item label="用工性质：">全职</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="公司名称：">{{ insuredInfo.taxSubName}}</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="用工性质：">{{ insuredInfo.empType | filterEmpType}}</el-form-item></el-col>
                       </el-row>
                       <el-row>
-                          <el-col :span="12"><el-form-item label="参保方案：">2019-01-02</el-form-item></el-col>
-                          <el-col :span="12"><el-form-item label="参保城市：">--</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="参保方案：">{{ insuredInfo.compInsuredName }}</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="参保城市：">{{ insuredInfo.insuredCity }}</el-form-item></el-col>
                       </el-row>
                   </el-form>
               </div>
               <div class="insured-info">
                   <span class="title">缴费信息</span>
               </div>
-              <div>
-                <div>缴费月份：12.12.12 <el-button type="text">删除补缴</el-button></div>
-                <el-table :data="list" border>
+              <div v-for="item in insuredPayList">
+                <div>缴费月份：{{ item.month }} <el-button type="text" @click="deletePayBack(item)" v-if="!item.isSupplement">删除补缴</el-button></div>
+                <el-table :data="insuredPayList" border>
                     <el-table-column prop="type" label="险种">
                       <template slot-scope="scope">
-                        <div class="number-right"> {{ scope.row.type }}</div>
+                        <div class="number-right"> {{ scope.row.insuranceType | insuranceType }}</div>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="type" label="缴费基数">
-                      <template slot-scope="scope">
-                        <div class="number-right"> {{ scope.row.type }}</div>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="个人缴费比例">
-                      <template slot-scope="scope">
-                        <div class="number-right"> {{ scope.row.type }}</div>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="个人固定金额">
-                        <template slot-scope="scope">
-                            <div class="number-right"> {{ scope.row.type }}</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="个人缴费金额">
-                        <template slot-scope="scope">
-                            <div class="number-right"> {{ scope.row.type }}</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="企业缴费比例">
-                      <template slot-scope="scope">
-                        <div class="number-right"> {{ scope.row.type }}</div>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="企业固定金额">
-                      <template slot-scope="scope">
-                        <div class="number-right"> {{ scope.row.type }}</div>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="企业缴费金额">
-                      <template slot-scope="scope">
-                        <div class="number-right"> {{ scope.row.type }}</div>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="type" label="个人企业合计">
-                      <template slot-scope="scope">
-                        <div class="number-right"> {{ scope.row.type }}</div>
-                      </template>
-                    </el-table-column>
+                    <el-table-column prop="baseNumber" label="缴费基数"></el-table-column>
+                    <el-table-column prop="personScale" label="个人缴费比例"></el-table-column>
+                    <el-table-column prop="personFixedAmount" label="个人固定金额"></el-table-column>
+                    <el-table-column prop="personPayAmount" label="个人缴费金额"></el-table-column>
+                    <el-table-column prop="compScale" label="企业缴费比例"></el-table-column>
+                    <el-table-column prop="compFixedAmount" label="企业固定金额"></el-table-column>
+                    <el-table-column prop="compPayAmount" label="企业缴费金额"></el-table-column>
+                    <el-table-column prop="totalPayAmount" label="个人企业合计"></el-table-column>
                 </el-table>
               </div>
           </div>
@@ -108,7 +76,8 @@ export default {
     const t = this;
     return {
       id:this.$route.query.id,
-      list:[],
+      insuredInfo:[],
+      insuredPayList:[]
     };
   },
   created(){
@@ -122,9 +91,31 @@ export default {
       this.$store
         .dispatch("socialFundStore/actionEmpMonthlyLedgerDetail",{id:this.id})
         .then(res=>{
-          console.log(res)
+           this.insuredInfo = res.data
+           this.insuredPayList = res.data.insuredPayList
         })
-    }
+    },
+    deletePayBack(data){
+      this.$confirm(" 是否删除所选记录！", "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+          center:false
+        }
+      ).then(() => {
+        this.$store
+          .dispatch("socialFundStore/actionEmpMonthlyLedgerDelete",{
+            id:this.id,
+            month:data.month
+          })
+          .then(res=>{
+            if(res.success){
+              this.getList()
+            }
+          })
+      }).catch(() => {})
+    },
   }
 };
 </script>

@@ -306,8 +306,7 @@
       },
       //社保增员
       showSocialIncreate(data){
-        let namelist = [data.empName]
-        this.$refs.socialIncreace.show(namelist)
+        this.$refs.socialIncreace.show([data])
       },
       handleSizeChange(val) {
         this.totalListForm.pageSize = val;

@@ -89,14 +89,14 @@
               <el-table-column prop="realCompFundTotal" label="单位公积金合计" width="120"></el-table-column>
               <el-table-column label="操作" fixed="right" width="120px">
                 <template slot-scope="scope">
-                  <el-button type="text" @click="goInsureAccountDetail(scope.row)">详情</el-button>
-                  <el-button type="text" @click="paybackCreate(scope.row)" v-if="scope.row.ledgerSource === 'GENERATE_LEDGER'">补缴</el-button>
-                  <el-popover ref="popMore" placement="bottom-end" width="60" trigger="hover" v-else>
-                    <div class="funStyle more-style" @click="paybackImport(scope.row)">补缴</div>
-                    <div class="funStyle more-style" @click="handleDelete
-                    (scope.row)">删除</div>
-                    <span slot="reference" class="more-choose">更多</span>
-                  </el-popover>
+                    <el-button type="text" @click="goInsureAccountDetail(scope.row)">详情</el-button>
+                    <el-button type="text" @click="paybackCreate(scope.row)" v-if="scope.row.ledgerSource === 'GENERATE_LEDGER'">补缴</el-button>
+                    <el-popover ref="popMore" placement="bottom-end" width="60" trigger="hover" v-else>
+                      <div class="funStyle more-style" @click="paybackImport(scope.row)">补缴</div>
+                      <div class="funStyle more-style" @click="handleDelete
+                      (scope.row)">删除</div>
+                      <span slot="reference" class="more-choose">更多</span>
+                    </el-popover>
                 </template>
               </el-table-column>
             </el-table>

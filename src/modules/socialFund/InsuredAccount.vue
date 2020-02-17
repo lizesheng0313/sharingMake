@@ -57,7 +57,7 @@
               </el-table-column>
               <el-table-column label="操作" fixed="right" width="160px">
                 <template slot-scope="scope">
-                  <span class="funStyle" @click="placeFile(scope.row)">{{ scope.row.isarchive?'归档':"取消归档" }}</span>
+                  <span class="funStyle" @click="placeFile(scope.row)">{{ scope.row.isarchive?'取消归档':"归档" }}</span>
                   <el-popover
                     ref="popMore"
                     placement="bottom-end"

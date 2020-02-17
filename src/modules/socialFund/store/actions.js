@@ -1,4 +1,4 @@
-import { apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
+import { apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
 
 // 参保 方案列表
 export const actionInsuredProjectMList = ({ dispatch },ruleForm) => {
@@ -77,4 +77,12 @@ export const actionFloatEmployeeIncreaseList= ({ dispatch },form) => {
 //减员
 export const actionFloatEmployeeDecreaseDo= ({ dispatch },form) => {
   return apiFloatEmployeeDecreaseDo(form)
+}
+//增员
+export const actionFloatEmployeeIncreaseDo= ({ dispatch },form) => {
+  return apiFloatEmployeeIncreaseDo(form)
+}
+//增员参保方案
+export const actionGetCompInsuredProject= ({ dispatch },) => {
+  return apiGetCompInsuredProject()
 }

@@ -10,9 +10,6 @@
     >
       <div class="screening-wapper">
         <div class="increase-tip">温馨提示：若参保人基数/方案不同，请选择【批量增员】方式导入实现增员</div>
-        <div class="name-con" v-if="!selectEmployee">
-          <span class="name-box" v-for="(item,index) in nameList" :key="index">{{ item }}、</span>
-        </div>
         <el-form :model="socialIncreaceForm" ref="socialIncreaceForm" label-width="140px" class="demo-ruleForm">
           <div class="shortCon" v-if="selectEmployee">
             <el-form-item label="人员" prop="employee" :rules="{required: true, message: '人员不能为空', trigger: 'blur'}">
@@ -27,18 +24,21 @@
             </el-form-item>
           </div>
           <div class="shortCon">
+            <el-form-item label="姓名" v-if="!selectEmployee">
+              <span class="name-box" v-for="(item,index) in nameList" :key="index">{{ item }}、</span>
+            </el-form-item>
             <el-form-item label="参保方案"
-                          prop="plan"
+                          prop="compInsuredId"
                           :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
-              <el-select v-model="socialIncreaceForm.plan" placeholder="请选择参保方案">
-                <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              <el-select v-model="socialIncreaceForm.compInsuredId" placeholder="请选择参保方案">
+                <el-option v-for="(item,index) in planOption" :label="item.insuredName" :value="item.id" :key="index"></el-option>
               </el-select>
             </el-form-item>
           </div>
           <div class="shortCon">
-            <el-form-item label="社保起缴月份" prop="socialMonth"
+            <el-form-item label="社保起缴月份" prop="socialInsuranceStartMonth"
                           :rules="{required: true, message: '请选择社保起缴月份', trigger: 'blur'}">
-              <el-date-picker v-model="socialIncreaceForm.socialMonth" type="month" placeholder="请选择"></el-date-picker>
+              <el-date-picker v-model="socialIncreaceForm.socialInsuranceStartMonth" type="month" placeholder="请选择"></el-date-picker>
             </el-form-item>
           </div>
           <div class="shortCon">
@@ -85,11 +85,13 @@ export default {
   data() {
     return {
       socialIncreaceForm:{
-        plan:"",
-        socialMonth:"",
-        socialBase:"",
-        providentMonth:"",
-        providentBase:"",
+        accumulationFundBaseNumber:"",
+        accumulationFundStartMonth:"",
+        compEmpIds:[],
+        compInsuredId:"",
+        socialInsuranceBaseNumber:"",
+        socialInsuranceStartMonth:"",
+
         providentMonthType:"1",
         employee:""
       },
@@ -104,15 +106,31 @@ export default {
     };
   },
   methods: {
-    show(nameList,params) {
+    show(data) {
       this.isShowIncrease = true;
-      this.nameList = nameList;
-      console.log(this.nameList)
+      this.nameList = data.map(item=>item.empName);
+      this.socialIncreaceForm.compEmpIds = data.map(item=>item.compEmpId)
+        this.$store
+        .dispatch("socialFundStore/actionGetCompInsuredProject", )
+        .then(res => {
+          if(res.success){
+            this.planOption = res.data
+          }
+        });
     },
     //增员导入
     handleIncreateSocial(){
       this.$refs.socialIncreaceForm.validate(valid => {
-
+        if(valid){
+          this.$store
+            .dispatch("socialFundStore/actionFloatEmployeeIncreaseDo", )
+            .then(res => {
+              if(res.success){
+                this.$message.success("增员导入成功")
+                this.isShowIncrease = false
+              }
+            });
+        }
       })
     },
   }
@@ -132,8 +150,7 @@ export default {
     text-overflow: ellipsis;
     .name-box{
       padding-right: 10px;
-      font-size: 16px;
-      font-weight: bold;
+      font-size: 14px;
     }
   }
   .el-select {

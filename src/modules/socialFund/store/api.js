@@ -146,3 +146,18 @@ export function apiFloatEmployeeDecreaseDo(form) {
     data:form
   })
 }
+//增员
+export function apiFloatEmployeeIncreaseDo(form) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/increase/do',
+    method: 'post',
+    data:form
+  })
+}
+//增员参保方案
+export function apiGetCompInsuredProject() {
+  return fetch({
+    url: '/api/xsalary/insuredProject/manage/getCompInsuredProject',
+    method: 'get',
+  })
+}
