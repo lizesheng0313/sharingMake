@@ -17,21 +17,21 @@
             <div class="shortCon"><span class="title">户籍城市</span><span>{{ this.selectItem.householdCountry }}</span></div>
             <div class="shortCon"><span class="title">户口性质</span><span>{{this.selectItem.householdRegistrationType }}</span></div>
             <div class="shortCon" style="display: flex">
-              <el-form-item label="补缴起止月份" prop="socialMonthStart" :rules="{required: true, message: '请选择社保起缴月份', trigger: 'blur'}">
-                <el-date-picker v-model="paybackForm.socialMonthStart" type="month" placeholder="请选择"></el-date-picker>
+              <el-form-item label="补缴起止月份" prop="startDate" :rules="{required: true, message: '请选择社保起缴月份', trigger: 'blur'}">
+                <el-date-picker v-model="paybackForm.startDate" type="month" placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
               </el-form-item>
               <span style="display: inline-block; margin:0 10px;line-height: 40px;height: 40px" >至</span>
-              <el-form-item prop="socialMonthEnd" :rules="{required: true, message: '请选择社保止缴月份', trigger: 'blur'}" class="date-picker-right">
-                <el-date-picker v-model="paybackForm.socialMonthEnd" type="month" placeholder="请选择"></el-date-picker>
+              <el-form-item prop="endDate" :rules="{required: true, message: '请选择社保止缴月份', trigger: 'blur'}" class="date-picker-right">
+                <el-date-picker v-model="paybackForm.endDate" type="month" placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
               </el-form-item>
             </div>
           </el-form>
         </div>
         <div style="padding:0 20px;margin: 30px 0px 0px 0px">
-          <el-table :data="insuranceList" border height="300">
+          <el-table :data="paybackForm.importSupplementIncuredVo" border height="300">
             <el-table-column prop="month" label="缴纳险种" >
               <template slot-scope="scope">
-                <span>{{ scope.row.type }}</span>
+                <span>{{ scope.row.type | insuranceType }}</span>
               </template>
             </el-table-column>
             <el-table-column label="个人缴纳金额">
@@ -65,41 +65,47 @@ export default {
   data() {
     return {
       paybackForm:{
-        plan:"",
-        socialMonthStart:"",
-        socialMonthEnd:"",
-        socialBase:"",
-        providentMonthStart:"",
-        providentMonthEnd:"",
-        providentBase:"",
-        providentMonthType:"1",
+        startDate:"",
+        endDate:"",
+        supplementType:"IMPORT",
+        importSupplementIncuredVo:[
+          {type:"ENDOWMENT_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"MEDICAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"UNEMPLOYMENT_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"INJURY_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"BIRTH_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"SERIOUS_DISEASE_TREATMENT",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"ACCUMULATION_FUND",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"COMPENSATORY_ACCUMULATION_FUND",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"COMPENSATORY_ENDOWMENT_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"COMPENSATORY_MEDICAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"COMPENSATORY_MEDICAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"COMPENSATORY_UNEMPLOYMENT_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+        ],
       },
-      planOption:[{label:"111",value:"111"}],
       closeModel: false,
-      nameList:[],
-      insuranceList:[
-        {type:"养老保险",personMoney:"100",companeyMoney:"100万"},
-        {type:"医疗保险",personMoney:"100",companeyMoney:"100万"},
-        {type:"养老保险",personMoney:"100",companeyMoney:"100万"},
-        {type:"医疗保险",personMoney:"100",companeyMoney:"100万"},
-        {type:"养老保险",personMoney:"100",companeyMoney:"100万"},
-      ],
       isShowPayback:false,
     };
   },
   created(){
-    console.log(this.selectItem)
   },
   methods: {
     show(){
-      this.isShowPayback= true
+      this.isShowPayback= true;
+      this.$refs.paybackForm?this.$refs.paybackForm.clearValidate():""
     },
     //代缴
     handlePayback(){
       this.$refs.paybackForm.validate(valid => {
         if(valid){
           this.isShowPayback = false;
-          this.$emit("reFreshList",true)
+          this.$store
+            .dispatch("socialFundStore/actionEmpMonthlyLedgerSupple",this.paybackForm)
+            .then(res => {
+              if(res.success){
+                this.$emit("reFreshList",true)
+              }
+            })
         }
       })
     },
@@ -120,13 +126,16 @@ export default {
   .shortCon{
     width:450px;
     color:#606266;
-    line-height: 40px;
-    height: 40px;
+    line-height: 50px;
+    height: 50px;
     span{
       display: inline-block;
     }
     .title{
-      padding:0 40px 0 60px;
+      width: 80px;
+      text-align: right;
+      margin-right: 40px;
+      margin-left: 20px;
     }
   }
   .increase-tip{

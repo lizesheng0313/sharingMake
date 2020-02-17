@@ -21,11 +21,11 @@
           </div>
           <div class="shortCon" style="display: flex">
              <el-form-item label="补缴起止月份" prop="startDate" :rules="{required: true, message: '请选择起缴月份', trigger: 'blur'}">
-                <el-date-picker v-model="paybackForm.startDate" type="month" placeholder="请选择"></el-date-picker>
+                <el-date-picker v-model="paybackForm.startDate" type="month" placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
              </el-form-item>
              <span style="display: inline-block; margin:0 10px;line-height: 40px;height: 40px" >至</span>
              <el-form-item prop="endDate" :rules="{required: true, message: '请选择止缴月份', trigger: 'blur'}" class="date-picker-right">
-                <el-date-picker v-model="paybackForm.endDate" type="month" placeholder="请选择"></el-date-picker>
+                <el-date-picker v-model="paybackForm.endDate" type="month" placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
              </el-form-item>
           </div>
           <div class="shortCon">
@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       paybackForm:{
+        id:"",
         compInsuredId:"",
         startDate:"",
         endDate:"",
@@ -69,8 +70,10 @@ export default {
     };
   },
   methods: {
-    show(insuredCity) {
+    show(data) {
       this.isShowPayback = true;
+      let insuredCity = data.insuredCity ? data.insuredCity :"110000"
+      this.paybackForm.id = data.id;
       this.$store
         .dispatch("socialFundStore/actionInsuredGetBase", insuredCity)
         .then(res => {
@@ -96,7 +99,6 @@ export default {
     },
     cancelPayBack(){
       this.isShowPayback = false;
-      this.$emit("reFreshList",true)
     }
   }
 };

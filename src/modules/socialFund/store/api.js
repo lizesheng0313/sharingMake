@@ -103,6 +103,14 @@ export function apiEmpMonthlyLedgerSupple(form) {
     data:form
   })
 }
+// 月度台账员工详情
+export function apiEmpMonthlyLedgerDetail(form) {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/empMonthlyLedgerDetail',
+    method: 'post',
+    data:form
+  })
+}
 
 //快速增减员列表
 export function apiFloatEmployeeList(form) {

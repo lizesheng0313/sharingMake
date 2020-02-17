@@ -107,14 +107,24 @@ export default {
   data() {
     const t = this;
     return {
-      list:[{name:'111'},{name:"2222"}],
+      id:this.$route.query.id,
+      list:[],
     };
+  },
+  created(){
+    this.getList()
   },
   mounted() {
 
   },
   methods: {
-
+    getList(){
+      this.$store
+        .dispatch("socialFundStore/actionEmpMonthlyLedgerDetail",{id:this.id})
+        .then(res=>{
+          console.log(res)
+        })
+    }
   }
 };
 </script>

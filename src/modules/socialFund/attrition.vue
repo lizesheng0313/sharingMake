@@ -89,7 +89,7 @@
               </el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
               <el-table-column prop="idCard" label="证件号码" width="180"></el-table-column>
-              <el-table-column prop="compName" label="公司名称"></el-table-column>
+              <el-table-column prop="compName" label="公司名称" width="160"></el-table-column>
               <el-table-column prop="insuredStatus" label="参保状态" width="140">
                 <template slot-scope="scope">{{ scope.row.insuredCity }}</template>
               </el-table-column>
@@ -141,14 +141,14 @@
           <el-form :model="ruleForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
             <div class="shortCon">
               <el-form-item label="公司名称" label-width="20%">
-                <el-select v-model="ruleForm.param.insuredCity" placeholder="请选择参保城市" filterable>
+                <el-select v-model="ruleForm.param.compId" placeholder="请选择参保城市" filterable>
                   <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
               <el-form-item label="参保城市" label-width="20%">
-                <el-select v-model="ruleForm.city" placeholder="请选择参保城市" @change="changeCity">
+                <el-select v-model="ruleForm.param.insuredCity" placeholder="请选择参保城市" @change="changeCity">
                   <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -191,8 +191,9 @@
           key:"",
           pageSize:1,
           currPage:1,
-          startMonth:defaultDate,
-          statusFlag:"0",
+          startMonth:"2020-03",
+          statusFlag:"",
+          taxSubId:"103",
           param:{
             compId:"",//公司Id
             compInsuredId:"",//参保方案Id

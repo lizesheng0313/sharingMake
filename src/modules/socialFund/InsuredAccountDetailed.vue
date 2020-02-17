@@ -300,12 +300,11 @@
       },
       //详情
       goInsureAccountDetail(data){
-        this.$router.push('/insuredAccountDetail')
+        this.$router.push({path:'/insuredAccountDetail',query:{id:data.id}})
       },
       //补缴(生成)
       paybackCreate(data){
-        let insuredCity = data.insuredCity ? data.insuredCity :"110000"
-        this.$refs.paybackCreate.show(insuredCity)
+        this.$refs.paybackCreate.show(data)
       },
       //补缴(导入)
       paybackImport(data){
@@ -335,7 +334,7 @@
       },
       //更新
       reFreshList(){
-        console.log('111')
+       this.getList()
       },
       hanleCloseImport(){
         this.popShow.isshow = false
