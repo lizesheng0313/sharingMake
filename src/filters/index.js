@@ -233,6 +233,18 @@ const filterEmpSex = (val) => {
     }
   }
 };
+ //参保状态
+const insuredStatus = (val) => {
+  switch (val) {
+    case 'INSURED_STOP': {
+      return '已停保';
+    }
+    case 'INSURED_ING': {
+      return '参保中';
+    }
+  }
+};
+
  const insuranceType = (val) => {
   switch (val) {
     case 'ENDOWMENT_INSURANCE': {
@@ -340,4 +352,5 @@ export default {
   filterEducation,
   householdRegistrationType,
   workType,
+  insuredStatus
 }

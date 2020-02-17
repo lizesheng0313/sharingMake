@@ -69,18 +69,18 @@ export default {
         endDate:"",
         supplementType:"IMPORT",
         importSupplementIncuredVo:[
-          {type:"ENDOWMENT_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"MEDICAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"UNEMPLOYMENT_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"INJURY_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"BIRTH_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"SERIOUS_DISEASE_TREATMENT",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"ACCUMULATION_FUND",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"COMPENSATORY_ACCUMULATION_FUND",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"COMPENSATORY_ENDOWMENT_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"COMPENSATORY_MEDICAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"COMPENSATORY_MEDICAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"COMPENSATORY_UNEMPLOYMENT_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"ENDOWMENT_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"MEDICAL_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"UNEMPLOYMENT_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"INJURY_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"BIRTH_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"SERIOUS_DISEASE_TREATMENT",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"ACCUMULATION_FUND",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"COMPENSATORY_ACCUMULATION_FUND",projectType:"ACCUMULATION_FUND",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"COMPENSATORY_ENDOWMENT_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"COMPENSATORY_MEDICAL_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"COMPENSATORY_MEDICAL_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
+          {type:"COMPENSATORY_UNEMPLOYMENT_INSURANCE",personMoney:"0.00",projectType:"SOCIAL_INSURANCE",companeyMoney:"0.00"},
         ],
       },
       closeModel: false,
@@ -99,6 +99,7 @@ export default {
       this.$refs.paybackForm.validate(valid => {
         if(valid){
           this.isShowPayback = false;
+          this.paybackForm.id = this.selectItem.id;
           this.$store
             .dispatch("socialFundStore/actionEmpMonthlyLedgerSupple",this.paybackForm)
             .then(res => {

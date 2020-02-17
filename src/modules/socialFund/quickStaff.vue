@@ -37,11 +37,11 @@
             <span class="staff-total">
               <span class="wait-report" @click="selectNum(true)">
                 入职未投保
-                <i :class="['num', uninsuredActive?'active':'']">{{ uninsuredCount?uninsuredCount:0 }}</i>人
+                <i :class="['num', uninsuredActive?'active':'']">{{ entryUninsuredNum?entryUninsuredNum:0 }}</i>人
               </span>
               <span class="wait-report" @click="selectNum(false)">
-                入职已投保
-                <i :class="['num', !uninsuredActive?'active':'']">{{ insuredCount ? insuredCount:0 }}</i>人
+                投保中已离职
+                <i :class="['num', !uninsuredActive?'active':'']">{{ dimissionInsuredNum ? dimissionInsuredNum:0 }}</i>人
               </span>
             </span>
           </div>
@@ -66,46 +66,32 @@
                 label="编号"
                 width="50">
               </el-table-column>
-              <el-table-column prop="name" label="姓名" width="140">
+              <el-table-column prop="empName" label="姓名" width="140">
                 <template slot-scope="scope">
-                  <span>{{ scope.row.name }}</span>
+                  <span>{{ scope.row.empName }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
-              <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
-              <el-table-column prop="idNo" label="公司名称"></el-table-column>
-              <el-table-column prop="empSex" label="用工性质" width="140">
-                <template slot-scope="scope">{{ scope.row.empSex }}</template>
+              <el-table-column prop="idCard" label="证件号码" width="180"></el-table-column>
+              <el-table-column prop="compName" label="公司名称" width="160"></el-table-column>
+              <el-table-column prop="empType" label="用工性质" width="140">
+                <template slot-scope="scope">{{ scope.row.empType | filterEmpType }}</template>
               </el-table-column>
               <template v-if="uninsuredActive">
-                <el-table-column prop="workerStatus" label="用工性质" width="140">
-                  <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
+                <el-table-column prop="empDay" label="入职日期" width="140"></el-table-column>
+                <el-table-column prop="householdCity" label="户口所在城市" width="140"></el-table-column>
+                <el-table-column prop="householdRegistrationType" label="户口性质" width="140">
+                  <template slot-scope="scope">{{ scope.row.householdRegistrationType }}</template>
                 </el-table-column>
-                <el-table-column prop="workerStatus" label="入职日期" width="140">
-                  <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
-                </el-table-column>
-                <el-table-column prop="reportStatus" label="户口所在城市" width="140">
-                  <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
-                </el-table-column>
-                <el-table-column prop="idValidStatus" label="户口性质" width="140">
-                  <template slot-scope="scope">{{ scope.row.idValidStatus }}</template>
-                </el-table-column>
+                <el-table-column prop="workCity" label="工作城市" width="140"></el-table-column>
               </template>
               <template v-else>
-                <el-table-column prop="workerStatus" label="离职日期" width="140">
-                  <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
-                </el-table-column>
-                <el-table-column prop="workerStatus" label="参保城市" width="140">
-                  <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
-                </el-table-column>
-                <el-table-column prop="reportStatus" label="参保方案" width="140">
-                  <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
-                </el-table-column>
-                <el-table-column prop="idValidStatus" label="社保起缴月份" width="140">
-                  <template slot-scope="scope">{{ scope.row.reportStatus }}</template>
-                </el-table-column>
+                <el-table-column prop="leaveDay" label="最后工作日" width="140"></el-table-column>
+                <el-table-column prop="insuredCity" label="参保城市" width="140"></el-table-column>
+                <el-table-column prop="compInsuredName" label="参保方案" width="140"></el-table-column>
+                <el-table-column prop="socialInsuranceStartMonth" label="社保起缴月份" width="140"></el-table-column>
               </template>
-              <el-table-column label="操作" fixed="right" width="280px">
+              <el-table-column label="操作" fixed="right" width="120px">
                 <template slot-scope="scope">
                   <el-button v-if="uninsuredActive" type="text" @click="showSocialIncreate(scope.row)">社保增员</el-button>
                   <el-button v-else type="text" @click="showSocialDecreate(scope.row)">社保减员</el-button>
@@ -135,40 +121,43 @@
           <el-form :model="ruleForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
             <div class="shortCon">
               <el-form-item label="公司名称" label-width="20%">
-                <el-input v-model="ruleForm.companyName"></el-input>
-              </el-form-item>
-            </div>
-            <div class="shortCon">
-              <el-form-item label="用工性质" label-width="20%">
-                <el-select v-model="ruleForm.city" placeholder="请选择用工性质">
-                  <el-option v-for="(item,index) in cityOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                <el-select v-model="ruleForm.taxSubId" multiple placeholder="请选择公司名称">
+                  <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
-              <el-form-item label="工作城市" label-width="20%">
-                <el-select v-model="ruleForm.plan" placeholder="请选择工作城市">
-                  <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              <el-form-item label="用工性质" label-width="20%">
+                <el-select v-model="ruleForm.empType" placeholder="请选择用工性质">
+                  <el-option v-for="(item,index) in employTypeOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </div>
+            <div class="shortCon" v-if="uninsuredActive">
+              <el-form-item label="参保城市" label-width="20%">
+                <el-select v-model="ruleForm.insuredCity" placeholder="请选择工作城市" filterable>
+                  <el-option v-for="(item,index) in cityList" :label="item.insuredName" :value="item.code" :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </div>
+            <div class="shortCon" v-else>
+              <el-form-item label="参保城市" label-width="20%">
+                <el-select v-model="ruleForm.workCity" placeholder="请选择工作城市" filterable>
+                  <el-option v-for="(item,index) in cityList" :label="item.insuredName" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
               <el-form-item label="户口性质" label-width="20%">
-                <el-select v-model="ruleForm.plan" placeholder="请选择户口性质">
-                  <el-option v-for="(item,index) in planOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                <el-select v-model="ruleForm.householdRegistrationType" placeholder="请选择户口性质">
+                  <el-option v-for="(item,index) in householdRegistrationTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon" v-if="uninsuredActive">
-              <el-form-item label="入职日期" label-width="20%">
-                <el-date-picker v-model="ruleForm.enterStart" type="month" placeholder="开始月份"></el-date-picker> 至
-                <el-date-picker v-model="ruleForm.enterEnd" type="month" placeholder="结束月份"></el-date-picker>
-              </el-form-item>
-            </div>
-            <div class="shortCon" v-else>
-              <el-form-item label="离职日期" label-width="20%">
-                <el-date-picker v-model="ruleForm.leaveStart" type="month" placeholder="选择月"></el-date-picker> 至
-                <el-date-picker v-model="ruleForm.leaveEnd" type="month" placeholder="选择月"></el-date-picker>
+              <el-form-item :label="uninsuredActive?'入职日期':'离职日期'" label-width="20%">
+                <el-date-picker v-model="ruleForm.startDate" type="month" placeholder="开始月份"></el-date-picker> 至
+                <el-date-picker v-model="ruleForm.endDate" type="month" placeholder="结束月份"></el-date-picker>
               </el-form-item>
             </div>
           </el-form>
@@ -189,10 +178,10 @@
   import socialIncreace from './components/socialIncreace'
   import socialDecreace from './components/socialDecrease'
   import { mapState } from "vuex";
-  import * as AT from "./store/actionTypes";
   import fun from "@/util/fun";
   let date = fun.headDate();
   let month = new Date().getMonth() + 1;
+  import * as constData from "./util/constData";
   let defaultDate =
     date.year + "年" + (date.month >= 10 ? date.month : "0" + date.month) + "月";
   export default {
@@ -209,25 +198,26 @@
     data() {
       return {
           ruleForm:{
-            startMonth:"",
-            companyName:"",
-            plan:"",
-            city:"",
-            enterStart:"",
-            enterEnd:"",
-            leaveStart:"",
-            leaveEnd:"",
+            taxSubId:"",
+            currPage:"1",
+            empType:"",
+            insuredCity:"",
+            startDate:"",
+            endDate:"",
+            householdRegistrationType:"",
+            key:"",
+            pageSize:"20",
+            workCity:"",
           },
           cityOption:[
 
           ],
-          planOption:[
-
-          ],
-          companyName:"",
+          planOption:[],
+          employTypeOption:constData.enumEmpTypeOption,
+          householdRegistrationTypeOption:constData.householdRegistrationTypeOption,
           screenWidth: document.body.clientWidth,// 屏幕尺寸
           screenHeight: document.body.clientHeight - 330,
-          list: [{name:"妞妞"},{name:"丫丫"}],
+          list: [],
           closeModel: false,
           isShowScreening:false,
           isShowDecrease:false,
@@ -238,16 +228,20 @@
           insuredCount:0,
           loading:false,
           selectNameList:[],
+          entryUninsuredNum:"",
+          dimissionInsuredNum:""
       };
     },
 
     computed:{
       ...mapState({
-        privilegeVoList:state=>state.privilegeVoList
+        privilegeVoList:state=>state.privilegeVoList,
+        taxSubjectInfoList:state=>state.taxSubjectInfoList,
+        cityList:state=>state.cityList
       }),
     },
     created(){
-
+      this.getList()
     },
     mounted() {
       const that = this;
@@ -262,22 +256,20 @@
     methods: {
       selectNum(type){
         this.uninsuredActive = type
+        this.getList()
       },
       getList() {
         this.loading = true;
+        let actionUrl = this.uninsuredActive?"actionFloatEmployeeIncreaseList":"actionFloatEmployeeIncreaseUnlist"
         this.$store
-          .dispatch("taxPageStore/actionEmpCollectList", this.ruleForm)
+          .dispatch("socialFundStore/"+actionUrl, this.ruleForm)
           .then(res => {
             if (res.success) {
               this.loading = false;
-              this.total = res.data.count;
               this.list = res.data.data;
-              this.increaseCount = res.data.increaseCount;
-              this.decreaseCount = res.data.decreaseCount;
-              this.awaitReportCount = res.data.awaitReportCount;
-              this.normalCount = res.data.normalCount;
-              this.failReportCount = res.data.failReportCount;
-              this.awaitFeedBackCount = res.data.awaitFeedBackCount;
+              this.total = res.data.count;
+              res.data.entryUninsuredNum ? this.entryUninsuredNum = res.data.entryUninsuredNum :""
+              res.data.dimissionInsuredNum ? this.dimissionInsuredNum = res.data.dimissionInsuredNum : "";
             }
           });
       },
@@ -321,8 +313,6 @@
       //批量选择
       handleSelectionPerson(val){
         this.selectNameList = val.map((item)=>item.name)
-        console.log(this.selectNameList)
-
       },
       //社保增员
       showSocialIncreate(data){
@@ -348,8 +338,8 @@
           .dispatch("taxPageStore/actionTaxEmpCollectNewListExport", this.ruleForm)
       },
       handleSizeChange(val) {
-        this.totalListForm.pageSize = val;
-        this.totalListForm.currPage = 1;
+        this.ruleForm.pageSize = val;
+        this.ruleForm.currPage = 1;
         this.getList();
       },
       //翻页

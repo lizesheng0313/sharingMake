@@ -91,7 +91,7 @@
               <el-table-column prop="idCard" label="证件号码" width="180"></el-table-column>
               <el-table-column prop="compName" label="公司名称" width="160"></el-table-column>
               <el-table-column prop="insuredStatus" label="参保状态" width="140">
-                <template slot-scope="scope">{{ scope.row.insuredCity }}</template>
+                <template slot-scope="scope">{{ scope.row.insuredStatus | insuredStatus }}</template>
               </el-table-column>
               <el-table-column prop="insuredCity" label="参保城市" width="140">
                 <template slot-scope="scope">{{ scope.row.insuredCity }}</template>
@@ -106,12 +106,14 @@
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
                   <span class="funStyle" @click="goDetail(scope.row)">详情</span>
+                  <span class="funStyle" @click="showSocialIncreate(scope.row)" v-if="scope.row.insuredStatus === 'INSURED_STOP'">继续参保</span>
                   <el-popover
                     ref="popMore"
                     placement="bottom-end"
                     width="60"
+                    v-else
                     trigger="hover">
-                    <div class="funStyle more-style">减员</div>
+                    <div class="funStyle more-style" @click="showSocialDecreate(scope.row)">减员</div>
                     <div class="funStyle more-style">删除</div>
                     <span slot="reference" class="more-choose">更多</span>
                   </el-popover>
@@ -141,14 +143,14 @@
           <el-form :model="ruleForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
             <div class="shortCon">
               <el-form-item label="公司名称" label-width="20%">
-                <el-select v-model="ruleForm.param.compId" placeholder="请选择参保城市" filterable>
+                <el-select v-model="ruleForm.taxSubId" placeholder="请选择参保城市" filterable>
                   <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon">
               <el-form-item label="参保城市" label-width="20%">
-                <el-select v-model="ruleForm.param.insuredCity" placeholder="请选择参保城市" @change="changeCity">
+                <el-select v-model="ruleForm.insuredCity" placeholder="请选择参保城市" @change="changeCity">
                   <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -162,7 +164,7 @@
             </div>
             <div class="shortCon">
               <el-form-item label="参保状态" label-width="20%">
-                <el-select v-model="ruleForm.param.insuredStatus" placeholder="请选择参保状态">
+                <el-select v-model="ruleForm.insuredStatus" placeholder="请选择参保状态">
                   <el-option v-for="(item,index) in insuredStatusOption" :label="item.label" :value="item.value" :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -174,6 +176,10 @@
           <el-button @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
+      <!-- 社保增员 -->
+      <socialIncreace ref="socialIncreace"></socialIncreace>
+      <!-- 社保减员 -->
+      <social-decreace ref="socialDecreace" @freshList = getList></social-decreace>
     </div>
   </div>
 </template>
@@ -182,24 +188,23 @@
   import fun from "@/util/fun";
   let date = fun.headDate();
   let month = new Date().getMonth() + 1;
+  import socialDecreace from './components/socialDecrease'
+  import socialIncreace from './components/socialIncreace'
   let defaultDate =
     date.year + "-" + (date.month >= 10 ? date.month : "0" + date.month);
   export default {
     data() {
       return {
         ruleForm:{
-          key:"",
-          pageSize:1,
-          currPage:1,
-          startMonth:"2020-03",
-          statusFlag:"",
-          taxSubId:"103",
-          param:{
-            compId:"",//公司Id
-            compInsuredId:"",//参保方案Id
-            insuredCity:"",//参保城市
-            insuredStatus:"",//参保状态
-          }
+          "compInsuredId": "",
+          "currPage": 1,
+          "insuredCity": "",
+          "insuredStatus": "",
+          "key": "",
+          "pageSize": 20,
+          "startMonth": "2020-02",
+          "statusFlag": "1",
+          "taxSubId": ""
         },
         screenWidth: document.body.clientWidth,// 屏幕尺寸
         screenHeight: document.body.clientHeight - 330,
@@ -222,6 +227,8 @@
     };
     },
     components:{
+      socialDecreace,
+      socialIncreace,
 
     },
     computed:{
@@ -293,6 +300,15 @@
         this.$store
           .dispatch("taxPageStore/actionTaxEmpCollectNewListExport", this.ruleForm)
       },
+      //社保减员
+      showSocialDecreate(data){
+        this.$refs.socialDecreace.show([data])
+      },
+      //社保增员
+      showSocialIncreate(data){
+        let namelist = [data.empName]
+        this.$refs.socialIncreace.show(namelist)
+      },
       handleSizeChange(val) {
         this.totalListForm.pageSize = val;
         this.totalListForm.currPage = 1;
@@ -304,7 +320,6 @@
           .then(res => {
             if(res.success){
               this.planOption = res.data
-              console.log(res)
             }
           });
       },

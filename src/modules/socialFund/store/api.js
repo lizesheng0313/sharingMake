@@ -108,7 +108,7 @@ export function apiEmpMonthlyLedgerDetail(form) {
   return oldFetch({
     url: 'xsalary/monthlyLedger/empMonthlyLedgerDetail',
     method: 'post',
-    data:form
+    params:form
   })
 }
 
@@ -120,5 +120,29 @@ export function apiFloatEmployeeList(form) {
     data:form
   })
 }
+//入职未投保
+export function apiFloatEmployeeIncreaseUnlist(form) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/increase/unList',
+    method: 'post',
+    data:form
+  })
+}
 
+//离职已投保
+export function apiFloatEmployeeIncreaseList(form) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/increase/list',
+    method: 'post',
+    data:form
+  })
+}
 
+//减员
+export function apiFloatEmployeeDecreaseDo(form) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/decrease/do',
+    method: 'post',
+    data:form
+  })
+}

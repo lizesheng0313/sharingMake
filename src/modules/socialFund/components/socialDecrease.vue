@@ -9,25 +9,26 @@
       :close-on-click-modal="closeModel"
     >
       <div class="screening-wapper">
-        <div class="name-con">
-          <span class="name-box" v-for="(item,index) in nameList" :key="index">{{ item }}、</span>
-        </div>
         <el-form :model="socialDecreaceForm" ref="socialDecreaceForm" label-width="140px" class="demo-ruleForm">
           <div class="shortCon">
-            <el-form-item label="社保停缴月份" prop="socialMonth"
+            <el-form-item label="社保停缴月份" prop="socialInsuranceEndMonth"
                           :rules="{required: true, message: '请选择社保停缴月份', trigger: 'blur'}">
-              <el-date-picker v-model="socialDecreaceForm.socialMonth" type="month" placeholder="请选择"></el-date-picker>
+              <el-date-picker v-model="socialDecreaceForm.socialInsuranceEndMonth" value-format="yyyy-MM"
+                              type="month" placeholder="请选择"></el-date-picker>
             </el-form-item>
           </div>
           <div class="shortCon">
-            <el-form-item label="公积金停缴月份" :prop="socialDecreaceForm.providentMonthType === '2' ? 'providentMonth':'providentMonthType'"
+            <el-form-item label="公积金停缴月份" prop="accumulationFundEndMonth"
                           :rules="{ required: true, message: '请选择公积金停缴月份', trigger: 'blur'}">
               <el-radio-group v-model="socialDecreaceForm.providentMonthType">
-                <el-radio-button label="1">同社保</el-radio-button>
-                <el-radio-button label="2">选择</el-radio-button>
+                <el-radio-button label = "1">同社保</el-radio-button>
+                <el-radio-button label = "2">选择</el-radio-button>
               </el-radio-group>
               <span class="provident-month">
-                    <el-date-picker v-if="socialDecreaceForm.providentMonthType==2" v-model="socialDecreaceForm.providentMonth" type="month" placeholder="请选择"></el-date-picker>
+                    <el-date-picker v-if="socialDecreaceForm.providentMonthType==2"
+                                    v-model="socialDecreaceForm.accumulationFundEndMonth"
+                                    value-format="yyyy-MM"
+                                    type="month" placeholder="请选择"></el-date-picker>
                 </span>
             </el-form-item>
           </div>
@@ -45,23 +46,38 @@ export default {
   data() {
     return {
       socialDecreaceForm:{
-          socialMonth:"",
-          providentMonth:"",
+          socialInsuranceEndMonth:"",
+          accumulationFundEndMonth:"",
           providentMonthType:"1",
         },
+        compEmpIds:[],
         closeModel: false,
         isShowDecrease:false,
         nameList:[],
     };
   },
   methods: {
-    show(nameList,params) {
+    show(data) {
       this.isShowDecrease = true;
-      this.nameList = nameList;
+      this.compEmpIds = data.map(item=>item.compEmpId)
     },
     handleDecreateSocial(){
+      this.socialDecreaceForm.accumulationFundEndMonth = this.socialDecreaceForm.providentMonthType === "1" ?
+        this.socialDecreaceForm.socialInsuranceEndMonth: this.socialDecreaceForm.accumulationFundEndMonth
       this.$refs.socialDecreaceForm.validate(valid => {
-
+        if(valid){
+          this.$store
+            .dispatch("socialFundStore/actionFloatEmployeeDecreaseDo", {
+              compEmpIds:this.compEmpIds,
+              socialInsuranceEndMonth:this.socialDecreaceForm.socialInsuranceEndMonth,
+              accumulationFundEndMonth: this.socialDecreaceForm.accumulationFundEndMonth
+            }).then(res => {
+                if(res.success){
+                  this.isShowDecrease = false;
+                  this.$emit("freshList")
+                }
+            })
+        }
       })
     }
   }

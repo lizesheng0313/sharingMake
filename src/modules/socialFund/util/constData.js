@@ -70,3 +70,34 @@ export const ruleOption = [
       value:"ZERO_EXCEPT_YUAN"
   },
 ]
+
+//用工性质
+export const enumEmpTypeOption = [
+  {
+    label:"全职",
+    value:"FULL_TIME"
+  },{
+    label:"兼职",
+    value:"PART_TIME"
+  },{
+    label:"实习",
+    value:"PRACTICE"
+  },{
+    label:"劳务",
+    value:"LABOUR"
+  },{
+    label:"退休返聘",
+    value:"RE_EMPLOY"
+  }
+]
+
+// 户口性质
+export const householdRegistrationTypeOption = [
+  {
+    label:"城镇户口",
+    value:"CITY"
+  },{
+    label:"农村户口",
+    value:"VILLAGE"
+  }
+]

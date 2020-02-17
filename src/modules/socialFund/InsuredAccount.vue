@@ -116,7 +116,6 @@
 </template>
 <script>
   import { mapState } from "vuex";
-  import * as AT from "./store/actionTypes";
   export default {
     data() {
       return {
