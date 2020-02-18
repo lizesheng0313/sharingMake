@@ -154,6 +154,15 @@ export function apiFloatEmployeeIncreaseDo(form) {
     data:form
   })
 }
+//参保导出
+export function apiFloatEmployeeInsuredExport(form) {
+  return oldFetch({
+    url: 'xsalary/floatEmployee/insured/export',
+    method: 'post',
+    data:form,
+    responseType: 'blob'
+  })
+}
 //增减员详情
 export function apiFloatEmployeeManageInfo(data) {
   return fetch({

@@ -54,7 +54,7 @@
                 width="60"
                 trigger="hover">
                 <div class="funStyle more-style">增减员导出</div>
-                <div class="funStyle more-style">参保人员导出</div>
+                <div class="funStyle more-style" @click="insureExport">参保人员导出</div>
                 <el-button slot="reference" class="more-choose">更多</el-button>
               </el-popover>
             </div>
@@ -310,6 +310,12 @@
         let nameList = [data.empName]
         this.$refs.socialIncreace.show(compEmpIds,nameList)
       },
+      //参保导出
+      insureExport(){
+        this.$store
+          .dispatch("socialFundStore/actionFloatEmployeeInsuredExport", this.ruleForm)
+      },
+
       handleSizeChange(val) {
         this.totalListForm.pageSize = val;
         this.totalListForm.currPage = 1;
