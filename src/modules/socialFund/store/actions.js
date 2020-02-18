@@ -1,4 +1,4 @@
-import { apiDeleteEmpMonthly,apiDeleteCompMonthly,apiFloatEmployeeDownloadModelDoc,apiImportMonthlyLedger,apiMonthlyLedgerError,apiMonthlyLedgerTemplate,apiFloatEmployeeDel,apiFloatEmployeeDeExport,apiFloatEmployeeInExport,apiFloatEmployeeInsuredExport,apiFloatEmployeeManageSave,apiFloatEmployeeManageInfo,apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
+import { apiFloatEmployeeEditErrorRecord,apiFloatEmployeeDecreaseErrorRecord,apiFloatEmployeeIncreaseErrorRecord,apiFloatEmployeeEditImport,apiFloatEmployeeDecreaseImport,apiFloatEmployeeIncreaseImport,apiFloatEmployeeDownloadModelDocE,apiFloatEmployeeDownloadModelDocD,apiFloatEmployeeDownloadModelDocI,apiDeleteEmpMonthly,apiDeleteCompMonthly,apiImportMonthlyLedger,apiMonthlyLedgerError,apiMonthlyLedgerTemplate,apiFloatEmployeeDel,apiFloatEmployeeDeExport,apiFloatEmployeeInExport,apiFloatEmployeeInsuredExport,apiFloatEmployeeManageSave,apiFloatEmployeeManageInfo,apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
 
 // 参保 方案列表
 export const actionInsuredProjectMList = ({ dispatch },ruleForm) => {
@@ -87,8 +87,40 @@ export const actionFloatEmployeeList= ({ dispatch },form) => {
   return apiFloatEmployeeList(form)
 }
 //增员导入模板
-export const actionFloatEmployeeDownloadModelDoc= ({ dispatch }) => {
-  return apiFloatEmployeeDownloadModelDoc()
+export const actionFloatEmployeeDownloadModelDocI= ({ dispatch }) => {
+  return apiFloatEmployeeDownloadModelDocI()
+}
+//增员导入
+export const actionFloatEmployeeIncreaseImport= ({ dispatch },data) => {
+  return apiFloatEmployeeIncreaseImport(data)
+}
+//增员导入日志
+export const actionFloatEmployeeIncreaseErrorRecord= ({ dispatch },data) => {
+  return apiFloatEmployeeIncreaseErrorRecord(data)
+}
+//减员导入模板
+export const actionFloatEmployeeDownloadModelDocD= ({ dispatch }) => {
+  return apiFloatEmployeeDownloadModelDocD()
+}
+//减员导入
+export const actionFloatEmployeeDecreaseImport= ({ dispatch },data) => {
+  return apiFloatEmployeeDecreaseImport(data)
+}
+//减员导入日志
+export const actionFloatEmployeeDecreaseErrorRecord= ({ dispatch },data) => {
+  return apiFloatEmployeeDecreaseErrorRecord(data)
+}
+//编辑导入模板
+export const actionFloatEmployeeDownloadModelDocE= ({ dispatch }) => {
+  return apiFloatEmployeeDownloadModelDocE()
+}
+//编辑导入
+export const actionFloatEmployeeEditImport= ({ dispatch },data) => {
+  return apiFloatEmployeeEditImport(data)
+}
+//编辑导入日志
+export const actionFloatEmployeeEditErrorRecord= ({ dispatch },data) => {
+  return apiFloatEmployeeEditErrorRecord(data)
 }
 //增减员列表 删除
 export const actionFloatEmployeeDel= ({ dispatch },form) => {

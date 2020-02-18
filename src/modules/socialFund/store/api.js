@@ -163,13 +163,71 @@ export function apiFloatEmployeeList(form) {
 }
 
 //增员导入模板
-export function apiFloatEmployeeDownloadModelDoc() {
-  return fetch({
+export function apiFloatEmployeeDownloadModelDocI() {
+  return fetchFile({
     url: '/api/xsalary/floatEmployee/increaseImport/downloadModelDoc',
+    method: 'get',
+  })
+}
+//增员导入
+export function apiFloatEmployeeIncreaseImport(params) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/increaseImport/import',
+    method: 'post',
+    params:params
+  })
+}
+//增员导入日志
+export function apiFloatEmployeeIncreaseErrorRecord(params) {
+  return fetchFile({
+    url: '/api/xsalary/floatEmployee/increaseImport/errorRecord/download/'+params.uuid,
     method: 'post',
   })
 }
-
+//减员导入模板
+export function apiFloatEmployeeDownloadModelDocD() {
+  return fetchFile({
+    url: '/api/xsalary/floatEmployee/decreaseImport/downloadModelDoc',
+    method: 'get',
+  })
+}
+//减员导入
+export function apiFloatEmployeeDecreaseImport(params) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/decreaseImport/import',
+    method: 'post',
+    params:params
+  })
+}
+//减员导入日志
+export function apiFloatEmployeeDecreaseErrorRecord(params) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/decreaseImport/errorRecord/download/'+params.uuid,
+    method: 'post',
+  })
+}
+//编辑导入模板
+export function apiFloatEmployeeDownloadModelDocE() {
+  return fetchFile({
+    url: '/api/xsalary/floatEmployee/editImport/downloadModelDoc',
+    method: 'get',
+  })
+}
+//编辑导入
+export function apiFloatEmployeEeditImport(params) {
+  return oldFetch({
+    url: 'xsalary/floatEmployee/editImport/import',
+    method: 'post',
+    params:params
+  })
+}
+//编辑导入日志
+export function apiFloatEmployeeEditErrorRecord(params) {
+  return fetchFile({
+    url: '/api/xsalary/floatEmployee/editImport/errorRecord/download/'+params.uuid,
+    method: 'post',
+  })
+}
 //入职未投保
 export function apiFloatEmployeeIncreaseUnlist(form) {
   return fetch({

@@ -185,13 +185,13 @@
         ref="import"
         :radioList="radioList"
         :title="importTitle"
-        :apiCheck="'/api/xsalary/monthlyLedger/importMonthlyLedgerVerify'"
-        :apiDownloadLog="'socialFundStore/actionMonthlyLedgerError'"
-        :apiDownloadTemplate="'socialFundStore/actionMonthlyLedgerTemplate'"
+        :apiCheck="apiCheck"
+        :apiDownloadLog="apiDownloadLog"
+        :apiDownloadTemplate="apiDownloadTemplate"
         :parameterData="parameterData"
         sendRadio="BY_EMP_NO"
         @changeRadioValue="changeRadioValue"
-        :impoartAction="'socialFundStore/actionImportMonthlyLedger'"
+        :impoartAction="impoartAction"
         @getLoading="getList"
         :uploadFileData="uploadFileData"
         :tips="'说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资'"
@@ -206,6 +206,7 @@
   let month = new Date().getMonth() + 1;
   import socialDecreace from './components/socialDecrease'
   import socialIncreace from './components/socialIncreace'
+  import importData from "@/components/tool/importData";
   let defaultDate =
     date.year + "-" + (date.month >= 10 ? date.month : "0" + date.month);
   export default {
@@ -241,6 +242,7 @@
           }],
         importTitle:"",
         apiCheck:"",
+        apiDownloadTemplate:"",
         apiDownloadLog:"",
         impoartAction:"",
         parameterData:{
@@ -259,6 +261,7 @@
     components:{
       socialDecreace,
       socialIncreace,
+      importData
     },
     computed:{
       ...mapState({
@@ -315,20 +318,32 @@
       //增员导入
       increatImport(){
           this.importTitle = "增员导入"
-          this.apiCheck = ""
-          this.apiDownloadLog = ""
-          this.impoartAction = ""
+          this.apiDownloadTemplate = "socialFundStore/actionFloatEmployeeDownloadModelDocI"
+          this.apiCheck = "/api/xsalary/floatEmployee/increaseImport/verify"
+          this.apiDownloadLog = "socialFundStore/actionFloatEmployeeIncreaseErrorRecord"
+          this.impoartAction = "socialFundStore/actionFloatEmployeeIncreaseImport"
+          this.$refs.import.show()
       },
       //减员导入
       decrateImport(){
-
+        this.importTitle = "减员导入"
+        this.apiDownloadTemplate = "socialFundStore/actionFloatEmployeeDownloadModelDocD"
+        this.apiCheck = "/api/xsalary/floatEmployee/decreaseImport/verify"
+        this.apiDownloadLog = "socialFundStore/actionFloatEmployeeDecreaseErrorRecord"
+        this.impoartAction = "socialFundStore/actionFloatEmployeeDecreaseImport"
+        this.$refs.import.show()
       },
       //编辑导入
       editImport(){
-
+        this.importTitle = "编辑导入"
+        this.apiDownloadTemplate = "socialFundStore/actionFloatEmployeeDownloadModelDocE"
+        this.apiCheck = "/api/xsalary/floatEmployee/editImport/verify"
+        this.apiDownloadLog = "socialFundStore/FloatEmployeeEditErrorRecord"
+        this.impoartAction = "socialFundStore/apiFloatEmployeeEditImport"
+        this.$refs.import.show()
       },
       changeRadioValue(val) {
-        this.importForm.importType = val;
+        this.parameterData.importType = val;
         this.uploadFileData.importType= val;
       },
       //筛选
