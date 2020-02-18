@@ -66,7 +66,6 @@ export function apiAddEmpCollectList(form) {
     data:form
   })
 }
-/api/
 //保存基本信息
 export function apiSaveSalaryRule(form) {
   return fetch({
