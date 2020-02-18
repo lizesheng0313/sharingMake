@@ -43,9 +43,9 @@
                 width="60"
                 class="button-style"
                 trigger="hover">
-                <div class="funStyle more-style">增员导入</div>
-                <div class="funStyle more-style">减员导入</div>
-                <div class="funStyle more-style">编辑导入</div>
+                <div class="funStyle more-style" @click="increatImport">增员导入</div>
+                <div class="funStyle more-style" @click="decrateImport">减员导入</div>
+                <div class="funStyle more-style" @click="editImport">编辑导入</div>
                 <el-button slot="reference" class="more-choose">批量操作</el-button>
               </el-popover>
               <el-popover
@@ -180,6 +180,22 @@
       <socialIncreace ref="socialIncreace" @freshList ="getList"></socialIncreace>
       <!-- 社保减员 -->
       <social-decreace ref="socialDecreace" @freshList ="getList"></social-decreace>
+     <!--   导入   -->
+      <import-data
+        ref="import"
+        :radioList="radioList"
+        :title="importTitle"
+        :apiCheck="'/api/xsalary/monthlyLedger/importMonthlyLedgerVerify'"
+        :apiDownloadLog="'socialFundStore/actionMonthlyLedgerError'"
+        :apiDownloadTemplate="'socialFundStore/actionMonthlyLedgerTemplate'"
+        :parameterData="parameterData"
+        sendRadio="BY_EMP_NO"
+        @changeRadioValue="changeRadioValue"
+        :impoartAction="'socialFundStore/actionImportMonthlyLedger'"
+        @getLoading="getList"
+        :uploadFileData="uploadFileData"
+        :tips="'说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资'"
+      ></import-data>
     </div>
   </div>
 </template>
@@ -223,7 +239,21 @@
             label:"已停保",
             value:"INSURED_STOP"
           }],
-
+        importTitle:"",
+        apiCheck:"",
+        apiDownloadLog:"",
+        impoartAction:"",
+        parameterData:{
+          importType:"BY_EMP_NO"
+        },
+        radioList: [
+          { lable: "BY_EMP_NO", title: "通过员工工号匹配人员" },
+          { lable: "BY_ID_NO", title: "通过身份证匹配人员" }
+        ],
+        uploadFileData: {
+          uuid: "",
+          importType:"BY_EMP_NO"
+        },
     };
     },
     components:{
@@ -282,6 +312,25 @@
             }
           });
       },
+      //增员导入
+      increatImport(){
+          this.importTitle = "增员导入"
+          this.apiCheck = ""
+          this.apiDownloadLog = ""
+          this.impoartAction = ""
+      },
+      //减员导入
+      decrateImport(){
+
+      },
+      //编辑导入
+      editImport(){
+
+      },
+      changeRadioValue(val) {
+        this.importForm.importType = val;
+        this.uploadFileData.importType= val;
+      },
       //筛选
       handleScreen(){
         this.getList()
@@ -303,8 +352,6 @@
              }
           })
         }).catch({})
-
-
       },
       goQuick(){
         this.$router.push('/quickStaff')

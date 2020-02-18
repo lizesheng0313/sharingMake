@@ -88,18 +88,18 @@ export function apiMonthlyLedgerTemplate() {
 }
 //参保月度台账、导入错误日志
 export function apiMonthlyLedgerError(data) {
-  return oldFetch({
-    url: 'xsalary/monthlyLedger/monthlyLedgerError/download',
+  return fetchFile({
+    url: '/api/xsalary/monthlyLedger/monthlyLedgerError/download',
     method: 'post',
     data:data,
   })
 }
 //参保月度台账、导入
-export function apiImportMonthlyLedger(data) {
-  return oldFetch({
-    url: 'xsalary/monthlyLedger/importMonthlyLedger',
+export function apiImportMonthlyLedger(params) {
+  return fetch({
+    url: '/api/xsalary/monthlyLedger/importMonthlyLedger',
     method: 'post',
-    data:data,
+    params: params
   })
 }
 //参保月度台账、员工月度台账列表
@@ -127,6 +127,7 @@ export function apiEmpMonthlyLedgerSupple(form) {
     data:form
   })
 }
+
 // 月度台账员工详情
 export function apiEmpMonthlyLedgerDetail(form) {
   return oldFetch({
@@ -144,6 +145,15 @@ export function apiFloatEmployeeList(form) {
     data:form
   })
 }
+
+//增员导入模板
+export function apiFloatEmployeeDownloadModelDoc() {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/increaseImport/downloadModelDoc',
+    method: 'post',
+  })
+}
+
 //入职未投保
 export function apiFloatEmployeeIncreaseUnlist(form) {
   return fetch({

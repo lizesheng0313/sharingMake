@@ -1,4 +1,4 @@
-import { apiImportMonthlyLedger,apiMonthlyLedgerError,apiMonthlyLedgerTemplate,apiFloatEmployeeDel,apiFloatEmployeeDeExport,apiFloatEmployeeInExport,apiFloatEmployeeInsuredExport,apiFloatEmployeeManageSave,apiFloatEmployeeManageInfo,apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
+import { apiFloatEmployeeDownloadModelDoc,apiImportMonthlyLedger,apiMonthlyLedgerError,apiMonthlyLedgerTemplate,apiFloatEmployeeDel,apiFloatEmployeeDeExport,apiFloatEmployeeInExport,apiFloatEmployeeInsuredExport,apiFloatEmployeeManageSave,apiFloatEmployeeManageInfo,apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
 
 // 参保 方案列表
 export const actionInsuredProjectMList = ({ dispatch },ruleForm) => {
@@ -77,6 +77,10 @@ export const actionEmpMonthlyLedgerDetail= ({ dispatch },form) => {
 //增减员列表
 export const actionFloatEmployeeList= ({ dispatch },form) => {
   return apiFloatEmployeeList(form)
+}
+//增员导入模板
+export const actionFloatEmployeeDownloadModelDoc= ({ dispatch }) => {
+  return apiFloatEmployeeDownloadModelDoc()
 }
 //增减员列表 删除
 export const actionFloatEmployeeDel= ({ dispatch },form) => {
