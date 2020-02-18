@@ -14,83 +14,83 @@
               <el-form label-width="150px" :model="baseForm" ref="baseForm" >
                     <el-row style="display: flex">
                         <div style="flex:1">
-                          <el-form-item label="姓名" prop="empName" :rules="{required: true, message: '姓名不能为空', trigger: 'blur'}">
-                            <el-input v-model="baseForm.empName"></el-input>
+                          <el-form-item label="姓名" prop="empName"  :rules="{required: true, message: '姓名不能为空', trigger: 'blur'}">
+                            <el-input v-model="baseForm.empName" :disabled="baseDisable"></el-input>
                           </el-form-item>
                         </div>
                         <div style="flex:1">
                           <el-form-item label="工号：">
-                            <el-input v-model="baseForm.empNo"></el-input>
+                            <el-input v-model="baseForm.empNo" :disabled="baseDisable"></el-input>
                           </el-form-item>
                         </div>
                     </el-row>
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="证件类型" prop="idType" :rules="{required: true, message: '证件类型不能为空', trigger: 'blur'}">
-                            <el-select v-model="baseForm.idType" placeholder="请选择证件类型" @change="changeIdType">
+                            <el-select v-model="baseForm.idType" placeholder="请选择证件类型" @change="changeIdType" :disabled="baseDisable">
                               <el-option v-for="(item,index) in idCardTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
                          <div style="flex:1">
                         <el-form-item label="证件号码：" prop="idNo" :rules="{required: true, validator: this.validIdNo, trigger: 'blur'}">
-                          <el-input v-model="baseForm.idNo" @blur="checkIdCard"></el-input>
+                          <el-input v-model="baseForm.idNo" :disabled="baseDisable"></el-input>
                         </el-form-item>
                       </div>
                     </el-row>
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="性别" prop="empSex" :rules="{required: true, message: '性别不能为空', trigger: 'change'}">
-                            <el-select v-model="baseForm.empSex" placeholder="请选择性别">
+                            <el-select v-model="baseForm.empSex" placeholder="请选择性别" :disabled="baseDisable">
                               <el-option v-for="(item,index) in sexOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
                         <div style="flex:1">
                             <el-form-item label="出生日期：" prop="birthday" :rules="{required: true, message: '出生日期不能为空', trigger: 'blur'}">
-                              <el-date-picker v-model="baseForm.birthday" type="date" placeholder="请选择" value-format="yyyy-MM-dd"></el-date-picker>
+                              <el-date-picker v-model="baseForm.birthday" type="date" placeholder="请选择" value-format="yyyy-MM-dd" :disabled="baseDisable"></el-date-picker>
                             </el-form-item>
                         </div>
                     </el-row>
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="国籍（地区）" prop="country" :rules="{required: true, message: '国籍不能为空', trigger: 'blur'}">
-                            <el-select v-model="baseForm.country" placeholder="请选择国籍">
+                            <el-select v-model="baseForm.country" placeholder="请选择国籍" :disabled="baseDisable">
                               <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index" :disabled="!canSelectCoutry.includes(item)"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
                         <div style="flex:1">
                             <el-form-item label="手机号码：" prop="mobile" :rules="{required: true, message: '手机号码不能为空', trigger: 'blur'}">
-                              <el-input v-model="baseForm.mobile"></el-input>
+                              <el-input v-model="baseForm.mobile" :disabled="baseDisable"></el-input>
                             </el-form-item>
                         </div>
                     </el-row>
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="最高学历">
-                            <el-select v-model="baseForm.education" placeholder="请选择最高学历">
+                            <el-select v-model="baseForm.education" placeholder="请选择最高学历" :disabled="baseDisable">
                               <el-option v-for="(item,index) in topEduOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
                         <div style="flex:1">
                             <el-form-item label="参加工作日期：">
-                              <el-date-picker v-model="baseForm.inWorkDay" type="date" placeholder="请选择" value-format="yyyy-MM-dd"></el-date-picker>
+                              <el-date-picker v-model="baseForm.inWorkDay" type="date" placeholder="请选择" value-format="yyyy-MM-dd" :disabled="baseDisable"></el-date-picker>
                             </el-form-item>
                         </div>
                     </el-row>
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="户口性质">
-                            <el-select v-model="baseForm.householdRegistrationType" placeholder="请选择最高学历">
+                            <el-select v-model="baseForm.householdRegistrationType" placeholder="请选择最高学历" :disabled="baseDisable">
                               <el-option v-for="(item,index) in householdSexOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
                         </div>
                         <div style="flex:1">
                             <el-form-item label="户口所在城市：">
-                              <el-select v-model="baseForm.householdCountry" placeholder="请选择户口所在城市" filterable>
+                              <el-select v-model="baseForm.householdCountry" placeholder="请选择户口所在城市" filterable :disabled="baseDisable">
                                 <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index" fi></el-option>
                               </el-select>
                             </el-form-item>
@@ -99,52 +99,52 @@
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="婚姻状况">
-                            <el-input v-model="baseForm.maritalStatus"></el-input>
+                            <el-input v-model="baseForm.maritalStatus" :disabled="baseDisable"></el-input>
                           </el-form-item>
                         </div>
                         <div style="flex:1">
                             <el-form-item label="民族：">
-                              <el-input v-model="baseForm.nationality"></el-input>
+                              <el-input v-model="baseForm.nationality" :disabled="baseDisable"></el-input>
                             </el-form-item>
                         </div>
                     </el-row>
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="工资卡开户银行">
-                            <el-input v-model="baseForm.wageCardBank"></el-input>
+                            <el-input v-model="baseForm.wageCardBank" :disabled="baseDisable"></el-input>
                           </el-form-item>
                         </div>
                         <div style="flex:1">
                             <el-form-item label="工资银行账号：">
-                              <el-input v-model="baseForm.wageCardNum"></el-input>
+                              <el-input v-model="baseForm.wageCardNum" :disabled="baseDisable"></el-input>
                             </el-form-item>
                         </div>
                     </el-row>
                     <el-row style="display: flex">
                       <div style="flex:1">
                         <el-form-item label="其他证件类型" >
-                          <el-select v-model="baseForm.otherIdType" placeholder="请选择其他证件类型">
+                          <el-select v-model="baseForm.otherIdType" placeholder="请选择其他证件类型" :disabled="baseDisable">
                             <el-option v-for="(item,index) in otherIdCardTypeOption" :label="item.label" :value="item.value" :key="index" :disabled="!canSelectotherIdType.includes(item.value)"></el-option>
                           </el-select>
                         </el-form-item>
                       </div>
                       <div style="flex:1">
-                        <el-form-item label="其他证件号码：">
-                          <el-input v-model="baseForm.otherIdNo"></el-input>
+                        <el-form-item label="其他证件号码：" >
+                          <el-input v-model="baseForm.otherIdNo" :disabled="baseDisable"></el-input>
                         </el-form-item>
                       </div>
                     </el-row>
                     <el-row style="display: flex">
                       <div style="flex:1">
                         <el-form-item label="出生国家(地区)">
-                          <el-select v-model="baseForm.birthPlace" placeholder="请选择出生国家(地区)">
+                          <el-select v-model="baseForm.birthPlace" placeholder="请选择出生国家(地区)" :disabled="baseDisable">
                             <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index"></el-option>
                           </el-select>
                         </el-form-item>
                       </div>
                       <div style="flex:1">
                         <el-form-item label="涉税事由：">
-                          <el-select v-model="baseForm.taxRelatedReason" placeholder="请选择涉税事由" multiple>
+                          <el-select v-model="baseForm.taxRelatedReason" placeholder="请选择涉税事由" multiple :disabled="baseDisable">
                             <el-option v-for="(item,index) in taxReasonOption" :label="item.label" :value="item.value" :key="index"></el-option>
                           </el-select>
                         </el-form-item>
@@ -152,13 +152,13 @@
                     </el-row>
                     <el-row style="display: flex">
                       <div style="flex:1">
-                        <el-form-item label="首次入境时间">
-                          <el-date-picker v-model="baseForm.firstEntryTime" type="date" placeholder="请选择"></el-date-picker>
+                        <el-form-item label="首次入境时间" >
+                          <el-date-picker v-model="baseForm.firstEntryTime" type="date" placeholder="请选择" :disabled="baseDisable"></el-date-picker>
                         </el-form-item>
                       </div>
                       <div style="flex:1">
                         <el-form-item label="预计离境时间：">
-                          <el-date-picker v-model="baseForm.expectLeaveTime" type="date" placeholder="请选择"></el-date-picker>
+                          <el-date-picker v-model="baseForm.expectLeaveTime" type="date" placeholder="请选择" :disabled="baseDisable"></el-date-picker>
                         </el-form-item>
                       </div>
                     </el-row>
@@ -302,7 +302,8 @@ export default {
       isFullWorkOption:constData.regularEmpYnOption,
       otherIdCardTypeOption:constData.idType,
       taxReasonOption:constData.taxReasonOption,
-      workerTypeOption: constData.workerType
+      workerTypeOption: constData.workerType,
+      baseDisable:false,
     };
   },
   computed: {
@@ -320,54 +321,82 @@ export default {
   },
   methods: {
     validIdNo(rule, value, callback){
+      let status = true;
       if(value){
         switch (this.baseForm.idType) {
           case "PRC_ID"://居民身份证
             var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
             if(!regIdNo.test(value)){
+              status = false
               callback(new Error('居民身份证号录入不正确'));
             }else{callback();}
             break;
           case "CHINA_PASSPORT"://中国护照
             if(value.length != 9){
+              status = false
               callback(new Error('中国护照的证件号码必须9位，且只含数字和字母'));
             }else{callback();}
             break;
           case "COMPATRIOTS_CARD"://港澳居民来往内地通行证
             if(!(value.length == 9 || value.length == 11)){
+              status = false
               callback(new Error('证件号码长度不对，且必须是数字和字母组合'));
             }else{callback();}
             break;
           case "FORMOSA_CARD"://台湾居民来往大陆通行证
             if(value.length != 8){
+              status = false
               callback(new Error('台湾居民来往大陆通行证的证件号码必须8位数字'));
             }else{callback();}
             break;
           case "MACAU_PRC_ID"://港澳居民居住证
             if(value.length != 18){
+              status = false
               callback(new Error('港澳居民居住证的证件号码必须18位'));
             }else{callback();}
             break;
           case "FORMOSA_PRC_ID"://台湾居民居住证
             if(value.length != 18){
+              status = false
               callback(new Error('台湾居民居住证的证件号码必须18位'));
             }else{callback();}
             break;
           case "FOREIGN_PRC_ID"://外国人永久居留身份证
             if(value.length != 15){
+              status = false
               callback(new Error('外国人永久居留身份证的证件号码必须15位'));
             }else{callback();}
             break;
         }
       }else{
         callback('身份证信息不能为空')
+        status = false
+      }
+      if(status){
+        this.checkIdCard()
       }
     },
     checkIdCard(){
       this.$store
         .dispatch("payMasterStore/actionEmployeeIdCard", this.baseForm.idNo)
         .then(res=>{
-          console.log(res)
+            let data = res.data
+            if(res.success){
+              this.$confirm(`员工[${data.empName}]已存在于[${data.taxSubName}]，是否继续将员工添加到其他公司`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                  for(let key in this.baseForm){if(data[key]){this.baseForm[key] = data[key]}}
+                  this.baseDisable = true;
+              }).catch({})
+          }else{
+              this.baseDisable = false
+              if(this.baseForm.idType === 'PRC_ID'){
+                this.baseForm.empSex = data.empSex
+                this.baseForm.birthday = data.birthday
+              }
+          }
         })
     },
     //证件类型控制显示
@@ -433,9 +462,12 @@ export default {
     },
     //取消保存公司信息
     cancelAddInfo(){
-      this.$router.go(-1)
-    },
-
+      this.baseDisable =false
+      for(let key in this.baseForm){
+       this.baseForm[key] =""
+      }
+      this.baseForm.idType = "PRC_ID"
+    }
   }
 };
 </script>

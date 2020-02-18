@@ -372,7 +372,7 @@
           type: 'warning'
         }).then(() => {
           this.$store
-            .dispatch("payMasterStore/actionDeleteEmployee", data.compEmpId)
+            .dispatch("payMasterStore/actionDeleteEmployee", data.empId)
               .then(res => {
                 if(res.success){
                   this.$message({type: 'success', message: '删除成功!'});
