@@ -43,7 +43,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="转正日期">
-            <el-date-picker v-model="changeCompanyForm.zzDay" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
+            <el-date-picker v-model="changeCompanyForm.turnRegularDate" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
           </el-form-item>
         </el-form>
         <span class="con-footer">
@@ -71,7 +71,7 @@ export default {
         empDay:"",//入职日期
         workCity:"",
         regularEmpYn:"-1",
-        zzDay:"",
+        turnRegularDate:"",
       },
       enumEmpTypeOption:constData.enumEmpTypeOption,
       workCityOption:[],

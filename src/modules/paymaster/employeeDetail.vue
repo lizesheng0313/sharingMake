@@ -188,7 +188,7 @@
                       </el-row>
                       <el-row>
                         <el-col :span="12"><el-form-item label="是否转正：">{{this.insuredForm.regularEmpYn }}</el-form-item></el-col>
-                        <el-col :span="12"><el-form-item label="转正日期：">{{ this.insuredForm.zzDay }}</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="转正日期：">{{ this.insuredForm.turnRegularDate }}</el-form-item></el-col>
                       </el-row>
                       <el-row>
                         <el-col :span="12"><el-form-item label="员工状态：">{{ this.insuredForm.empStatus | filterEmployStatus }}</el-form-item></el-col>
@@ -250,8 +250,8 @@
                           </el-form-item>
                         </div>
                         <div style="flex:1">
-                          <el-form-item label="转正日期" prop="zzDay">
-                            <el-date-picker v-model="insuredForm.zzDay" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
+                          <el-form-item label="转正日期" prop="turnRegularDate">
+                            <el-date-picker v-model="insuredForm.turnRegularDate" type="date" value-format="yyyy-MM-dd" placeholder="请选择"></el-date-picker>
                           </el-form-item>
                         </div>
                       </el-row>
@@ -339,7 +339,7 @@ export default {
         empDay:"",//入职日期
         workerType:"",//受职
         regularEmpYn:"",//是否转正
-        zzDay:"",//转正日期
+        turnRegularDate:"",//转正日期
         empStatus:"",//员工状态
         leaveDay:"",//最后工作日
         workCity:"",//工作城市

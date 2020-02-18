@@ -217,8 +217,8 @@
                         </el-form-item>
                       </div>
                       <div style="flex:1">
-                        <el-form-item label="转正日期" prop="zzDay" :rules="{required: baseForm.regularEmpYn ==='1', message: '请选择转正日期', trigger: 'blur'}">
-                          <el-date-picker v-model="baseForm.zzDay" type="date" placeholder="请选择" value-format="yyyy-MM-dd"></el-date-picker>
+                        <el-form-item label="转正日期" prop="turnRegularDate" :rules="{required: baseForm.regularEmpYn ==='1', message: '请选择转正日期', trigger: 'blur'}">
+                          <el-date-picker v-model="baseForm.turnRegularDate" type="date" placeholder="请选择" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                       </div>
                     </el-row>
@@ -289,7 +289,7 @@ export default {
         empDay:"",
         workerType:"",
         regularEmpYn:"",
-        zzDay:"",
+        turnRegularDate:"",
         workCity:"",
       },
       canSelectCoutry:[],
