@@ -59,9 +59,10 @@ export const actionEmployeesTemplate= ({ dispatch }) => {
 export const actionEmployeesVerifyErrorLog= ({ dispatch },id) => {
   return apiEmployeesVerifyErrorLog(id)
 }
+
 //增员导入
-export const actionEmployeesImport= ({ dispatch }) => {
-  return apiEmployeesImport()
+export const actionEmployeesImport= ({ dispatch },data) => {
+  return apiEmployeesImport(data)
 }
 //校验身份证号
 export const actionEmployeeIdCard= ({ dispatch },idCard) => {

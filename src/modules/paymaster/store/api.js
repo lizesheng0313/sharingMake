@@ -111,10 +111,11 @@ export function apiEmployeesVerifyErrorLog(id) {
   })
 }
 //增员导入
-export function apiEmployeesImport() {
+export function apiEmployeesImport(data) {
   return oldFetch({
     url: 'xsalary/enterprise/employees/import',
     method: 'post',
+    data:data
   })
 }
 
