@@ -27,7 +27,7 @@
             </div>
             <div class="right">
               <el-button type="primary" class="add-import" @click="handleShowCreate(false)">生成月度台账</el-button>
-              <el-button class="add-import">导入月度台账</el-button>
+              <el-button class="add-import" @click="handleShowImport">导入月度台账</el-button>
             </div>
           </div>
           <div class="staff-table">
@@ -109,6 +109,45 @@
               </el-form>
             </div>
           </el-dialog>
+          <!-- 导入月度台账-->
+          <el-dialog
+            :visible.sync="isShowImportAccount"
+            title="导入月度台账"
+            width="36%"
+            center
+            class="screen-dialog"
+            :close-on-click-modal="closeModel"
+          >
+            <div class="screening-wapper">
+              <el-form :model="importForm" ref="importForm" label-width="100px" class="demo-ruleForm">
+                <div class="shortCon">
+                  <el-form-item label="台账月份" label-width="20%" prop="month" :rules="{required: true, message: '请选择台账月份', trigger: 'blur'}">
+                    <el-date-picker v-model="importForm.month" type="month" value-format="yyyy-MM" placeholder="请选择"></el-date-picker>
+                  </el-form-item>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="handleImport">下一步</el-button>
+                    <el-button @click="isShowCreateAccount = false">取消</el-button>
+                  </span>
+                </div>
+              </el-form>
+            </div>
+          </el-dialog>
+        <!--   导入页面   -->
+          <import-data
+            ref="import"
+            :radioList="radioList"
+            :title="'月度台账导入'"
+            :apiCheck="'/api/xsalary/monthlyLedger/importMonthlyLedgerVerify'"
+            :apiDownloadLog="'socialFundStore/actionMonthlyLedgerError'"
+            :apiDownloadTemplate="'socialFundStore/actionMonthlyLedgerTemplate'"
+            :parameterData="importForm"
+            sendRadio="BY_ID_NO"
+            @changeRadioValue="changeRadioValue"
+            :impoartAction="'socialFundStore/actionImportMonthlyLedger'"
+            @getLoading="getList"
+            :uploadFileData="uploadFileData"
+            :tips="'说明：导入模板中空单元格薪资项，导入后不覆盖系统中对应薪资'"
+          ></import-data>
         </div>
       </div>
     </div>
@@ -116,6 +155,7 @@
 </template>
 <script>
   import { mapState } from "vuex";
+  import importData from "@/components/tool/importData";
   export default {
     data() {
       return {
@@ -129,6 +169,11 @@
           taxSubList:"",
           month:"",
         },
+        importForm:{
+          month:"",
+          importType:'BY_ID_NO',
+        },
+        isShowImportAccount:false,
         isShowCreateAccount:false,
         loading:false,
         screenWidth: document.body.clientWidth,// 屏幕尺寸
@@ -136,11 +181,20 @@
         list: [],
         closeModel: false,
         total:0,
-        areaOption:[]
+        areaOption:[],
+        radioList: [
+          { lable: "BY_EMP_NO", title: "通过员工工号匹配人员" },
+          { lable: "BY_ID_NO", title: "通过身份证匹配人员" }
+        ],
+        uploadFileData: {
+          month:"",
+          uuid: "",
+          importType:"BY_EMP_NO"
+        },
     };
     },
     components:{
-
+      importData
     },
     computed:{
       ...mapState({
@@ -178,6 +232,24 @@
       handleShowCreate(){
         this.isShowCreateAccount = true
         this.$refs['createForm']?this.$refs['createForm'].clearValidate():"";
+      },
+      //导入展示
+      handleShowImport(){
+        this.isShowImportAccount = true
+        this.$refs['importForm']?this.$refs['importForm'].clearValidate():"";
+      },
+      changeRadioValue(val) {
+        this.importForm.importType = val;
+        this.uploadFileData.importType= val;
+      },
+      handleImport(){
+        this.$refs['importForm'].validate(valid => {
+          if(valid){
+            this.uploadFileData.month = this.importForm.month
+            this.isShowImportAccount = false;
+            this.$refs.import.show()
+          }
+        })
       },
       //重新生成
       handleReCreate(data){
