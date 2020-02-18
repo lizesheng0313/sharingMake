@@ -70,6 +70,22 @@ export function apiSaveMonthlyLedger(form) {
     data:form
   })
 }
+//参保月度台账、删除公司台账
+export function apiDeleteCompMonthly(form) {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/deleteCompMonthly',
+    method: 'post',
+    params:form
+  })
+}
+//参保月度台账、删除员工台账
+export function apiDeleteEmpMonthly(form) {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/deleteEmpMonthly',
+    method: 'post',
+    params:form
+  })
+}
 //参保月度台账、归档
 export function apiArchiveMonthlyLedger(form) {
   return oldFetch({

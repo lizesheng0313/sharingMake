@@ -321,9 +321,8 @@
           }
         ).then(() => {
             this.$store
-              .dispatch("socialFundStore/actionEmpMonthlyLedgerDelete",{
+              .dispatch("socialFundStore/actionDeleteEmpMonthly",{
                 id:data.id,
-                month:this.ruleForm.queryMonth
               })
               .then(res=>{
                   if(res.success){

@@ -65,7 +65,7 @@
                     trigger="hover">
                     <div class="funStyle more-style" @click="handleReCreate(scope.row)" v-if="!scope.row.isarchive">重新生成</div>
                     <div class="funStyle more-style">导出</div>
-                    <div class="funStyle more-style" v-if="!scope.row.isarchive">删除</div>
+                    <div class="funStyle more-style" v-if="!scope.row.isarchive" @click="handleDelete(scope.row)">删除</div>
                     <span slot="reference" class="more-choose">更多</span>
                   </el-popover>
                 </template>
@@ -284,6 +284,23 @@
                   }
               })
           }
+        })
+      },
+      handleDelete(data){
+        this.$confirm("是否删除所选月度台账！", '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store
+            .dispatch("socialFundStore/actionDeleteCompMonthly", {
+              id: data.id
+            })
+            .then(res => {
+              if (res.success) {
+                this.getList()
+              }
+            })
         })
       },
       //归档

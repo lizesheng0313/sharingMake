@@ -1,4 +1,4 @@
-import { apiFloatEmployeeDownloadModelDoc,apiImportMonthlyLedger,apiMonthlyLedgerError,apiMonthlyLedgerTemplate,apiFloatEmployeeDel,apiFloatEmployeeDeExport,apiFloatEmployeeInExport,apiFloatEmployeeInsuredExport,apiFloatEmployeeManageSave,apiFloatEmployeeManageInfo,apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
+import { apiDeleteEmpMonthly,apiDeleteCompMonthly,apiFloatEmployeeDownloadModelDoc,apiImportMonthlyLedger,apiMonthlyLedgerError,apiMonthlyLedgerTemplate,apiFloatEmployeeDel,apiFloatEmployeeDeExport,apiFloatEmployeeInExport,apiFloatEmployeeInsuredExport,apiFloatEmployeeManageSave,apiFloatEmployeeManageInfo,apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
 
 // 参保 方案列表
 export const actionInsuredProjectMList = ({ dispatch },ruleForm) => {
@@ -41,6 +41,14 @@ export const actionGetCompMonthlyLedgerList= ({ dispatch },form) => {
 //参保台账生成
 export const actionSaveMonthlyLedger= ({ dispatch },form) => {
   return apiSaveMonthlyLedger(form)
+}
+//参保台账 公司删除
+export const actionDeleteCompMonthly= ({ dispatch },form) => {
+  return apiDeleteCompMonthly(form)
+}
+//参保台账 员工删除
+export const actionDeleteEmpMonthly= ({ dispatch },form) => {
+  return apiDeleteEmpMonthly(form)
 }
 //参保台账归档
 export const actionArchiveMonthlyLedger= ({ dispatch },form) => {
