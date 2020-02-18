@@ -1,4 +1,4 @@
-import { apiCheckMemberSummary,apiSalaryAddDetailCheckMembers,apiSalaryDetailCheckMembersDelete,apiAddSalaryEmp,apiSalaryDetailCheckMembers,apiSalaryAddEmpList,apiSyncSalaryEmp,apiEnterpriseEmployees,apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery,apiSocialProvidentExport,apiCheckEmpReportStatus,apiPayrollCredit,apiSalaryCheckFailRecord,apiSalaryCheckFailRecordExport,apiPayrollCreditCancel,apiGetAdditionalListExport,apiPayrollCreditExport,apiTips} from './api'
+import { apiAddEmpCollectList,apiCheckMemberSummary,apiSalaryAddDetailCheckMembers,apiSalaryDetailCheckMembersDelete,apiAddSalaryEmp,apiSalaryDetailCheckMembers,apiSalaryAddEmpList,apiSyncSalaryEmp,apiEnterpriseEmployees,apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery,apiSocialProvidentExport,apiCheckEmpReportStatus,apiPayrollCredit,apiSalaryCheckFailRecord,apiSalaryCheckFailRecordExport,apiPayrollCreditCancel,apiGetAdditionalListExport,apiPayrollCreditExport,apiTips} from './api'
 
 
 //增减员明细
@@ -16,6 +16,10 @@ export const actionSalaryAddDetailCheckMembers = ({ dispatch },id) => {
 //可添加发薪人员列表
 export const actionSalaryAddEmpList = ({ dispatch },form) => {
   return apiSalaryAddEmpList(form);
+}
+//可添加人员信息采集 列表
+export const actionAddEmpCollectList = ({ dispatch },form) => {
+  return apiAddEmpCollectList(form);
 }
 //增减员明细人数
 export const actionCheckMemberSummary = ({ dispatch },id) => {

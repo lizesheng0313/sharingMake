@@ -4,7 +4,6 @@
       :fsTitle="'人员信息'"
       :bgColor="'#fff'"
       class="info-collection"
-      :goUrl="'-1'"
     >
       <span slot="fs-button">关闭</span>
       <div slot="fs-container">
@@ -49,19 +48,19 @@
                 <el-form-item label="其他证件类型">
                   <el-select v-model="employeeFormData.otherIdCardType" placeholder="请选择" >
                     <el-option
-                      v-for="(value,key) in baseInfo.empSex"
+                      v-for="(item,key) in otherIdCardTypeOption"
                       :key="key"
-                      :label="value"
-                      :value="key"
+                      :label="item.label"
+                      :value="item.value"
                     ></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="出生国家" prop="birthCountry" :rules="{required: true, message: '出生国家不能为空', trigger: 'blur'}">
                   <el-select v-model="employeeFormData.birthCountry" placeholder="请选择" >
                     <el-option
-                      v-for="(value,key) in baseInfo.empSex"
+                      v-for="(item,key) in countryList"
                       :key="key"
-                      :label="value"
+                      :label="item"
                       :value="key"
                     ></el-option>
                   </el-select>
@@ -96,8 +95,15 @@
                 <el-form-item label="证件号码" prop="idNo">
                   <el-input v-model="employeeFormData.idNo" :disabled="checkSuccess"></el-input>
                 </el-form-item>
-                <el-form-item label="国籍(地区)" prop="country" :disabled="checkSuccess">
-                  <el-input value="中国" disabled></el-input>
+                <el-form-item label="国籍(地区)" prop="country" >
+                  <el-select v-model="employeeFormData.country" placeholder="请选择" :disabled="checkSuccess">
+                    <el-option
+                      v-for="(item,key) in countryList"
+                      :key="key"
+                      :label="item"
+                      :value="key"
+                    ></el-option>
+                  </el-select>
                 </el-form-item>
                 <el-form-item label="其他证件号码" prop="otherIdCard">
                   <el-input v-model="employeeFormData.otherIdCard"></el-input>
@@ -128,7 +134,7 @@
             </el-row>
           </div>
           <div>
-            <span class="title">任职受雇从业信息</span>
+            <span class="title">任职受雇从业类型</span>
             <el-row type="flex" justify="center">
               <el-col :span="7">
                 <el-form-item label="任职受雇从业信息" prop="workerType">
@@ -234,6 +240,9 @@ export default {
     ...mapState("taxPageStore", {
       personnelCollection: state => state.personnelCollection
     }),
+    ...mapState({
+      countryList:state=>state.countryList,
+    }),
     checkSuccess:function(){
       return this.employeeFormData.idValidStatus === "CHECK_SUCCESS" || this.employeeFormData.idValidStatus ==='CHECKING'
     }
@@ -327,7 +336,8 @@ export default {
       baseInfo: SCR,
       employeeFormData: {
         martyrFamilyYn: ""
-      }
+      },
+      otherIdCardTypeOption:SCR.idTypeOption
     };
   },
   methods: {

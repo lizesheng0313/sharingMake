@@ -1,4 +1,42 @@
-
+export const idTypeOption = [
+  {
+    label:"居民身份证",
+    value:"PRC_ID"
+  },{
+    label:"港澳居民来往内地通行证",
+    value:"COMPATRIOTS_CARD"
+  }, {
+    label:"台湾居民来往大陆通行证",
+    value:"FORMOSA_CARD"
+  },{
+    label:"中国护照",
+    value:"CHINA_PASSPORT"
+  },{
+    label:"外国护照",
+    value:"FOREIGN_PASSPORT"
+  },{
+    label:"台湾居民居住证",
+    value:"FORMOSA_PRC_ID"
+  },{
+    label:"港澳居民居住证",
+    value:"MACAU_PRC_ID"
+  },{
+    label:"外国人永久居留身份证",
+    value:"FOREIGN_PRC_ID"
+  },{
+    label:"外国人工作许可证（A类）",
+    value:"FOREIGN_WORK_PERMIT_A"
+  },{
+    label:"外国人工作许可证（B类）",
+    value:"FOREIGN_WORK_PERMIT_B"
+  },{
+    label:"外国人工作许可证（C类）",
+    value:"FOREIGN_WORK_PERMIT_C"
+  },{
+    label:"其他",
+    value:"OTHER"
+  }
+]
 //身份证状态
 export const idValidStatus = {
   'AWAIT_CHECK': '待验证',

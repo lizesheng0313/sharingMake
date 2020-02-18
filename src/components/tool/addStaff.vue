@@ -101,11 +101,14 @@ export default {
   created(){
   },
   methods: {
-    getList(checkId){
-      checkId?this.addForm.checkId = checkId:"";
+    getList(form){
+      form.checkId?this.addForm.checkId = form.checkId:"";
+      this.listAction = form.listAction
+      this.saveAction = form.saveAction
       this.isShowAddStaff = true
-      this.$store.dispatch('salaryCalStore/actionSalaryAddEmpList',this.addForm)
+      this.$store.dispatch(this.listAction,this.addForm)
         .then(res=>{
+          console.log(res)
           this.staffTable = res.data;
         })
     },
@@ -114,7 +117,7 @@ export default {
       this.$refs.staffTable.toggleRowSelection(item,false);
     },
     handleSubmit(){
-      this.$store.dispatch('salaryCalStore/actionAddSalaryEmp',{
+      this.$store.dispatch(this.saveAction,{
           checkId:this.addForm.checkId,
           compEmpIds:this.compEmpIds,
           key:this.addForm.key,
@@ -134,7 +137,7 @@ export default {
     },
     handleSelectionChange(data){
       this.checkedPerson = data;
-      this.compEmpIds = data.map(item=>item.empId)
+      this.compEmpIds = data.map(item=>item.compEmpId)
     },
   }
 };

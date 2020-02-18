@@ -50,6 +50,14 @@ export function apiAddSalaryEmp(form) {
     data:form
   })
 }
+//可添加发薪人员信息采集 添加
+export function apiAddEmpCollectList(form) {
+  return fetch({
+    url: '/api/xsalary/taxReport/addEmpCollectList',
+    method: 'post',
+    data:form
+  })
+}
 //保存基本信息
 export function apiSaveSalaryRule(form) {
   return fetch({
