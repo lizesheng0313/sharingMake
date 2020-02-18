@@ -28,8 +28,6 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="increateImport" v-if="uninsuredActive">增员导入</el-button>
-              <el-button type="primary" class="add-import" @click="decreateImport" v-else>减员导入</el-button>
               <el-button class="add-import" @click="handleExport">导出</el-button>
             </div>
           </div>
@@ -337,8 +335,9 @@
       },
       //导出
       handleExport(){
+        let actionUrl = this.uninsuredActive?"actionFloatEmployeeInExport":"actionFloatEmployeeDeExpor"
         this.$store
-          .dispatch("taxPageStore/actionTaxEmpCollectNewListExport", this.ruleForm)
+          .dispatch("socialFundStore/"+actionUrl, this.ruleForm)
       },
       handleSizeChange(val) {
         this.ruleForm.pageSize = val;

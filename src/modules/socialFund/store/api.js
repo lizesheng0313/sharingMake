@@ -154,10 +154,36 @@ export function apiFloatEmployeeIncreaseDo(form) {
     data:form
   })
 }
+//增减员删除
+export function apiFloatEmployeeDel(form) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/manage/del',
+    method: 'post',
+    data:form
+  })
+}
 //参保导出
 export function apiFloatEmployeeInsuredExport(form) {
   return oldFetch({
     url: 'xsalary/floatEmployee/insured/export',
+    method: 'post',
+    data:form,
+    responseType: 'blob'
+  })
+}
+//增员导出
+export function apiFloatEmployeeInExport(form) {
+  return oldFetch({
+    url: 'xsalary/floatEmployee/manage/inExport',
+    method: 'post',
+    data:form,
+    responseType: 'blob'
+  })
+}
+//减员导出
+export function apiFloatEmployeeDeExport(form) {
+  return oldFetch({
+    url: 'xsalary/floatEmployee/manage/deExport',
     method: 'post',
     data:form,
     responseType: 'blob'

@@ -1,4 +1,4 @@
-import { apiFloatEmployeeInsuredExport,apiFloatEmployeeManageSave,apiFloatEmployeeManageInfo,apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
+import { apiFloatEmployeeDel,apiFloatEmployeeDeExport,apiFloatEmployeeInExport,apiFloatEmployeeInsuredExport,apiFloatEmployeeManageSave,apiFloatEmployeeManageInfo,apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
 
 // 参保 方案列表
 export const actionInsuredProjectMList = ({ dispatch },ruleForm) => {
@@ -66,6 +66,11 @@ export const actionEmpMonthlyLedgerDetail= ({ dispatch },form) => {
 export const actionFloatEmployeeList= ({ dispatch },form) => {
   return apiFloatEmployeeList(form)
 }
+//增减员列表 删除
+export const actionFloatEmployeeDel= ({ dispatch },form) => {
+  return apiFloatEmployeeDel(form)
+}
+
 //增减员 入职未投保
 export const actionFloatEmployeeIncreaseUnlist= ({ dispatch },form) => {
   return apiFloatEmployeeIncreaseUnlist(form)
@@ -86,7 +91,14 @@ export const actionFloatEmployeeIncreaseDo= ({ dispatch },form) => {
 export const actionFloatEmployeeInsuredExport= ({ dispatch },form) => {
   return apiFloatEmployeeInsuredExport(form)
 }
-
+//增员导出
+export const actionFloatEmployeeInExport= ({ dispatch },form) => {
+  return apiFloatEmployeeInExport(form)
+}
+//减员导出
+export const actionFloatEmployeeDeExpor= ({ dispatch },form) => {
+  return apiFloatEmployeeDeExport(form)
+}
 //增减员详情
 export const actionFloatEmployeeManageInfo= ({ dispatch },data) => {
   return apiFloatEmployeeManageInfo(data)

@@ -114,7 +114,7 @@
                     v-else
                     trigger="hover">
                     <div class="funStyle more-style" @click="showSocialDecreate(scope.row)">减员</div>
-                    <div class="funStyle more-style">删除</div>
+                    <div class="funStyle more-style" @click="handleDelete(scope.row)">删除</div>
                     <span slot="reference" class="more-choose">更多</span>
                   </el-popover>
                 </template>
@@ -286,6 +286,25 @@
       handleScreen(){
         this.getList()
         this.isShowScreening = false;
+      },
+      handleDelete(data){
+        this.$confirm("是否删除所选参保记录！", '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store
+            .dispatch("socialFundStore/actionFloatEmployeeDel", {
+              empInsuredIds:[data.empInsuredId]
+            }).then(res=>{
+             if(res.success){
+               this.$message.success("删除成功")
+               this.getList()
+             }
+          })
+        }).catch({})
+
+
       },
       goQuick(){
         this.$router.push('/quickStaff')
