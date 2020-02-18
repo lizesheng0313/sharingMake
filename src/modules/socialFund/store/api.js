@@ -78,6 +78,30 @@ export function apiArchiveMonthlyLedger(form) {
     data:form
   })
 }
+//参保月度台账、导入模板
+export function apiMonthlyLedgerTemplate() {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/downloadMonthlyLedger',
+    method: 'post',
+    responseType: 'blob'
+  })
+}
+//参保月度台账、导入错误日志
+export function apiMonthlyLedgerError(data) {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/monthlyLedgerError/download',
+    method: 'post',
+    data:data,
+  })
+}
+//参保月度台账、导入
+export function apiImportMonthlyLedger(data) {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/importMonthlyLedger',
+    method: 'post',
+    data:data,
+  })
+}
 //参保月度台账、员工月度台账列表
 export function apiEmpMonthlyLedgerList(form) {
   return oldFetch({

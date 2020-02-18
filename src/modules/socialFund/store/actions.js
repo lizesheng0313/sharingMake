@@ -1,4 +1,4 @@
-import { apiFloatEmployeeDel,apiFloatEmployeeDeExport,apiFloatEmployeeInExport,apiFloatEmployeeInsuredExport,apiFloatEmployeeManageSave,apiFloatEmployeeManageInfo,apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
+import { apiImportMonthlyLedger,apiMonthlyLedgerError,apiMonthlyLedgerTemplate,apiFloatEmployeeDel,apiFloatEmployeeDeExport,apiFloatEmployeeInExport,apiFloatEmployeeInsuredExport,apiFloatEmployeeManageSave,apiFloatEmployeeManageInfo,apiFloatEmployeeIncreaseDo,apiGetCompInsuredProject,apiFloatEmployeeDecreaseDo,apiFloatEmployeeIncreaseList,apiFloatEmployeeIncreaseUnlist,apiEmpMonthlyLedgerDetail,apiEmpMonthlyLedgerSupple,apiEmpMonthlyLedgerDelete,apiFloatEmployeeList,apiEmpMonthlyLedgerList,apiArchiveMonthlyLedger,apiSaveMonthlyLedger,apiGetCompMonthlyLedgerList,apiInsuredDel,apiInsuredGetEditInfo,apiInsuredProjectMList,apiInsuredProjectSave,apiInsuredGetInfo,apiInsuredProjectList,apiInsuredGetBase} from './api'
 
 // 参保 方案列表
 export const actionInsuredProjectMList = ({ dispatch },ruleForm) => {
@@ -45,6 +45,18 @@ export const actionSaveMonthlyLedger= ({ dispatch },form) => {
 //参保台账归档
 export const actionArchiveMonthlyLedger= ({ dispatch },form) => {
   return apiArchiveMonthlyLedger(form)
+}
+//参保台账 导入模板
+export const actionMonthlyLedgerTemplate= ({ dispatch }) => {
+  return apiMonthlyLedgerTemplate()
+}
+//参保台账 导入错误日志
+export const actionMonthlyLedgerError= ({ dispatch },data) => {
+  return apiMonthlyLedgerError(data)
+}
+//参保台账 导入
+export const actionImportMonthlyLedger= ({ dispatch },data) => {
+  return apiImportMonthlyLedger(data)
 }
 //参保月度台账、员工列表
 export const actionEmpMonthlyLedgerList= ({ dispatch },form) => {
