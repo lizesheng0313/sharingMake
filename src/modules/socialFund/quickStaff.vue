@@ -46,8 +46,8 @@
             </span>
           </div>
           <div class="staff-table">
-            <div class="floating-menu" v-if="selectNameList.length>0">
-              <span>已选中{{selectNameList.length}}人</span>
+            <div class="floating-menu" v-if="selectList.length>0">
+              <span>已选中{{selectList.length}}人</span>
               <el-button size="small" class="button-mini" @click="batchIncreate" v-if="uninsuredActive">批量增员</el-button>
               <el-button size="small" class="button-mini" @click="batchDecreate" v-else>批量减员</el-button>
             </div>
@@ -168,9 +168,9 @@
         </span>
       </el-dialog>
       <!-- 社保增员 -->
-      <socialIncreace ref="socialIncreace" :nameList="selectNameList"></socialIncreace>
+      <socialIncreace ref="socialIncreace" @freshList ="getList"></socialIncreace>
       <!-- 社保减员 -->
-      <social-decreace ref="socialDecreace"></social-decreace>
+      <social-decreace ref="socialDecreace" @freshList ="getList"></social-decreace>
     </div>
   </div>
 </template>
@@ -227,7 +227,7 @@
           uninsuredCount:0,
           insuredCount:0,
           loading:false,
-          selectNameList:[],
+          selectList:[],
           entryUninsuredNum:"",
           dimissionInsuredNum:""
       };
@@ -312,25 +312,28 @@
       },
       //批量选择
       handleSelectionPerson(val){
-        this.selectNameList = val.map((item)=>item.name)
+        this.selectList = val
       },
       //社保增员
       showSocialIncreate(data){
-        let namelist = [data.name]
-        this.$refs.socialIncreace.show(namelist)
+        let compEmpIds = [data.compEmpId]
+        let nameList = [data.empName]
+        this.$refs.socialIncreace.show(compEmpIds,nameList)
       },
       //社保减员
       showSocialDecreate(data){
-        let namelist = [data.name]
-        this.$refs.socialDecreace.show(namelist)
+        this.$refs.socialDecreace.show([data.compEmpId])
       },
       //批量增员
       batchIncreate(){
-        this.$refs.socialIncreace.show(this.selectNameList)
+        let compEmpIds = this.selectList.map(item=>item.compEmpId)
+        let nameList = this.selectList.map(item=>item.empName)
+        this.$refs.socialIncreace.show(compEmpIds,nameList)
       },
       //批量减员
       batchDecreate(){
-        this.$refs.socialDecreace.show(this.selectNameList)
+        let compEmpIds = this.selectList.map(item=>item.compEmpId)
+        this.$refs.socialDecreace.show(compEmpIds)
       },
       //导出
       handleExport(){

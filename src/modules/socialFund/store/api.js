@@ -154,6 +154,20 @@ export function apiFloatEmployeeIncreaseDo(form) {
     data:form
   })
 }
+//增减员详情
+export function apiFloatEmployeeManageInfo(data) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/manage/info/'+data.compEmpId+'/'+data.empInsuredId,
+    method: 'get',
+  })
+}
+export function apiFloatEmployeeManageSave(data) {
+  return fetch({
+    url: '/api/xsalary/floatEmployee/manage/save',
+    method: 'post',
+    data:data
+  })
+}
 //增员参保方案
 export function apiGetCompInsuredProject() {
   return fetch({

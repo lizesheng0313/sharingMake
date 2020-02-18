@@ -57,9 +57,10 @@ export default {
     };
   },
   methods: {
-    show(data) {
+    show(compEmpIds) {
       this.isShowDecrease = true;
-      this.compEmpIds = data.map(item=>item.compEmpId)
+      this.compEmpIds =compEmpIds
+      console.log(this.compEmpIds)
     },
     handleDecreateSocial(){
       this.socialDecreaceForm.accumulationFundEndMonth = this.socialDecreaceForm.providentMonthType === "1" ?

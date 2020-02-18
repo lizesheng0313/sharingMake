@@ -280,6 +280,10 @@ const insuredStatus = (val) => {
     case 'COMPENSATORY_ACCUMULATION_FUND': {
       return '补偿公积金';
     }
+    case 'TOTAL_INSURANCE': {
+      return '合计';
+    }
+
   }
 };
 //证件类型

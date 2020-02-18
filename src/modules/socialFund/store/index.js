@@ -5,7 +5,8 @@ import * as getters from './getters'
 export const socialFundStore = {
   namespaced: true,
   state: {
-    insuredAccoundItem:{}
+    insuredAccoundItem:{},
+    attritionItem:{}
   },
   actions,
   mutations,

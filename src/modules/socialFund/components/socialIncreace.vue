@@ -38,7 +38,7 @@
           <div class="shortCon">
             <el-form-item label="社保起缴月份" prop="socialInsuranceStartMonth"
                           :rules="{required: true, message: '请选择社保起缴月份', trigger: 'blur'}">
-              <el-date-picker v-model="socialIncreaceForm.socialInsuranceStartMonth" type="month" placeholder="请选择"></el-date-picker>
+              <el-date-picker v-model="socialIncreaceForm.socialInsuranceStartMonth" type="month" placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
             </el-form-item>
           </div>
           <div class="shortCon">
@@ -55,7 +55,7 @@
                 <el-radio-button label="2">选择</el-radio-button>
               </el-radio-group>
               <span class="provident-month">
-                    <el-date-picker v-if="socialIncreaceForm.providentMonthType==2" v-model="socialIncreaceForm.providentMonth" type="month" placeholder="请选择"></el-date-picker>
+                    <el-date-picker v-if="socialIncreaceForm.providentMonthType==2" v-model="socialIncreaceForm.providentMonth" type="month" placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
                 </span>
             </el-form-item>
           </div>
@@ -106,28 +106,29 @@ export default {
     };
   },
   methods: {
-    show(data) {
+    show(compEmpIds,nameList) {
       this.isShowIncrease = true;
-      this.nameList = data.map(item=>item.empName);
-      this.socialIncreaceForm.compEmpIds = data.map(item=>item.compEmpId)
+      this.nameList = nameList
+      this.socialIncreaceForm.compEmpIds = compEmpIds
         this.$store
-        .dispatch("socialFundStore/actionGetCompInsuredProject", )
+        .dispatch("socialFundStore/actionGetCompInsuredProject", this.socialIncreaceForm)
         .then(res => {
           if(res.success){
             this.planOption = res.data
           }
         });
     },
-    //增员导入
+    //增员
     handleIncreateSocial(){
       this.$refs.socialIncreaceForm.validate(valid => {
         if(valid){
           this.$store
-            .dispatch("socialFundStore/actionFloatEmployeeIncreaseDo", )
+            .dispatch("socialFundStore/actionFloatEmployeeIncreaseDo", this.socialIncreaceForm)
             .then(res => {
               if(res.success){
                 this.$message.success("增员导入成功")
                 this.isShowIncrease = false
+                this.$emit("freshList")
               }
             });
         }

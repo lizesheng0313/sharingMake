@@ -177,9 +177,9 @@
         </span>
       </el-dialog>
       <!-- 社保增员 -->
-      <socialIncreace ref="socialIncreace"></socialIncreace>
+      <socialIncreace ref="socialIncreace" @freshList ="getList"></socialIncreace>
       <!-- 社保减员 -->
-      <social-decreace ref="socialDecreace" @freshList = getList></social-decreace>
+      <social-decreace ref="socialDecreace" @freshList ="getList"></social-decreace>
     </div>
   </div>
 </template>
@@ -229,7 +229,6 @@
     components:{
       socialDecreace,
       socialIncreace,
-
     },
     computed:{
       ...mapState({
@@ -260,7 +259,7 @@
        this.getList('selectNum')
       },
       getList(selectNum) {
-        this.loading = false;
+        this.loading = true;
         this.$store
           .dispatch("socialFundStore/actionFloatEmployeeList", this.ruleForm)
           .then(res => {
@@ -293,7 +292,8 @@
       },
       //详情
       goDetail(data){
-        this.$router.push({path:'/attritionDetail',query:{type:data.type}})
+        this.$store.commit("socialFundStore/GET_ATRRITIONITEM",data);
+        this.$router.push('/attritionDetail')
       },
       //导出
       handleExport(){
@@ -302,11 +302,13 @@
       },
       //社保减员
       showSocialDecreate(data){
-        this.$refs.socialDecreace.show([data])
+        this.$refs.socialDecreace.show([data.compEmpId])
       },
       //社保增员
       showSocialIncreate(data){
-        this.$refs.socialIncreace.show([data])
+        let compEmpIds = [data.compEmpId]
+        let nameList = [data.empName]
+        this.$refs.socialIncreace.show(compEmpIds,nameList)
       },
       handleSizeChange(val) {
         this.totalListForm.pageSize = val;
