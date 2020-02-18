@@ -214,7 +214,7 @@ export function apiFloatEmployeeDownloadModelDocE() {
   })
 }
 //编辑导入
-export function apiFloatEmployeEeditImport(params) {
+export function apiFloatEmployeeEditImport(params) {
   return oldFetch({
     url: 'xsalary/floatEmployee/editImport/import',
     method: 'post',
