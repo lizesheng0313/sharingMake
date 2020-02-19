@@ -44,8 +44,8 @@
     <div class="staff-table">
       <div class="floating-menu" v-if="selectUserIdList.length>0">
         <span>已选中{{selectUserIdList.length}}人</span>
-        <el-button size="mini" class="button-mini" @click="handleBatchSend" v-if="selectUserStatusList.includes('已发放')">批量发放</el-button>
-        <el-button size="mini" class="button-mini" @click="handleBatchCancel" v-if="selectUserStatusList.includes('未发放')">批量撤回</el-button>
+        <el-button size="small" class="button-mini" @click="handleBatchSend" v-if="selectUserStatusList.includes('已发放')">批量发放</el-button>
+        <el-button size="small" class="button-mini" @click="handleBatchCancel" v-if="selectUserStatusList.includes('未发放')">批量撤回</el-button>
       </div>
       <el-table :data="salaryList"
                 class="check-staff_table"

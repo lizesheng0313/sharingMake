@@ -40,7 +40,34 @@ export default {
           url: "/home",
           index: 0,
           icon:"iconshouye"
+        },
+        {
+          businessCode: null,
+          name: "增减员",
+          url: "/attrition",
+          index: 0,
+          icon:"iconshouye"
+        },
+        {
+          businessCode: null,
+          name: "发薪人员",
+          url: "/payMaster",
+          index: 0,
+          icon:"iconshouye"
+        },{
+          businessCode: null,
+          name: "参保月度台账",
+          url: "/insuredAccount",
+          index: 0,
+          icon:"iconshouye"
+        },{
+          businessCode: null,
+          name: "参保方案",
+          url: "/insuredPlan",
+          index: 0,
+          icon:"iconshouye"
         }
+
       ]
       }
   },
@@ -61,17 +88,59 @@ export default {
     // this.mainMenu = privilegeGroupTreeVO
     // let privilegeVOList0 = privilegeVOList.map(it=>it.code);
     // this.$store.commit(AT.SET_PRIVILIGEVOLiST,privilegeVOList0);
+
+   //  公司名称列表
+    this.getTaxSubjectInfoList()
+
+  // 国籍列表
+    this.getCountriesList()
+
+  // 银行列表
+    this.getBankList()
+
+  // 城市列表
+    this.getCityList()
   },
   mounted() {
   },
   methods:{
+    getTaxSubjectInfoList() {
+      this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
+        if (res.success) {
+          let taxSubjectInfoList = [{'taxSubId':0,'taxSubName':"全部"}].concat(res.data);
+          this.$store.commit(AT.SET_TAXSUBJECTINFOLIST,taxSubjectInfoList);
+        }
+      });
+    },
+    getCountriesList(){
+      this.$store
+        .dispatch("payMasterStore/actionGetCountries")
+        .then(res => {
+          this.$store.commit(AT.SET_COUNTRYLIST,res.data);
 
+        })
+    },
+    getBankList(){
+      this.$store
+        .dispatch("payMasterStore/actionGetBanks")
+        .then(res => {
+          this.$store.commit(AT.SET_BANKLIST,res.data);
+        })
+    },
+    getCityList(){
+      this.$store
+        .dispatch("payMasterStore/actionGetCity")
+        .then(res=>{
+          this.$store.commit(AT.SET_CITYLIST,res.data);
+      })
+    }
   },
 };
 </script>
 <style lang="scss" scoped>
 .app-page {
   height: 100%;
+  background: #fff;
   background-size: 100% 100%;
   background-position: center center;
   .router-view {
@@ -93,7 +162,7 @@ export default {
   margin-left: 17px;
   background: #fff;
   overflow: hidden;
-  box-shadow: 3px 5px 15px #dae2ea;
+  /*box-shadow: 3px 5px 15px #dae2ea;*/
 }
 .bottom {
   text-align: center;

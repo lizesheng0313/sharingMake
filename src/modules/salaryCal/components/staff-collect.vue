@@ -255,6 +255,10 @@ export default {
         this.getList()
       }
     },
+    //添加人员
+    addStaff(){
+
+    },
     //查看工资表状态
     getSalaryStatus(){
       this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.ruleForm.checkId).then(res=>{

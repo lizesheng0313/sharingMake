@@ -75,7 +75,51 @@ const filterEmpType = (val) => {
     }
   }
 };
-
+//学历
+const filterEducation = (val) => {
+  switch (val) {
+    case 'DR': {
+      return '博士研究生';
+    }
+    case 'MASTER': {
+      return '硕士研究生';
+    }
+    case 'REGULAR': {
+      return '大学本科';
+    }
+    case 'JUNIOR': {
+      return '大学专科';
+    }
+    case 'OTHER': {
+      return '其他';
+    }
+  }
+};
+//员工状态
+export const filterEmployStatus = (val) =>{
+  switch (val) {//仲裁类别
+    case 'ON_THE_JOB': {
+      return '在职';
+    }
+    case 'DIMISSION': {
+      return '离职';
+    }
+    case 'RETIRED': {
+      return '退休';
+    }
+  }
+}
+//户口性质
+const householdRegistrationType = (val) => {
+  switch (val) {//仲裁类别
+    case 'CITY': {
+      return '城镇户口';
+    }
+    case 'FAVILLAGEIL': {
+      return '农村户口';
+    }
+  }
+};
 const filterType = (val) => {
   switch (val) {//仲裁类别
     case 'SYSYEM': {
@@ -177,6 +221,124 @@ const reportType = (val) => {
     }
   }
 };
+
+//性别
+const filterEmpSex = (val) => {
+  switch (val) {
+    case 'MALE': {
+      return '男';
+    }
+    case 'FEMALE': {
+      return '女';
+    }
+  }
+};
+ //参保状态
+const insuredStatus = (val) => {
+  switch (val) {
+    case 'INSURED_STOP': {
+      return '已停保';
+    }
+    case 'INSURED_ING': {
+      return '参保中';
+    }
+  }
+};
+
+ const insuranceType = (val) => {
+  switch (val) {
+    case 'ENDOWMENT_INSURANCE': {
+      return '养老保险';
+    }
+    case 'MEDICAL_INSURANCE': {
+      return '医疗保险';
+    }
+    case 'UNEMPLOYMENT_INSURANCE': {
+      return '失业保险';
+    }
+    case 'INJURY_INSURANCE': {
+      return '工伤保险';
+    }
+    case 'BIRTH_INSURANCE': {
+      return '生育保险';
+    }
+    case 'SERIOUS_DISEASE_TREATMENT': {
+      return '大病医疗';
+    }
+    case 'COMPENSATORY_ENDOWMENT_INSURANCE': {
+      return '补充养老保险';
+    }
+    case 'COMPENSATORY_MEDICAL_INSURANCE': {
+      return '补充医疗保险';
+    }
+    case 'COMPENSATORY_UNEMPLOYMENT_INSURANCE': {
+      return '补充失业保险';
+    }
+    case 'ACCUMULATION_FUND': {
+      return '公积金';
+    }
+    case 'COMPENSATORY_ACCUMULATION_FUND': {
+      return '补偿公积金';
+    }
+    case 'TOTAL_INSURANCE': {
+      return '合计';
+    }
+
+  }
+};
+//证件类型
+const filterIdType = (val) => {
+  switch (val) {
+    case 'PRC_ID': {
+      return '居民身份证';
+    }
+    case 'COMPATRIOTS_CARD': {
+      return '港澳居民来往内地通行证';
+    }
+    case 'FORMOSA_CARD': {
+      return '台湾居民来往大陆通行证';
+    }
+    case 'CHINA_PASSPORT': {
+      return '中国护照';
+    }
+    case 'FOREIGN_PASSPORT': {
+      return '外国护照';
+    }
+    case 'FORMOSA_PRC_ID': {
+      return '台湾居民居住证';
+    }
+    case 'MACAU_PRC_ID': {
+      return '港澳居民居住证';
+    }
+    case 'FOREIGN_PRC_ID':{
+      return '外国人永久居留身份证';
+    }
+    case 'FOREIGN_WORK_PERMIT_A': {
+      return '外国人工作许可证（A类）';
+    }
+    case 'FOREIGN_WORK_PERMIT_B': {
+      return '外国人工作许可证（B类）';
+    }
+    case 'FOREIGN_WORK_PERMIT_C': {
+      return '外国人工作许可证（C类）';
+    }
+    case 'OTHER': {
+      return '其他';
+    }
+  }
+};
+
+// 任职受雇从业类型
+const workType = (val) => {
+  switch (val) {
+    case 'EMPLOYEE': {
+      return '雇员';
+    }
+    case 'OTHER': {
+      return '其他';
+    }
+  }
+};
 export default {
   resetDate,
   texRule,
@@ -186,5 +348,13 @@ export default {
   countryType,
   accreditStatus,
   dateStyle,
-  reportType
+  insuranceType,
+  reportType,
+  filterEmployStatus,
+  filterEmpSex,
+  filterIdType,
+  filterEducation,
+  householdRegistrationType,
+  workType,
+  insuredStatus
 }

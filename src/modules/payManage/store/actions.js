@@ -14,7 +14,7 @@ export const postRecordList = ({ commit }, formData) => {
 };
 
 export const postCreateSalary = ({ commit }, formData) => {
-    return apiCreateSalary(formData).then(res => res);
+  return apiCreateSalary(formData).then(res => res);
 };
 
 export const postImportSalary = ({ commit }, formData) => {

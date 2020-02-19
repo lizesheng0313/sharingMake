@@ -11,13 +11,15 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="showIncrease" class="add-import" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empAdd')">增减员导入</el-button>
+        <el-button type="primary" @click="handleAddStaff" :disabled="setWarning">添加人员</el-button>
+<!--        <el-button type="primary" @click="showIncrease" class="add-import" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empAdd')">增减员导入</el-button>-->
         <el-dropdown trigger="click" @command="handleDropdown">
           <el-button type="default">
             更多
             <i class="iconsanjiao iconfont"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="sync" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">同步本月发薪人员</el-dropdown-item>
             <el-dropdown-item command="delete" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">全部删除</el-dropdown-item>
             <el-dropdown-item command="export" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empExport')">导出</el-dropdown-item>
           </el-dropdown-menu>
@@ -37,6 +39,7 @@
         减少：
         <i>{{decNum || decNum ==0?this.decNum:"0"}}</i>人
       </span>
+      <span class="seeDetail" @click="$router.push({path:'/inOrdeDetail',query:{id:$route.query.id}})">查看增减明细</span>
     </div>
     <div class="staff-table">
       <!-- <div class="floating-menu">
@@ -200,13 +203,37 @@
 <!--        <el-button @click="isShowIncreaseFinish = false">取 消</el-button>-->
       </span>
     </el-dialog>
+    <add-staff ref="addStaff" :id="$route.query.id" @freshList="loading()"></add-staff>
+    <!--   同步本月发薪人员 -->
+    <el-dialog
+      :visible.sync="isShowSyncEmployee"
+      width="500px"
+      center
+      class="importFinishDialog"
+      title="同步人员"
+      :close-on-click-modal="closeModel"
+    >
+      <div>确认同步后，将重新同步本月算薪人员：</div>
+      <div>系统重新获取算薪人员范围内、算薪周期范围内有任职的人员为本月算薪人员</div>
+      <div>确认是否重新同步本月算薪人员？</div>
+      <div style="text-align: center;">
+        <el-button type="primary" @click="handleSync">确定</el-button>
+        <el-button @click="isShowSyncEmployee = false">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
   import { apiCheckMember,apiImportMember,apiCheckMemberdelete,apiCheckMemberSummary,apiMemberErrorRecord} from '../store/api'
   import { mapState } from "vuex";
+  import RouterLink from "olading-ui/lib/mixins/router-link";
+  import addStaff from "@/components/tool/addStaff";
  export default {
-  data() {
+   components: {
+     RouterLink,
+     addStaff
+   },
+   data() {
     return {
       radio: 3,
       fileList: [],
@@ -249,6 +276,7 @@
       deleteDisabled:false,
       setWarning:false,
       closeModel:false,
+      isShowSyncEmployee:false,
     };
   },
   computed:{
@@ -295,6 +323,13 @@
             this.incNum = data.incNum;
           }
         })
+    },
+    handleAddStaff(){
+      this.$refs.addStaff.show({
+        checkId:this.$route.query.id,
+        listAction:"salaryCalStore/actionSalaryAddEmpList",
+        saveAction:"salaryCalStore/actionAddSalaryEmp"
+      })
     },
     getSalaryStatus(){
       this.$store.dispatch('salaryCalStore/actionGetSalaryStatus',this.userForm.checkId).then(res=>{
@@ -407,6 +442,16 @@
     handleSelectionChange(val){
       this.selectUserIdList = val.map((item,index)=>item.id);
     },
+    //同步发薪人员
+    handleSync(){
+      this.$store.dispatch('salaryCalStore/actionSyncSalaryEmp',this.userForm.checkId).then(res=>{
+        if(res.success){
+          this.$message.success("同步数据成功");
+          this.isShowSyncEmployee = false;
+          this.loading()
+        }
+      })
+    },
     handleDropdown(val){
       if(val === 'delete'){
         if(this.setWarning){
@@ -427,8 +472,16 @@
               })
             }).catch(() => {});
         }
-      }else{
+      }
+      if(val === 'export'){
         window.location.href = "/api/salary/checkMember/export?checkId="+this.userForm.checkId+"&"+"key="+this.userForm.key
+      }
+      if(val === 'sync'){
+        if(this.setWarning){
+          this.$message.warning("工资表已审核，不允许操作。")
+        }else{
+          this.isShowSyncEmployee = true;
+        }
       }
     },
     //增员导入
@@ -478,6 +531,13 @@
       color: $mainColor;
       font-style: normal;
       padding: 0 3px;
+    }
+    .seeDetail{
+      display: inline-block;
+      margin-left: 10px;
+      color: $mainColor;
+      cursor: pointer;
+      font-size: 14px;
     }
   }
   .staff-table {

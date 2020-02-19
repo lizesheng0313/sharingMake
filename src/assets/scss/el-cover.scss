@@ -68,6 +68,16 @@
     top: 4px;
   }
 }
+
+.attrition,.quickStaff {
+  .el-input--prefix .el-input__inner {
+    font-size: 14px;
+    padding: 19px 30px;
+  }
+  .search-input .el-input__prefix {
+    top: 4px;
+  }
+}
 .paid,.cumulative {
   .el-input--prefix .el-input__inner {
     font-size: 14px;
@@ -86,11 +96,6 @@
     padding: 19px 30px;
   }
 }
-
-
-.el-date-editor.el-input {
-  width: 130px;
-}
 .sflary-el-step {
   .el-step__main {
     color: #999;
@@ -101,7 +106,7 @@
   .el-step__head.is-process {
     color: $mainColor;
     .el-step__icon.is-text {
-      border-color:$mainColor;
+      border-color: $mainColor;
     }
   }
   .el-step__title.is-process {
@@ -110,7 +115,7 @@
 }
 .salary-check {
   .first-step {
-    .el-step__head.is-success{
+    .el-step__head.is-success {
       color: #C0C4CC !important;
       border-color: #C0C4CC;
     }
@@ -131,90 +136,94 @@
     display: block;
   }
 }
-.cumulative{
-  .el-input__suffix{
-    top:2px;
+.cumulative {
+  .el-input__suffix {
+    top: 2px;
     cursor: pointer;
   }
-  .el-select{
-    margin-right:20px;
-    width:100px;
+  .el-select {
+    margin-right: 20px;
+    width: 100px;
   }
-  .selectCon{
-    .el-select{
-      width:220px;
+  .selectCon {
+    .el-select {
+      width: 220px;
     }
-    .el-input--suffix .el-input__inner{
-      border:none;
+    .el-input--suffix .el-input__inner {
+      border: none;
     }
-    .el-select__caret{
+    .el-select__caret {
       font-weight: bolder;
     }
   }
 }
-.diy-el_dialog{
+.diy-el_dialog {
   border-radius:6px;
-  .el-form-item__content{
-    height:40px;
+  .el-form-item__content {
+    height: 40px;
   }
-  .el-form-item{
-    margin-bottom:15px;
+  .el-form-item {
+    margin-bottom: 15px;
   }
-  .el-dialog__header{
-    background:#F7F7F7;
-    padding:15px 0;
-    .el-icon-close{
+  .el-dialog__header {
+    background: #F7F7F7;
+    padding: 15px 0;
+    .el-icon-close {
       position: relative;
-      top:-3px;
+      top: -3px;
     }
-    .el-dialog__title{
+    .el-dialog__title {
       font-size:16px;
     }
   }
-  .el-dialog__close{
+  .el-dialog__close {
     font-size:22px;
   }
-  .diy-el_radio{
-    margin-top:20px;
-    margin-left:18px;
+  .diy-el_radio {
+    margin-top: 20px;
+    margin-left: 18px;
   }
-  .headings{
-    font-weight:500;
-    font-size:14px;
-    margin-bottom:10px;
+  .headings {
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 10px;
   }
   .select-file {
-    margin-top:20px;
+    margin-top: 20px;
     p{
-      margin-left:28px;
-      margin-top:15px;
-      span{
+      margin-left: 28px;
+      margin-top: 15px;
+      span {
         cursor: pointer;
-        margin-left:20px;
-        color:#FF8F2C;
+        margin-left: 20px;
+        color: #FF8F2C;
       }
     }
   }
 }
-
 .el-table th, .el-table td {
   text-align: center !important
 }
-
+.el-date-editor.el-input {
+  width: 168px;
+}
+.social-increace-dialog {
+  .el-date-editor.el-input {
+    width: 310px;
+  }
+  .provident-month .el-date-editor.el-input {
+    width: 140px;
+  }
+}
 .el-radio {
   margin: 10px !important;
 }
-
-.upload-disable .el-upload--picture-card{
+.upload-disable .el-upload--picture-card {
   display: none;
 }
-// .el-upload-dragger{
-//   width:180px!important;
-// }
 .el-submenu .el-menu-item {
   min-width: 170px;
 }
-
 .el-button--primary {
   border: 1px solid $mainColor;
   font-size: 14px;
@@ -224,35 +233,35 @@
     padding: 9px 0px;
   }
 }
-.check-staff,.salary-send{
-  .el-dropdown{
-    .el-button{
+.check-staff,.salary-send {
+  .el-dropdown {
+    .el-button {
       padding:9px 20px;
     }
   }
-  .el-upload-list__item-name{
+  .el-upload-list__item-name {
     margin-left: 22px;
   }
 }
-.calc-wages{
-  .el-upload-list__item-name{
+.calc-wages {
+  .el-upload-list__item-name {
     margin-left: 22px;
   }
-  .el-radio-group{
-    margin-left:18px;
+  .el-radio-group {
+    margin-left: 18px;
   }
 }
-.search-input .el-input__icon{
-   line-height:34px;
+.search-input .el-input__icon {
+    line-height: 34px;
 }
-.collect{
-  .search-input{
-    .el-input__inner{
+.collect {
+  .search-input {
+    .el-input__inner {
       width: 230px;
     }
   }
 }
-.el-dropdown-menu__item.current-tab-sub_name{
+.el-dropdown-menu__item.current-tab-sub_name {
   @include ellipsis;
   width: 200px;
   display: block;
@@ -262,7 +271,6 @@
   font-weight: normal;
   padding: 0px;
 }
-
 .salarySet-page {
   .el-step__head.is-finish {
     color: #303133 !important;
@@ -332,13 +340,68 @@
 .v-modal {
   z-index: 2000 !important;
 }
-
 .notification {
   .check-tip {
-    margin-top:4px;
+    margin-top: 4px;
     .el-checkbox__label {
       font-size: 12px;
     }
   }
 }
-
+.attrition-detail,.employee-detail,.add-employee,.insured-account .screen-dialog {
+  .el-input--suffix .el-input__inner,input[type="text"] {
+    width: 300px;
+  }
+  .el-date-editor.el-input {
+    width: 280px;
+  }
+  .provident-month {
+    .el-input--suffix .el-input__inner {
+      width: 170px;
+    }
+    .el-date-editor.el-input {
+      width: 168px;
+    }
+  }
+}
+.company-change {
+  .el-input--prefix .el-input__inner {
+    padding: 14px 30px;
+  }
+}
+.employee-Info {
+  .drop-down {
+    margin: 10px 0px;
+    input[type="text"] {
+      border:none;
+      text-align: center;
+    }
+  }
+}
+.input-right {
+  input[type="text"] {
+    text-align: right;
+  }
+}
+.el-autocomplete-suggestion {
+  display: none;
+}
+.salary-area ,.un-need-salary {
+  input[type="text"]{
+    height: 28px;
+  }
+  .el-tabs__item {
+    padding: 0 10px;
+  }
+  .input-style {
+    font-size: 13px;
+  }
+}
+.add-staff {
+  .el-input {
+    width: 140px;
+  }
+  .el-input__icon{
+    line-height: 30px;
+  }
+}

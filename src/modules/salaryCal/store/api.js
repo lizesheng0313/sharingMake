@@ -1,5 +1,71 @@
 import { fetch,fetchFile } from 'request/fetch'
 import oldfetch from 'request/oldFetch'
+
+
+//增减员明细
+export function apiSalaryDetailCheckMembers(form) {
+  return fetch({
+    url: '/api/xsalary/salary/salaryDetailCheckMembers',
+    method: 'get',
+    params:form
+  })
+}
+
+//删除算薪
+export function apiSalaryDetailCheckMembersDelete(id) {
+  return fetch({
+    url: '/api/xsalary/salary/salaryDetailCheckMembers/delete/'+id,
+    method: 'delete',
+  })
+}
+//添加算薪
+export function apiSalaryAddDetailCheckMembers(id) {
+  return fetch({
+    url: '/api/xsalary/salary/salaryAddDetailCheckMembers/'+id,
+    method: 'get',
+  })
+}
+//薪资核算-同步数据
+export function apiSyncSalaryEmp(id) {
+  return fetch({
+    url: '/api/xsalary/salary/syncSalaryEmp/'+id,
+    method: 'get',
+  })
+}
+
+//可添加发薪人员列表
+export function apiSalaryAddEmpList(form) {
+  return fetch({
+    url: '/api/xsalary/salary/salaryAddEmpList',
+    method: 'get',
+    params:form
+  })
+}
+
+//可添加发薪人员列表 添加
+export function apiAddSalaryEmp(form) {
+  return fetch({
+    url: '/api/xsalary/salary/addSalaryEmp',
+    method: 'post',
+    data:form
+  })
+}
+//可添加发薪人员信息采集 列表
+export function apiGetAddEmpCollectList(form) {
+  return fetch({
+    url: '/api/xsalary/taxReport/getAddEmpCollectList',
+    method: 'get',
+    params:form
+  })
+}
+//可添加发薪人员信息采集 添加
+export function apiAddEmpCollectList(form) {
+  return fetch({
+    url: '/api/xsalary/taxReport/addEmpCollectList',
+    method: 'post',
+    data:form
+  })
+}
 //保存基本信息
 export function apiSaveSalaryRule(form) {
   return fetch({
@@ -62,6 +128,13 @@ export function apiSalaryRuleList(date) {
     params:{
       date:date
     }
+  })
+}
+//工资表设置扣缴义务人人员
+export function apiEnterpriseEmployees(taxSubId) {
+  return fetch({
+    url: '/api/xsalary/enterprise/'+taxSubId+'/rangeEmployees',
+    method: 'get',
   })
 }
 //启动薪资核算
@@ -129,7 +202,7 @@ export function apiCheckMemberDeleteAll(checkId) {
     },
   })
 }
-
+//核对人员较上月变化数
 export function apiCheckMemberSummary(checkId) {
   return fetch({
     url: '/api/xsalary/salary/checkMember/summary/'+checkId,

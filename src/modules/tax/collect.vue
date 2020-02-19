@@ -37,6 +37,7 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
+              <el-button type="primary" class="add-import" @click="handleAddStaff">添加</el-button>
               <el-button type="primary" class="add-import" @click="handleReport"
                          v-if="privilegeVoList.includes('salary.report.personReport.sendReport')">报送</el-button>
               <el-button class="add-import" @click="handleReportInfo"
@@ -276,6 +277,8 @@
       <taxSelectS ref="selectSY" :timeObj="timeObj" :sign="sign"></taxSelectS>
       <!-- 查询-->
       <taxtFeedback ref="feedback" :sign="sign"></taxtFeedback>
+      <!-- 添加人员-->
+      <add-staff ref="addStaff"></add-staff>
     </div>
   </div>
 </template>
@@ -286,6 +289,7 @@ import * as AT from "./store/actionTypes";
 import fun from "@/util/fun";
 import taxSelectS from "./components/taxSelectS";
 import taxtFeedback from "./components/taxtFeedback";
+import addStaff from "@/components/tool/addStaff";
 let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
@@ -362,7 +366,8 @@ export default {
   },
   components:{
     taxSelectS,
-    taxtFeedback
+    taxtFeedback,
+    addStaff
   },
   computed:{
     ...mapState("salaryCalStore", {
@@ -401,6 +406,13 @@ export default {
       if(type==="REPORT_ERROR"){this.allActive = false;this.successActive = false;  this.waitActive = false; this.backActive = false ; this.errorActive = true; }
       this.ruleForm.reportStatus = type === "" ? [] : [type];
       this.getList()
+    },
+    handleAddStaff(){
+      this.$refs.addStaff.show({
+        checkId:"",
+        listAction:"salaryCalStore/actionGetAddEmpCollectList",
+        saveAction:"salaryCalStore/actionAddEmpCollectList"
+      })
     },
     getList() {
       this.loading = true;
