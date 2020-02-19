@@ -325,7 +325,7 @@
         })
     },
     handleAddStaff(){
-      this.$refs.addStaff.getList({
+      this.$refs.addStaff.show({
         checkId:this.$route.query.id,
         listAction:"salaryCalStore/actionSalaryAddEmpList",
         saveAction:"salaryCalStore/actionAddSalaryEmp"

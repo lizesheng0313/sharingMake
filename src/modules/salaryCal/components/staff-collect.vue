@@ -19,7 +19,6 @@
               <el-tooltip class="item" effect="dark" content="若未选择人员，抓取工资表全部待报送人员；若选择了人员，抓取所选人员中待报送人员报送。" placement="top">
                 <el-button type="primary" class="add-import" @click="handleReport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empReport')">报送</el-button>
               </el-tooltip>
-              <el-button type="primary" @click="handleAddStaff" :disabled="setWarning">添加人员</el-button>
               <el-button class="add-import" @click="handleReportInfo" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empReport')">获取反馈</el-button>
               <el-button class="add-import" @click="handleExport" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empReportExport')">导出</el-button>
             </div>
@@ -136,8 +135,6 @@
       >
       </salaryBack>
       <authorizeTip ref="authorizeTip"></authorizeTip>
-     <!--   添加人员   -->
-      <add-staff ref="addStaff" :id="$route.query.id" @freshList="getList()"></add-staff>
     </div>
   </div>
 </template>
@@ -149,7 +146,6 @@ import fun from "@/util/fun";
 import authorizeTip from "@/components/tool/authorizeTip"
 import salarySy from "@/components/tool/salarySy"
 import salaryBack from "@/components/tool/salaryBack";
-import addStaff from "@/components/tool/addStaff";
 let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
@@ -159,7 +155,6 @@ export default {
     authorizeTip,
     salarySy,
     salaryBack,
-    addStaff
   },
   data() {
     return {
@@ -237,13 +232,6 @@ export default {
     that.getList();
   },
   methods: {
-    handleAddStaff(){
-      this.$refs.addStaff.getList({
-        checkId:this.$route.query.id,
-        listAction:"salaryCalStore/actionGetAddEmpCollectList",
-        saveAction:"salaryCalStore/actionAddEmpCollectList"
-      })
-    },
     //列表查询
     getList() {
       this.loading = true;

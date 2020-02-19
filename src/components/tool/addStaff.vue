@@ -11,16 +11,16 @@
     <div class="add-staff-con">
       <div class="table-con">
           <div class="select-con">
-              <el-select v-model="addForm.taxSubId" placeholder="请选择公司" @change="getList()">
+              <el-select v-model="addForm.taxSubId" placeholder="请选择公司" @change="changeCompany">
                 <el-option v-for="item in taxSubjectInfoList" :key="item.taxSubId" :label="item.taxSubName" :value="item.taxSubId"></el-option>
               </el-select>
-              <el-select v-model="addForm.empType" placeholder="用工性质" @change="getList()">
+              <el-select v-model="addForm.empType" placeholder="用工性质" @change="getList">
                 <el-option v-for="item in enumEmpTypeOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
-              <el-select v-model="addForm.enumEmpStatus" placeholder="员工状态" @change="getList()">
+              <el-select v-model="addForm.enumEmpStatus" placeholder="员工状态" @change="getList">
                 <el-option v-for="item in employStatusOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
-              <el-input v-model="addForm.key" placeholder="姓名/工号" @keyup.enter.native="getList()"></el-input>
+              <el-input v-model="addForm.key" placeholder="姓名/工号" @keyup.enter.native="getList"></el-input>
           </div>
           <el-table :data="staffTable" ref="staffTable" tooltip-effect="dark" height="300px" style="width:100%;margin-top: 10px"
                     @selection-change="handleSelectionChange">
@@ -90,6 +90,8 @@ export default {
       staffTable:[],
       checkedPerson:[],
       compEmpIds:[],
+      listAction:"",
+      saveAction:"",
     };
   },
   computed:{
@@ -101,14 +103,19 @@ export default {
   created(){
   },
   methods: {
-    getList(form){
+    show(form){
       form.checkId?this.addForm.checkId = form.checkId:"";
       this.listAction = form.listAction
       this.saveAction = form.saveAction
       this.isShowAddStaff = true
+      this.getList()
+    },
+    changeCompany(){
+      this.getList()
+    },
+    getList(){
       this.$store.dispatch(this.listAction,this.addForm)
         .then(res=>{
-          console.log(res)
           this.staffTable = res.data;
         })
     },
