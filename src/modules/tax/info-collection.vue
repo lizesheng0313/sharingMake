@@ -361,7 +361,7 @@ export default {
   methods: {
     validIdNo(rule, value, callback){
       if(value){
-        switch (this.baseForm.idType) {
+        switch (this.employeeFormData.idType) {
           case "PRC_ID"://居民身份证
             var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
             if(!regIdNo.test(value)){
