@@ -77,7 +77,6 @@ export const actionDownloadOtherTotal = ({ dispatch }, tatalForm) => {
 }
 
 /*个税-综合申报*/
-
 //综合申报-列表
 export const actionTaxReportTotalList = ({ dispatch }, reportForm) => {
     return apiTaxReportTotalList(reportForm)
@@ -125,6 +124,7 @@ export const postGetReportBackQuery = ({ dispatch }, invalidForm) => {
 export const postSendReport = ({ dispatch }, sendReportForm) => {
     return apiSendReport(sendReportForm)
 }
+
 //综合申报-发送申报反馈
 export const postSendReportQuery = ({ dispatch }, sendReportForm) => {
   return apiSendReportQuery(sendReportForm)

@@ -32,9 +32,9 @@
               <span class="plan-tip" v-if="planOption.length>0">有{{ planOption.length }}个社保方案供您参保 <span class="choose-plan" @click="choosePlan">选择方案</span></span>
             </div>
             <div class="social-plan-table">
-                <el-popover ref="socialPlan" placement="bottom" width="200" trigger="click">
+                <el-popover ref="socialPlan" placement="bottom" width="140" trigger="click">
                   <el-checkbox-group v-model="socialCheckedType" @change="handleSocialType">
-                    <div v-for="(item,index) in socialOption" style="line-height: 20px">
+                    <div v-for="(item,index) in socialOption" style="line-height: 20px;text-align: left;margin-left: 20px">
                       <el-checkbox :label="item.value" :key="index">{{ item.label }}</el-checkbox>
                     </div>
                   </el-checkbox-group>
@@ -72,7 +72,7 @@
                       <el-input v-model="scope.row.personFixedAmount" class="input-right"/>
                     </template>
                   </el-table-column>
-                  <el-table-column label="个人尾数规则">
+                  <el-table-column label="个人尾数规则" width="200px">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.personMantissaRule" placeholder="请选择">
                         <el-option
@@ -92,12 +92,12 @@
                       </div>
                     </template>
                   </el-table-column>
-                  <el-table-column label="公司比例" width="120">
+                  <el-table-column label="单位固定金额" width="120">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.compScale" class="input-right"/>
+                      <el-input v-model="scope.row.compFixedAmount" class="input-right"/>
                     </template>
                   </el-table-column>
-                  <el-table-column label="公司尾数规则" width="120">
+                  <el-table-column label="公司尾数规则" width="200">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
                         <el-option
@@ -111,7 +111,6 @@
                   </el-table-column>
                 </el-table>
             </div>
-
             <div class="social-plan-title" style="margin-top: 20px;overflow: hidden">
               <span class="plan-title">公积金方案</span>
               <el-checkbox v-model="accumulationFundYn" style="margin-left: 20px">是否缴纳公积金</el-checkbox>
@@ -119,7 +118,7 @@
             <div class="social-plan-table">
               <el-popover ref="fundPlan" placement="bottom" width="160" trigger="click">
                 <el-checkbox-group v-model="fundCheckedType" @change="handleFundType">
-                  <div v-for="(item,index) in fundOption" style="line-height: 20px" >
+                  <div v-for="(item,index) in fundOption" style="line-height: 20px;text-align: left;margin-left: 20px" >
                     <el-checkbox :label="item.value" :key="index">{{ item.label }}</el-checkbox>
                   </div>
                 </el-checkbox-group>
@@ -157,7 +156,7 @@
                     <el-input v-model="scope.row.personFixedAmount" class="input-right"/>
                   </template>
                 </el-table-column>
-                <el-table-column label="个人尾数规则">
+                <el-table-column label="个人尾数规则" width="200">
                   <template slot-scope="scope">
                     <el-select v-model="scope.row.personMantissaRule" placeholder="请选择">
                       <el-option
@@ -180,12 +179,12 @@
                 <el-table-column label="单位固定金额" width="120">
                   <template slot-scope="scope">
                     <div style="display: flex">
-                      <el-input v-model="scope.row.compScale" class="input-right"/>
+                      <el-input v-model="scope.row.compFixedAmount" class="input-right"/>
                       <span style="line-height: 32px">%</span>
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="公司尾数规则" width="120">
+                <el-table-column label="公司尾数规则" width="200">
                   <template slot-scope="scope">
                     <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
                       <el-option
