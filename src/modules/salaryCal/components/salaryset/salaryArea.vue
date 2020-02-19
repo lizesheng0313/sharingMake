@@ -26,7 +26,7 @@
           <div>
               <div style="margin-bottom: 10px" v-if="chooseType === 'company'">全部公司</div>
               <div v-else style="margin-bottom: 10px">
-                  <el-select v-model="company" placeholder="请选择公司" style="margin-bottom: 10px;border:none" @change="changCompany">
+                  <el-select v-model="taxSubId" placeholder="请选择公司" style="margin-bottom: 10px;border:none" @change="changCompany">
                     <el-option v-for="(item,index) in taxSubjectInfoList" :key="index" :label="item.taxSubName" :value="item.taxSubId"></el-option>
                   </el-select>
               </div>
@@ -66,7 +66,6 @@ export default {
       closeModel:false,
       isShowSalaryArea:false,
       chooseType:"company",
-      company:0,
       chooseTypeObj:{
         "company":{
           checkAll: false,
@@ -82,7 +81,7 @@ export default {
           isIndeterminate: false,
         }
       },
-      taxSubId:"",
+      taxSubId:"0",
       searchCon:"",
       focus:false,
       showSearch:false,
@@ -149,6 +148,7 @@ export default {
         })
     },
     changCompany(){
+      console.log(111)
       this.getEmployList()
     },
     handleCheckAll(val) {

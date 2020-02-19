@@ -49,17 +49,17 @@
                       <span>{{ scope.row.insuranceType | insuranceType}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="基数下限">
+                  <el-table-column label="基数下限" width="120">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.baseNumberMin" class="input-right"/>
                     </template>
                   </el-table-column>
-                  <el-table-column label="基数上限">
+                  <el-table-column label="基数上限" width="120">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.baseNumberMax" class="input-right"/>
                     </template>
                   </el-table-column>
-                  <el-table-column label="个人比例">
+                  <el-table-column label="个人比例" width="120">
                     <template slot-scope="scope">
                       <div style="display: flex">
                         <el-input v-model="scope.row.personScale" class="input-right"/>
@@ -67,7 +67,7 @@
                       </div>
                     </template>
                   </el-table-column>
-                  <el-table-column label="个人固定金额">
+                  <el-table-column label="个人固定金额" width="120">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.personFixedAmount" class="input-right"/>
                     </template>
@@ -84,7 +84,7 @@
                       </el-select>
                     </template>
                   </el-table-column>
-                  <el-table-column label="公司比例">
+                  <el-table-column label="公司比例" width="120">
                     <template slot-scope="scope">
                       <div style="display: flex">
                         <el-input v-model="scope.row.compScale" class="input-right"/>
@@ -92,12 +92,12 @@
                       </div>
                     </template>
                   </el-table-column>
-                  <el-table-column label="公司比例">
+                  <el-table-column label="公司比例" width="120">
                     <template slot-scope="scope">
                       <el-input v-model="scope.row.compScale" class="input-right"/>
                     </template>
                   </el-table-column>
-                  <el-table-column label="公司尾数规则">
+                  <el-table-column label="公司尾数规则" width="120">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
                         <el-option
@@ -134,17 +134,17 @@
                     <span>{{ scope.row.insuranceType | insuranceType}}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="基数下限">
+                <el-table-column label="基数下限" width="120">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.baseNumberMin" class="input-right"/>
                   </template>
                 </el-table-column>
-                <el-table-column label="基数上限">
+                <el-table-column label="基数上限" width="120">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.baseNumberMax" class="input-right"/>
                   </template>
                 </el-table-column>
-                <el-table-column label="个人比例" width="100">
+                <el-table-column label="个人比例" width="120">
                   <template slot-scope="scope">
                     <div style="display: flex">
                       <el-input v-model="scope.row.personScale" class="input-right"/>
@@ -152,7 +152,7 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="个人固定金额">
+                <el-table-column label="个人固定金额" width="120">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.personFixedAmount" class="input-right"/>
                   </template>
@@ -169,7 +169,7 @@
                     </el-select>
                   </template>
                 </el-table-column>
-                <el-table-column label="公司比例" width="100">
+                <el-table-column label="单位比例" width="120">
                   <template slot-scope="scope">
                     <div style="display: flex">
                       <el-input v-model="scope.row.compScale" class="input-right"/>
@@ -177,7 +177,15 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="公司尾数规则">
+                <el-table-column label="单位固定金额" width="120">
+                  <template slot-scope="scope">
+                    <div style="display: flex">
+                      <el-input v-model="scope.row.compScale" class="input-right"/>
+                      <span style="line-height: 32px">%</span>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column label="公司尾数规则" width="120">
                   <template slot-scope="scope">
                     <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
                       <el-option
@@ -236,14 +244,19 @@
         id:this.$route.query.id,
         planOption:[],
         chooseCityName:"",
-        socialInsuranceList:[],
-        accumulationFundList:[],
+        socialInsuranceList:[
+          { insuranceType: "ENDOWMENT_INSURANCE", baseNumberMax: "00.00", baseNumberMin: "00.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "00.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"},
+          { insuranceType: "MEDICAL_INSURANCE", baseNumberMax: "00.00", baseNumberMin: "00.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "00.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"},
+          { insuranceType: "UNEMPLOYMENT_INSURANCE", baseNumberMax: "00.00", baseNumberMin: "00.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "00.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"},
+          { insuranceType: "INJURY_INSURANCE", baseNumberMax: "00.00", baseNumberMin: "00.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "00.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"}
+        ],
+        accumulationFundList:[{ insuranceType: "ACCUMULATION_FUND", baseNumberMax: "00.00", baseNumberMin: "00.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "00.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"}],
         ruleOption:constData.ruleOption,
         closeModel:false,
         isShowChoosePlan:false,
-        socialOption:constData.insuranceType,
+        socialOption:constData.socialInsuranceType,
         socialCheckedType:[],
-        fundOption:constData.insuranceType,
+        fundOption:constData.funInsuranceType,
         fundCheckedType:[],
         choosePlanForm:{
           baseInsuredId:"",

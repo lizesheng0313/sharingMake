@@ -130,7 +130,7 @@
             </div>
             <div class="shortCon">
               <el-form-item label="参保方案" label-width="20%">
-                <el-select v-model="ruleForm.plan" placeholder="参保方案">
+                <el-select v-model="ruleForm.queryFilterParam.insuredCity" placeholder="参保方案">
                   <el-option v-for="(item,index) in planOption" :label="item.insuredName" :value="item.id" :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -156,7 +156,7 @@
           </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="getList">查询</el-button>
+          <el-button type="primary" @click="handleScreen">查询</el-button>
           <el-button @click="handleReset">重置</el-button>
         </span>
       </el-dialog>
@@ -262,9 +262,14 @@
             }
           });
       },
-      //筛选
+      //筛选显示
       onShowScreen(){
         this.isShowScreening = true
+      },
+      //筛选
+      handleScreen(){
+        this.getList()
+        this.isShowScreening = false;
       },
       // 重置
       handleReset(){

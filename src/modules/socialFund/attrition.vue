@@ -339,7 +339,7 @@
         this.apiDownloadTemplate = "socialFundStore/actionFloatEmployeeDownloadModelDocE"
         this.apiCheck = "/api/xsalary/floatEmployee/editImport/verify"
         this.apiDownloadLog = "socialFundStore/FloatEmployeeEditErrorRecord"
-        this.impoartAction = "socialFundStore/apiFloatEmployeeEditImport"
+        this.impoartAction = "socialFundStore/actionFloatEmployeeEditImport"
         this.$refs.import.show()
       },
       changeRadioValue(val) {

@@ -116,7 +116,9 @@ export default {
     getList(){
       this.$store.dispatch(this.listAction,this.addForm)
         .then(res=>{
-          this.staffTable = res.data;
+          if(res.success){
+            this.staffTable = res.data.data;
+          }
         })
     },
     removeStaff(item){

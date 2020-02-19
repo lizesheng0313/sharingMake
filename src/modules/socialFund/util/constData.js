@@ -2,7 +2,7 @@
  * 模板管理 常量定义
  */
 //保险类型
-export const insuranceType = [
+export const socialInsuranceType = [
     {
       label:"养老保险",
       value:"ENDOWMENT_INSURANCE"
@@ -21,26 +21,28 @@ export const insuranceType = [
     },{
       label:"大病医疗",
       value:"SERIOUS_DISEASE_TREATMENT"
+    },{
+      label:"残保金",
+      value:"RESIDUAL_INSURANCE_GOLD"
     }, {
-      label:"公积金",
-      value:"ACCUMULATION_FUND"
-    },{
-      label:"补偿公积金",
-      value:"COMPENSATORY_ACCUMULATION_FUND"
-    },
-    {
-      label:"补充养老保险",
-      value:"COMPENSATORY_ENDOWMENT_INSURANCE"
-    },{
-      label:"补充医疗保险",
-      value:"COMPENSATORY_MEDICAL_INSURANCE"
-    },{
+    label:"补充养老保险",
+    value:"COMPENSATORY_ENDOWMENT_INSURANCE"
+   }, {
+    label:"补充医疗保险",
+    value:"COMPENSATORY_MEDICAL_INSURANCE"
+  }, {
       label:"补充失业保险",
       value:"COMPENSATORY_UNEMPLOYMENT_INSURANCE"
-    },
+    }
   ]
-export const insuranceFunType = [
-
+export const funInsuranceType = [
+  {
+    label:"公积金",
+    value:"ACCUMULATION_FUND"
+  },{
+    label:"补偿公积金",
+    value:"COMPENSATORY_ACCUMULATION_FUND"
+  },
 ]
 
 export const ruleOption = [

@@ -313,9 +313,8 @@
         }).then(() => {
           this.$store
             .dispatch("socialFundStore/actionArchiveMonthlyLedger",{
+              id:data.id,
               archiveType:data.isarchive?'CANCEL_ARCHIVE':"ARCHIVE",
-              month:data.currentMonth,
-              taxSubId:data.taxSubId
             })
             .then(res => {
               if(res.success){
