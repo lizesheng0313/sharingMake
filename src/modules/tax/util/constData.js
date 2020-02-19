@@ -37,6 +37,34 @@ export const idTypeOption = [
     value:"OTHER"
   }
 ]
+export const workerTypeOption = [
+  {
+    label:"雇员",
+    value:"EMPLOYEE"
+  },{
+    label:"其他",
+    value:"OTHER"
+  }
+]
+//涉税事由
+export const taxReasonOption = [
+  {
+    label:"任职受雇",
+    value:"EMPLOYMENT"
+  },{
+    label:"提供临时劳务",
+    value:"TEMPORARY_LABOR"
+  },{
+    label:"转让财产",
+    value:"TRANSFER_PROPERTY"
+  },{
+    label:"从事投资和经营活动",
+    value:"INVEST"
+  },{
+    label:"其他",
+    value:"OTHER"
+  },
+]
 //身份证状态
 export const idValidStatus = {
   'AWAIT_CHECK': '待验证',

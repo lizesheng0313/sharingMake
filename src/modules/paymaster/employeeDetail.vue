@@ -474,7 +474,7 @@ export default {
         case "CHINA_PASSPORT":
           this.baseForm.country = "中国" ;this.canSelectCoutry = ['中国']
           break;
-        case "COMPATRIOTS_CARD'": //港澳居民来往内地通行证、港澳居民居住证
+        case "COMPATRIOTS_CARD": //港澳居民来往内地通行证、港澳居民居住证
         case "MACAU_PRC_ID":
           this.baseForm.country = "" ;this.canSelectCoutry = ['中国香港','中国澳门']
           break;

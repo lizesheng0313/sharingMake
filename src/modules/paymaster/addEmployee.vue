@@ -410,7 +410,7 @@ export default {
           this.baseForm.country = "中国" ;this.canSelectCoutry = ['中国']
           this.baseForm.otherIdType = "中国护照";this.canSelectotherIdType = ['中国护照']
           break;
-        case "COMPATRIOTS_CARD'": //港澳居民来往内地通行证
+        case "COMPATRIOTS_CARD": //港澳居民来往内地通行证
           this.baseForm.country = "" ;this.canSelectCoutry = ['中国香港','中国澳门']
           this.baseForm.otherIdType = "MACAU_PRC_ID";this.canSelectotherIdType = ['MACAU_PRC_ID']
           break;
