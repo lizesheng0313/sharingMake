@@ -64,7 +64,7 @@
                   <el-row style="display: flex">
                       <div style="flex:1">
                         <el-form-item label="参保方案" prop="compInsuredId" :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
-                          <el-select v-model="insuredForm.compInsuredId" placeholder="请选择参保方案">
+                          <el-select v-model="insuredForm.compInsuredId" placeholder="请选择参保方案" @change="changeInsure">
                             <el-option v-for="(item,index) in planOption" :label="item.insuredName" :value="item.id" :key="index"></el-option>
                           </el-select>
                         </el-form-item>
@@ -77,8 +77,9 @@
                   </el-row>
                   <el-row style="display: flex">
                     <div style="flex:1">
-                      <el-form-item label="社保起缴月份" prop="socialInsuranceStartMonth" :rules="{required: true, message: '请选择社保起缴月份', trigger: 'blur'}">
-                          <el-date-picker v-model="insuredForm.socialInsuranceStartMonth" type="month" value-format="yyyy-MM"  placeholder="请选择"></el-date-picker>
+                      <el-form-item label="社保起缴月份" prop="socialInsuranceStartMonth" :rules="{required:true, message: '请选择社保起缴月份', trigger: 'blur'}">
+                          <el-date-picker v-model="insuredForm.socialInsuranceStartMonth"
+                                          type="month" value-format="yyyy-MM"  placeholder="请选择"></el-date-picker>
                       </el-form-item>
                     </div>
                     <div style="flex:1">
@@ -91,38 +92,47 @@
                     <div style="flex:1">
                       <el-form-item label="公积金起缴月份" prop="accumulationFundStartMonth"
                                     :rules="{ required: true, message: '请选择公积金起缴月份', trigger: 'blur'}">
-                        <el-radio-group v-model="insuredForm.providentStartMonthType" size="small">
+                        <el-radio-group v-model="insuredForm.providentStartMonthType" size="small" :disabled="accumulationFundYn">
                           <el-radio-button label="1">同社保</el-radio-button>
                           <el-radio-button label="2">选择</el-radio-button>
                         </el-radio-group>
                         <span class="provident-month">
-                            <el-date-picker v-if="insuredForm.providentStartMonthType==2" value-format="yyyy-MM" v-model="insuredForm.accumulationFundStartMonth" type="month" placeholder="请选择"></el-date-picker>
+                            <el-date-picker v-if="insuredForm.providentStartMonthType==2" value-format="yyyy-MM"
+                                            :disabled="accumulationFundYn"
+                                            v-model="insuredForm.accumulationFundStartMonth" type="month" placeholder="请选择"></el-date-picker>
                         </span>
                       </el-form-item>
                     </div>
                     <div style="flex:1">
                       <el-form-item label="公积金基数" prop="accumulationFundBaseNumber"
                                     :rules="{ required: true, message: '公积金基数不能为空', trigger: 'blur'}">
-                        <el-input v-model="insuredForm.accumulationFundBaseNumber"></el-input>
+                        <el-input v-model="insuredForm.accumulationFundBaseNumber" :disabled="accumulationFundYn"></el-input>
                       </el-form-item>
                     </div>
                   </el-row>
                   <el-row style="display: flex">
                     <div style="flex:1">
                         <el-form-item label="社保停缴月份" prop="socialInsuranceEndMonth"
-                                      :rules="{required: true, message: '请选择社保停缴月份', trigger: 'blur'}">
-                          <el-date-picker v-model="insuredForm.socialInsuranceEndMonth" type="month" placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
+                                      :rules="{required: attritionItem.insuredStatus === 'INSURED_STOP' && !accumulationFundYn, message: '请选择社保停缴月份', trigger: 'blur'}">
+                          <el-date-picker v-model="insuredForm.socialInsuranceEndMonth" type="month"
+                                          :disabled="attritionItem.insuredStatus === 'INSURED_ING'"
+                                          placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
                         </el-form-item>
                     </div>
                     <div style="flex:1">
                       <el-form-item label="公积金停缴月份" prop="accumulationFundEndMonth"
-                                    :rules="{ required: true, message: '请选择公积金停缴月份', trigger: 'blur'}">
-                        <el-radio-group v-model="insuredForm.providentStopMonthType" size="small">
+                                    :disabled="accumulationFundYn"
+                                    :rules="{ required: attritionItem.insuredStatus === 'INSURED_STOP' && !accumulationFundYn, message: '请选择公积金停缴月份', trigger: 'blur'}">
+                        <el-radio-group v-model="insuredForm.providentStopMonthType" size="small"
+                                        :disabled="accumulationFundYn || attritionItem.insuredStatus === 'INSURED_ING'">
                           <el-radio-button label="1">同社保</el-radio-button>
                           <el-radio-button label="2">选择</el-radio-button>
                         </el-radio-group>
                         <span class="provident-month">
-                            <el-date-picker v-if="insuredForm.providentStopMonthType==2" v-model="insuredForm.accumulationFundEndMonth" type="month" value-format="yyyy-MM" placeholder="请选择"></el-date-picker>
+                            <el-date-picker v-if="insuredForm.providentStopMonthType==2"
+                                            :disabled="accumulationFundYn || attritionItem.insuredStatus === 'INSURED_ING'"
+                                            v-model="insuredForm.accumulationFundEndMonth" type="month"
+                                            value-format="yyyy-MM" placeholder="请选择"></el-date-picker>
                         </span>
                       </el-form-item>
                     </div>
@@ -212,6 +222,7 @@ export default {
       floatEmployeeInsuredInfoVo:[],
       insuredPayDetailVoList:[],
       planOption:[],
+      accumulationFundYn:false,
       showTable:false,
     };
   },
@@ -239,6 +250,7 @@ export default {
                 this.insuredForm[key]=this.floatEmployeeInsuredInfoVo[key]
               }
             }
+            console.log(this.insuredForm.socialInsuranceEndMonth)
             this.insuredForm.compInsuredId = this.insuredForm.compInsuredId-0
             //获取参保方案列表
             this.getPlanList()
@@ -255,8 +267,14 @@ export default {
         .then(res => {
           if(res.success){
             this.planOption = res.data
+            this.changeInsure(this.insuredForm.compInsuredId)
           }
         });
+    },
+    changeInsure(value){
+      let selectItem = this.planOption.filter(item=>item.id == value)
+      this.insuredForm.insuredCity =selectItem[0].insuredCity
+      this.accumulationFundYn = selectItem[0].accumulationFundYn
     },
     saveInfo() {
       this.$refs['insuredForms'].validate(valid => {
