@@ -462,11 +462,12 @@ export default {
     },
     //取消保存公司信息
     cancelAddInfo(){
-      this.baseDisable =false
-      for(let key in this.baseForm){
-       this.baseForm[key] =""
-      }
-      this.baseForm.idType = "PRC_ID"
+      // this.baseDisable =false
+      // for(let key in this.baseForm){
+      //  this.baseForm[key] =""
+      // }
+      // this.baseForm.idType = "PRC_ID"
+      this.$router.go(-1)
     }
   }
 };
