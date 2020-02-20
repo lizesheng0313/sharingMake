@@ -44,7 +44,7 @@
                   <span>选择险种</span>
                 </el-button>
                 <el-table :data="socialInsuranceList" border>
-                  <el-table-column prop="month" label=" ">
+                  <el-table-column prop="month" label=" " width="160">
                     <template slot-scope="scope">
                       <span>{{ scope.row.insuranceType | insuranceType}}</span>
                     </template>
@@ -128,7 +128,7 @@
                 <span>选择险种</span>
               </el-button>
               <el-table :data="accumulationFundList" border>
-                <el-table-column prop="month" label=" ">
+                <el-table-column prop="month" label=" " width="160">
                   <template slot-scope="scope">
                     <span>{{ scope.row.insuranceType | insuranceType}}</span>
                   </template>
