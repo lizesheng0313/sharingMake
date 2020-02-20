@@ -258,7 +258,7 @@
       },
       getList() {
         this.loading = true;
-        let actionUrl = this.uninsuredActive?"actionFloatEmployeeIncreaseList":"actionFloatEmployeeIncreaseUnlist"
+        let actionUrl = this.uninsuredActive?"actionFloatEmployeeIncreaseUnlist":"actionFloatEmployeeIncreaseList"
         this.$store
           .dispatch("socialFundStore/"+actionUrl, this.ruleForm)
           .then(res => {
