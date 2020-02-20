@@ -68,7 +68,7 @@
               <el-table-column prop="idValidStatus" label="入职日期" width="140">
                 <template slot-scope="scope">{{ scope.row.empDay }}</template>
               </el-table-column>
-              <el-table-column prop="turnRegularDat" label="转正日期" width="140"></el-table-column>
+              <el-table-column prop="turnRegularDate" label="转正日期" width="140"></el-table-column>
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
                   <span class="funStyle" @click="onChange(scope.row)" v-if="scope.row.empStatus == 'ON_THE_JOB'">变更</span>

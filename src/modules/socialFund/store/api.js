@@ -86,6 +86,15 @@ export function apiDeleteEmpMonthly(form) {
     params:form
   })
 }
+//参保月度台账、员工台账导出
+export function apiEmpMonthlyLedgerExport(form) {
+  return oldFetch({
+    url: 'xsalary/monthlyLedger/empMonthlyLedger/export',
+    method: 'get',
+    params:form,
+    responseType: 'blob'
+  })
+}
 //参保月度台账、归档
 export function apiArchiveMonthlyLedger(form) {
   return oldFetch({
