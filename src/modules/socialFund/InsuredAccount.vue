@@ -19,7 +19,7 @@
                 v-model="ruleForm.queryMonth"
                 type="month"
                 placeholder="参保月份"
-                value-format="yyyy-MM-dd"
+                value-format="yyyy-MM"
                 :editable="false"
                 :clearable="false"
                 @change="getList"

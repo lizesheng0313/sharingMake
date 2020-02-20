@@ -59,7 +59,7 @@ export function apiGetCompMonthlyLedgerList(form) {
   return fetch({
     url: 'api/xsalary/monthlyLedger/getCompMonthlyLedgerList',
     method: 'get',
-    data:form
+    params:form
   })
 }
 //参保月度台账、生成月度台账

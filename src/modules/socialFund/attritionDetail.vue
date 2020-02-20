@@ -132,7 +132,9 @@
                             <el-date-picker v-if="insuredForm.providentStopMonthType==2"
                                             :disabled="accumulationFundYn || attritionItem.insuredStatus === 'INSURED_ING'"
                                             v-model="insuredForm.accumulationFundEndMonth" type="month"
-                                            value-format="yyyy-MM" placeholder="请选择"></el-date-picker>
+                                            value-format="yyyy-MM" placeholder="请选择">
+
+                            </el-date-picker>
                         </span>
                       </el-form-item>
                     </div>
