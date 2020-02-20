@@ -79,7 +79,7 @@
                 <el-table-column prop="empDay" label="入职日期" width="140"></el-table-column>
                 <el-table-column prop="householdCity" label="户口所在城市" width="140"></el-table-column>
                 <el-table-column prop="householdRegistrationType" label="户口性质" width="140">
-                  <template slot-scope="scope">{{ scope.row.householdRegistrationType }}</template>
+                  <template slot-scope="scope">{{ scope.row.householdRegistrationType | householdRegistrationType }}</template>
                 </el-table-column>
                 <el-table-column prop="workCity" label="工作城市" width="140"></el-table-column>
               </template>
