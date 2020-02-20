@@ -309,7 +309,7 @@ export function apiFloatEmployeeDeExport(form) {
 //增减员详情
 export function apiFloatEmployeeManageInfo(data) {
   return fetch({
-    url: '/api/xsalary/floatEmployee/manage/info/'+data.empId+'/'+data.empInsuredId,
+    url: '/api/xsalary/floatEmployee/manage/info/'+data.empInsuredId,
     method: 'get',
   })
 }

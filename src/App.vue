@@ -107,7 +107,7 @@ export default {
     getTaxSubjectInfoList() {
       this.$store.dispatch("taxPageStore/actionTaxSubjectList").then(res => {
         if (res.success) {
-          let taxSubjectInfoList = [{'taxSubId':0,'taxSubName':"全部"}].concat(res.data);
+          let taxSubjectInfoList = [{'taxSubId':"",'taxSubName':"全部"}].concat(res.data);
           this.$store.commit(AT.SET_TAXSUBJECTINFOLIST,taxSubjectInfoList);
         }
       });

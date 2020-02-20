@@ -160,7 +160,7 @@
     data() {
       return {
         ruleForm:{
-          taxSubId:0,
+          taxSubId:"",
           currPage:"1",
           pageSize:"20",
           queryMonth:""
