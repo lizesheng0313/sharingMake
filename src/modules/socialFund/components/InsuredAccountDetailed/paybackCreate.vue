@@ -72,15 +72,14 @@ export default {
   methods: {
     show(data) {
       this.isShowPayback = true;
-      let insuredCity = data.insuredCity ? data.insuredCity :"110000"
       this.paybackForm.id = data.id;
       this.$store
-        .dispatch("socialFundStore/actionInsuredGetBase", insuredCity)
+        .dispatch("socialFundStore/actionGetCompInsuredProject", )
         .then(res => {
           if(res.success){
-            this.planOption = res.data;
+            this.planOption = res.data
           }
-        })
+        });
     },
     //代缴
     handlePayback(){

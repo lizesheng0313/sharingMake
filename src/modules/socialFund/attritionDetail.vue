@@ -229,7 +229,7 @@ export default {
     return {
       isEdit:false,
       insuredForm:{
-        compEmpId:"",
+        empInsuredId:"",
         compInsuredId:null,
         insuredCity:"",
 
@@ -253,7 +253,7 @@ export default {
     };
   },
   created(){
-    this.insuredForm.compEmpId = this.attritionItem.compEmpId
+    this.insuredForm.empInsuredId = this.attritionItem.empInsuredId
     this.getInfo()
   },
   mounted(){
