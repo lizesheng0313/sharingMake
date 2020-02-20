@@ -5,8 +5,8 @@
         <el-row type="flex">
           <el-col :span="12">
             <el-tabs v-model="activeName" @tab-click="handleClick">
-              <el-tab-pane label="用户管理" name="emplyeeInfo"></el-tab-pane>
-              <el-tab-pane label="社保增员" name="socialInceace"></el-tab-pane>
+              <el-tab-pane label="员工信息" name="emplyeeInfo"></el-tab-pane>
+              <el-tab-pane label="社保增减员" name="socialInceace"></el-tab-pane>
             </el-tabs>
           </el-col>
         </el-row>
