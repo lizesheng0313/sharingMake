@@ -15,16 +15,16 @@
                           <el-col :span="12"><el-form-item label="工号：">{{ floatEmployeeBaseInfoVo ? floatEmployeeBaseInfoVo.empNo:"_"}}</el-form-item></el-col>
                       </el-row>
                       <el-row>
-<!--                          <el-col :span="12"><el-form-item label="证件类型：">{{ // floatEmployeeBaseInfoVo?(floatEmployeeBaseInfoVo.idType | filterIdType) :"_"}}</el-form-item></el-col>-->
+                          <el-col :span="12"><el-form-item label="证件类型：">{{ floatEmployeeBaseInfoVo?(floatEmployeeBaseInfoVo.idType | filterIdType) :"_"}}</el-form-item></el-col>
                           <el-col :span="12"><el-form-item label="证件号码：">{{ floatEmployeeBaseInfoVo?floatEmployeeBaseInfoVo.idNo:"_" }}</el-form-item></el-col>
                       </el-row>
                       <el-row>
                           <el-col :span="12"><el-form-item label="户籍城市：">{{ floatEmployeeBaseInfoVo?floatEmployeeBaseInfoVo.householdCountry:"_" }}</el-form-item></el-col>
-<!--                          <el-col :span="12"><el-form-item label="户口性质：">{{ // floatEmployeeBaseInfoVo.householdRegistrationType | householdRegistrationType}}</el-form-item></el-col>-->
+                          <el-col :span="12"><el-form-item label="户口性质：">{{ floatEmployeeBaseInfoVo.householdRegistrationType | householdRegistrationType}}</el-form-item></el-col>
                       </el-row>
                       <el-row>
                           <el-col :span="12"><el-form-item label="公司名称：">{{ floatEmployeeBaseInfoVo?floatEmployeeBaseInfoVo.compName:"_" }}</el-form-item></el-col>
-<!--                          <el-col :span="12"><el-form-item label="用工性质：">{{ floatEmployeeBaseInfoVo?(floatEmployeeBaseInfoVo.empType|filterEmpType) : "_"}}</el-form-item></el-col>-->
+                          <el-col :span="12"><el-form-item label="用工性质：">{{ floatEmployeeBaseInfoVo?(floatEmployeeBaseInfoVo.empType|filterEmpType) : "_"}}</el-form-item></el-col>
                       </el-row>
                       <el-row>
                           <el-col :span="12"><el-form-item label="入职日期：">{{ floatEmployeeBaseInfoVo?floatEmployeeBaseInfoVo.empDay:""}}</el-form-item></el-col>
@@ -328,7 +328,13 @@ export default {
     },
     //减员
     decreaceStaff(){
-      this.$refs.socialDecreace.show([this.attritionItem.compEmpId])
+      let compEmpInfo= [
+        {
+          compEmpId:this.attritionItem.compEmpId,
+          taxSubId:this.attritionItem.taxSubId
+        }
+      ]
+      this.$refs.socialDecreace.show(compEmpInfo)
     },
     cancelEdit(){
       this.isEdit = false

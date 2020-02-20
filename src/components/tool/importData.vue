@@ -38,7 +38,7 @@
           <span v-else-if="failCount !== 0 && successCount !==0">
             <i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{failCount}}</strong>条数据错误
           </span>
-          <span v-else-if="successCount === 0"><i class="el-icon-error">数据全部未通过校验</span>
+          <span v-else-if="successCount === 0"><i class="el-icon-error">数据全部未通过校验</i></span>
           <span>
             <a @click="handleDownload" v-if="failCount !== 0" class="download">下载日志</a>
           </span>
