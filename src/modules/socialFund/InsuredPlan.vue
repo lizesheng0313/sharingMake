@@ -11,7 +11,7 @@
       <div class="plan-content">
           <div class="clearfix insured-plan-menu">
             <el-input
-              placeholder="请输入姓名\工号\身份证号"
+              placeholder="请输入参保方案名称"
               v-model="ruleForm.compInsuredName"
               prefix-icon="iconiconfonticonfontsousuo1 iconfont"
               @keyup.enter.native="handleSearch"

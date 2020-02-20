@@ -268,6 +268,9 @@ const insuredStatus = (val) => {
     case 'COMPENSATORY_ENDOWMENT_INSURANCE': {
       return '补充养老保险';
     }
+    case 'RESIDUAL_INSURANCE_GOLD': {
+      return '残保金';
+    }
     case 'COMPENSATORY_MEDICAL_INSURANCE': {
       return '补充医疗保险';
     }
