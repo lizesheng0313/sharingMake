@@ -77,7 +77,7 @@ export default {
     return {
       addForm:{
         checkId:"",
-        taxSubId:0,//公司
+        taxSubId:"",//公司
         empType:"",//用工性质
         enumEmpStatus:"",//人员状态
         key:"",
@@ -149,7 +149,7 @@ export default {
       let idsDtoList = [];
       data.forEach(item=>{
         idsDtoList.push({
-          compEmpid:item.compEmpid,
+          compEmpId:item.compEmpId,
           empId:item.empId
         })
       })
