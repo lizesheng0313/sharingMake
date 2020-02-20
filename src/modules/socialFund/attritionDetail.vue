@@ -328,7 +328,13 @@ export default {
     },
     //减员
     decreaceStaff(){
-      this.$refs.socialDecreace.show([this.attritionItem.compEmpId])
+      let compEmpInfo= [
+        {
+          compEmpId:this.attritionItem.compEmpId,
+          taxSubId:this.attritionItem.taxSubId
+        }
+      ]
+      this.$refs.socialDecreace.show(compEmpInfo)
     },
     cancelEdit(){
       this.isEdit = false

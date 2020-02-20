@@ -50,17 +50,17 @@ export default {
           accumulationFundEndMonth:"",
           providentMonthType:"1",
         },
-        compEmpIds:[],
+        compEmpInfo:[],
         closeModel: false,
         isShowDecrease:false,
         nameList:[],
     };
   },
   methods: {
-    show(compEmpIds) {
+    show(compEmpInfo) {
       this.isShowDecrease = true;
-      this.compEmpIds =compEmpIds
-      console.log(this.compEmpIds)
+      this.compEmpInfo =compEmpInfo
+      console.log(this.compEmpInfo)
     },
     handleDecreateSocial(){
       this.socialDecreaceForm.accumulationFundEndMonth = this.socialDecreaceForm.providentMonthType === "1" ?
@@ -69,7 +69,7 @@ export default {
         if(valid){
           this.$store
             .dispatch("socialFundStore/actionFloatEmployeeDecreaseDo", {
-              compEmpIds:this.compEmpIds,
+              compEmpInfo:this.compEmpInfo,
               socialInsuranceEndMonth:this.socialDecreaceForm.socialInsuranceEndMonth,
               accumulationFundEndMonth: this.socialDecreaceForm.accumulationFundEndMonth
             }).then(res => {

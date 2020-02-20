@@ -320,7 +320,13 @@
       },
       //社保减员
       showSocialDecreate(data){
-        this.$refs.socialDecreace.show([data.compEmpId])
+        let compEmpInfo= [
+          {
+            compEmpId:data.compEmpId,
+            taxSubId:data.taxSubId
+          }
+        ]
+        this.$refs.socialDecreace.show(compEmpInfo)
       },
       //批量增员
       batchIncreate(){
@@ -330,8 +336,14 @@
       },
       //批量减员
       batchDecreate(){
-        let compEmpIds = this.selectList.map(item=>item.compEmpId)
-        this.$refs.socialDecreace.show(compEmpIds)
+        let compEmpInfo = []
+          this.selectList.forEach(item=>{
+            compEmpInfo.push({
+              compEmpId:item.compEmpId,
+              taxSubId:item.taxSubId
+            })
+          })
+        this.$refs.socialDecreace.show(compEmpInfo)
       },
       //导出
       handleExport(){

@@ -99,10 +99,10 @@
               <el-table-column prop="compInsuredName" label="参保方案" width="140">
                 <template slot-scope="scope">{{ scope.row.compInsuredName }}</template>
               </el-table-column>
-              <el-table-column prop="idValidStatus" label="社保起缴月份" width="140">
+              <el-table-column prop="socialInsuranceStartMonth" label="社保起缴月份" width="140">
                 <template slot-scope="scope">{{ scope.row.socialInsuranceStartMonth }}</template>
               </el-table-column>
-              <el-table-column prop="mobile" label="公积金期缴月份" width="140"></el-table-column>
+<!--              <el-table-column prop="mobile" label="公积金起缴月份" width="140"></el-table-column>-->
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
                   <span class="funStyle" @click="goDetail(scope.row)">详情</span>
@@ -383,7 +383,13 @@
       },
       //社保减员
       showSocialDecreate(data){
-        this.$refs.socialDecreace.show([data.compEmpId])
+        let compEmpInfo= [
+          {
+            compEmpId:data.compEmpId,
+            taxSubId:data.taxSubId
+          }
+        ]
+        this.$refs.socialDecreace.show(compEmpInfo)
       },
       //社保增员
       showSocialIncreate(data){
