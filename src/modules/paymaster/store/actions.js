@@ -1,4 +1,4 @@
-import { apiEmployeeIdCard,apiEmployeesImport,apiEmployeesVerifyErrorLog,apiEmployeesTemplate,apiDeleteEmployee,apiPostEmployeesExport,apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
+import { apiPostEmpolyeeCompany,apiEmployeeIdCard,apiEmployeesImport,apiEmployeesVerifyErrorLog,apiEmployeesTemplate,apiDeleteEmployee,apiPostEmployeesExport,apiGetEmployee,apiPostEmployeeList,apiPostEmployee,apiPostCompany,apiGetCity,apiPostCompanyChange,apiGetCountries,apiGetBanks,apiPostEmployees} from './api'
 //发薪人员、员工信息列表
 export const actionGetEmployeeList = ({ dispatch },form) => {
   return apiPostEmployeeList(form)
@@ -12,8 +12,8 @@ export const actionDeleteEmployee = ({ commit }, id) => {
   return apiDeleteEmployee(id).then(res => res);
 };
 //发薪人员、员工详情
-export const actionGetEmployee = ({ dispatch },id) => {
-    return apiGetEmployee(id)
+export const actionGetEmployee = ({ dispatch },data) => {
+    return apiGetEmployee(data)
 }
 
 //发薪人员、员工详情、保存员工基本信息
@@ -22,6 +22,11 @@ export const actionSaveEmployee = ({ dispatch },form) => {
 }
 
 //发薪人员、员工详情、保存公司信息
+export const actionEmpolyeeCompany = ({ dispatch },form) => {
+  return apiPostEmpolyeeCompany(form)
+}
+
+//发薪人员、变更、保存公司信息
 export const actionSaveCompany = ({ dispatch },form) => {
   return apiPostCompany(form)
 }

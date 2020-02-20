@@ -63,6 +63,7 @@ export default {
     return {
       isShowCompany:false,
       changeCompanyForm: {
+        compEmpId:"",
         empId:"",
         taxSubId: "",
         empType:"",

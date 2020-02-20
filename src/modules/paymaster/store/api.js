@@ -28,9 +28,9 @@ export function apiDeleteEmployee(id) {
   })
 }
 //发薪人员、员工详情
-export function apiGetEmployee(id) {
+export function apiGetEmployee(data) {
   return fetch({
-    url: '/api/xsalary/enterprise/compEmployee/'+id,
+    url: '/api/xsalary/enterprise/compEmployee/'+data.compEmpId+'/'+data.empId,
     method: 'get',
   })
 }
@@ -51,7 +51,7 @@ export function apiPostEmployee(form) {
   })
 }
 
-//发薪人员、员工详情、保存公司基本信息
+//发薪人员、员工详情、保存基本信息
 export function apiPostCompany(form) {
   return fetch({
     url: '/api/xsalary/enterprise/company',
@@ -64,6 +64,14 @@ export function apiPostCompany(form) {
 export function apiPostCompanyChange(form) {
   return fetch({
     url: '/api/xsalary/enterprise/employee/companyChange',
+    method: 'post',
+    data:form
+  })
+}
+//发薪人员、员工详情、保存参保信息
+export function apiPostEmpolyeeCompany(form) {
+  return fetch({
+    url: '/api/xsalary/enterprise/empolyee/company',
     method: 'post',
     data:form
   })

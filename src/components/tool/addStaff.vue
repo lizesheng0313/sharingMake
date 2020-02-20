@@ -89,7 +89,7 @@ export default {
       closeModel:false,
       staffTable:[],
       checkedPerson:[],
-      compEmpIds:[],
+      idsDtoList:[],
       listAction:"",
       saveAction:"",
     };
@@ -128,7 +128,7 @@ export default {
     handleSubmit(){
       this.$store.dispatch(this.saveAction,{
           checkId:this.addForm.checkId,
-          compEmpIds:this.compEmpIds,
+          idsDtoList:this.idsDtoList,
           key:this.addForm.key,
           queryFilterParam:{
             "empType":this.addForm.empType,
@@ -146,7 +146,14 @@ export default {
     },
     handleSelectionChange(data){
       this.checkedPerson = data;
-      this.compEmpIds = data.map(item=>item.compEmpId)
+      let idsDtoList = [];
+      data.forEach(item=>{
+        idsDtoList.push({
+          compEmpid:item.compEmpid,
+          empId:item.empId
+        })
+      })
+      this.idsDtoList = idsDtoList
     },
   }
 };
