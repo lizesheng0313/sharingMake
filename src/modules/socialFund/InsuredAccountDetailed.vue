@@ -71,11 +71,11 @@
               <el-table-column prop="empNo" label="工号" width="100"></el-table-column>
               <el-table-column prop="idNo" label="证件号码" width="160"></el-table-column>
               <el-table-column prop="taxSubName" label="公司名称" width="120"></el-table-column>
-              <el-table-column prop="empSex" label="参保城市" width="140">
+              <el-table-column prop="insuredCity" label="参保城市" width="140">
                 <template slot-scope="scope">{{ scope.row.insuredCity }}</template>
               </el-table-column>
-              <el-table-column prop="workerStatus" label="参保方案" width="120">
-                <template slot-scope="scope">{{ scope.row.workerStatus }}</template>
+              <el-table-column prop="compInsuredName" label="参保方案" width="120">
+                <template slot-scope="scope">{{ scope.row.compInsuredName }}</template>
               </el-table-column>
               <el-table-column prop="empSex" label="数据来源" width="80">
                 <template slot-scope="scope">{{ scope.row.ledgerSource ==='IMPORT_LEDGER'?'导入':'生成' }}</template>
