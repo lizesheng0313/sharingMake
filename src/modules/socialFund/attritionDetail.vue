@@ -275,7 +275,6 @@ export default {
                 this.insuredForm[key]=this.floatEmployeeInsuredInfoVo[key]
               }
             }
-            console.log(this.insuredForm.socialInsuranceEndMonth)
             this.insuredForm.compInsuredId = this.insuredForm.compInsuredId-0
             //获取参保方案列表
             this.getPlanList()
@@ -323,9 +322,14 @@ export default {
     },
     //增员
     increaceStaff(){
-      let compEmpIds = [this.attritionItem.compEmpId]
+      let compEmpInfo= [
+        {
+          compEmpId:this.attritionItem.compEmpId,
+          taxSubId:this.attritionItem.taxSubId
+        }
+      ]
       let nameList = [this.floatEmployeeBaseInfoVo.empName]
-      this.$refs.socialIncreace.show(compEmpIds,nameList)
+      this.$refs.socialIncreace.show(compEmpInfo,nameList)
     },
     //减员
     decreaceStaff(){

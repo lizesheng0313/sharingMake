@@ -92,7 +92,7 @@ export default {
       socialIncreaceForm:{
         accumulationFundBaseNumber:"",
         accumulationFundStartMonth:"",
-        compEmpIds:[],
+        compEmpInfo:[],
         compInsuredId:"",
         socialInsuranceBaseNumber:"",
         socialInsuranceStartMonth:"",
@@ -113,10 +113,10 @@ export default {
     };
   },
   methods: {
-    show(compEmpIds,nameList) {
+    show(compEmpInfo,nameList) {
       this.isShowIncrease = true;
       this.nameList = nameList
-      this.socialIncreaceForm.compEmpIds = compEmpIds
+      this.socialIncreaceForm.compEmpInfo = compEmpInfo
         this.$store
         .dispatch("socialFundStore/actionGetCompInsuredProject", this.socialIncreaceForm)
         .then(res => {
