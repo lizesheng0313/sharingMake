@@ -81,17 +81,13 @@
                   <el-input v-model="basicInfoForm.salaryArea" @focus="showSalaryArea" :disabled="basicInfoForm.allTaxSub"></el-input>
                   <el-checkbox v-model="basicInfoForm.allTaxSub" class="checkAllStyle">选择全部</el-checkbox>
 
-                  <div style="width: 510px;margin-top: 10px">
-                  <span>添加用工性质：</span>
-                  <el-select v-model="basicInfoForm.employType" multiple placeholder="请选择" style="width: 386px">
-                    <el-option
-                      v-for="(item,index) in employTypeOption"
-                      :key="index"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                  </el-select>
-                </div>
+                  <div style="width: 510px;margin-top: 10px;display: flex" class="salary-employeetype">
+                      <span>添加用工性质：</span>
+                      <el-checkbox-group
+                          v-model="basicInfoForm.employType">
+                          <el-checkbox v-for="(item,index) in employTypeOption" :label="item.value" :key="index">{{item.label}}</el-checkbox>
+                        </el-checkbox-group>
+                  </div>
               </el-form-item>
               <el-form-item label="无需算薪人员">
                 <el-input v-model="basicInfoForm.unNeedSalary" @focus="showUnNeedSalary"></el-input>
