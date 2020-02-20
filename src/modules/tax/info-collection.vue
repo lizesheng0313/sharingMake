@@ -33,7 +33,7 @@
             <el-row type="flex" justify="center">
               <el-col :span="7">
                 <el-form-item label="证件类型" prop="idType">
-                  <el-select v-model="employeeFormData.idType" placeholder="请选择" @change="changeIdType">
+                  <el-select v-model="employeeFormData.idType" placeholder="请选择" @change="changeIdType" :disabled="!employeeFormData.checkStatus">
                     <el-option
                       v-for="(value,key) in baseInfo.idType"
                       :key="key"
@@ -43,7 +43,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="姓名" prop="empName">
-                  <el-input v-model="employeeFormData.empName" :disabled="checkSuccess"></el-input>
+                  <el-input v-model="employeeFormData.empName" :disabled="checkSuccess || !employeeFormData.checkStatus"></el-input>
                 </el-form-item>
                 <el-form-item label="其他证件类型">
                   <el-select v-model="employeeFormData.otherIdType" placeholder="请选择" :disabled="employeeFormData.idType ==='PRC_ID'">
@@ -57,7 +57,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="出生国家" prop="birthPlace" :rules="{required: employeeFormData.idType !='PRC_ID', message: '出生国家不能为空', trigger: 'blur'}">
-                  <el-select v-model="employeeFormData.birthPlace" placeholder="请选择" :disabled="employeeFormData.idType ==='PRC_ID'" >
+                  <el-select v-model="employeeFormData.birthPlace" placeholder="请选择" :disabled="employeeFormData.idType ==='PRC_ID' || !employeeFormData.checkStatus" >
                     <el-option
                       v-for="(item,key) in countryList"
                       :key="key"
@@ -67,7 +67,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="性别" required>
-                  <el-select v-model="employeeFormData.empSex" placeholder="请选择" :disabled="checkDisabled">
+                  <el-select v-model="employeeFormData.empSex" placeholder="请选择" :disabled="checkDisabled || !employeeFormData.checkStatus">
                     <el-option
                       v-for="(value,key) in baseInfo.empSex"
                       :key="key"
@@ -94,7 +94,7 @@
               </el-col>
               <el-col :span="7" class="right-input-box">
                 <el-form-item label="证件号码" prop="idNo" :rules="{required: true, validator: this.validIdNo, trigger: 'blur'}">
-                  <el-input v-model="employeeFormData.idNo" :disabled="checkSuccess"></el-input>
+                  <el-input v-model="employeeFormData.idNo" :disabled="checkSuccess || !employeeFormData.checkStatus"></el-input>
                 </el-form-item>
                 <el-form-item label="国籍(地区)" prop="country" >
                   <el-select v-model="employeeFormData.country" placeholder="请选择" :disabled="checkSuccess">
