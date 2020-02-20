@@ -426,11 +426,11 @@ export default {
         }
       }else{
         callback('身份证信息不能为空')
-        status = false
+        // status = false
       }
-      if(status){
-        this.checkIdCard()
-      }
+      // if(status){
+      //   this.checkIdCard()
+      // }
     },
     //检验身份证
     checkIdCard(){
