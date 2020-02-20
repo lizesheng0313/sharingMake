@@ -300,8 +300,13 @@
             })
         }).catch(() => {})
       },
-      //导出
+      //员工月度台账导出
       handleExport(){
+        this.$store
+          .dispatch("socialFundStore/actionEmpMonthlyLedgerExport",this.ruleForm)
+          .then(res=>{
+
+          })
       },
       //详情
       goInsureAccountDetail(data){

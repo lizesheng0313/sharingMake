@@ -34,14 +34,11 @@
           <el-button size="small" type="primary">选择文件</el-button>
         </el-upload>
         <div v-show="uuid" style="margin:15px 0 0 28px">
-          <span v-if="failCount === 0">
-            <i class="el-icon-success"></i>数据全部校验通过
-          </span>
+          <span v-if="failCount === 0"><i class="el-icon-success"></i>数据全部校验通过</span>
           <span v-else-if="failCount !== 0 && successCount !==0">
-            <i class="el-icon-warning"></i>数据部分校验通过，有
-            <strong style="color:red">{{failCount}}</strong>条数据错误
+            <i class="el-icon-warning"></i>数据部分校验通过，有<strong style="color:red">{{failCount}}</strong>条数据错误
           </span>
-          <span v-else-if="successCount === 0">数据全部未通过校验</span>
+          <span v-else-if="successCount === 0"><i class="el-icon-error">数据全部未通过校验</span>
           <span>
             <a @click="handleDownload" v-if="failCount !== 0" class="download">下载日志</a>
           </span>

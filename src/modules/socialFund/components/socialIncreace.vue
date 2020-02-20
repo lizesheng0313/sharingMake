@@ -42,27 +42,27 @@
             </el-form-item>
           </div>
           <div class="shortCon">
-            <el-form-item label="员工社保基数" prop="socialBase"
+            <el-form-item label="员工社保基数" prop="socialInsuranceBaseNumber"
                           :rules="{ required: true, message: '请选择员工社保基数', trigger: 'blur'}">
-              <el-input v-model="socialIncreaceForm.socialBase"></el-input>
+              <el-input v-model="socialIncreaceForm.socialInsuranceBaseNumber"></el-input>
             </el-form-item>
           </div>
           <div class="shortCon">
-            <el-form-item label="公积金起缴月份" :prop="socialIncreaceForm.providentMonthType === '2' ? 'providentMonth':'providentMonthType'"
+            <el-form-item label="公积金起缴月份" prop="accumulationFundStartMonth"
                           :rules="{ required: true, message: '请选择公积金起缴月份', trigger: 'blur'}">
               <el-radio-group v-model="socialIncreaceForm.providentMonthType">
                 <el-radio-button label="1">同社保</el-radio-button>
                 <el-radio-button label="2">选择</el-radio-button>
               </el-radio-group>
               <span class="provident-month">
-                    <el-date-picker v-if="socialIncreaceForm.providentMonthType==2" v-model="socialIncreaceForm.providentMonth" type="month" placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
+                    <el-date-picker v-if="socialIncreaceForm.providentMonthType==2" v-model="socialIncreaceForm.accumulationFundStartMonth" type="month" placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
                 </span>
             </el-form-item>
           </div>
           <div class="shortCon">
-            <el-form-item label="员工公积金基数" prop="providentBase"
+            <el-form-item label="员工公积金基数" prop="accumulationFundBaseNumber"
                           :rules="{ required: true, message: '员工公积金基数不能为空', trigger: 'blur'}">
-              <el-input v-model="socialIncreaceForm.providentBase"></el-input>
+              <el-input v-model="socialIncreaceForm.accumulationFundBaseNumber"></el-input>
             </el-form-item>
           </div>
         </el-form>
@@ -120,6 +120,8 @@ export default {
     },
     //增员
     handleIncreateSocial(){
+      this.socialIncreaceForm.providentMonthType == "1" ?
+        this.socialIncreaceForm.accumulationFundStartMonth = this.socialIncreaceForm.socialInsuranceStartMonth:""
       this.$refs.socialIncreaceForm.validate(valid => {
         if(valid){
           this.$store

@@ -115,7 +115,7 @@ const householdRegistrationType = (val) => {
     case 'CITY': {
       return '城镇户口';
     }
-    case 'FAVILLAGEIL': {
+    case 'VILLAGE': {
       return '农村户口';
     }
   }

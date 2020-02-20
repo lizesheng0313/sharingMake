@@ -81,7 +81,7 @@
                   <el-input v-model="basicInfoForm.salaryArea" @focus="showSalaryArea" :disabled="basicInfoForm.allTaxSub"></el-input>
                   <el-checkbox v-model="basicInfoForm.allTaxSub" class="checkAllStyle">选择全部</el-checkbox>
               </el-form-item>
-              <el-form-item label="增加过滤范围" class="taxRule">
+              <el-form-item label="用工性质" class="taxRule">
                 <el-select v-model="basicInfoForm.employType" multiple placeholder="请选择">
                   <el-option
                     v-for="(item,index) in employTypeOption"
