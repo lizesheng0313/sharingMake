@@ -36,7 +36,7 @@
                   <span class="title">缴费信息</span>
               </div>
               <div v-for="(item,index) in insuredPayList" :key="index">
-                <div>缴费月份：{{ item.month }} <el-button type="text" @click="deletePayBack(item)" v-if="!item.isSupplement">删除补缴</el-button></div>
+                <div>缴费月份：{{ item.month }} <el-button type="text" @click="deletePayBack(item)" v-if="item.isSupplement">删除补缴</el-button></div>
                 <el-table :data="item.payDetailList" border>
                     <el-table-column prop="type" label="险种">
                       <template slot-scope="scope">

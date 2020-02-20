@@ -301,6 +301,7 @@ export default {
       isBaseEdit:false,
       isInsuredEdit:false,
       compEmpId:this.$route.query.compEmpId,
+      empId:this.$route.query.empId,
       baseForm:{
         compEmpId:this.$route.query.compEmpId,
         bankId:"",
@@ -333,6 +334,7 @@ export default {
         empId:"",
         taxSubId:"",
         taxSubName:"",
+        compEmpId:"",
         empType:"",
         deptName:"",//部门
         positionName:"",//岗位
@@ -457,7 +459,10 @@ export default {
         })
     },
     getInfo(){
-      this.$store.dispatch("payMasterStore/actionGetEmployee",this.compEmpId).then(res=>{
+      this.$store.dispatch("payMasterStore/actionGetEmployee",{
+        compEmpId:this.compEmpId,
+        empId:this.empId
+      }).then(res=>{
         if(res.success){
           let data = res.data;
           this.checkReference = data.checkReference//公司信息是否被引用,可编辑
@@ -526,7 +531,7 @@ export default {
       this.$refs['insuredForm'].validate(valid => {
         if(valid){
           this.$store
-            .dispatch("payMasterStore/actionSaveCompany", this.insuredForm)
+            .dispatch("payMasterStore/actionEmpolyeeCompany", this.insuredForm)
             .then(res => {
               if(res.success){
                 this.getInfo()

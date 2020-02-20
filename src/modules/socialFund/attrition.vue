@@ -304,8 +304,8 @@
                 this.numSelect = [
                   { label:"全部", value:responseData.num, isActive:true, isHasBorder:false,flag:""},
                   { label:"本月社保：缴纳中", value:responseData.sitaxNum, isActive:false, isHasBorder:true,flag:"1" },
-                  { label:"增员", value:responseData.sidecreaseNum, isActive:false, isHasBorder:false,flag:"2" },
-                  { label:"减员", value:responseData.siincreaseNum, isActive:false, isHasBorder:false,flag:"3"},
+                  { label:"增员", value:responseData.siincreaseNum, isActive:false, isHasBorder:false,flag:"2" },
+                  { label:"减员", value:responseData.sidecreaseNum, isActive:false, isHasBorder:false,flag:"3"},
                   { label:"本月公积金：缴纳中", value:responseData.aftaxNum, isActive:false, isHasBorder:true,flag:"4" },
                   { label:"增员", value:responseData.afincreaseNum, isActive:false, isHasBorder:false,flag:"5" },
                   { label:"减员", value:responseData.afdecreaseNum, isActive:false, isHasBorder:false,flag:"6" },
