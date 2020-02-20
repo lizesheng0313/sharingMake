@@ -15,7 +15,7 @@
                           <el-col :span="12"><el-form-item label="工号：">{{ floatEmployeeBaseInfoVo ? floatEmployeeBaseInfoVo.empNo:"_"}}</el-form-item></el-col>
                       </el-row>
                       <el-row>
-                          <el-col :span="12"><el-form-item label="证件类型：">{{ floatEmployeeBaseInfoVo?(floatEmployeeBaseInfoVo.idType | filterIdType) :"_"}}</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="证件类型：">{{ floatEmployeeBaseInfoVo.idType | filterIdType}}</el-form-item></el-col>
                           <el-col :span="12"><el-form-item label="证件号码：">{{ floatEmployeeBaseInfoVo?floatEmployeeBaseInfoVo.idNo:"_" }}</el-form-item></el-col>
                       </el-row>
                       <el-row>
@@ -24,7 +24,7 @@
                       </el-row>
                       <el-row>
                           <el-col :span="12"><el-form-item label="公司名称：">{{ floatEmployeeBaseInfoVo?floatEmployeeBaseInfoVo.compName:"_" }}</el-form-item></el-col>
-                          <el-col :span="12"><el-form-item label="用工性质：">{{ floatEmployeeBaseInfoVo?(floatEmployeeBaseInfoVo.empType|filterEmpType) : "_"}}</el-form-item></el-col>
+                          <el-col :span="12"><el-form-item label="用工性质：">{{ floatEmployeeBaseInfoVo.empType|filterEmpType }}</el-form-item></el-col>
                       </el-row>
                       <el-row>
                           <el-col :span="12"><el-form-item label="入职日期：">{{ floatEmployeeBaseInfoVo?floatEmployeeBaseInfoVo.empDay:""}}</el-form-item></el-col>
