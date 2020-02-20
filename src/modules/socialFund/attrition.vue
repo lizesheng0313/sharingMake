@@ -392,9 +392,14 @@
       },
       //社保增员
       showSocialIncreate(data){
-        let compEmpIds = [data.compEmpId]
+        let compEmpInfo = [
+          {
+            compEmpId:data.compEmpId,
+            taxSubId:data.taxSubId
+          }
+        ]
         let nameList = [data.empName]
-        this.$refs.socialIncreace.show(compEmpIds,nameList)
+        this.$refs.socialIncreace.show(compEmpInfo,nameList)
       },
       //参保导出
       insureExport(){

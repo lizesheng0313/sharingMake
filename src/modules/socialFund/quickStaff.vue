@@ -314,9 +314,14 @@
       },
       //社保增员
       showSocialIncreate(data){
-        let compEmpIds = [data.compEmpId]
+        let compEmpInfo= [
+          {
+            compEmpId:data.compEmpId,
+            taxSubId:data.taxSubId
+          }
+        ]
         let nameList = [data.empName]
-        this.$refs.socialIncreace.show(compEmpIds,nameList)
+        this.$refs.socialIncreace.show(compEmpInfo,nameList)
       },
       //社保减员
       showSocialDecreate(data){
@@ -330,9 +335,15 @@
       },
       //批量增员
       batchIncreate(){
-        let compEmpIds = this.selectList.map(item=>item.compEmpId)
+        let compEmpInfo = []
+        this.selectList.forEach(item=>{
+          compEmpInfo.push({
+            compEmpId:item.compEmpId,
+            taxSubId:item.taxSubId
+          })
+        })
         let nameList = this.selectList.map(item=>item.empName)
-        this.$refs.socialIncreace.show(compEmpIds,nameList)
+        this.$refs.socialIncreace.show(compEmpInfo,nameList)
       },
       //批量减员
       batchDecreate(){
