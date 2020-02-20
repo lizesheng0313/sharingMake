@@ -187,7 +187,7 @@
                         <el-col :span="12"><el-form-item label="任职受雇从业类型：">{{this.insuredForm.workerType | workType}}</el-form-item></el-col>
                       </el-row>
                       <el-row>
-                        <el-col :span="12"><el-form-item label="是否转正：">{{this.insuredForm.regularEmpYn }}</el-form-item></el-col>
+                        <el-col :span="12"><el-form-item label="是否转正：">{{this.insuredForm.regularEmpYn=="1"?"是":"否" }}</el-form-item></el-col>
                         <el-col :span="12"><el-form-item label="转正日期：">{{ this.insuredForm.turnRegularDate }}</el-form-item></el-col>
                       </el-row>
                       <el-row>

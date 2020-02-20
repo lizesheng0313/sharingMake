@@ -260,7 +260,7 @@ export default {
     getInfo(){
       this.$store
         .dispatch("socialFundStore/actionFloatEmployeeManageInfo",{
-          "compEmpId":this.attritionItem.compEmpId,
+          "empId":this.attritionItem.empId,
           "empInsuredId":this.attritionItem.empInsuredId
         })
         .then(res => {
