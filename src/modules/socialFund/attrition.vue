@@ -219,7 +219,7 @@
           "key": "",
           "pageSize": 20,
           "startMonth": "2020-02",
-          "statusFlag": "1",
+          "statusFlag": "",
           "taxSubId": ""
         },
         screenWidth: document.body.clientWidth,// 屏幕尺寸
@@ -287,7 +287,7 @@
       selectNum(data){
        this.numSelect.forEach(it=>{it.isActive = false})
        data.isActive = true
-       this.ruleForm.statusFlag = data.value;
+       this.ruleForm.statusFlag = data.flag;
        this.getList('selectNum')
       },
       getList(selectNum) {
@@ -302,13 +302,13 @@
               this.list = responseData.pageResponse.data;
               if(!selectNum){
                 this.numSelect = [
-                  { label:"全部", value:responseData.num, isActive:true, isHasBorder:false },
-                  { label:"本月社保：缴纳中", value:responseData.sitaxNum, isActive:false, isHasBorder:true },
-                  { label:"增员", value:responseData.sidecreaseNum, isActive:false, isHasBorder:false },
-                  { label:"减员", value:responseData.siincreaseNum, isActive:false, isHasBorder:false },
-                  { label:"本月公积金：缴纳中", value:responseData.aftaxNum, isActive:false, isHasBorder:true },
-                  { label:"增员", value:responseData.afincreaseNum, isActive:false, isHasBorder:false },
-                  { label:"减员", value:responseData.afdecreaseNum, isActive:false, isHasBorder:false },
+                  { label:"全部", value:responseData.num, isActive:true, isHasBorder:false,flag:""},
+                  { label:"本月社保：缴纳中", value:responseData.sitaxNum, isActive:false, isHasBorder:true,flag:"1" },
+                  { label:"增员", value:responseData.sidecreaseNum, isActive:false, isHasBorder:false,flag:"2" },
+                  { label:"减员", value:responseData.siincreaseNum, isActive:false, isHasBorder:false,flag:"3"},
+                  { label:"本月公积金：缴纳中", value:responseData.aftaxNum, isActive:false, isHasBorder:true,flag:"4" },
+                  { label:"增员", value:responseData.afincreaseNum, isActive:false, isHasBorder:false,flag:"5" },
+                  { label:"减员", value:responseData.afdecreaseNum, isActive:false, isHasBorder:false,flag:"6" },
                 ]
               }
             }

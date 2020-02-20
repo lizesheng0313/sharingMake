@@ -37,20 +37,52 @@
               </div>
               <div v-for="(item,index) in insuredPayList" :key="index">
                 <div>缴费月份：{{ item.month }} <el-button type="text" @click="deletePayBack(item)" v-if="!item.isSupplement">删除补缴</el-button></div>
-                <el-table data="item.payDetailList" border>
+                <el-table :data="item.payDetailList" border>
                     <el-table-column prop="type" label="险种">
                       <template slot-scope="scope">
                         <div class="number-right"> {{ scope.row.insuranceType | insuranceType }}</div>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="baseNumber" label="缴费基数"></el-table-column>
-                    <el-table-column prop="personScale" label="个人缴费比例"></el-table-column>
-                    <el-table-column prop="personFixedAmount" label="个人固定金额"></el-table-column>
-                    <el-table-column prop="personPayAmount" label="个人缴费金额"></el-table-column>
-                    <el-table-column prop="compScale" label="企业缴费比例"></el-table-column>
-                    <el-table-column prop="compFixedAmount" label="企业固定金额"></el-table-column>
-                    <el-table-column prop="compPayAmount" label="企业缴费金额"></el-table-column>
-                    <el-table-column prop="totalPayAmount" label="个人企业合计"></el-table-column>
+                    <el-table-column prop="baseNumber" label="缴费基数">
+                      <template slot-scope="scope">
+                        <div class="number-right"> {{ scope.row.baseNumber?scope.row.baseNumber:"_" }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="personScale" label="个人缴费比例">
+                      <template slot-scope="scope">
+                        <div class="number-right"> {{ scope.row.personScale?scope.row.personScale:"_" }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="personFixedAmount" label="个人固定金额">
+                      <template slot-scope="scope">
+                        <div class="number-right"> {{ scope.row.personFixedAmount?scope.row.personFixedAmount:"_" }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="personPayAmount" label="个人缴费金额">
+                      <template slot-scope="scope">
+                        <div class="number-right"> {{ scope.row.personPayAmount?scope.row.personPayAmount:"_" }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="compScale" label="企业缴费比例">
+                      <template slot-scope="scope">
+                        <div class="number-right"> {{ scope.row.compScale?scope.row.compScale:"_" }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="compFixedAmount" label="企业固定金额">
+                      <template slot-scope="scope">
+                        <div class="number-right"> {{ scope.row.compFixedAmount?scope.row.compFixedAmount:"_" }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="compPayAmount" label="企业缴费金额">
+                      <template slot-scope="scope">
+                        <div class="number-right"> {{ scope.row.compPayAmount?scope.row.compPayAmount:"_" }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="totalPayAmount" label="个人企业合计">
+                      <template slot-scope="scope">
+                        <div class="number-right"> {{ scope.row.totalPayAmount?scope.row.totalPayAmount:"_" }}</div>
+                      </template>
+                    </el-table-column>
                 </el-table>
               </div>
           </div>
