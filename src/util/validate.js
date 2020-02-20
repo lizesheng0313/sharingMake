@@ -7,3 +7,11 @@ export const validatePhone = (phone) => {
     return true
 }
 
+export const validateNumber = (rule, value, callback) => {
+  let reg= /^(0|[1-9]\d*)(\s|$|\.\d{1,2}\b)/
+  if(reg.test(value)){
+    callback()
+  }else{
+    callback(new Error('请输入正确数值'));
+  }
+};

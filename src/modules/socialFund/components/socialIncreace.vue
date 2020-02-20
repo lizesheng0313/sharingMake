@@ -42,8 +42,9 @@
             </el-form-item>
           </div>
           <div class="shortCon">
-            <el-form-item label="员工社保基数" prop="socialInsuranceBaseNumber"
-                          :rules="{ required: true, message: '请选择员工社保基数', trigger: 'blur'}">
+            <el-form-item label="员工社保基数" prop="socialInsuranceBaseNumber" :rules="[
+              { required: true, message: '请选择员工社保基数', trigger: 'blur'},
+              { validator: validateNumber, trigger: 'blur'}]">
               <el-input v-model="socialIncreaceForm.socialInsuranceBaseNumber"></el-input>
             </el-form-item>
           </div>
@@ -61,7 +62,10 @@
           </div>
           <div class="shortCon">
             <el-form-item label="员工公积金基数" prop="accumulationFundBaseNumber"
-                          :rules="{ required: true, message: '员工公积金基数不能为空', trigger: 'blur'}">
+                          :rules="[
+                           { required: true, message: '公积金基数不能为空', trigger: 'blur'},
+                           { validator: validateNumber, trigger: 'blur'}
+                          ]">
               <el-input v-model="socialIncreaceForm.accumulationFundBaseNumber"></el-input>
             </el-form-item>
           </div>
@@ -75,6 +79,7 @@
   </div>
 </template>
 <script>
+  import { validateNumber } from "@/util/validate";
 export default {
   props:{
     selectEmployee:{
@@ -102,7 +107,9 @@ export default {
       }],
       isShowIncrease:false,
       closeModel: false,
-      nameList:[]
+      nameList:[],
+      validateNumber:validateNumber,
+
     };
   },
   methods: {
