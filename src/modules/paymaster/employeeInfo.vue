@@ -260,7 +260,7 @@
             workCity:"",//工作城市
             enterStartTime:"",//入职筛选开始时间
             enterEndTime:"",
-            regularEmpYn:-1,//是否转正
+            regularEmpYn:"",//是否转正
             turnRegularStartTime:"",//转正开始时间
             turnRegularEndTime:"",
             lastEmployStartTime:"",
@@ -399,7 +399,7 @@
         for(let key in this.ruleForm.queryFilterParam){
           if(!['enumEmpTypes','enumEmpStatuses','regularEmpYn'].includes(key)){
             this.ruleForm.queryFilterParam[key] = ""
-            this.ruleForm.queryFilterParam.regularEmpYn = -1;
+            this.ruleForm.queryFilterParam.regularEmpYn = "";
             this.$refs.enumEmpType.changeNoType();
             this.$refs.employStatus.changeNoType();
           }

@@ -100,7 +100,7 @@ export const enumEmpTypeOption = [
 export const regularEmpYnOption = [
   {
     label:"不限",
-    value:"-1"
+    value:""
   },{
     label:"是",
     value:"1"

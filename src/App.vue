@@ -140,7 +140,7 @@ export default {
 <style lang="scss" scoped>
 .app-page {
   height: 100%;
-  background: #fff;
+  background: #fafafa;
   background-size: 100% 100%;
   background-position: center center;
   .router-view {
