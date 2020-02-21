@@ -102,7 +102,10 @@
                           </el-form-item>
                         </div>
                         <div style="flex:1">
-                            <el-form-item label="手机号码：" prop="mobile" :rules="{required: true, message: '手机号码不能为空', trigger: 'blur'}">
+                            <el-form-item label="手机号码：" prop="mobile" :rules="[
+                            {required: true, message: '手机号码不能为空', trigger: 'blur'},
+                            { validator: validateTell, trigger: 'blur'}
+                            ]">
                               <el-input v-model="baseForm.mobile" :disabled="baseDisable"></el-input>
                             </el-form-item>
                         </div>
@@ -288,7 +291,7 @@
 <script>
 import fullScreen from "@/components/full-screen/index";
 import * as constData from "./util/constData"
-import { validatePhone } from "@/util/validate";
+import { validateTell } from "@/util/validate";
 import { mapState } from "vuex";
 
 export default {
@@ -362,6 +365,7 @@ export default {
       empStatusOption:constData.employStatusOption,
       showTable:false,
       baseDisable:false,
+      validateTell:validateTell
     };
   },
   computed: {
