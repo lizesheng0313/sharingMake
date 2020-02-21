@@ -384,7 +384,7 @@
       showSocialDecreate(data){
         let compEmpInfo= [
           {
-            compEmpId:data.compEmpId,
+            empId:data.empId,
             taxSubId:data.taxSubId
           }
         ]
@@ -394,7 +394,7 @@
       showSocialIncreate(data){
         let compEmpInfo = [
           {
-            compEmpId:data.compEmpId,
+            empId:data.empId,
             taxSubId:data.taxSubId
           }
         ]

@@ -376,13 +376,13 @@ export default {
         if(this.sendBasicInfoForm.empList.length>0){
           let empList = this.sendBasicInfoForm['empList'].map(item=>item.empId);
           this.basicInfoForm.empList = empList
-          this.sendBasicInfoForm['empList'].forEach(item=>{salaryAreaE+=`${item.empName}(${item.empId})、`})
+          this.sendBasicInfoForm['empList'].forEach(item=>{salaryAreaE+=`${item.empName}(${item.mobile})、`})
         }
         this.basicInfoForm.salaryArea = salaryAreaE + salaryAreaC;
       }
       // 无需算薪人员范围
       if(this.sendBasicInfoForm['excludeEmpList'].length>0 && !this.isEditExcludeEmpList){
-        this.sendBasicInfoForm['excludeEmpList'].forEach(item=>{unNeedSalary+=`${item.empName}(${item.empId})、`})
+        this.sendBasicInfoForm['excludeEmpList'].forEach(item=>{unNeedSalary+=`${item.empName}(${item.mobile})、`})
         this.basicInfoForm.unNeedSalary = unNeedSalary.substring(0,unNeedSalary.length-1)
         let excludeEmpList = this.sendBasicInfoForm['excludeEmpList'].map(item=>item.empId);
         this.basicInfoForm.excludeEmpList = excludeEmpList

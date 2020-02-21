@@ -316,7 +316,7 @@
       showSocialIncreate(data){
         let compEmpInfo= [
           {
-            compEmpId:data.compEmpId,
+            empId:data.empId,
             taxSubId:data.taxSubId
           }
         ]
@@ -327,7 +327,7 @@
       showSocialDecreate(data){
         let compEmpInfo= [
           {
-            compEmpId:data.compEmpId,
+            empId:data.empId,
             taxSubId:data.taxSubId
           }
         ]
@@ -338,7 +338,7 @@
         let compEmpInfo = []
         this.selectList.forEach(item=>{
           compEmpInfo.push({
-            compEmpId:item.compEmpId,
+            empId:item.empId,
             taxSubId:item.taxSubId
           })
         })
@@ -350,7 +350,7 @@
         let compEmpInfo = []
           this.selectList.forEach(item=>{
             compEmpInfo.push({
-              compEmpId:item.compEmpId,
+              empId:item.empId,
               taxSubId:item.taxSubId
             })
           })

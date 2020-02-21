@@ -125,8 +125,8 @@ export default {
 
       //公司信息回显
       this.chooseTypeObj.company.checkedLists = this.chooseTypeObj.company.lists.filter(item=>companyData.includes(item.taxSubId))
-      this.chooseTypeObj.company.isIndeterminate = companyData.length<this.chooseTypeObj.company.lists.length
-      this.chooseTypeObj.company.checkAll = companyData.length=this.chooseTypeObj.company.lists.length
+      // this.chooseTypeObj.company.isIndeterminate = companyData.length>0 && companyData.length<this.chooseTypeObj.company.lists.length
+      // this.chooseTypeObj.company.checkAll = companyData.length == this.chooseTypeObj.company.lists.length
     },
     getEmployList(emplyeeData){
       this.$store
@@ -137,7 +137,7 @@ export default {
           if(res.success){
             let emplyeeList = res.data
             emplyeeList.forEach(item=>{
-              item.name = item.empName+`(${item.empId})`;
+              item.name = item.empName+`(${item.mobile})`;
               item.id = item.empId;
               item.type = "employee";
             })
@@ -145,8 +145,10 @@ export default {
             //数据回显
             if(emplyeeData){
               this.chooseTypeObj.employee.checkedLists = this.chooseTypeObj.employee.lists.filter(item=>emplyeeData.includes(item.empId))
-              this.chooseTypeObj.employee.isIndeterminate = emplyeeData.length<this.chooseTypeObj.employee.lists.length
-              this.chooseTypeObj.employee.checkAll = emplyeeData.length=this.chooseTypeObj.employee.lists.length
+              this.chooseTypeObj.employee.isIndeterminate = emplyeeData.length >0 && emplyeeData.length<this.chooseTypeObj.employee.lists.length
+              this.chooseTypeObj.employee.checkAll = emplyeeData.length == this.chooseTypeObj.employee.lists.length
+              // console.log( emplyeeData.length >0 && emplyeeData.length<this.chooseTypeObj.employee.lists.length)
+              // console.log(emplyeeData)
             }
           }
         })
