@@ -40,34 +40,7 @@ export default {
           url: "/home",
           index: 0,
           icon:"iconshouye"
-        },
-        {
-          businessCode: null,
-          name: "增减员",
-          url: "/attrition",
-          index: 0,
-          icon:"iconshouye"
-        },
-        {
-          businessCode: null,
-          name: "发薪人员",
-          url: "/payMaster",
-          index: 0,
-          icon:"iconshouye"
-        },{
-          businessCode: null,
-          name: "参保月度台账",
-          url: "/insuredAccount",
-          index: 0,
-          icon:"iconshouye"
-        },{
-          businessCode: null,
-          name: "参保方案",
-          url: "/insuredPlan",
-          index: 0,
-          icon:"iconshouye"
         }
-
       ]
       }
   },

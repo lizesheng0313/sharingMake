@@ -7,21 +7,15 @@ export default [
     path: '/payMaster',
     component: payMaster,
     meta: {
-      businessCode: "salary.init.taxTotalBase"
+      businessCode: "salary.compute.emp"
     }
   },
   {
     path: '/employeeDetail',
     component: employeeDetail,
-    meta: {
-      businessCode: "salary.init.taxTotalBase"
-    }
   },
   {
     path: '/addEmployee',
     component: addEmployee,
-    meta: {
-      businessCode: "salary.init.taxTotalBase"
-    }
   },
 ]
