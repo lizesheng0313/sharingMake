@@ -111,9 +111,9 @@ export function apiEmployeesTemplate() {
 }
 
 //导入下载错误日志
-export function apiEmployeesVerifyErrorLog(id) {
+export function apiEmployeesVerifyErrorLog(data) {
   return oldFetch({
-    url: 'xsalary/enterprise/employees/importVerifyErrorLog/'+id,
+    url: 'xsalary/enterprise/employees/importVerifyErrorLog/'+data.uuid,
     method: 'get',
     responseType: 'blob'
   })

@@ -61,8 +61,8 @@ export const actionEmployeesTemplate= ({ dispatch }) => {
 }
 
 //导入错误日志下载
-export const actionEmployeesVerifyErrorLog= ({ dispatch },id) => {
-  return apiEmployeesVerifyErrorLog(id)
+export const actionEmployeesVerifyErrorLog= ({ dispatch },data) => {
+  return apiEmployeesVerifyErrorLog(data)
 }
 
 //增员导入
