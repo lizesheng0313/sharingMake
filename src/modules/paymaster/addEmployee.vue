@@ -83,7 +83,7 @@
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="户口性质">
-                            <el-select v-model="baseForm.householdRegistrationType" placeholder="请选择最高学历" :disabled="baseDisable">
+                            <el-select v-model="baseForm.householdRegistrationType" placeholder="请选择户口性质" :disabled="baseDisable">
                               <el-option v-for="(item,index) in householdSexOption" :label="item.label" :value="item.value" :key="index"></el-option>
                             </el-select>
                           </el-form-item>
@@ -170,7 +170,7 @@
                       <div style="flex:1">
                         <el-form-item label="公司名称" prop="taxSubId" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
                           <el-select v-model="baseForm.taxSubId" placeholder="请选择公司名称">
-                            <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                            <el-option v-for="(item,index) in taxSubList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                           </el-select>
                         </el-form-item>
                       </div>
@@ -210,7 +210,7 @@
                     </el-row>
                     <el-row style="display: flex">
                       <div style="flex:1">
-                        <el-form-item label="是否转正" prop="regularEmpYn" :rules="{required: true, message: '请选择是否转正', trigger: 'blur'}">
+                        <el-form-item label="是否转正" prop="regularEmpYn" >
                           <el-select v-model="baseForm.regularEmpYn" placeholder="请选择">
                             <el-option v-for="(item,index) in isFullWorkOption" :label="item.label" :value="item.value" :key="index"></el-option>
                           </el-select>
@@ -294,12 +294,13 @@ export default {
       },
       canSelectCoutry:[],
       canSelectotherIdType:[],//其他证件类型
+      taxSubList:[],
       enumEmpTypeOption:constData.enumEmpTypeOption,
       idCardTypeOption:constData.idType,
       sexOption:constData.empSex,
       topEduOption:constData.educationOption,
       householdSexOption:constData.householdRegistrationTypeOption,
-      isFullWorkOption:constData.regularEmpYnOption,
+      isFullWorkOption:[],
       otherIdCardTypeOption:constData.idType,
       taxReasonOption:constData.taxReasonOption,
       workerTypeOption: constData.workerType,
@@ -318,6 +319,8 @@ export default {
   },
   created(){
     this.changeIdType(this.baseForm.idType)
+    this.taxSubList = this.taxSubjectInfoList.filter(item=>item.taxSubId)
+    this.isFullWorkOption = constData.regularEmpYnOption.filter(item=>item.value)
   },
   methods: {
     validIdNo(rule, value, callback){
