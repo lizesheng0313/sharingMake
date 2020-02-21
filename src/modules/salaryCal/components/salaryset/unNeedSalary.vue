@@ -20,7 +20,7 @@
              </span>
              <i class="el-icon-search" v-if="!showSearch" @click.stop="showSearch = true"></i>
           </div>
-          <el-select v-model="company" placeholder="请选择公司" style="margin-bottom: 10px;border:none" @change="changCompany">
+          <el-select v-model="taxSubId" placeholder="请选择公司" style="margin-bottom: 10px;border:none" @change="changCompany">
             <el-option v-for="item in taxSubjectInfoList" :key="item.taxSubId" :label="item.taxSubName" :value="item.taxSubId"></el-option>
           </el-select>
           <div>
@@ -66,7 +66,6 @@ export default {
       searchCon:"",
       focus:false,
       showSearch:false,
-      company:"",
       taxSubId:""
     };
   },
@@ -101,12 +100,14 @@ export default {
         .then(res => {
           let emplyeeList = res.data
           emplyeeList.forEach(item=>{
-            item.name = item.empName+`(${item.empId})`;
+            item.name = item.empName+`(${item.mobile})`;
             item.id = item.empId;
           })
+          this.lists = this.allLists = emplyeeList
           if(data){
-            this.lists = this.allLists = emplyeeList
             this.checkedLists = this.lists.filter(item=>data.includes(item.empId))
+            this.isIndeterminate = this.checkedLists.length > 0 && this.checkedLists.length < this.lists.length
+            this.checkAll = this.checkedLists.length == this.lists.length
           }
         })
     },

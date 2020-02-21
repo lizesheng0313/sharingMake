@@ -324,7 +324,7 @@ export default {
     increaceStaff(){
       let compEmpInfo= [
         {
-          compEmpId:this.attritionItem.compEmpId,
+          empId:this.attritionItem.empId,
           taxSubId:this.attritionItem.taxSubId
         }
       ]
@@ -335,7 +335,7 @@ export default {
     decreaceStaff(){
       let compEmpInfo= [
         {
-          compEmpId:this.attritionItem.compEmpId,
+          empId:this.attritionItem.empId,
           taxSubId:this.attritionItem.taxSubId
         }
       ]
