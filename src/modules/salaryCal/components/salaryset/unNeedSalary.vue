@@ -66,7 +66,7 @@ export default {
       searchCon:"",
       focus:false,
       showSearch:false,
-      company:0,
+      company:"",
       taxSubId:""
     };
   },
@@ -95,7 +95,9 @@ export default {
     },
     getEmployList(data){
       this.$store
-        .dispatch("salaryCalStore/actionGetEnterpriseEmployees", this.taxSubId)
+        .dispatch("salaryCalStore/actionGetEnterpriseEmployees", {
+          taxSubId:this.taxSubId
+        })
         .then(res => {
           let emplyeeList = res.data
           emplyeeList.forEach(item=>{

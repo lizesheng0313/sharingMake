@@ -61,7 +61,10 @@
                           </el-form-item>
                         </div>
                         <div style="flex:1">
-                            <el-form-item label="手机号码：" prop="mobile" :rules="{required: true, message: '手机号码不能为空', trigger: 'blur'}">
+                            <el-form-item label="手机号码：" prop="mobile" :rules="[
+                            {required: true, message: '手机号码不能为空', trigger: 'blur'},
+                            { validator: validateTell, trigger: 'blur'}
+                            ]">
                               <el-input v-model="baseForm.mobile" :disabled="baseDisable"></el-input>
                             </el-form-item>
                         </div>
@@ -246,6 +249,7 @@
 import fullScreen from "@/components/full-screen/index";
 import { mapState } from "vuex";
 import * as constData from "./util/constData"
+import { validateTell } from "@/util/validate";
 export default {
   components: {
     fullScreen
@@ -305,6 +309,8 @@ export default {
       taxReasonOption:constData.taxReasonOption,
       workerTypeOption: constData.workerType,
       baseDisable:false,
+      validateTell:validateTell,
+
     };
   },
   computed: {
@@ -393,6 +399,8 @@ export default {
                   for(let key in this.baseForm){if(data[key]){this.baseForm[key] = data[key]}}
                   this.baseDisable = true;
               }).catch({})
+              this.$refs['baseForm'].clearValidate('empName')
+              this.$refs['baseForm'].clearValidate('mobile')
           }else{
               this.baseDisable = false
               if(this.baseForm.idType === 'PRC_ID'){
@@ -401,6 +409,8 @@ export default {
               }
           }
         })
+       this.$refs['baseForm'].clearValidate('empSex')
+       this.$refs['baseForm'].clearValidate('birthday')
     },
     //证件类型控制显示
     changeIdType(value){

@@ -81,10 +81,11 @@ export default {
           isIndeterminate: false,
         }
       },
-      taxSubId:"0",
+      taxSubId:"",
       searchCon:"",
       focus:false,
       showSearch:false,
+      taxSubList:[],
     };
   },
   computed:{
@@ -103,7 +104,8 @@ export default {
     },
   },
   created(){
-
+    this.taxSubList = this.taxSubjectInfoList.filter(item=>item.taxSubId)
+    console.log( this.taxSubList)
   },
   methods: {
     sendData(companyData,emplyeeData){
@@ -113,7 +115,7 @@ export default {
       this.getEmployList(emplyeeData)
 
       // 公司列表
-      let taxSubjectInfoList =this.taxSubjectInfoList.filter(item=>item.taxSubId !== 0)
+      let taxSubjectInfoList =this.taxSubjectInfoList.filter(item=>item.taxSubId)
       taxSubjectInfoList.forEach(item=>{
         item.name =item.taxSubName;
         item.id = item.taxSubId;
@@ -128,7 +130,9 @@ export default {
     },
     getEmployList(emplyeeData){
       this.$store
-        .dispatch("salaryCalStore/actionGetEnterpriseEmployees", this.taxSubId)
+        .dispatch("salaryCalStore/actionGetEnterpriseEmployees", {
+          taxSubId:this.taxSubId,
+        })
         .then(res => {
           if(res.success){
             let emplyeeList = res.data
@@ -148,7 +152,6 @@ export default {
         })
     },
     changCompany(){
-      console.log(111)
       this.getEmployList()
     },
     handleCheckAll(val) {
