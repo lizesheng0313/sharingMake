@@ -26,8 +26,8 @@
               ></el-date-picker>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="handleShowCreate(false)">生成月度台账</el-button>
-              <el-button class="add-import" @click="handleShowImport">导入月度台账</el-button>
+              <el-button type="primary" class="add-import" @click="handleShowCreate(false)" v-if="privilegeVoList.includes('salary.social.ledger.generate')">生成月度台账</el-button>
+              <el-button class="add-import" @click="handleShowImport" v-if="privilegeVoList.includes('salary.social.ledger.import')">导入月度台账</el-button>
             </div>
           </div>
           <div class="staff-table">
@@ -57,15 +57,17 @@
               </el-table-column>
               <el-table-column label="操作" fixed="right" width="160px">
                 <template slot-scope="scope">
-                  <span class="funStyle" @click="placeFile(scope.row)">{{ scope.row.isarchive?'取消归档':"归档" }}</span>
+                  <span class="funStyle" @click="placeFile(scope.row)" v-if="privilegeVoList.includes('salary.social.ledger.archive')">{{ scope.row.isarchive?'取消归档':"归档" }}</span>
                   <el-popover
                     ref="popMore"
                     placement="bottom-end"
                     width="60"
                     trigger="hover">
-                    <div class="funStyle more-style" @click="handleReCreate(scope.row)" v-if="!scope.row.isarchive">重新生成</div>
-                    <div class="funStyle more-style">导出</div>
-                    <div class="funStyle more-style" v-if="!scope.row.isarchive" @click="handleDelete(scope.row)">删除</div>
+                    <div class="funStyle more-style" @click="handleReCreate(scope.row)" v-if="!scope.row.isarchive"
+                         v-show="privilegeVoList.includes('salary.social.ledger.generate')">重新生成</div>
+                    <div class="funStyle more-style" v-if="privilegeVoList.includes('salary.social.ledger.exportCompany')">导出</div>
+                    <div class="funStyle more-style" v-if="!scope.row.isarchive" @click="handleDelete(scope.row)"
+                    v-show="privilegeVoList.includes('salary.social.ledger.delCompany')">删除</div>
                     <span slot="reference" class="more-choose">更多</span>
                   </el-popover>
                 </template>

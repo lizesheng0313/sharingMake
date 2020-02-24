@@ -19,7 +19,7 @@
               class="search-input"
             ></el-input>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="addInsuredPlan">新增参保方案</el-button>
+              <el-button type="primary" class="add-import" @click="addInsuredPlan" v-if="privilegeVoList.includes('salary.social.insuredProject.add')" >新增参保方案</el-button>
             </div>
           </div>
           <div class="table-contant">
@@ -38,8 +38,8 @@
               <el-table-column prop="updateTime" label="最近修改日期"></el-table-column>
               <el-table-column label="操作" fixed="right" width="140px">
                 <template slot-scope="scope">
-                  <span class="funStyle" @click="editPlan(scope.row)">编辑</span>
-                  <span class="funStyle" @click="deletePlan(scope.row)">删除</span>
+                  <span class="funStyle" @click="editPlan(scope.row)" v-show="privilegeVoList.includes('salary.social.insuredProject.edit')">编辑</span>
+                  <span class="funStyle" @click="deletePlan(scope.row)" v-show="privilegeVoList.includes('salary.social.insuredProject.del')">删除</span>
                 </template>
               </el-table-column>
             </el-table>
