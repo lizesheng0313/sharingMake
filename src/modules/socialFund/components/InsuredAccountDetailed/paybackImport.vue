@@ -75,7 +75,7 @@ export default {
           {type:"INJURY_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
           {type:"BIRTH_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
           {type:"SERIOUS_DISEASE_TREATMENT",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
-          {type:"ACCUMULATION_FUND",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"ACCUMULATION_FUND",projectType:"ACCUMULATION_FUND",personMoney:"0.00",companyMoney:"0.00"},
           {type:"COMPENSATORY_ACCUMULATION_FUND",projectType:"ACCUMULATION_FUND",personMoney:"0.00",companyMoney:"0.00"},
           {type:"COMPENSATORY_ENDOWMENT_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
           {type:"COMPENSATORY_MEDICAL_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
