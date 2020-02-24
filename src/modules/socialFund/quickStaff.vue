@@ -46,8 +46,8 @@
           <div class="staff-table">
             <div class="floating-menu" v-if="selectList.length>0">
               <span>已选中{{selectList.length}}人</span>
-              <el-button size="small" class="button-mini" @click="batchIncreate" v-if="uninsuredActive">批量增员</el-button>
-              <el-button size="small" class="button-mini" @click="batchDecreate" v-else>批量减员</el-button>
+              <el-button size="small" class="button-mini" @click="batchIncreate" v-if="uninsuredActive" v-show="privilegeVoList.includes('salary.social.floatEmployee.increase')">批量增员</el-button>
+              <el-button size="small" class="button-mini" @click="batchDecreate" v-else v-show="privilegeVoList.includes('salary.social.floatEmployee.decrease')">批量减员</el-button>
             </div>
             <el-table
               v-loading="loading"
@@ -91,8 +91,8 @@
               </template>
               <el-table-column label="操作" fixed="right" width="120px">
                 <template slot-scope="scope">
-                  <el-button v-if="uninsuredActive" type="text" @click="showSocialIncreate(scope.row)">社保增员</el-button>
-                  <el-button v-else type="text" @click="showSocialDecreate(scope.row)">社保减员</el-button>
+                  <el-button v-if="uninsuredActive" type="text" v-show="privilegeVoList.includes('salary.social.floatEmployee.increase')"  @click="showSocialIncreate(scope.row)" >社保增员</el-button>
+                  <el-button v-else type="text" @click="showSocialDecreate(scope.row)" v-show="privilegeVoList.includes('salary.social.floatEmployee.decrease')">社保减员</el-button>
                 </template>
               </el-table-column>
             </el-table>
