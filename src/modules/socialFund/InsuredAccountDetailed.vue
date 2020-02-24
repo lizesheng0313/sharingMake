@@ -28,8 +28,9 @@
               <el-button type="primary" class="tax-search" @click="getList">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" v-if="!insuredAccoundItem.isarchive" @click="handleRecreate">重新生成</el-button>
-              <el-button class="add-import" @click="handleExport">导出</el-button>
+              <el-button type="primary" class="add-import" v-if="!insuredAccoundItem.isarchive" @click="handleRecreate"
+                v-show="privilegeVoList.includes('salary.social.ledger.generate')">重新生成</el-button>
+              <el-button class="add-import" @click="handleExport" v-show="privilegeVoList.includes('salary.social.ledger.exportEmp')">导出</el-button>
             </div>
           </div>
           <div class="staff-situation">
@@ -91,10 +92,13 @@
                     <el-button type="text" @click="goInsureAccountDetail(scope.row)">详情</el-button>
                     <el-popover ref="popMore" placement="bottom-end" width="60" trigger="hover">
                        <el-button type="text" @click="paybackCreate(scope.row)"
-                                  v-if="scope.row.ledgerSource === 'GENERATE_LEDGER'">补缴</el-button>
+                                  v-if="scope.row.ledgerSource === 'GENERATE_LEDGER'"
+                                  v-show="privilegeVoList.includes('salary.social.ledger.supplement')">补缴</el-button>
                        <div v-else>
-                         <div class="funStyle more-style" @click="paybackImport(scope.row)">补缴</div>
-                         <div class="funStyle more-style" @click="handleDelete(scope.row)">删除</div>
+                         <div class="funStyle more-style" @click="paybackImport(scope.row)"
+                              v-show="privilegeVoList.includes('salary.social.ledger.supplement')">补缴</div>
+                         <div class="funStyle more-style" @click="handleDelete(scope.row)"
+                              v-if="privilegeVoList.includes('salary.social.ledger.delCompany')">删除</div>
                        </div>
                        <span slot="reference" class="more-choose" v-if="!insuredAccoundItem.isarchive">更多</span>
                     </el-popover>

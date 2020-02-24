@@ -351,6 +351,7 @@
         this.getList()
         this.isShowScreening = false;
       },
+      //删除
       handleDelete(data){
         this.$confirm("是否删除所选参保记录！", '提示', {
           confirmButtonText: '确定',
@@ -359,7 +360,7 @@
         }).then(() => {
           this.$store
             .dispatch("socialFundStore/actionFloatEmployeeDel", {
-              empInsuredIds:[data.empInsuredId]
+              empInsuredIds:data.empInsuredId
             }).then(res=>{
              if(res.success){
                this.$message.success("删除成功")

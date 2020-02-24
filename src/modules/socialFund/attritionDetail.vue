@@ -35,9 +35,9 @@
               <div class="insured-info">
                   <span class="title">参保信息</span>
                   <span class="fun-right">
-                      <el-button type="primary" @click="editInsured">编辑</el-button>
-                      <el-button type="primary" @click="decreaceStaff" v-if="floatEmployeeBaseInfoVo.insuredStatus === 'INSURED_ING'">减员</el-button>
-                      <el-button type="primary" @click="increaceStaff" v-else >继续参保</el-button>
+                      <el-button type="primary" @click="editInsured" v-if="privilegeVoList.includes('salary.social.floatEmployee.editSave')">编辑</el-button>
+                      <el-button type="primary" @click="decreaceStaff" v-if="floatEmployeeBaseInfoVo.insuredStatus === 'INSURED_ING'" v-show="privilegeVoList.includes('salary.social.floatEmployee.decrease')">减员</el-button>
+                      <el-button type="primary" @click="increaceStaff" v-else v-show="privilegeVoList.includes('salary.social.floatEmployee.increase')">继续参保</el-button>
 
                 </span>
               </div>
@@ -222,7 +222,9 @@ export default {
   computed: {
     ...mapState("socialFundStore", {
       attritionItem: state => state.attritionItem,
-      privilegeVoList:state=>state.privilegeVoList,
+    }),
+    ...mapState({
+      privilegeVoList: state => state.privilegeVoList,
     })
   },
   data() {
@@ -259,6 +261,7 @@ export default {
     this.getInfo()
   },
   mounted(){
+    console.log(this.privilegeVoList.includes(''))
   },
   methods: {
     getInfo(){
