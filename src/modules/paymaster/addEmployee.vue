@@ -381,7 +381,7 @@ export default {
            .then(res=>{
              let data = res.data
              if(res.success){
-               this.$confirm(`员工[${data.empName}]已存在于[${data.taxSubName}]，是否继续将员工添加到其他公司`, '提示', {
+               this.$confirm(`员工[${data.empName}]已存在，是否继续将员工添加到其他公司`, '提示', {
                  confirmButtonText: '确定',
                  cancelButtonText: '取消',
                  type: 'warning'
