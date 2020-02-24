@@ -42,6 +42,7 @@
   </div>
 </template>
 <script>
+  import { validateNumber } from "@/util/validate";
 export default {
   props:{
     accumulationFundYn:{
@@ -60,6 +61,7 @@ export default {
         closeModel: false,
         isShowDecrease:false,
         nameList:[],
+        validateNumber:validateNumber
     };
   },
 
@@ -67,7 +69,6 @@ export default {
     show(compEmpInfo) {
       this.isShowDecrease = true;
       this.compEmpInfo =compEmpInfo
-      console.log(this.compEmpInfo)
     },
     handleDecreateSocial(){
       this.socialDecreaceForm.accumulationFundEndMonth = this.socialDecreaceForm.providentMonthType === "1" ?
