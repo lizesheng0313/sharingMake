@@ -168,7 +168,7 @@
       <!-- 社保增员 -->
       <socialIncreace ref="socialIncreace" @freshList ="getList"></socialIncreace>
       <!-- 社保减员 -->
-      <social-decreace ref="socialDecreace" @freshList ="getList"></social-decreace>
+      <social-decreace ref="socialDecreace" @freshList ="getList" :accumulationFundYn="deAccumulationFundYn"></social-decreace>
     </div>
   </div>
 </template>
@@ -227,7 +227,8 @@
           loading:false,
           selectList:[],
           entryUninsuredNum:"",
-          dimissionInsuredNum:""
+          dimissionInsuredNum:"",
+          deAccumulationFundYn:false,
       };
     },
 
@@ -325,6 +326,7 @@
       },
       //社保减员
       showSocialDecreate(data){
+        this.deAccumulationFundYn = data.accumulationFundYn
         let compEmpInfo= [
           {
             empId:data.empId,

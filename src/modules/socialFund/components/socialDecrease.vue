@@ -17,7 +17,7 @@
                               type="month" placeholder="请选择"></el-date-picker>
             </el-form-item>
           </div>
-          <div class="shortCon">
+          <div class="shortCon" v-if="!accumulationFundYn">
             <el-form-item label="公积金停缴月份" prop="accumulationFundEndMonth"
                           :rules="{ required: true, message: '请选择公积金停缴月份', trigger: 'blur'}">
               <el-radio-group v-model="socialDecreaceForm.providentMonthType">
@@ -43,6 +43,12 @@
 </template>
 <script>
 export default {
+  props:{
+    accumulationFundYn:{
+      type:Boolean,
+      default:false
+    },
+  },
   data() {
     return {
       socialDecreaceForm:{
@@ -56,6 +62,7 @@ export default {
         nameList:[],
     };
   },
+
   methods: {
     show(compEmpInfo) {
       this.isShowDecrease = true;
