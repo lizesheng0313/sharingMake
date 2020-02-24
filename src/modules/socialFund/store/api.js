@@ -274,9 +274,8 @@ export function apiFloatEmployeeIncreaseDo(form) {
 //增减员删除
 export function apiFloatEmployeeDel(form) {
   return fetch({
-    url: '/api/xsalary/floatEmployee/manage/del',
-    method: 'post',
-    data:form
+    url: '/api/xsalary/floatEmployee/manage/del/'+form.empInsuredIds,
+    method: 'get',
   })
 }
 //参保导出
