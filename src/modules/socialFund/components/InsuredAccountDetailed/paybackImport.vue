@@ -41,7 +41,7 @@
             </el-table-column>
             <el-table-column label="公司缴纳金额">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.companeyMoney" class="input-right"/>
+                <el-input v-model="scope.row.companyMoney" class="input-right"/>
               </template>
             </el-table-column>
           </el-table>
@@ -69,18 +69,18 @@ export default {
         endDate:"",
         supplementType:"IMPORT",
         importSupplementIncuredVo:[
-          {type:"ENDOWMENT_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"MEDICAL_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"UNEMPLOYMENT_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"INJURY_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"BIRTH_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"SERIOUS_DISEASE_TREATMENT",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"ACCUMULATION_FUND",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"COMPENSATORY_ACCUMULATION_FUND",projectType:"ACCUMULATION_FUND",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"COMPENSATORY_ENDOWMENT_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"COMPENSATORY_MEDICAL_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"COMPENSATORY_MEDICAL_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companeyMoney:"0.00"},
-          {type:"COMPENSATORY_UNEMPLOYMENT_INSURANCE",personMoney:"0.00",projectType:"SOCIAL_INSURANCE",companeyMoney:"0.00"},
+          {type:"ENDOWMENT_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"MEDICAL_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"UNEMPLOYMENT_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"INJURY_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"BIRTH_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"SERIOUS_DISEASE_TREATMENT",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"ACCUMULATION_FUND",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"COMPENSATORY_ACCUMULATION_FUND",projectType:"ACCUMULATION_FUND",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"COMPENSATORY_ENDOWMENT_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"COMPENSATORY_MEDICAL_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"COMPENSATORY_MEDICAL_INSURANCE",projectType:"SOCIAL_INSURANCE",personMoney:"0.00",companyMoney:"0.00"},
+          {type:"COMPENSATORY_UNEMPLOYMENT_INSURANCE",personMoney:"0.00",projectType:"SOCIAL_INSURANCE",companyMoney:"0.00"},
         ],
       },
       closeModel: false,
