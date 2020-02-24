@@ -30,7 +30,7 @@
             <el-form-item label="参保方案"
                           prop="compInsuredId"
                           :rules="{required: true, message: '参保方案不能为空', trigger: 'blur'}">
-              <el-select v-model="socialIncreaceForm.compInsuredId" placeholder="请选择参保方案">
+              <el-select v-model="socialIncreaceForm.compInsuredId" placeholder="请选择参保方案" @change="changeInsure">
                 <el-option v-for="(item,index) in planOption" :label="item.insuredName" :value="item.id" :key="index"></el-option>
               </el-select>
             </el-form-item>
@@ -48,7 +48,7 @@
               <el-input v-model="socialIncreaceForm.socialInsuranceBaseNumber"></el-input>
             </el-form-item>
           </div>
-          <div class="shortCon">
+          <div class="shortCon" v-if="!accumulationFundYn">
             <el-form-item label="公积金起缴月份" prop="accumulationFundStartMonth"
                           :rules="{ required: true, message: '请选择公积金起缴月份', trigger: 'blur'}">
               <el-radio-group v-model="socialIncreaceForm.providentMonthType">
@@ -60,7 +60,7 @@
                 </span>
             </el-form-item>
           </div>
-          <div class="shortCon">
+          <div class="shortCon" v-if="!accumulationFundYn">
             <el-form-item label="员工公积金基数" prop="accumulationFundBaseNumber"
                           :rules="[
                            { required: true, message: '公积金基数不能为空', trigger: 'blur'},
@@ -109,6 +109,7 @@ export default {
       closeModel: false,
       nameList:[],
       validateNumber:validateNumber,
+      accumulationFundYn:false,
 
     };
   },
@@ -124,6 +125,11 @@ export default {
             this.planOption = res.data
           }
         });
+    },
+    //选择参保方案
+    changeInsure(){
+      let selectInsure = this.planOption.filter(item=>item.compInsuredId === this.socialIncreaceForm.compInsuredId)
+      this.accumulationFundYn = selectInsure.accumulationFundYn
     },
     //增员
     handleIncreateSocial(){

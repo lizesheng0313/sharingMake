@@ -203,7 +203,7 @@
     <!-- 社保增员 -->
     <socialIncreace ref="socialIncreace" @freshList ="getInfo"></socialIncreace>
     <!-- 社保减员 -->
-    <social-decreace ref="socialDecreace" @freshList ="getInfo"></social-decreace>
+    <social-decreace ref="socialDecreace" @freshList ="getInfo" :accumulationFundYn="deAccumulationFundYn"></social-decreace>
   </div>
 </template>
 <script>
@@ -250,6 +250,7 @@ export default {
       planOption:[],
       accumulationFundYn:false,
       showTable:false,
+      deAccumulationFundYn:false,
     };
   },
   created(){
@@ -333,6 +334,7 @@ export default {
     },
     //减员
     decreaceStaff(){
+      this.deAccumulationFundYn = this.floatEmployeeInsuredInfoVo.accumulationFundYn
       let compEmpInfo= [
         {
           empId:this.attritionItem.empId,
