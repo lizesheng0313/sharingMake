@@ -34,7 +34,7 @@
                         </div>
                          <div style="flex:1">
                         <el-form-item label="证件号码：" prop="idNo" :rules="{required: true, validator: this.validIdNo, trigger: 'blur'}">
-                          <el-input v-model="baseForm.idNo" :disabled="baseDisable"></el-input>
+                          <el-input v-model="baseForm.idNo" :disabled="baseDisable" @blur="checkIdCard"></el-input>
                         </el-form-item>
                       </div>
                     </el-row>
@@ -330,87 +330,78 @@ export default {
   },
   methods: {
     validIdNo(rule, value, callback){
-      let status = true;
       if(value){
         switch (this.baseForm.idType) {
           case "PRC_ID"://居民身份证
             var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
             if(!regIdNo.test(value)){
-              status = false
               callback(new Error('居民身份证号录入不正确'));
             }else{callback();}
             break;
           case "CHINA_PASSPORT"://中国护照
             if(value.length != 9){
-              status = false
               callback(new Error('中国护照的证件号码必须9位，且只含数字和字母'));
             }else{callback();}
             break;
           case "COMPATRIOTS_CARD"://港澳居民来往内地通行证
             if(!(value.length == 9 || value.length == 11)){
-              status = false
               callback(new Error('证件号码长度不对，且必须是数字和字母组合'));
             }else{callback();}
             break;
           case "FORMOSA_CARD"://台湾居民来往大陆通行证
             if(value.length != 8){
-              status = false
               callback(new Error('台湾居民来往大陆通行证的证件号码必须8位数字'));
             }else{callback();}
             break;
           case "MACAU_PRC_ID"://港澳居民居住证
             if(value.length != 18){
-              status = false
               callback(new Error('港澳居民居住证的证件号码必须18位'));
             }else{callback();}
             break;
           case "FORMOSA_PRC_ID"://台湾居民居住证
             if(value.length != 18){
-              status = false
               callback(new Error('台湾居民居住证的证件号码必须18位'));
             }else{callback();}
             break;
           case "FOREIGN_PRC_ID"://外国人永久居留身份证
             if(value.length != 15){
-              status = false
               callback(new Error('外国人永久居留身份证的证件号码必须15位'));
             }else{callback();}
             break;
         }
       }else{
         callback('身份证信息不能为空')
-        status = false
-      }
-      if(status){
-        this.checkIdCard()
       }
     },
     checkIdCard(){
-      this.$store
-        .dispatch("payMasterStore/actionEmployeeIdCard", this.baseForm.idNo)
-        .then(res=>{
-            let data = res.data
-            if(res.success){
-              this.$confirm(`员工[${data.empName}]已存在于[${data.taxSubName}]，是否继续将员工添加到其他公司`, '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-              }).then(() => {
-                  for(let key in this.baseForm){if(data[key]){this.baseForm[key] = data[key]}}
-                  this.baseDisable = true;
-              }).catch({})
-              this.$refs['baseForm'].clearValidate('empName')
-              this.$refs['baseForm'].clearValidate('mobile')
-          }else{
-              this.baseDisable = false
-              if(this.baseForm.idType === 'PRC_ID'){
-                this.baseForm.empSex = data.empSex
-                this.baseForm.birthday = data.birthday
-              }
-          }
-        })
-       this.$refs['baseForm'].clearValidate('empSex')
-       this.$refs['baseForm'].clearValidate('birthday')
+     this.$refs.baseForm.validateField('idNo',emailError=>{
+       if(!emailError){
+         this.$store
+           .dispatch("payMasterStore/actionEmployeeIdCard", this.baseForm.idNo)
+           .then(res=>{
+             let data = res.data
+             if(res.success){
+               this.$confirm(`员工[${data.empName}]已存在于[${data.taxSubName}]，是否继续将员工添加到其他公司`, '提示', {
+                 confirmButtonText: '确定',
+                 cancelButtonText: '取消',
+                 type: 'warning'
+               }).then(() => {
+                 for(let key in this.baseForm){if(data[key]){this.baseForm[key] = data[key]}}
+                 this.baseDisable = true;
+                 this.$refs['baseForm'].validate()
+               }).catch(() => {})
+             }else{
+               this.baseDisable = false
+               if(this.baseForm.idType === 'PRC_ID'){
+                 this.baseForm.empSex = data.empSex
+                 this.baseForm.birthday = data.birthday
+               }
+               this.$refs['baseForm'].validate()
+             }
+           })
+       }
+      })
+
     },
     //证件类型控制显示
     changeIdType(value){
