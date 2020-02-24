@@ -15,7 +15,7 @@
             <div class="shortCon"><span class="title">工号</span><span>{{ this.selectItem.empNo }}</span></div>
             <div class="shortCon"><span class="title">证件号码</span><span>{{ this.selectItem.idNo }}</span></div>
             <div class="shortCon"><span class="title">户籍城市</span><span>{{ this.selectItem.householdCountry }}</span></div>
-            <div class="shortCon"><span class="title">户口性质</span><span>{{this.selectItem.householdRegistrationType }}</span></div>
+            <div class="shortCon"><span class="title">户口性质</span><span>{{this.selectItem.householdRegistrationType | householdRegistrationType }}</span></div>
             <div class="shortCon" style="display: flex">
               <el-form-item label="补缴起止月份" prop="startDate" label-width="120px" :rules="{required: true, message: '请选择社保起缴月份', trigger: 'blur'}">
                 <el-date-picker v-model="paybackForm.startDate" type="month" placeholder="请选择" value-format="yyyy-MM"></el-date-picker>
