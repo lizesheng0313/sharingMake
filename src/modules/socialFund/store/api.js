@@ -210,7 +210,7 @@ export function apiFloatEmployeeDecreaseImport(params) {
 }
 //减员导入日志
 export function apiFloatEmployeeDecreaseErrorRecord(params) {
-  return fetch({
+  return fetchFile({
     url: '/api/xsalary/floatEmployee/decreaseImport/errorRecord/download/'+params.uuid,
     method: 'post',
   })
