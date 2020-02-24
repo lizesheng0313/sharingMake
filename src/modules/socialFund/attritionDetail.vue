@@ -36,7 +36,7 @@
                   <span class="title">参保信息</span>
                   <span class="fun-right">
                       <el-button type="primary" @click="editInsured">编辑</el-button>
-                      <el-button type="primary" @click="decreaceStaff" v-if="floatEmployeeBaseInfoVo.insuredStatus === 'INSURED_ING'" v-show="privilegeVoList.includes('salary.social.floatEmployee.decrease')">减员</el-button>
+                      <el-button type="primary" @click="decreaceStaff" v-if="floatEmployeeBaseInfoVo.insuredStatus === 'INSURED_ING'">减员</el-button>
                       <el-button type="primary" @click="increaceStaff" v-else >继续参保</el-button>
 
                 </span>
