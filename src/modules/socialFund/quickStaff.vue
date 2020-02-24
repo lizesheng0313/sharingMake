@@ -70,7 +70,7 @@
                 </template>
               </el-table-column>
               <el-table-column prop="empNo" label="工号" width="140"></el-table-column>
-              <el-table-column prop="idCard" label="证件号码" width="180"></el-table-column>
+              <el-table-column prop="idNo" label="证件号码" width="180"></el-table-column>
               <el-table-column prop="compName" label="公司名称" width="160"></el-table-column>
               <el-table-column prop="empType" label="用工性质" width="140">
                 <template slot-scope="scope">{{ scope.row.empType | filterEmpType }}</template>
