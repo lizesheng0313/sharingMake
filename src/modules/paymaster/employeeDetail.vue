@@ -14,7 +14,7 @@
                    <el-button type="primary" @click="saveBaseInfo">保存</el-button>
                    <el-button @click="cancelBaseEdit">取消</el-button>
                  </span>
-                 <el-button type="primary" @click="isBaseEdit = true" v-else>编辑</el-button>
+                 <el-button type="primary" @click="isBaseEdit = true" v-else v-show="privilegeVoList.includes('salary.compute.emp.editEmp')">编辑</el-button>
               </span>
             </div>
             <div class="base-info-con">
@@ -172,7 +172,7 @@
                       <el-button type="primary" @click="saveInsuredInfo">保存</el-button>
                       <el-button @click="isInsuredEdit = false">取消</el-button>
                     </span>
-                    <span v-else><el-button type="primary" @click="isInsuredEdit = true">编辑</el-button></span>
+                    <span v-else><el-button type="primary" @click="isInsuredEdit = true" v-if="privilegeVoList.includes('salary.compute.emp.editEmpCompany')">编辑</el-button></span>
                 </span>
             </div>
             <div class="insured-info-con">
@@ -372,6 +372,7 @@ export default {
     ...mapState({
       countryList:state=>state.countryList,
       cityList:state=>state.cityList,
+      privilegeVoList:state=>state.privilegeVoList,
     })
   },
   created(){
