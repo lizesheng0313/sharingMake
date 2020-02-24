@@ -338,7 +338,7 @@
         this.importTitle = "编辑导入"
         this.apiDownloadTemplate = "socialFundStore/actionFloatEmployeeDownloadModelDocE"
         this.apiCheck = "/api/xsalary/floatEmployee/editImport/verify"
-        this.apiDownloadLog = "socialFundStore/FloatEmployeeEditErrorRecord"
+        this.apiDownloadLog = "socialFundStore/actionFloatEmployeeEditErrorRecord"
         this.impoartAction = "socialFundStore/actionFloatEmployeeEditImport"
         this.$refs.import.show()
       },
