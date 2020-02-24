@@ -281,11 +281,10 @@ export function apiFloatEmployeeDel(form) {
 }
 //参保导出
 export function apiFloatEmployeeInsuredExport(form) {
-  return oldFetch({
-    url: 'xsalary/floatEmployee/insured/export',
+  return fetchFile({
+    url: '/api/xsalary/floatEmployee/insuringEmp/export',
     method: 'post',
     data:form,
-    responseType: 'blob'
   })
 }
 //增员导出

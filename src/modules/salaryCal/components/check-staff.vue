@@ -11,7 +11,7 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="handleAddStaff" :disabled="setWarning">添加人员</el-button>
+        <el-button type="primary" @click="handleAddStaff" :disabled="setWarning" v-if="privilegeVoList.includes('salary.compute.salaryCheck.addSalaryEmp')">添加人员</el-button>
 <!--        <el-button type="primary" @click="showIncrease" class="add-import" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empAdd')">增减员导入</el-button>-->
         <el-dropdown trigger="click" @command="handleDropdown">
           <el-button type="default">
@@ -19,7 +19,7 @@
             <i class="iconsanjiao iconfont"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="sync" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">同步本月发薪人员</el-dropdown-item>
+            <el-dropdown-item command="sync" v-if="privilegeVoList.includes('salary.compute.salaryCheck.syncSalaryEmp')">同步人员</el-dropdown-item>
             <el-dropdown-item command="delete" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')">全部删除</el-dropdown-item>
             <el-dropdown-item command="export" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empExport')">导出</el-dropdown-item>
           </el-dropdown-menu>

@@ -19,9 +19,9 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="addEmployee">新增人员</el-button>
-              <el-button type="primary" class="add-import" @click="batchImport">批量导入</el-button>
-              <el-button  class="more-choose" @click="isShowExport = true">导出</el-button>
+              <el-button type="primary" class="add-import" @click="addEmployee" v-if="privilegeVoList.includes('salary.compute.emp.addEmp')">新增人员</el-button>
+              <el-button type="primary" class="add-import" @click="batchImport" v-if="privilegeVoList.includes('salary.compute.emp.importEmp')">批量导入</el-button>
+              <el-button  class="more-choose" @click="isShowExport = true" v-if="privilegeVoList.includes('salary.compute.emp.export')">导出</el-button>
             </div>
           </div>
           <div class="drop-down">
@@ -71,8 +71,9 @@
               <el-table-column prop="turnRegularDate" label="转正日期" width="140"></el-table-column>
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
-                  <span class="funStyle" @click="onChange(scope.row)" v-if="scope.row.empStatus == 'ON_THE_JOB'">变更</span>
-                  <span class="funStyle" @click="handleDelete(scope.row)">删除</span>
+                  <span class="funStyle" @click="onChange(scope.row)" v-if="scope.row.empStatus == 'ON_THE_JOB' &&
+                  privilegeVoList.includes('salary.compute.emp.updateCompany')">变更</span>
+                  <span class="funStyle" @click="handleDelete(scope.row)" v-if="privilegeVoList.includes('salary.compute.emp.delEmp')">删除</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -309,7 +310,6 @@
       };
     },
     components:{
-      rightPop,
       companyChange,
       radios,
       importData

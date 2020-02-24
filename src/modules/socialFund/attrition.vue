@@ -36,16 +36,16 @@
               <el-button type="primary" class="tax-search" @click="getList">查询</el-button>
             </div>
             <div class="right">
-              <el-button type="primary" class="add-import" @click="goQuick">快速增减员</el-button>
+              <el-button type="primary" class="add-import" @click="goQuick" v-if="privilegeVoList.includes('salary.social.floatEmployee.fastFloat')">快速增减员</el-button>
               <el-popover
                 ref="popMore"
                 placement="bottom-end"
                 width="60"
                 class="button-style"
                 trigger="hover">
-                <div class="funStyle more-style" @click="increatImport">增员导入</div>
-                <div class="funStyle more-style" @click="decrateImport">减员导入</div>
-                <div class="funStyle more-style" @click="editImport">编辑导入</div>
+                <div class="funStyle more-style" @click="increatImport" v-if="privilegeVoList.includes('salary.social.floatEmployee.fastFloat')">增员导入</div>
+                <div class="funStyle more-style" @click="decrateImport" v-if="privilegeVoList.includes('salary.social.floatEmployee.decreaseImport')">减员导入</div>
+                <div class="funStyle more-style" @click="editImport" v-if="privilegeVoList.includes('salary.social.floatEmployee.editImport')">编辑导入</div>
                 <el-button slot="reference" class="more-choose">批量操作</el-button>
               </el-popover>
               <el-popover
@@ -53,8 +53,8 @@
                 placement="bottom-end"
                 width="60"
                 trigger="hover">
-                <div class="funStyle more-style">增减员导出</div>
-                <div class="funStyle more-style" @click="insureExport">参保人员导出</div>
+                <div class="funStyle more-style" @click="insureExport('CHANGE')" v-if="privilegeVoList.includes('salary.social.floatEmployee.floatExport')">增减员导出</div>
+                <div class="funStyle more-style" @click="insureExport('ING')" v-if="privilegeVoList.includes('salary.social.floatEmployee.insuredExport')">参保人员导出</div>
                 <el-button slot="reference" class="more-choose">更多</el-button>
               </el-popover>
             </div>
@@ -105,15 +105,15 @@
               <el-table-column label="操作" fixed="right" width="280px">
                 <template slot-scope="scope">
                   <span class="funStyle" @click="goDetail(scope.row)">详情</span>
-                  <span class="funStyle" @click="showSocialIncreate(scope.row)" v-if="scope.row.insuredStatus === 'INSURED_STOP'">继续参保</span>
+                  <span class="funStyle" @click="showSocialIncreate(scope.row)" v-if="scope.row.insuredStatus === 'INSURED_STOP' && privilegeVoList.includes('salary.social.floatEmployee.increase')">继续参保</span>
                   <el-popover
                     ref="popMore"
                     placement="bottom-end"
                     width="60"
                     v-else
                     trigger="hover">
-                    <div class="funStyle more-style" @click="showSocialDecreate(scope.row)">减员</div>
-                    <div class="funStyle more-style" @click="handleDelete(scope.row)">删除</div>
+                    <div class="funStyle more-style" @click="showSocialDecreate(scope.row)" v-if="privilegeVoList.includes('salary.social.floatEmployee.decrease')">减员</div>
+                    <div class="funStyle more-style" @click="handleDelete(scope.row)" v-if="privilegeVoList.includes('salary.social.floatEmployee.del')">删除</div>
                     <span slot="reference" class="more-choose">更多</span>
                   </el-popover>
                 </template>
@@ -404,7 +404,8 @@
         this.$refs.socialIncreace.show(compEmpInfo,nameList)
       },
       //参保导出
-      insureExport(){
+      insureExport(type){
+        this.ruleForm.exportType = type
         this.$store
           .dispatch("socialFundStore/actionFloatEmployeeInsuredExport", this.ruleForm)
       },
