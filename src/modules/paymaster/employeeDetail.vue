@@ -158,7 +158,7 @@
                           </el-form-item>
                         </div>
                         <div style="flex:1">
-                            <el-form-item label="工资银行账号：">
+                            <el-form-item label="工资银行账号："  :rules="[{validator:validateBankId, trigger: 'blur'}]">
                               <el-input v-model="baseForm.wageCardNum" :disabled="baseDisable"></el-input>
                             </el-form-item>
                         </div>
@@ -291,7 +291,7 @@
 <script>
 import fullScreen from "@/components/full-screen/index";
 import * as constData from "./util/constData"
-import { validateTell } from "@/util/validate";
+import { validateTell,validateBankId } from "@/util/validate";
 import { mapState } from "vuex";
 
 export default {
@@ -365,7 +365,8 @@ export default {
       empStatusOption:constData.employStatusOption,
       showTable:false,
       baseDisable:false,
-      validateTell:validateTell
+      validateTell:validateTell,
+      validateBankId:validateBankId
     };
   },
   computed: {
