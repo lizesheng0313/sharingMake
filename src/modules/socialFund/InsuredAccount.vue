@@ -143,7 +143,7 @@
             :apiDownloadLog="'socialFundStore/actionMonthlyLedgerError'"
             :apiDownloadTemplate="'socialFundStore/actionMonthlyLedgerTemplate'"
             :parameterData="importForm"
-            sendRadio="BY_ID_NO"
+            sendRadio="BY_EMP_NO"
             @changeRadioValue="changeRadioValue"
             :impoartAction="'socialFundStore/actionImportMonthlyLedger'"
             @getLoading="getList"
@@ -173,7 +173,7 @@
         },
         importForm:{
           month:"",
-          importType:'BY_ID_NO',
+          importType:'BY_EMP_NO',
         },
         isShowImportAccount:false,
         isShowCreateAccount:false,
