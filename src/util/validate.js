@@ -27,8 +27,8 @@ export const validateTell = (rule, value, callback) => {
 }
 //银行卡
 export const validateBankId = (rule, value, callback) => {
-  let reg= /^([1-9]{1})(\d{14}|\d{18})$/
-  if(reg.test(value)){
+  let reg= /[^\d]/g
+  if(!reg.test(value)){
     callback()
   }else{
     callback(new Error('请输入正确银行卡号'));

@@ -180,7 +180,7 @@
                   <template slot-scope="scope">
                     <div style="display: flex">
                       <el-input v-model="scope.row.compFixedAmount" class="input-right"/>
-                      <span style="line-height: 32px">%</span>
+                      <span style="line-height: 32px"></span>
                     </div>
                   </template>
                 </el-table-column>
