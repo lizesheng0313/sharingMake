@@ -73,8 +73,6 @@ export default {
             this.isShowReportInfo = false;
             this.$refs.authorizeTip.show()
           }
-        }else{
-          this.$message.warning(res.message)
         }
       })
     },

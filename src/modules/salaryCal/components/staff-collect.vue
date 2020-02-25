@@ -168,7 +168,8 @@ export default {
       },
       loading: false,
       isShowScreening:false,
-      ids: [],
+      ids: [],//待报送
+      reportingIds:[],//待反馈
       awaitReportCount:0,
       failReportCount:0,
       awaitFeedBackCount:0,
@@ -339,8 +340,8 @@ export default {
       if(this.setWarning){
         this.$message.warning("工资表已审核，不允许操作。")
       }else{
-        if(this.ids.length>0 || this.allIds.length === 0){
-          this.validParameter.ids = this.ids;
+        if(this.reportingIds.length>0 || this.allIds.length === 0){
+          this.validParameter.ids = this.reportingIds;
           this.validParameter.date = this.salaryItem.date;
           this.$refs.feedback.show(true)
         }else{
@@ -356,6 +357,9 @@ export default {
         this.allIds.push(element.id);
         if (element.reportStatus == "AWAIT_REPORT") {
           this.ids.push(element.id);
+        }
+        if(element.reportStatus == "REPORTING"){
+          this.reportingIds.push(element.id);
         }
       });
     },

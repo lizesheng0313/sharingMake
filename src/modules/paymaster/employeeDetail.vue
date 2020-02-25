@@ -310,6 +310,7 @@ export default {
         bankId:"",
         empName:"",
         empNo:"",
+        empId:"",
         idType:"PRC_ID",
         idNo:"",
         empSex:"MALE",
