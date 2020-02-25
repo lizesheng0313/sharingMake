@@ -90,8 +90,8 @@ export function apiDeleteEmpMonthly(form) {
 export function apiEmpMonthlyLedgerExport(form) {
   return oldFetch({
     url: 'xsalary/monthlyLedger/empMonthlyLedger/export',
-    method: 'get',
-    params:form,
+    method: 'post',
+    data:form,
     responseType: 'blob'
   })
 }
@@ -280,10 +280,11 @@ export function apiFloatEmployeeDel(form) {
 }
 //参保导出
 export function apiFloatEmployeeInsuredExport(form) {
-  return fetchFile({
-    url: '/api/xsalary/floatEmployee/insuringEmp/export',
+  return oldFetch({
+    url: 'xsalary/floatEmployee/insuringEmp/export',
     method: 'post',
     data:form,
+    responseType: 'blob'
   })
 }
 //增员导出

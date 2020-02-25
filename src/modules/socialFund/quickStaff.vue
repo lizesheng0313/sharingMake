@@ -127,14 +127,14 @@
             <div class="shortCon">
               <el-form-item label="用工性质" label-width="20%">
                 <el-select v-model="ruleForm.empType" placeholder="请选择用工性质">
-                  <el-option v-for="(item,index) in employTypeOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                  <el-option v-for="(item,index) in employTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="shortCon" v-if="uninsuredActive">
               <el-form-item label="参保城市" label-width="20%">
                 <el-select v-model="ruleForm.insuredCity" placeholder="请选择工作城市" filterable>
-                  <el-option v-for="(item,index) in cityList" :label="item.insuredName" :value="item.code" :key="index"></el-option>
+                  <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>

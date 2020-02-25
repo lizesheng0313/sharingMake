@@ -65,7 +65,7 @@
                     trigger="hover">
                     <div class="funStyle more-style" @click="handleReCreate(scope.row)" v-if="!scope.row.isarchive"
                          v-show="privilegeVoList.includes('salary.social.ledger.generate')">重新生成</div>
-                    <div class="funStyle more-style" v-if="privilegeVoList.includes('salary.social.ledger.exportCompany')">导出</div>
+                    <div class="funStyle more-style" v-if="privilegeVoList.includes('salary.social.ledger.exportCompany')" @click="handleExport(scope.row)">导出</div>
                     <div class="funStyle more-style" v-if="!scope.row.isarchive" @click="handleDelete(scope.row)"
                     v-show="privilegeVoList.includes('salary.social.ledger.delCompany')">删除</div>
                     <span slot="reference" class="more-choose">更多</span>
@@ -287,6 +287,18 @@
               })
           }
         })
+      },
+      //导出
+      handleExport(data){
+        let queryMonth = data.currentMonth?data.currentMonth.substr(0,4)+'-'+data.currentMonth.substr(5,6):""
+        this.$store
+          .dispatch("socialFundStore/actionEmpMonthlyLedgerExport",{
+            taxSubId:data.taxSubId,
+            queryMonth:queryMonth
+          })
+          .then(res=>{
+            console.log(res)
+          })
       },
       handleDelete(data){
         this.$confirm("是否删除所选月度台账！", '提示', {
