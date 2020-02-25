@@ -127,7 +127,7 @@
             <div class="shortCon">
               <el-form-item label="用工性质" label-width="20%">
                 <el-select v-model="ruleForm.empType" placeholder="请选择用工性质">
-                  <el-option v-for="(item,index) in employTypeOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                  <el-option v-for="(item,index) in employTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
