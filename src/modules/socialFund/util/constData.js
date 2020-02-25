@@ -60,10 +60,10 @@ export const ruleOption = [
     value:"CEIL_INTO_FEN"
   },{
       label:"见分进角",
-      value:"CEIL_INTO_YUAN"
+      value:"CEIL_INTO_JIAO"
   },{
       label:"见分舍去，见角进元",
-      value:"CEIL_INTO_JIAO"
+      value:"CEIL_INTO_YUAN"
   },{
       label:"见分进角进元",
       value:"CEIL_INTO_JIAO_YUAN"
