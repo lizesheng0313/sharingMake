@@ -109,6 +109,20 @@ export const filterEmployStatus = (val) =>{
     }
   }
 }
+//对比上月状态
+export const compareLastMonthOperation = (val) =>{
+  switch (val) {
+    case 'ADD': {
+      return '增员';
+    }
+    case 'UPDATE': {
+      return '更新';
+    }
+    case 'DELETE': {
+      return '减员';
+    }
+  }
+}
 //户口性质
 const householdRegistrationType = (val) => {
   switch (val) {//仲裁类别
@@ -359,5 +373,6 @@ export default {
   filterEducation,
   householdRegistrationType,
   workType,
-  insuredStatus
+  insuredStatus,
+  compareLastMonthOperation
 }
