@@ -119,7 +119,7 @@
                         </div>
                         <div style="flex:1">
                             <el-form-item label="工资银行账号：" prop="wageCardNum"
-                                          :rules="[{validator:validateBankId, trigger: 'blur'}]">
+                                          :rules="[{required:false,validator:validateBankId, trigger: 'blur'}]">
                               <el-input v-model="baseForm.wageCardNum" :disabled="baseDisable"></el-input>
                             </el-form-item>
                         </div>
