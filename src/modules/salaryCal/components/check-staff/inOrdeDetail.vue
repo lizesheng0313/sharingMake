@@ -91,7 +91,7 @@
             </el-table-column>
             <el-table-column  label="对比上月" width="180px">
               <template slot-scope="scope">
-                <span>{{ scope.row.compareLastMonthOperation }}</span>
+                <span>{{ scope.row.compareLastMonthOperation | compareLastMonthOperation }}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" width="240px">
