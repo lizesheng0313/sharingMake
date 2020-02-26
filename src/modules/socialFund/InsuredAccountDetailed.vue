@@ -37,15 +37,15 @@
             <span class="staff-total">
               <span class="wait-report">
                 参保人数
-                <i>{{ uninsuredCount }}</i>人
+                <i>{{ insuredCount }}</i>人
               </span>
               <span class="wait-report">
                 本月增员
-                <i>{{ insuredCount}}</i>人
+                <i>{{ currentMonthAdd}}</i>人
               </span>
               <span class="wait-report">
                 本月减员
-                <i class="num">{{ insuredCount}}</i>人
+                <i class="num">{{ currentMonthSub}}</i>人
               </span>
             </span>
           </div>
@@ -135,7 +135,7 @@
             </div>
             <div class="shortCon">
               <el-form-item label="参保方案" label-width="20%">
-                <el-select v-model="ruleForm.queryFilterParam.insuredCity" placeholder="参保方案">
+                <el-select v-model="ruleForm.queryFilterParam.compInsuredId" placeholder="参保方案">
                   <el-option v-for="(item,index) in planOption" :label="item.insuredName" :value="item.id" :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -216,10 +216,11 @@
         list: [],
         closeModel: false,
         total:0,
-        uninsuredCount:0,
-        insuredCount:0,
         loading:false,
         createPlanOption:[],
+        currentMonthAdd: 0,
+        currentMonthSub: 0,
+        insuredCount:0,
       };
     },
     computed:{
@@ -255,6 +256,9 @@
             this.loading = false;
             this.list = res.data.data;
             this.total = res.data.count;
+            this.currentMonthAdd = res.data.currentMonthAdd
+            this.currentMonthSub = res.data.currentMonthSub
+            this.insuredCount = res.data.insuredCount
           })
 
       },
@@ -264,6 +268,7 @@
           .then(res => {
             if(res.success){
               this.planOption = res.data
+              console.log(res.data)
             }
           });
       },

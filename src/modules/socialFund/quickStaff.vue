@@ -119,7 +119,7 @@
           <el-form :model="ruleForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
             <div class="shortCon">
               <el-form-item label="公司名称" label-width="20%">
-                <el-select v-model="ruleForm.taxSubId" multiple placeholder="请选择公司名称">
+                <el-select v-model="ruleForm.taxSubId" placeholder="请选择公司名称">
                   <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -275,12 +275,13 @@
       changeMonth(){
 
       },
+      //筛选查询
       handleSearch(){
-
+        this.getList()
+        this.isShowScreening = false
       },
       //筛选
       onShowScreen(){
-
         this.isShowScreening = true
         if(this.uninsuredActive){
           this.ruleForm.leaveStart = ""
@@ -295,7 +296,6 @@
         for(let key in this.ruleForm){
           this.ruleForm[key] = ""
         }
-        console.log(this.ruleForm)
       },
       increateImport(){
 
