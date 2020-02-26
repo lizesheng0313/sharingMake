@@ -63,6 +63,7 @@ export default {
     return {
       isShowCompany:false,
       changeCompanyForm: {
+        workerType:"",
         compEmpId:"",
         empId:"",
         taxSubId: "",
@@ -101,6 +102,7 @@ export default {
     showCompany(data){
       this.isShowCompany = true;
       this.companyItem = data
+      console.log(this.companyItem)
       for(let key in this.changeCompanyForm){
         this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
       }
