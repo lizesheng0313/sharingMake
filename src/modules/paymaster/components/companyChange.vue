@@ -72,7 +72,7 @@ export default {
         positionName:"",
         empDay:"",//入职日期
         workCity:"",
-        regularEmpYn:"-1",
+        regularEmpYn:"",
         turnRegularDate:"",
       },
       enumEmpTypeOption:constData.enumEmpTypeOption,
