@@ -43,38 +43,53 @@
                   <i class="el-icon-circle-plus-outline" :style="iconStyle"></i>
                   <span>选择险种</span>
                 </el-button>
-                <el-table :data="socialInsuranceList" border>
+                <el-table :data="insuredForm.socialInsuranceList" border>
                   <el-table-column prop="month" label=" " width="160">
                     <template slot-scope="scope">
-                      <span>{{ scope.row.insuranceType | insuranceType}}</span>
+                      <el-form-item label-width="0">
+                        <span>{{ scope.row.insuranceType | insuranceType}}</span>
+                      </el-form-item>
                     </template>
                   </el-table-column>
                   <el-table-column label="基数下限" width="120">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.baseNumberMin" class="input-right"/>
+                      <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.baseNumberMin'"
+                                    :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                        <el-input v-model="scope.row.baseNumberMin" class="input-right"/>
+                      </el-form-item>
                     </template>
                   </el-table-column>
                   <el-table-column label="基数上限" width="120">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.baseNumberMax" class="input-right"/>
+                      <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.baseNumberMax'"
+                                    :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                         <el-input v-model="scope.row.baseNumberMax" class="input-right"/>
+                      </el-form-item>
                     </template>
                   </el-table-column>
                   <el-table-column label="个人比例" width="120">
                     <template slot-scope="scope">
                       <div style="display: flex">
-                        <el-input v-model="scope.row.personScale" class="input-right"/>
-                        <span style="line-height: 32px">%</span>
+                        <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.personScale'"
+                                      :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                          <el-input v-model="scope.row.personScale" class="input-right"/>
+                        </el-form-item>
+                        <span style="line-height: 42px">%</span>
                       </div>
                     </template>
                   </el-table-column>
                   <el-table-column label="个人固定金额" width="120">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.personFixedAmount" class="input-right"/>
+                      <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.personFixedAmount'"
+                                    :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                         <el-input v-model="scope.row.personFixedAmount" class="input-right"/>
+                      </el-form-item>
                     </template>
                   </el-table-column>
                   <el-table-column label="个人尾数规则" width="200px">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.personMantissaRule" placeholder="请选择">
+                      <el-form-item label-width="0">
+                        <el-select v-model="scope.row.personMantissaRule" placeholder="请选择">
                         <el-option
                           v-for="item in ruleOption"
                           :key="item.value"
@@ -82,24 +97,32 @@
                           :value="item.value">
                         </el-option>
                       </el-select>
+                      </el-form-item>
                     </template>
                   </el-table-column>
                   <el-table-column label="公司比例" width="120">
                     <template slot-scope="scope">
                       <div style="display: flex">
-                        <el-input v-model="scope.row.compScale" class="input-right"/>
-                        <span style="line-height: 32px">%</span>
+                        <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.compScale'"
+                                      :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                             <el-input v-model="scope.row.compScale" class="input-right"/>
+                        </el-form-item>
+                        <span style="line-height: 42px">%</span>
                       </div>
                     </template>
                   </el-table-column>
                   <el-table-column label="单位固定金额" width="120">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.compFixedAmount" class="input-right"/>
+                      <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.compFixedAmount'"
+                                    :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                         <el-input v-model="scope.row.compFixedAmount" class="input-right"/>
+                      </el-form-item>
                     </template>
                   </el-table-column>
                   <el-table-column label="公司尾数规则" width="200">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
+                     <el-form-item label-width="0">
+                        <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
                         <el-option
                           v-for="item in ruleOption"
                           :key="item.value"
@@ -107,6 +130,7 @@
                           :value="item.value">
                         </el-option>
                       </el-select>
+                     </el-form-item>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -127,38 +151,53 @@
                 <i class="el-icon-circle-plus-outline" :style="iconStyle"></i>
                 <span>选择险种</span>
               </el-button>
-              <el-table :data="accumulationFundList" border>
+              <el-table :data="insuredForm.accumulationFundList" border>
                 <el-table-column prop="month" label=" " width="160">
                   <template slot-scope="scope">
-                    <span>{{ scope.row.insuranceType | insuranceType}}</span>
+                    <el-form-item label-width="0">
+                       <span>{{ scope.row.insuranceType | insuranceType}}</span>
+                    </el-form-item>
                   </template>
                 </el-table-column>
                 <el-table-column label="基数下限" width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.baseNumberMin" class="input-right"/>
+                    <el-form-item label-width="0" :prop="'accumulationFundList.' + scope.$index +'.baseNumberMin'"
+                                  :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                       <el-input v-model="scope.row.baseNumberMin" class="input-right"/>
+                    </el-form-item>
                   </template>
                 </el-table-column>
                 <el-table-column label="基数上限" width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.baseNumberMax" class="input-right"/>
+                    <el-form-item label-width="0" :prop="'accumulationFundList.' + scope.$index +'.baseNumberMax'"
+                                  :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                      <el-input v-model="scope.row.baseNumberMax" class="input-right"/>
+                    </el-form-item>
                   </template>
                 </el-table-column>
                 <el-table-column label="个人比例" width="120">
                   <template slot-scope="scope">
                     <div style="display: flex">
-                      <el-input v-model="scope.row.personScale" class="input-right"/>
-                      <span style="line-height: 32px">%</span>
+                      <el-form-item label-width="0" :prop="'accumulationFundList.' + scope.$index +'.personScale'"
+                                    :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                         <el-input v-model="scope.row.personScale" class="input-right"/>
+                      </el-form-item>
+                      <span style="line-height: 42px">%</span>
                     </div>
                   </template>
                 </el-table-column>
                 <el-table-column label="个人固定金额" width="120">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.personFixedAmount" class="input-right"/>
+                    <el-form-item label-width="0" :prop="'accumulationFundList.' + scope.$index +'.personFixedAmount'"
+                                  :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                        <el-input v-model="scope.row.personFixedAmount" class="input-right"/>
+                    </el-form-item>
                   </template>
                 </el-table-column>
                 <el-table-column label="个人尾数规则" width="200">
                   <template slot-scope="scope">
-                    <el-select v-model="scope.row.personMantissaRule" placeholder="请选择">
+                    <el-form-item label-width="0">
+                      <el-select v-model="scope.row.personMantissaRule" placeholder="请选择">
                       <el-option
                         v-for="item in ruleOption"
                         :key="item.value"
@@ -166,34 +205,43 @@
                         :value="item.value">
                       </el-option>
                     </el-select>
+                    </el-form-item>
                   </template>
                 </el-table-column>
                 <el-table-column label="单位比例" width="120">
                   <template slot-scope="scope">
                     <div style="display: flex">
-                      <el-input v-model="scope.row.compScale" class="input-right"/>
-                      <span style="line-height: 32px">%</span>
+                      <el-form-item label-width="0" :prop="'accumulationFundList.' + scope.$index +'.compScale'"
+                                    :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                          <el-input v-model="scope.row.compScale" class="input-right"/>
+                      </el-form-item>
+                      <span style="line-height: 42px">%</span>
                     </div>
                   </template>
                 </el-table-column>
                 <el-table-column label="单位固定金额" width="120">
                   <template slot-scope="scope">
                     <div style="display: flex">
-                      <el-input v-model="scope.row.compFixedAmount" class="input-right"/>
-                      <span style="line-height: 32px"></span>
+                      <el-form-item label-width="0" :prop="'accumulationFundList.' + scope.$index +'.compFixedAmount'"
+                                    :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
+                          <el-input v-model="scope.row.compFixedAmount" class="input-right"/>
+                      </el-form-item>
+                      <span style="line-height: 42px"></span>
                     </div>
                   </template>
                 </el-table-column>
                 <el-table-column label="公司尾数规则" width="200">
                   <template slot-scope="scope">
-                    <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
-                      <el-option
-                        v-for="item in ruleOption"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                      </el-option>
-                    </el-select>
+                    <el-form-item label-width="0">
+                      <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
+                        <el-option
+                          v-for="item in ruleOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
                   </template>
                 </el-table-column>
               </el-table>
@@ -230,6 +278,7 @@
   import { mapState } from "vuex";
   import fun from "@/util/fun";
   import * as constData from "./util/constData"
+  import { validateNumber } from "@/util/validate";
   export default {
     components:{
 
@@ -238,18 +287,20 @@
       return {
         insuredForm:{
           planName:"",
-          insuredCity:""
+          insuredCity:"",
+          socialInsuranceList:[
+            { insuranceType: "ENDOWMENT_INSURANCE", baseNumberMax: "0.00", baseNumberMin: "0.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "0.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"},
+            { insuranceType: "MEDICAL_INSURANCE", baseNumberMax: "0.00", baseNumberMin: "0.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "0.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"},
+            { insuranceType: "UNEMPLOYMENT_INSURANCE", baseNumberMax: "0.00", baseNumberMin: "0.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "0.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"},
+            { insuranceType: "INJURY_INSURANCE", baseNumberMax: "0.00", baseNumberMin: "0.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "0.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"}
+          ],
+          accumulationFundList:[
+            { insuranceType: "ACCUMULATION_FUND", baseNumberMax: "0.00", baseNumberMin: "0.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "0.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"}
+          ],
         },
         id:this.$route.query.id,
         planOption:[],
         chooseCityName:"",
-        socialInsuranceList:[
-          { insuranceType: "ENDOWMENT_INSURANCE", baseNumberMax: "00.00", baseNumberMin: "00.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "00.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"},
-          { insuranceType: "MEDICAL_INSURANCE", baseNumberMax: "00.00", baseNumberMin: "00.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "00.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"},
-          { insuranceType: "UNEMPLOYMENT_INSURANCE", baseNumberMax: "00.00", baseNumberMin: "00.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "00.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"},
-          { insuranceType: "INJURY_INSURANCE", baseNumberMax: "00.00", baseNumberMin: "00.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "00.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"}
-        ],
-        accumulationFundList:[{ insuranceType: "ACCUMULATION_FUND", baseNumberMax: "00.00", baseNumberMin: "00.00", compFixedAmount: "0.00", compMantissaRule: "ROUND_UNTIL_FEN", compScale: "0", personFixedAmount: "00.00", personMantissaRule: "ROUND_UNTIL_FEN", personScale: "0"}],
         ruleOption:constData.ruleOption,
         closeModel:false,
         isShowChoosePlan:false,
@@ -265,6 +316,7 @@
           'font-size':'20px',
           'color':'#108EE9'
         },
+        validateNumber:validateNumber,
       };
     },
     computed:{
@@ -280,8 +332,9 @@
           .then(res => {
             if(res.success){
               let data = res.data;
-              this.socialInsuranceList = data.socialInsuranceList;
-              this.accumulationFundList = data.accumulationFundList;
+              this.insuredForm.socialInsuranceList = data.socialInsuranceList;
+              this.insuredForm.accumulationFundList = data.accumulationFundList;
+              this.accumulationFundYn = data.accumulationFundYn;
               this.accumulationFundYn = data.accumulationFundYn;
               this.insuredForm.planName = data.insuredName;
               this.choosePlanForm.baseInsuredId = data.baseInsuredId;
@@ -307,46 +360,46 @@
       },
       //社保选择险种
       handleSocialType(value){
-        let socialType = this.socialInsuranceList.map(item=>item.insuranceType)
+        let socialType = this.insuredForm.socialInsuranceList.map(item=>item.insuranceType)
         if(value.length < socialType.length){
-          this.socialInsuranceList = this.socialInsuranceList.filter(item=>value.includes(item.insuranceType))
+          this.insuredForm.socialInsuranceList = this.insuredForm.socialInsuranceList.filter(item=>value.includes(item.insuranceType))
         }else{
-          this.socialInsuranceList.push({
+          this.insuredForm.socialInsuranceList.push({
             insuranceType: value[value.length-1],
-            baseNumberMax: "00.00",
-            baseNumberMin: "00.00",
+            baseNumberMax: "0.00",
+            baseNumberMin: "0.00",
             compFixedAmount: "0.00",
             compMantissaRule: "ROUND_UNTIL_FEN",
             compScale: "0",
-            personFixedAmount: "00.00",
+            personFixedAmount: "0.00",
             personMantissaRule: "ROUND_UNTIL_FEN",
             personScale: "0"
           })
         }
       },
       handleSocial(){
-        this.socialCheckedType = this.socialInsuranceList.map(item=>item.insuranceType)
+        this.socialCheckedType = this.insuredForm.socialInsuranceList.map(item=>item.insuranceType)
       },
       handleFundType(value){
-        let fundType = this.accumulationFundList.map(item=>item.insuranceType)
+        let fundType = this.insuredForm.accumulationFundList.map(item=>item.insuranceType)
         if(value.length < fundType.length){
-          this.accumulationFundList = this.accumulationFundList.filter(item=>value.includes(item.insuranceType))
+          this.insuredForm.accumulationFundList = this.insuredForm.accumulationFundList.filter(item=>value.includes(item.insuranceType))
         }else{
-          this.accumulationFundList.push({
+          this.insuredForm.accumulationFundList.push({
             insuranceType: value[value.length-1],
-            baseNumberMax: "00.00",
-            baseNumberMin: "00.00",
+            baseNumberMax: "0.00",
+            baseNumberMin: "0.00",
             compFixedAmount: "0.00",
             compMantissaRule: "ROUND_UNTIL_FEN",
             compScale: "0",
-            personFixedAmount: "00.00",
+            personFixedAmount: "0.00",
             personMantissaRule: "ROUND_UNTIL_FEN",
             personScale: "0",
           })
         }
       },
       handleFund(){
-        this.fundCheckedType = this.accumulationFundList.map(item=>item.insuranceType)
+        this.fundCheckedType = this.insuredForm.accumulationFundList.map(item=>item.insuranceType)
       },
       changeCity(value){
         this.$store
@@ -364,8 +417,9 @@
           .then(res => {
             if(res.success){
               let data = res.data;
-              this.socialInsuranceList = data.socialInsuranceList
-              this.accumulationFundList = data.accumulationFundList
+              this.insuredForm.socialInsuranceList = data.socialInsuranceList
+              this.insuredForm.accumulationFundList = data.accumulationFundList
+              this.accumulationFundYn = data.accumulationFundYn;
               this.isShowChoosePlan = false
             }
           });
@@ -375,12 +429,12 @@
             if(valid){
               this.$store
                 .dispatch("socialFundStore/actionInsuredProjectSave",{
-                  accumulationFundList:this.accumulationFundList,
+                  accumulationFundList:this.insuredForm.accumulationFundList,
                   accumulationFundYn:this.accumulationFundYn,
                   insuredName:this.insuredForm.planName,
                   baseInsuredId:this.choosePlanForm.baseInsuredId,
                   insuredCity:this.insuredForm.insuredCity,
-                  socialInsuranceList:this.socialInsuranceList,
+                  socialInsuranceList:this.insuredForm.socialInsuranceList,
                   id:this.id,
                 })
                 .then(res => {
