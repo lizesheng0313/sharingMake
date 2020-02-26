@@ -149,8 +149,8 @@
             </div>
             <div class="shortCon">
               <el-form-item label="参保城市" label-width="20%">
-                <el-select v-model="ruleForm.insuredCity" placeholder="请选择参保城市" @change="changeCity">
-                  <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
+                <el-select v-model="ruleForm.insuredCity" placeholder="请选择参保城市">
+                  <el-option v-for="(item,index) in cityListOption" :label="item.name" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </div>
@@ -233,6 +233,9 @@
         planOption:[],
         insuredStatusOption:[
           {
+            label:"全部",
+            value:""
+          },{
             label:"参保中",
             value:"INSURED_ING"
           },{
@@ -256,7 +259,9 @@
           importType:"BY_EMP_NO"
         },
         deAccumulationFundYn:false,
-    };
+        cityListOption:[],
+
+      };
     },
     components:{
       socialDecreace,
@@ -272,6 +277,9 @@
     },
     created(){
       this.getList()
+    //  获取企业下参保方案
+      this.getPlan()
+      this.cityListOption = [{name:"全部",code:""}].concat(this.cityList)
     },
     mounted() {
       const that = this;
@@ -416,12 +424,12 @@
         this.totalListForm.currPage = 1;
         this.getList();
       },
-      changeCity(value){
+      getPlan(){
         this.$store
-          .dispatch("socialFundStore/actionInsuredGetBase", value)
+          .dispatch("socialFundStore/actionGetCompInsuredProject")
           .then(res => {
             if(res.success){
-              this.planOption = res.data
+              this.planOption = [{insuredName:"全部",id:""}].concat(res.data)
             }
           });
       },
