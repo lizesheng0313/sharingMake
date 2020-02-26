@@ -139,7 +139,7 @@
               <span class="plan-title">公积金方案</span>
               <el-checkbox v-model="accumulationFundYn" style="margin-left: 20px">是否不缴纳公积金</el-checkbox>
             </div>
-            <div class="social-plan-table">
+            <div class="social-plan-table" v-if="!accumulationFundYn">
               <el-popover ref="fundPlan" placement="bottom" width="160" trigger="click">
                 <el-checkbox-group v-model="fundCheckedType" @change="handleFundType">
                   <div v-for="(item,index) in fundOption" style="line-height: 20px;text-align: left;margin-left: 20px" >

@@ -70,8 +70,8 @@ export const actionEmployeesImport= ({ dispatch },data) => {
   return apiEmployeesImport(data)
 }
 //校验身份证号
-export const actionEmployeeIdCard= ({ dispatch },idCard) => {
-  return apiEmployeeIdCard(idCard)
+export const actionEmployeeIdCard= ({ dispatch },data) => {
+  return apiEmployeeIdCard(data)
 }
 
 

@@ -42,8 +42,8 @@
                          v-if="privilegeVoList.includes('salary.report.personReport.sendReport')">报送</el-button>
               <el-button class="add-import" @click="handleReportInfo"
                          v-if="privilegeVoList.includes('salary.report.personReport.sendReport')">获取反馈</el-button>
-              <el-button class="add-import" @click="handleExport"
-                         v-if="privilegeVoList.includes('salary.report.personReport.export')">导出</el-button>
+<!--              <el-button class="add-import" @click="handleExport"-->
+<!--                         v-if="privilegeVoList.includes('salary.report.personReport.export')">导出</el-button>-->
             </div>
           </div>
           <div class="staff-situation">

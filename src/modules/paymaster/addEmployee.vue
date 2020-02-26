@@ -379,7 +379,10 @@ export default {
      this.$refs.baseForm.validateField('idNo',emailError=>{
        if(!emailError){
          this.$store
-           .dispatch("payMasterStore/actionEmployeeIdCard", this.baseForm.idNo)
+           .dispatch("payMasterStore/actionEmployeeIdCard", {
+              "idCard":this.baseForm.idNo,
+              "idType":this.baseForm.idType,
+           })
            .then(res=>{
              let data = res.data
              if(res.success){

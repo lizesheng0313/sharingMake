@@ -128,9 +128,9 @@ export function apiEmployeesImport(data) {
 }
 
 //校验身份证号
-export function apiEmployeeIdCard(idCard) {
+export function apiEmployeeIdCard(data) {
   return oldFetch({
-    url: 'xsalary/enterprise/employee/'+idCard,
+    url: 'xsalary/enterprise/employee/'+data.idType+'/'+data.idCard,
     method: 'get',
   })
 }
