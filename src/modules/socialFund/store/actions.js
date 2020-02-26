@@ -167,7 +167,7 @@ export const actionFloatEmployeeManageInfo= ({ dispatch },data) => {
 export const actionFloatEmployeeManageSave= ({ dispatch },data) => {
   return apiFloatEmployeeManageSave(data)
 }
-//增员参保方案
+//企业参保方案
 export const actionGetCompInsuredProject= ({ dispatch },) => {
   return apiGetCompInsuredProject()
 }

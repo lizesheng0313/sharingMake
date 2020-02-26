@@ -166,7 +166,7 @@
                 </el-form>
             </div>
             <div class="insured-info">
-                <span class="title">参保信息</span>
+                <span class="title">公司信息</span>
                 <span class="fun-right">
                     <span v-if="isInsuredEdit">
                       <el-button type="primary" @click="saveInsuredInfo">保存</el-button>
