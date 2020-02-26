@@ -128,7 +128,7 @@
           <el-form :model="ruleForm" ref="screenForm" label-width="100px" class="demo-ruleForm">
             <div class="shortCon">
               <el-form-item label="参保城市" label-width="20%" >
-                <el-select v-model="ruleForm.queryFilterParam.insuredCity" placeholder="请选择参保城市" filterable @change="changeCity">
+                <el-select v-model="ruleForm.queryFilterParam.insuredCity" placeholder="请选择参保城市" filterable>
                   <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -234,6 +234,7 @@
     },
     created(){
       this.getList()
+      this.getPlan()
       this.ruleForm.queryMonth= this.insuredAccoundItem.currentMonth;
       this.ruleForm.taxSubId= this.insuredAccoundItem.taxSubId;
     },
@@ -262,13 +263,12 @@
           })
 
       },
-      changeCity(value){
+     getPlan(){
         this.$store
-          .dispatch("socialFundStore/actionInsuredGetBase", value)
+          .dispatch("socialFundStore/actionGetCompInsuredProject",)
           .then(res => {
             if(res.success){
               this.planOption = res.data
-              console.log(res.data)
             }
           });
       },

@@ -290,11 +290,10 @@
       },
       //导出
       handleExport(data){
-        let queryMonth = data.currentMonth?data.currentMonth.substr(0,4)+'-'+data.currentMonth.substr(5,6):""
         this.$store
           .dispatch("socialFundStore/actionEmpMonthlyLedgerExport",{
             taxSubId:data.taxSubId,
-            queryMonth:queryMonth
+            queryMonth:data.currentMonth
           })
           .then(res=>{
             console.log(res)
