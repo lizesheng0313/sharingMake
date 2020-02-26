@@ -146,7 +146,7 @@
         </el-form-item>
         <el-form-item label="是否转正" label-width="22%">
           <el-radio-group v-model="ruleForm.queryFilterParam.regularEmpYn" size="small">
-            <el-radio-button label=-1>不限</el-radio-button>
+            <el-radio-button label="">不限</el-radio-button>
             <el-radio-button label="1">是</el-radio-button>
             <el-radio-button label="0">否</el-radio-button>
           </el-radio-group>
