@@ -37,8 +37,8 @@
               <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="是否转正" prop="regularEmpYn" :rules="{required: true, message: '请选择', trigger: 'blur'}">
-            <el-select v-model="changeCompanyForm.regularEmpYn" placeholder="请选择">
+          <el-form-item label="是否转正" prop="regularEmpYn" :rules="{required: true, message: '请选择是或否', trigger: 'blur'}">
+            <el-select v-model="changeCompanyForm.regularEmpYn" placeholder="请选择是或否">
               <el-option v-for="(item,index) in regularEmpYnOptions" :label="item.label" :value="item.value" :key="index"></el-option>
             </el-select>
           </el-form-item>
