@@ -356,6 +356,18 @@ const workType = (val) => {
     }
   }
 };
+// 是否转正
+const regularEmpYn = (val) => {
+  switch (val) {
+    case '1': {
+      return '是';
+    }
+    case '0': {
+      return '否';
+    }
+  }
+};
+
 export default {
   resetDate,
   texRule,
@@ -374,5 +386,6 @@ export default {
   householdRegistrationType,
   workType,
   insuredStatus,
-  compareLastMonthOperation
+  compareLastMonthOperation,
+  regularEmpYn
 }
