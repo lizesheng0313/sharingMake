@@ -3,7 +3,7 @@
     <el-dialog
       title="增加人员"
       :visible.sync="isShowAddStaff"
-      width="60%"
+      width="57%"
       center
       class="diy-el_dialog"
       :close-on-click-modal="closeModel"
@@ -170,6 +170,7 @@ export default {
 <style lang="scss" scoped>
 .add-staff {
   .add-staff-con{
+    width: 820px;
     display: flex;
     border-top:1.2px solid #f7f7f7;
     .table-con{
