@@ -168,7 +168,7 @@
                     </el-row>
 <!--                    参保信息-->
                     <div class="insured-info">
-                      <span class="title">参保信息</span>
+                      <span class="title">公司信息</span>
                     </div>
                     <el-row style="display: flex">
                       <div style="flex:1">
@@ -205,8 +205,8 @@
                         </el-form-item>
                       </div>
                       <div style="flex:1">
-                        <el-form-item label="任职受雇从业类型" prop="workerType">
-                          <el-select v-model="baseForm.workerType" placeholder="请选择任职受雇从业类型" :rules="{required: true, message: '请选择任职受贿类型', trigger: 'blur'}">
+                        <el-form-item label="任职受雇从业类型" prop="workerType" :rules="{required: true, message: '请选择任职受雇从业类型', trigger: 'blur'}">
+                          <el-select v-model="baseForm.workerType" placeholder="请选择任职受雇从业类型">
                             <el-option v-for="(item,index) in workerTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                           </el-select>
                         </el-form-item>
