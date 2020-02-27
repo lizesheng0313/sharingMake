@@ -254,7 +254,7 @@ export default {
         .then(res => {
           if(res.success){
             this.tripleAgreementTaxList = res.data.tripleAgreementListVoList;
-            if(this.tripleAgreementNo.length>0){
+            if(this.tripleAgreementTaxList.length>0){
               this.tripleAgreementNo = this.tripleAgreementTaxList[0].tripleAgreementNo;
               this.taxSubId =this.tripleAgreementTaxList[0].taxSubId;
             }
