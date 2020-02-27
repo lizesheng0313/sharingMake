@@ -543,7 +543,7 @@ export default {
               if(res.success){
                 this.getInfo()
                 this.isInsuredEdit = false
-                this.$message.success("参保信息保存成功")
+                this.$message.success("公司信息保存成功")
               }
             })
         }
