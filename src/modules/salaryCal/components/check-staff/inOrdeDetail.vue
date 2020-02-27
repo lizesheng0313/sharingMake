@@ -181,7 +181,7 @@
     },
     handleAdd(data){
       this.$store.dispatch('salaryCalStore/actionSalaryAddDetailCheckMembers',{
-        id:data.compEmpId,
+        id:data.id,
         checkId:this.id
       }).then(res=>{
         if(res.success){
