@@ -4,6 +4,7 @@
       :visible.sync="isShowCompany"
       :with-header="false"
       ref="companyChange"
+      size="34%"
     >
         <span class="drawer-title">变更公司</span>
         <el-form
@@ -134,7 +135,8 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/scss/helpers.scss";
 .company-change {
-  padding:0px 20px;
+  /*padding:0px 20px;*/
+  /*margin-right: 20px;*/
   .con-footer{
     position: absolute;
     bottom:10px;

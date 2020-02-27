@@ -180,7 +180,10 @@
       })
     },
     handleAdd(data){
-      this.$store.dispatch('salaryCalStore/actionSalaryAddDetailCheckMembers',data.compEmpId).then(res=>{
+      this.$store.dispatch('salaryCalStore/actionSalaryAddDetailCheckMembers',{
+        id:data.compEmpId,
+        checkId:this.id
+      }).then(res=>{
         if(res.success){
           this.loading()
         }
