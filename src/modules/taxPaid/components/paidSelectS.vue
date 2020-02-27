@@ -70,7 +70,6 @@ export default {
       this.$store
         .dispatch(this.paramsObj.validAction, this.paramsObj.validParameter)
         .then(res=>{
-          console.log(res.success)
           if (res.success) {
             //验证通过
             if(res.data.status === "SUCCESS"){
@@ -87,7 +86,7 @@ export default {
               this.$refs.authorizeTip.show()
             }
           }else{
-            this.$message.warning(res.message)
+            // this.$message.warning(res.message)
           }
         })
     },
