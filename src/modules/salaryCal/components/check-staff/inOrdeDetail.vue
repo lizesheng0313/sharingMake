@@ -12,7 +12,7 @@
             <el-col :span="12">
               <span @click="$router.go(-1)" class="back-style">返回</span>
               <span class="header-line">|</span>
-              <span>上月收入与减除填写</span>
+              <span>增减明细</span>
             </el-col>
           </el-row>
         </header>
