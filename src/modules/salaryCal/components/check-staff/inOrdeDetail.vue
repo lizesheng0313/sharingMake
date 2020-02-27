@@ -99,11 +99,11 @@
                 <el-button size="mini" type="text" @click="handleDelete(scope.row)"
                            :disabled="setWarning"
                            v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')"
-                           v-show="scope.row.compareLastMonthOperation=='增加'">删除算薪</el-button>
+                           v-show="scope.row.compareLastMonthOperation=='ADD'">删除算薪</el-button>
                 <el-button size="mini" type="text" @click="handleAdd(scope.row)"
                            :disabled="setWarning"
                            v-if="privilegeVoList.includes('salary.compute.salaryCheck.empDelete')"
-                           v-show="scope.row.compareLastMonthOperation=='减少'">添加算薪</el-button>
+                           v-show="scope.row.compareLastMonthOperation=='DELETE'">添加算薪</el-button>
               </template>
             </el-table-column>
           </el-table>
