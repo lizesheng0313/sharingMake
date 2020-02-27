@@ -190,7 +190,7 @@
       })
     },
     handleDelete(data){
-      this.$store.dispatch('salaryCalStore/actionSalaryDetailCheckMembersDelete',data.compEmpId).then(res=>{
+      this.$store.dispatch('salaryCalStore/actionSalaryDetailCheckMembersDelete',data.id).then(res=>{
         if(res.success){
           this.loading()
         }
