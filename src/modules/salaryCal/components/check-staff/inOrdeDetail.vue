@@ -30,7 +30,7 @@
         <div class="staff-situation">
             <span class="staff-total">
                 调整总人数
-                <i>{{ count ? count : "0" }}</i>人
+                <i>{{ incDecNumCount ? incDecNumCount : "0" }}</i>人
             </span>
             <span>
                 相比上月：新增
@@ -131,6 +131,7 @@
       userLoading:false,
       decNum:0,
       incNum:0,
+      incDecNumCount:0,
       closeModel:false,
       setWarning:false
     };
@@ -173,9 +174,10 @@
       this.$store.dispatch('salaryCalStore/actionCheckMemberSummary',this.id).then(res=>{
         if(res.success){
           let data = res.data;
+          console.log(data)
           this.decNum = data.decNum?data.decNum:0;
           this.incNum = data.incNum?data.incNum:0;
-          this.total = data.total?data.total:0;
+          this.incDecNumCount = data.incDecNumCount?data.incDecNumCount:0;
         }
       })
     },
