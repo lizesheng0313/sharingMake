@@ -115,7 +115,15 @@ export default {
       this.getList()
     },
     getList(){
-      this.$store.dispatch(this.listAction,this.addForm)
+      this.$store.dispatch(this.listAction,{
+        checkId:this.addForm.checkId,
+        key:this.addForm.key,
+        queryFilterParam:{
+          "empType":this.addForm.empType,
+          "enumEmpStatus":this.addForm.enumEmpStatus,
+          "taxSubId": this.addForm.taxSubId
+        }
+      })
         .then(res=>{
           if(res.success){
             this.staffTable = res.data.data;
