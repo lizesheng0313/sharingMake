@@ -120,7 +120,7 @@
                         </div>
                         <div style="flex:1">
                             <el-form-item label="参加工作日期：">
-                              <el-date-picker v-model="baseForm.inWorkDay" type="date" value-format="yyyy-MM-dd":disabled="baseDisable"  placeholder="请选择"></el-date-picker>
+                              <el-date-picker v-model="baseForm.inWorkDay" type="date" value-format="yyyy-MM-dd" :disabled="baseDisable"  placeholder="请选择"></el-date-picker>
                             </el-form-item>
                         </div>
                     </el-row>
@@ -268,7 +268,7 @@
                         </div>
                         <div style="flex:1">
                           <el-form-item label="最后工作日" prop="leaveDay">
-                            <el-date-picker v-model="insuredForm.leaveDay" type="date" placeholder="请选择" :disabled="insuredForm.empStatus==='ON_THE_JOB'"></el-date-picker>
+                            <el-date-picker v-model="insuredForm.leaveDay" type="date" placeholder="请选择" value-format="yyyy-MM-dd" :disabled="insuredForm.empStatus==='ON_THE_JOB'"></el-date-picker>
                           </el-form-item>
                         </div>
                       </el-row>
