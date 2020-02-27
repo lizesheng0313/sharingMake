@@ -143,7 +143,7 @@
                 <template slot-scope="scope">{{returnStatus('workerType',scope.row.workerType)}}</template>
               </el-table-column>
               <el-table-column label="国籍" width="140">
-                <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
+                <template slot-scope="scope">{{ scope.row.country }}</template>
               </el-table-column>
 <!--              <el-table-column prop="reportFinishTime" label="更新时间" width="180"></el-table-column>-->
 <!--              <el-table-column prop="updateTime" label="最近操作时间" width="180"></el-table-column>-->
