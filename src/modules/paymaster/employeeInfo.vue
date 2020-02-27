@@ -20,7 +20,7 @@
             </div>
             <div class="right">
               <el-button type="primary" class="add-import" @click="addEmployee" v-if="privilegeVoList.includes('salary.compute.emp.addEmp')">新增人员</el-button>
-              <el-button type="primary" class="add-import" @click="batchImport" v-if="privilegeVoList.includes('salary.compute.emp.importEmp')">批量导入</el-button>
+              <el-button type="primary" class="add-import" @click="batchImport" v-if="privilegeVoList.includes('salary.compute.emp.importEmp')">新增导入</el-button>
               <el-button  class="more-choose" @click="isShowExport = true" v-if="privilegeVoList.includes('salary.compute.emp.export')">导出</el-button>
             </div>
           </div>

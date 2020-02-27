@@ -83,7 +83,7 @@ export default {
         key:"",
       },
       companyOptions:[],
-      enumEmpTypeOption:constData.enumEmpTypeOption,//用工性质
+      enumEmpTypeOption:[],//用工性质
       employStatusOption:constData.employStatusOption,//员工状态
       isShowAddStaff: false,
       closeModel:false,
@@ -104,6 +104,7 @@ export default {
   },
   methods: {
     show(form){
+      this.enumEmpTypeOption = [{label:"全部",value:""}].concat(constData.enumEmpTypeOption)
       form.checkId?this.addForm.checkId = form.checkId:"";
       this.listAction = form.listAction
       this.saveAction = form.saveAction
