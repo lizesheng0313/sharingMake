@@ -170,6 +170,7 @@ export default {
 <style lang="scss" scoped>
 .add-staff {
   .add-staff-con{
+    width: 820px;
     display: flex;
     border-top:1.2px solid #f7f7f7;
     .table-con{
