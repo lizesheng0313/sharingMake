@@ -254,8 +254,10 @@ export default {
         .then(res => {
           if(res.success){
             this.tripleAgreementTaxList = res.data.tripleAgreementListVoList;
-            this.tripleAgreementNo = this.tripleAgreementTaxList[0].tripleAgreementNo;
-            this.taxSubId =this.tripleAgreementTaxList[0].taxSubId;
+            if(this.tripleAgreementNo.length>0){
+              this.tripleAgreementNo = this.tripleAgreementTaxList[0].tripleAgreementNo;
+              this.taxSubId =this.tripleAgreementTaxList[0].taxSubId;
+            }
             this.deductionAmount = res.data.deductionAmount;
             this.tripleAgreementLoading = false;
           }else{
