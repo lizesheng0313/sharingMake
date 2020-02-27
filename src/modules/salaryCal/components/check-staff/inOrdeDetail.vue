@@ -160,6 +160,7 @@
   },
   methods: {
     loading(){
+      this.userLoading = true;
       this.$store.dispatch('salaryCalStore/actionSalaryDetailCheckMembers',{
         checkId:this.id,
         key:this.key,
