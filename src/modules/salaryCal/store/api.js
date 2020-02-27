@@ -37,8 +37,8 @@ export function apiSyncSalaryEmp(id) {
 export function apiSalaryAddEmpList(form) {
   return fetch({
     url: '/api/xsalary/salary/salaryAddEmpList',
-    method: 'get',
-    params:form
+    method: 'post',
+    data:form
   })
 }
 
@@ -54,8 +54,8 @@ export function apiAddSalaryEmp(form) {
 export function apiGetAddEmpCollectList(form) {
   return fetch({
     url: '/api/xsalary/taxReport/getAddEmpCollectList',
-    method: 'get',
-    params:form
+    method: 'post',
+    data:form
   })
 }
 //可添加发薪人员信息采集 添加
