@@ -85,7 +85,7 @@ export default {
             this.$refs.authorizeTip.show()
           }
         }else{
-          this.$message.warning(res.message)
+          // this.$message.warning(res.message)
         }
       })
     },
