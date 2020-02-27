@@ -172,14 +172,14 @@
                     </div>
                     <el-row style="display: flex">
                       <div style="flex:1">
-                        <el-form-item label="公司名称" prop="taxSubId" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
+                        <el-form-item label="公司名称" prop="taxSubId" :rules="{required: true, message: '请选择公司名称', trigger: 'change'}">
                           <el-select v-model="baseForm.taxSubId" placeholder="请选择公司名称">
                             <el-option v-for="(item,index) in taxSubList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                           </el-select>
                         </el-form-item>
                       </div>
                       <div style="flex:1">
-                        <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'blur'}">
+                        <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'change'}">
                           <el-select v-model="baseForm.empType">
                             <el-option v-for="(item,index) in enumEmpTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                           </el-select>
@@ -200,12 +200,12 @@
                     </el-row>
                     <el-row style="display: flex">
                       <div style="flex:1">
-                        <el-form-item label="入职日期" prop="empDay" :rules="{required: true, message: '请选择入职日期', trigger: 'blur'}">
+                        <el-form-item label="入职日期" prop="empDay" :rules="{required: true, message: '请选择入职日期', trigger: 'change'}">
                           <el-date-picker v-model="baseForm.empDay" type="date" placeholder="请选择" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-form-item>
                       </div>
                       <div style="flex:1">
-                        <el-form-item label="任职受雇从业类型" prop="workerType" :rules="{required: true, message: '请选择任职受雇从业类型', trigger: 'blur'}">
+                        <el-form-item label="任职受雇从业类型" prop="workerType" :rules="{required: true, message: '请选择任职受雇从业类型', trigger: 'change'}">
                           <el-select v-model="baseForm.workerType" placeholder="请选择任职受雇从业类型">
                             <el-option v-for="(item,index) in workerTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
                           </el-select>
