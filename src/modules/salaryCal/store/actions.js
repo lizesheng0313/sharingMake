@@ -10,8 +10,8 @@ export const actionSalaryDetailCheckMembersDelete = ({ dispatch },id) => {
   return apiSalaryDetailCheckMembersDelete(id);
 }
 //添加算薪人员
-export const actionSalaryAddDetailCheckMembers = ({ dispatch },id) => {
-  return apiSalaryAddDetailCheckMembers(id);
+export const actionSalaryAddDetailCheckMembers = ({ dispatch },data) => {
+  return apiSalaryAddDetailCheckMembers(data);
 }
 //可添加发薪人员列表
 export const actionSalaryAddEmpList = ({ dispatch },form) => {

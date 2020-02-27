@@ -19,10 +19,11 @@ export function apiSalaryDetailCheckMembersDelete(id) {
   })
 }
 //添加算薪
-export function apiSalaryAddDetailCheckMembers(id) {
+export function apiSalaryAddDetailCheckMembers(data) {
   return fetch({
-    url: '/api/xsalary/salary/salaryAddDetailCheckMembers/'+id,
+    url: '/api/xsalary/salary/salaryAddDetailCheckMembers',
     method: 'get',
+    params:data
   })
 }
 //薪资核算-同步数据
