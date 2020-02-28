@@ -141,7 +141,7 @@ export default {
           }else{
             this.reportInfoLoading = false;
             this.isShowReportInfo = false;
-            this.$message.warning(res.message)
+            // this.$message.warning(res.message)
           }
         })
     },

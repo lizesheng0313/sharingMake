@@ -102,7 +102,7 @@
                       <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
-                  <div style="color: #333;font-size: 13px;margin-left: 20px;margin-top: -10px">只能选择所选月份没有月度台账的公司</div>
+                  <div style="color: #333;font-size: 13px;margin-left: 20px;margin-top: -10px">可以同时生成多家公司的数据</div>
                   <span slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="handleCreate">确定</el-button>
                     <el-button @click="isShowCreateAccount = false">取消</el-button>
