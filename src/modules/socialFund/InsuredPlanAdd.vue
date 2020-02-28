@@ -6,7 +6,7 @@
           <el-col :span="12">
             <span @click="$router.go(-1)" class="back-style">返回</span>
             <span class="header-line">|</span>
-            <span>参保月度台账</span>
+            <span>参保方案</span>
           </el-col>
         </el-row>
       </header>
@@ -39,19 +39,21 @@
                     </div>
                   </el-checkbox-group>
                 </el-popover>
-                <el-button v-popover:socialPlan type="text" size="mini" class="insurance-type-add" @click="handleSocial">
-                  <i class="el-icon-circle-plus-outline" :style="iconStyle"></i>
-                  <span>选择险种</span>
-                </el-button>
+                <div class="insurance-type-add">
+                  <el-button v-popover:socialPlan type="text" size="mini"  @click="handleSocial">
+                    <i class="el-icon-circle-plus-outline" :style="iconStyle"></i>
+                    <span>选择险种</span>
+                  </el-button>
+                </div>
                 <el-table :data="insuredForm.socialInsuranceList" border>
-                  <el-table-column prop="month" label=" " width="160">
+                  <el-table-column prop="month" label=" " width="130">
                     <template slot-scope="scope">
                       <el-form-item label-width="0">
                         <span>{{ scope.row.insuranceType | insuranceType}}</span>
                       </el-form-item>
                     </template>
                   </el-table-column>
-                  <el-table-column label="基数下限" width="120">
+                  <el-table-column label="基数下限" width="110">
                     <template slot-scope="scope">
                       <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.baseNumberMin'"
                                     :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
@@ -59,7 +61,7 @@
                       </el-form-item>
                     </template>
                   </el-table-column>
-                  <el-table-column label="基数上限" width="120">
+                  <el-table-column label="基数上限" width="110">
                     <template slot-scope="scope">
                       <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.baseNumberMax'"
                                     :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
@@ -67,7 +69,7 @@
                       </el-form-item>
                     </template>
                   </el-table-column>
-                  <el-table-column label="个人比例" width="120">
+                  <el-table-column label="个人比例" width="100">
                     <template slot-scope="scope">
                       <div style="display: flex">
                         <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.personScale'"
@@ -86,7 +88,7 @@
                       </el-form-item>
                     </template>
                   </el-table-column>
-                  <el-table-column label="个人尾数规则" width="200px">
+                  <el-table-column label="个人尾数规则" width="200">
                     <template slot-scope="scope">
                       <el-form-item label-width="0">
                         <el-select v-model="scope.row.personMantissaRule" placeholder="请选择">
@@ -100,7 +102,7 @@
                       </el-form-item>
                     </template>
                   </el-table-column>
-                  <el-table-column label="公司比例" width="120">
+                  <el-table-column label="公司比例" width="100">
                     <template slot-scope="scope">
                       <div style="display: flex">
                         <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.compScale'"
@@ -111,7 +113,7 @@
                       </div>
                     </template>
                   </el-table-column>
-                  <el-table-column label="单位固定金额" width="120">
+                  <el-table-column label="单位固定金额" width="110">
                     <template slot-scope="scope">
                       <el-form-item label-width="0" :prop="'socialInsuranceList.' + scope.$index +'.compFixedAmount'"
                                     :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
@@ -119,7 +121,7 @@
                       </el-form-item>
                     </template>
                   </el-table-column>
-                  <el-table-column label="公司尾数规则" width="200">
+                  <el-table-column label="公司尾数规则">
                     <template slot-scope="scope">
                      <el-form-item label-width="0">
                         <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
@@ -152,14 +154,14 @@
                 <span>选择险种</span>
               </el-button>
               <el-table :data="insuredForm.accumulationFundList" border>
-                <el-table-column prop="month" label=" " width="160">
+                <el-table-column prop="month" label=" " width="130">
                   <template slot-scope="scope">
                     <el-form-item label-width="0">
                        <span>{{ scope.row.insuranceType | insuranceType}}</span>
                     </el-form-item>
                   </template>
                 </el-table-column>
-                <el-table-column label="基数下限" width="120">
+                <el-table-column label="基数下限" width="110">
                   <template slot-scope="scope">
                     <el-form-item label-width="0" :prop="'accumulationFundList.' + scope.$index +'.baseNumberMin'"
                                   :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
@@ -167,7 +169,7 @@
                     </el-form-item>
                   </template>
                 </el-table-column>
-                <el-table-column label="基数上限" width="120">
+                <el-table-column label="基数上限" width="110">
                   <template slot-scope="scope">
                     <el-form-item label-width="0" :prop="'accumulationFundList.' + scope.$index +'.baseNumberMax'"
                                   :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
@@ -175,7 +177,7 @@
                     </el-form-item>
                   </template>
                 </el-table-column>
-                <el-table-column label="个人比例" width="120">
+                <el-table-column label="个人比例" width="110">
                   <template slot-scope="scope">
                     <div style="display: flex">
                       <el-form-item label-width="0" :prop="'accumulationFundList.' + scope.$index +'.personScale'"
@@ -186,7 +188,7 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="个人固定金额" width="120">
+                <el-table-column label="个人固定金额" width="110">
                   <template slot-scope="scope">
                     <el-form-item label-width="0" :prop="'accumulationFundList.' + scope.$index +'.personFixedAmount'"
                                   :rules="{ validator: validateNumber, message: '请输入正确数值', trigger: 'blur'}">
@@ -230,7 +232,7 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="公司尾数规则" width="200">
+                <el-table-column label="公司尾数规则">
                   <template slot-scope="scope">
                     <el-form-item label-width="0">
                       <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
@@ -487,12 +489,6 @@
           border-radius: 4px;
           margin-left: 20px;
         }
-        .insurance-type-add {
-          position: relative;
-          left:26px;
-          top:36px;
-          z-index: 1222;
-        }
         .choose-plan{
           color:$mainColor;
           cursor:pointer;
@@ -500,6 +496,17 @@
         }
         .social-plan-table {
           margin: 0px 20px 0px 0px;
+          .insurance-type-add {
+            position: relative;
+            left: 1px;
+            top: 48px;
+            padding-left: 10px;
+            line-height: 46px;
+            height: 45px;
+            z-index: 1196;
+            width: 119px;
+            background: #fff;
+          }
         }
       }
     }

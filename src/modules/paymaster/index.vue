@@ -1,15 +1,11 @@
 <template>
   <div class="paymaster">
     <div class="tax el-diy-month">
-      <header class="header main-title">
-        <el-row type="flex">
-          <el-col :span="12">
+      <header class="header main-title" style="padding-right: 20px">
             <el-tabs v-model="activeName" @tab-click="handleClick">
               <el-tab-pane label="员工信息" name="emplyeeInfo"></el-tab-pane>
-              <el-tab-pane label="社保增减员" name="socialInceace"></el-tab-pane>
+              <el-tab-pane label="" name="socialInceace"></el-tab-pane>
             </el-tabs>
-          </el-col>
-        </el-row>
       </header>
       <employee-info v-if="activeName=='emplyeeInfo'"></employee-info>
       <quickStaff v-if="activeName=='socialInceace'" :showTitle = "showTitle"></quickStaff>
