@@ -35,14 +35,13 @@ let router = new Router({
     ...salaryCal,
     ...tax,
     ...taxPaid,
-    ...initialize,
     ...accountPageRouter,
     ...payManageRouter,
     ...withdrawal,
     ...resultRouter,
     ...socialFund,
-    ...paymaster
-
+    ...paymaster,
+    ...initialize,
   ]
 })
 routerConfig(router)
