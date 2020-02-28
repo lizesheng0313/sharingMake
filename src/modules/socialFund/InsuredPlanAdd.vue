@@ -121,7 +121,7 @@
                       </el-form-item>
                     </template>
                   </el-table-column>
-                  <el-table-column label="公司尾数规则">
+                  <el-table-column label="公司尾数规则" min-width="200">
                     <template slot-scope="scope">
                      <el-form-item label-width="0">
                         <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
@@ -234,7 +234,7 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="公司尾数规则">
+                <el-table-column label="公司尾数规则" min-width="200">
                   <template slot-scope="scope">
                     <el-form-item label-width="0">
                       <el-select v-model="scope.row.compMantissaRule" placeholder="请选择">
