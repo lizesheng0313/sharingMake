@@ -149,10 +149,12 @@
                   </div>
                 </el-checkbox-group>
               </el-popover>
-              <el-button v-popover:fundPlan type="text" size="mini" class="insurance-type-add" @click="handleFund">
-                <i class="el-icon-circle-plus-outline" :style="iconStyle"></i>
-                <span>选择险种</span>
-              </el-button>
+              <div class="insurance-type-add">
+                <el-button v-popover:fundPlan type="text" size="mini"  @click="handleFund">
+                  <i class="el-icon-circle-plus-outline" :style="iconStyle"></i>
+                  <span>选择险种</span>
+                </el-button>
+              </div>
               <el-table :data="insuredForm.accumulationFundList" border>
                 <el-table-column prop="month" label=" " width="130">
                   <template slot-scope="scope">
