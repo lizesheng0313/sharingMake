@@ -53,7 +53,7 @@
                     </el-table-column>
                     <el-table-column prop="personScale" label="个人缴费比例">
                       <template slot-scope="scope">
-                        <div class="number-right"> {{ scope.row.personScale?scope.row.personScale:"_" }}</div>
+                        <div class="number-right"> {{ scope.row.personScale?scope.row.personScale+'%':"_" }}</div>
                       </template>
                     </el-table-column>
                     <el-table-column prop="personFixedAmount" label="个人固定金额">
@@ -68,7 +68,7 @@
                     </el-table-column>
                     <el-table-column prop="compScale" label="企业缴费比例">
                       <template slot-scope="scope">
-                        <div class="number-right"> {{ scope.row.compScale?scope.row.compScale:"_" }}</div>
+                        <div class="number-right"> {{ scope.row.compScale?scope.row.compScale+'%':"_" }}</div>
                       </template>
                     </el-table-column>
                     <el-table-column prop="compFixedAmount" label="企业固定金额">
