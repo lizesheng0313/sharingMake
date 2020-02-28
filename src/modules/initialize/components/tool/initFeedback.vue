@@ -71,6 +71,7 @@ export default {
           if(res.data.status === "SUCCESS"){
             this.reportInfoList = res.data.taxSubList;
             this.isShowReturnInfo = true;
+            this.isShowIknow = true;
             if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
               this.showReturn = true;
             }
