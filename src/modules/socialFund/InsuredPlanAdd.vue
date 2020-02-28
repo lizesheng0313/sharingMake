@@ -40,12 +40,12 @@
                   </el-checkbox-group>
                 </el-popover>
                 <div class="insurance-type-add">
-                  <el-button v-popover:socialPlan type="text" size="mini"  @click="handleSocial">
+                  <el-button v-popover:socialPlan type="text" size="mini" @click="handleSocial">
                     <i class="el-icon-circle-plus-outline" :style="iconStyle"></i>
                     <span>选择险种</span>
                   </el-button>
                 </div>
-                <el-table :data="insuredForm.socialInsuranceList" border>
+                <el-table :data="insuredForm.socialInsuranceList" border height="40%">
                   <el-table-column prop="month" label=" " width="130">
                     <template slot-scope="scope">
                       <el-form-item label-width="0">
@@ -459,7 +459,7 @@
 <style lang="scss" scoped>
   @import "../../assets/scss/helpers.scss";
   .insured-account-add {
-    height: 100%;
+    height:calc(100vh - 90px);
     .header {
       border-bottom: 1px solid #ededed;
       .add-table {
@@ -497,11 +497,13 @@
           padding-left: 10px;
         }
         .social-plan-table {
-          margin: 0px 20px 0px 0px;
+          margin: 20px 20px 0px 0px;
+          position: relative;
+          overflow: hidden;
           .insurance-type-add {
-            position: relative;
+            position: absolute;
             left: 1px;
-            top: 48px;
+            top: 1px;
             padding-left: 10px;
             line-height: 46px;
             height: 45px;
