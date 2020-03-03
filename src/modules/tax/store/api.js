@@ -23,7 +23,7 @@ export function apiSaveEmpCollectInfo(employeeFormData) {
   return fetch({
     url: '/api/xsalary/taxReport/saveEmpCollectInfo',
     method: 'post',
-    params: employeeFormData
+    data: employeeFormData
   })
 }
 

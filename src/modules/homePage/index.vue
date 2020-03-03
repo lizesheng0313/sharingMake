@@ -15,7 +15,7 @@
     </header>
     <div class="home-content">
       <div class="home-head">薪税通操作指引 ></div>
-      <img src="../../assets/images/home_content.png" alt="" class="home-image-down">
+      <img src="../../assets/images/home_content_new.png" alt="" class="home-image-down">
     </div>
   </div>
 </template>

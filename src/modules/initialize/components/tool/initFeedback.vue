@@ -71,6 +71,7 @@ export default {
           if(res.data.status === "SUCCESS"){
             this.reportInfoList = res.data.taxSubList;
             this.isShowReturnInfo = true;
+            this.isShowIknow = true;
             if(res.data.taxSubList.map(item=>item.dealStatus === "PROCESSING").includes(true)){
               this.showReturn = true;
             }
@@ -79,7 +80,7 @@ export default {
             this.$refs.authorizeTip.show()
           }
         }else{
-          this.$message.warning(res.message)
+          // this.$message.warning(res.message)
         }
       })
     },

@@ -1,11 +1,53 @@
-import { apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery,apiSocialProvidentExport,apiCheckEmpReportStatus,apiPayrollCredit,apiSalaryCheckFailRecord,apiSalaryCheckFailRecordExport,apiPayrollCreditCancel,apiGetAdditionalListExport,apiPayrollCreditExport,apiTips} from './api'
+import { apiAddEmpCollectList,apiGetAddEmpCollectList,apiCheckMemberSummary,apiSalaryAddDetailCheckMembers,apiSalaryDetailCheckMembersDelete,apiAddSalaryEmp,apiSalaryDetailCheckMembers,apiSalaryAddEmpList,apiSyncSalaryEmp,apiEnterpriseEmployees,apiGetSalaryStatus,apiSalaryStubsList,apiSalarySum,apiCheckMemberDownload,apiCheckMemberDeleteAll,apiMemberErrorRecord,apiSocialProvident,apiSocialProvidentTemplate,apiSocialProvidentRecord,apisyncLastMonthSocial,apiSalaryComputes,apiSalaryCheckQuery,apiSocialProvidentExport,apiCheckEmpReportStatus,apiPayrollCredit,apiSalaryCheckFailRecord,apiSalaryCheckFailRecordExport,apiPayrollCreditCancel,apiGetAdditionalListExport,apiPayrollCreditExport,apiTips} from './api'
 
+
+//增减员明细
+export const actionSalaryDetailCheckMembers = ({ dispatch },form) => {
+  return apiSalaryDetailCheckMembers(form);
+}
+//删除算薪人员
+export const actionSalaryDetailCheckMembersDelete = ({ dispatch },id) => {
+  return apiSalaryDetailCheckMembersDelete(id);
+}
+//添加算薪人员
+export const actionSalaryAddDetailCheckMembers = ({ dispatch },data) => {
+  return apiSalaryAddDetailCheckMembers(data);
+}
+//可添加发薪人员列表
+export const actionSalaryAddEmpList = ({ dispatch },form) => {
+  return apiSalaryAddEmpList(form);
+}
+//可添加人员信息采集 列表
+export const actionGetAddEmpCollectList = ({ dispatch },form) => {
+  return apiGetAddEmpCollectList(form);
+}
+//增//可添加人员信息采集 列表
+export const actionAddEmpCollectList = ({ dispatch },form) => {
+  return apiAddEmpCollectList(form);
+}
+//增减员明细人数
+export const actionCheckMemberSummary = ({ dispatch },id) => {
+  return apiCheckMemberSummary(id);
+}
+
+//可添加发薪人员  添加
+export const actionAddSalaryEmp = ({ dispatch },form) => {
+  return apiAddSalaryEmp(form);
+}
+//同步发薪人员
+export const actionSyncSalaryEmp = ({ dispatch },id) => {
+  return apiSyncSalaryEmp(id);
+}
 export const actionGetSalaryStatus = ({ dispatch },id) => {
   return apiGetSalaryStatus(id);
 }
 //工资表列表
 export const actionGetSalaryStubsList = ({ dispatch },form) => {
   return apiSalaryStubsList(form);
+}
+//工资表设置扣缴义务人人员
+export const actionGetEnterpriseEmployees = ({ dispatch },data) => {
+  return apiEnterpriseEmployees(data);
 }
 //薪资表合计
 export const actionPostSalarySum = ({ dispatch },form) => {

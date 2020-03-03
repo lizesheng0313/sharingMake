@@ -37,12 +37,13 @@
               <el-button type="primary" class="tax-search" @click="handleSearch">查询</el-button>
             </div>
             <div class="right">
+              <el-button type="primary" class="add-import" @click="handleAddStaff" v-if="privilegeVoList.includes('salary.report.personReport.add')">添加人员</el-button>
               <el-button type="primary" class="add-import" @click="handleReport"
                          v-if="privilegeVoList.includes('salary.report.personReport.sendReport')">报送</el-button>
               <el-button class="add-import" @click="handleReportInfo"
                          v-if="privilegeVoList.includes('salary.report.personReport.sendReport')">获取反馈</el-button>
-              <el-button class="add-import" @click="handleExport"
-                         v-if="privilegeVoList.includes('salary.report.personReport.export')">导出</el-button>
+<!--              <el-button class="add-import" @click="handleExport"-->
+<!--                         v-if="privilegeVoList.includes('salary.report.personReport.export')">导出</el-button>-->
             </div>
           </div>
           <div class="staff-situation">
@@ -142,7 +143,7 @@
                 <template slot-scope="scope">{{returnStatus('workerType',scope.row.workerType)}}</template>
               </el-table-column>
               <el-table-column label="国籍" width="140">
-                <template slot-scope="scope">{{ scope.row.country|countryType }}</template>
+                <template slot-scope="scope">{{ scope.row.country }}</template>
               </el-table-column>
 <!--              <el-table-column prop="reportFinishTime" label="更新时间" width="180"></el-table-column>-->
 <!--              <el-table-column prop="updateTime" label="最近操作时间" width="180"></el-table-column>-->
@@ -276,6 +277,8 @@
       <taxSelectS ref="selectSY" :timeObj="timeObj" :sign="sign"></taxSelectS>
       <!-- 查询-->
       <taxtFeedback ref="feedback" :sign="sign"></taxtFeedback>
+      <!-- 添加人员-->
+      <add-staff ref="addStaff"></add-staff>
     </div>
   </div>
 </template>
@@ -286,6 +289,7 @@ import * as AT from "./store/actionTypes";
 import fun from "@/util/fun";
 import taxSelectS from "./components/taxSelectS";
 import taxtFeedback from "./components/taxtFeedback";
+import addStaff from "@/components/tool/addStaff";
 let date = fun.headDate();
 let month = new Date().getMonth() + 1;
 let defaultDate =
@@ -362,7 +366,8 @@ export default {
   },
   components:{
     taxSelectS,
-    taxtFeedback
+    taxtFeedback,
+    addStaff
   },
   computed:{
     ...mapState("salaryCalStore", {
@@ -401,6 +406,13 @@ export default {
       if(type==="REPORT_ERROR"){this.allActive = false;this.successActive = false;  this.waitActive = false; this.backActive = false ; this.errorActive = true; }
       this.ruleForm.reportStatus = type === "" ? [] : [type];
       this.getList()
+    },
+    handleAddStaff(){
+      this.$refs.addStaff.show({
+        checkId:"",
+        listAction:"salaryCalStore/actionGetAddEmpCollectList",
+        saveAction:"salaryCalStore/actionAddEmpCollectList"
+      })
     },
     getList() {
       this.loading = true;

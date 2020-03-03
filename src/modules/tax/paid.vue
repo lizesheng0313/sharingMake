@@ -44,10 +44,10 @@
               <el-table-column prop="accreditStatus" label="授权状态"></el-table-column>
               <el-table-column prop="failReason" label="未通过原因"></el-table-column>
               <el-table-column label="操作" fixed="right">
-              <template slot-scope="scope">
-                <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
-                <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
-              </template>
+                <template slot-scope="scope">
+                  <el-button size="primary" @click="handleEditor(scope.row)">编辑</el-button>
+                  <el-button size="mini" @click="handleDelete(scope.row.taxSubId)">删除</el-button>
+                </template>
             </el-table-column>
             </el-table>
           </div>

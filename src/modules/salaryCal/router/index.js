@@ -3,6 +3,7 @@
 import index from '../index'
 import salarySet from '../salarySet'
 import salaryCheck from '../salaryCheck'
+import inOrdeDetail from '../components/check-staff/inOrdeDetail'
 
 export default [
   {
@@ -18,5 +19,9 @@ export default [
   },{
     path: '/salaryCheck',
     component: salaryCheck
+  },{
+    path: '/inOrdeDetail',
+    component: inOrdeDetail
+
   }
 ]

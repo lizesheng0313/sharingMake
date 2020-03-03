@@ -12,6 +12,8 @@ import accountPageRouter from 'modules/account/router'
 import payManageRouter from 'modules/payManage/router'
 import withdrawal from 'modules/withdrawal/router'
 import resultRouter from 'modules/result/router'
+import socialFund from 'modules/socialFund/router'
+import paymaster from 'modules/paymaster/router'
 
 
 
@@ -33,11 +35,13 @@ let router = new Router({
     ...salaryCal,
     ...tax,
     ...taxPaid,
-    ...initialize,
     ...accountPageRouter,
     ...payManageRouter,
     ...withdrawal,
-    ...resultRouter
+    ...resultRouter,
+    ...socialFund,
+    ...paymaster,
+    ...initialize,
   ]
 })
 routerConfig(router)
