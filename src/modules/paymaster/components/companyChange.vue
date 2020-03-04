@@ -4,13 +4,14 @@
       :visible.sync="isShowCompany"
       :with-header="false"
       ref="companyChange"
-      size="34%"
+      size="40%"
     >
-        <span class="drawer-title">变更公司</span>
+        <div class="drawer-title">变更公司 <i class="el-icon-close" @click="isShowCompany = false"></i></div>
         <el-form
           label-width="100px"
           ref="changeCompanyForm"
           :model="changeCompanyForm"
+          class="change-form"
         >
           <el-form-item label="姓名">{{ companyItem.empName }}</el-form-item>
           <el-form-item label="身份证号">{{ companyItem.idNo }}</el-form-item>
@@ -103,7 +104,6 @@ export default {
     showCompany(data){
       this.isShowCompany = true;
       this.companyItem = data
-      console.log(this.companyItem)
       for(let key in this.changeCompanyForm){
         this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
       }
@@ -139,14 +139,30 @@ export default {
   /*margin-right: 20px;*/
   .con-footer{
     position: absolute;
-    bottom:10px;
-    left:40%;
+    bottom:0px;
+    left: 5%;
+    text-align: center;
+    background: #fff;
+    width: 90%;
+    padding: 10px 0px;
+
   }
   .el-date-editor.el-input,.el-select {
     width: 100%;
   }
   .el-input--prefix .el-input__inner {
     padding: 14px 30px;
+  }
+  .change-form{
+    width: 80%;
+    margin:0 auto;
+    padding-bottom: 50px;
+  }
+  .el-icon-close{
+    font-size: 18px;
+    float: right;
+    margin-top: 20px;
+    cursor: pointer;
   }
 }
 </style>
