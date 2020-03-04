@@ -30,8 +30,9 @@ export function apiDeleteEmployee(id) {
 //发薪人员、员工详情
 export function apiGetEmployee(data) {
   return fetch({
-    url: '/api/xsalary/enterprise/compEmployee/'+data.compEmpId+'/'+data.empId,
+    url: '/api/xsalary/enterprise/compEmployee',
     method: 'get',
+    params:data
   })
 }
 //获取城市列表
