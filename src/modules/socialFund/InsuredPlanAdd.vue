@@ -45,7 +45,7 @@
                     <span>选择险种</span>
                   </el-button>
                 </div>
-                <el-table :data="insuredForm.socialInsuranceList" border height="40%">
+                <el-table :data="insuredForm.socialInsuranceList" border >
                   <el-table-column prop="month" label=" " width="130">
                     <template slot-scope="scope">
                       <el-form-item label-width="0">
