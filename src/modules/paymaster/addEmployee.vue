@@ -55,7 +55,7 @@
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="国籍（地区）" prop="country" :rules="{required: true, message: '国籍不能为空', trigger: 'blur'}">
-                            <el-select v-model="baseForm.country" placeholder="请选择国籍" :disabled="baseDisable">
+                            <el-select v-model="baseForm.country" placeholder="请选择国籍" :disabled="baseDisable" filterable>
                               <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index" :disabled="!canSelectCoutry.includes(item)"></el-option>
                             </el-select>
                           </el-form-item>
@@ -141,7 +141,7 @@
                     <el-row style="display: flex">
                       <div style="flex:1">
                         <el-form-item label="出生国家(地区)">
-                          <el-select v-model="baseForm.birthPlace" placeholder="请选择出生国家(地区)" :disabled="baseDisable">
+                          <el-select v-model="baseForm.birthPlace" placeholder="请选择出生国家(地区)" :disabled="baseDisable" filterable>
                             <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index"></el-option>
                           </el-select>
                         </el-form-item>

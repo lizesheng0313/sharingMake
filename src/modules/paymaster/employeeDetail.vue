@@ -96,7 +96,7 @@
                     <el-row style="display: flex">
                         <div style="flex:1">
                           <el-form-item label="国籍（地区）" prop="country" :rules="{required: true, message: '国籍不能为空', trigger: 'chang'}">
-                            <el-select v-model="baseForm.country" placeholder="请选择国籍" filterable :disabled="!checkStatus || baseDisable">
+                            <el-select v-model="baseForm.country" placeholder="请选择国籍" filterable :disabled="!checkStatus || baseDisable" filterable>
                               <el-option v-for="(item,index) in countryList" :label="item" :value="item" :key="index" :disabled="!canSelectCoutry.includes(item)"></el-option>
                             </el-select>
                           </el-form-item>
