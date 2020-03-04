@@ -41,7 +41,7 @@
       </div>
       <div class="screening">
         <div class="select_tax-payer" style="clear: both">
-          扣缴义务人：
+          公司名称：
           <el-dropdown trigger="click">
             <el-button type="text">
               <em class="current-tab-sub_name">{{currentTaxSubName}}</em>

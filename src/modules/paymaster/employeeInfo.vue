@@ -20,7 +20,7 @@
             </div>
             <div class="right">
               <el-button type="primary" class="add-import" @click="addEmployee" v-if="privilegeVoList.includes('salary.compute.emp.addEmp')">新增人员</el-button>
-              <el-button type="primary" class="add-import" @click="batchImport" v-if="privilegeVoList.includes('salary.compute.emp.importEmp')">新增导入</el-button>
+              <el-button  class="add-import" @click="batchImport" v-if="privilegeVoList.includes('salary.compute.emp.importEmp')">新增导入</el-button>
               <el-button  class="more-choose" @click="isShowExport = true" v-if="privilegeVoList.includes('salary.compute.emp.export')">导出</el-button>
             </div>
           </div>
@@ -69,7 +69,7 @@
                 <template slot-scope="scope">{{ scope.row.empDay }}</template>
               </el-table-column>
               <el-table-column prop="turnRegularDate" label="转正日期" width="140"></el-table-column>
-              <el-table-column label="操作" fixed="right" width="280px">
+              <el-table-column label="操作" fixed="right" width="140px">
                 <template slot-scope="scope">
                   <span class="funStyle" @click="onChange(scope.row)" v-if="scope.row.empStatus == 'ON_THE_JOB' &&
                   privilegeVoList.includes('salary.compute.emp.updateCompany')">变更</span>
@@ -101,35 +101,35 @@
       class="screen-dialog"
       :close-on-click-modal="closeModel"
     >
-      <el-form :model="ruleForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="ruleForm.queryFilterParam" ref="screenForm" label-width="180px" class="demo-ruleForm">
         <div class="shortCon">
-          <el-form-item label="用工性质" label-width="38%">
+          <el-form-item label="用工性质">
             <radios ref="enumEmpType" :screenOption="enumEmpTypeOption" @handleRadio="handleEnumEmpTypes"> </radios>
           </el-form-item>
         </div>
         <div class="shortCon">
-          <el-form-item label="员工状态" label-width="38%">
+          <el-form-item label="员工状态">
             <radios ref="employStatus" :screenOption="employStatusOption" @handleRadio="handleEnumEmpStatuses"></radios>
           </el-form-item>
         </div>
         <div class="shortCon">
-          <el-form-item label="部门" label-width="38%">
+          <el-form-item label="部门">
             <el-input v-model="ruleForm.queryFilterParam.departName"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
-          <el-form-item label="岗位" label-width="38%">
+          <el-form-item label="岗位">
             <el-input v-model="ruleForm.queryFilterParam.positionName"></el-input>
           </el-form-item>
         </div>
         <div class="shortCon">
-          <el-form-item label="工作城市" label-width="38%">
+          <el-form-item label="工作城市">
             <el-select v-model="ruleForm.queryFilterParam.workCity" placeholder="请选择" filterable>
               <el-option v-for="(item,index) in cityList" :label="item.name" :value="item.code" :key="index"></el-option>
             </el-select>
           </el-form-item>
         </div>
-        <el-form-item label="入职日期" label-width="22%">
+        <el-form-item label="入职日期">
           <el-date-picker
             v-model="ruleForm.queryFilterParam.enterStartTime"
             type="date"
@@ -144,14 +144,14 @@
             placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="是否转正" label-width="22%">
+        <el-form-item label="是否转正">
           <el-radio-group v-model="ruleForm.queryFilterParam.regularEmpYn" size="small">
             <el-radio-button label="">不限</el-radio-button>
             <el-radio-button label="1">是</el-radio-button>
             <el-radio-button label="0">否</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="转正日期" label-width="22%">
+        <el-form-item label="转正日期">
           <el-date-picker
             v-model="ruleForm.queryFilterParam.StartTime"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -166,7 +166,7 @@
             placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="离职日期" label-width="22%">
+        <el-form-item label="离职日期">
           <el-date-picker
             v-model="ruleForm.queryFilterParam.correctStartTime"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -350,7 +350,8 @@
           .dispatch("payMasterStore/actionGetEmployeeList", this.ruleForm)
           .then(res => {
             if(res.success){
-              this.list = res.data
+              this.list = res.data.data;
+              this.total = res.data.count;
               this.loading = false
             }
           });
@@ -430,7 +431,7 @@
       },
       //员工详情
       handleEmplayeeName(data){
-        this.$router.push({path:'/employeeDetail',query:{compEmpId:data.compEmpId,empId:data.empId}})
+        this.$router.push({path:'/employeeDetail',query:{bankId:data.bankId,compEmpId:data.compEmpId,empId:data.empId}})
       },
       //人员基本信息
       checkAllInfo(index){

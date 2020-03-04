@@ -4,7 +4,7 @@
       <header class="header main-title">
         <el-row type="flex">
           <el-col :span="12">
-            <span>扣缴义务人</span>
+            <span>公司名称</span>
           </el-col>
         </el-row>
       </header>
@@ -37,7 +37,7 @@
               v-loading="loading"
             >
               <el-table-column label="序号" type="index"></el-table-column>
-              <el-table-column prop="taxSubName" label="扣缴义务人名称"></el-table-column>
+              <el-table-column prop="taxSubName" label="公司名称"></el-table-column>
               <el-table-column prop="taxPayerNo" label="纳税人识别号"></el-table-column>
               <el-table-column prop="legalName" label="法定代表人"></el-table-column>
               <el-table-column prop="remark" label="经办人姓名"></el-table-column>
@@ -68,7 +68,7 @@
           class="addForm"
           :model="newBodyFormData"
         >
-          <el-form-item label="扣缴义务人名称" prop="taxSubName">
+          <el-form-item label="公司名称" prop="taxSubName">
             <el-input v-model="newBodyFormData.taxSubName"></el-input>
           </el-form-item>
           <el-form-item label="纳税人识别号" prop="taxPayerNo">
@@ -111,7 +111,7 @@ export default {
         taxSubName: [
           {
             required: true,
-            message: "请输入扣缴义务人名称",
+            message: "请输入公司名称",
             trigger: "blur"
           }
         ],
@@ -196,7 +196,7 @@ export default {
     },
     handleDelete(id) {
       this.$confirm(
-        "您确定删除扣缴义务人，如果是，请点击'确定',如果否,请点击'取消'",
+        "您确定删除该公司，如果是，请点击'确定',如果否,请点击'取消'",
         "删除确认",
         {
           confirmButtonText: "确定",
