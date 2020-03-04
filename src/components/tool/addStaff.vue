@@ -159,7 +159,8 @@ export default {
       data.forEach(item=>{
         idsDtoList.push({
           compEmpId:item.compEmpId,
-          empId:item.empId
+          empId:item.empId,
+          bankId:item.bankId
         })
       })
       this.idsDtoList = idsDtoList
