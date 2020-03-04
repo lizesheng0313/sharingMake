@@ -59,7 +59,7 @@
   }
 }
 
-.collect,.attach,.recharge,.withdraw{
+.collect,.attach,.recharge,.withdraw {
   .el-input--prefix .el-input__inner {
     font-size: 14px;
     padding: 19px 20px;
@@ -78,7 +78,7 @@
     top: 4px;
   }
 }
-.paid,.cumulative,.paymaster {
+.paid,.cumulative,.paymaster .check-staff-menu {
   .el-input--prefix .el-input__inner {
     font-size: 14px;
     padding: 19px 30px;
@@ -89,6 +89,9 @@
   .el-input--suffix .el-input__inner {
     padding: 19px 30px;
   }
+}
+.insured-account .check-staff-menu input[type="text"] {
+  height: 38px;
 }
 .pay-record,.pay-order {
   .el-input--prefix .el-input__inner {

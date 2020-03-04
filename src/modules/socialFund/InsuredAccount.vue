@@ -226,6 +226,7 @@
             this.loading = false
             if (res.success) {
               this.list = res.data.data;
+              this.total = res.data.count;
               this.loading = false;
             }
           });

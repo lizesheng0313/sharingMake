@@ -350,7 +350,8 @@
           .dispatch("payMasterStore/actionGetEmployeeList", this.ruleForm)
           .then(res => {
             if(res.success){
-              this.list = res.data.data
+              this.list = res.data.data;
+              this.total = res.data.count;
               this.loading = false
             }
           });
