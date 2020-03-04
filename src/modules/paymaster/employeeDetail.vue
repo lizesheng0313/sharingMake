@@ -305,6 +305,7 @@ export default {
       isInsuredEdit:false,
       compEmpId:this.$route.query.compEmpId,
       empId:this.$route.query.empId,
+      bankId:this.$route.query.bankId,
       baseForm:{
         compEmpId:this.$route.query.compEmpId,
         bankId:"",
@@ -468,7 +469,8 @@ export default {
     getInfo(){
       this.$store.dispatch("payMasterStore/actionGetEmployee",{
         compEmpId:this.compEmpId,
-        empId:this.empId
+        empId:this.empId,
+        bankId:this.bankId
       }).then(res=>{
         if(res.success){
           let data = res.data;

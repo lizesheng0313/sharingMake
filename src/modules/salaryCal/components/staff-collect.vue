@@ -67,7 +67,7 @@
 <!--              <el-table-column prop="empSex" label="性别">-->
 <!--                <template slot-scope="scope">{{returnStatus('empSex',scope.row.empSex)}}</template>-->
 <!--              </el-table-column>-->
-              <el-table-column prop="taxSubName" label="扣缴义务人名称" width="200">
+              <el-table-column prop="taxSubName" label="公司名称" width="200">
                 <template slot-scope="scope">
                   <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
                     <div class="hiden-con">{{ scope.row.taxSubName }}</div>

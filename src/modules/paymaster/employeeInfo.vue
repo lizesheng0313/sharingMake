@@ -350,7 +350,7 @@
           .dispatch("payMasterStore/actionGetEmployeeList", this.ruleForm)
           .then(res => {
             if(res.success){
-              this.list = res.data
+              this.list = res.data.data
               this.loading = false
             }
           });
@@ -430,7 +430,7 @@
       },
       //员工详情
       handleEmplayeeName(data){
-        this.$router.push({path:'/employeeDetail',query:{compEmpId:data.compEmpId,empId:data.empId}})
+        this.$router.push({path:'/employeeDetail',query:{bankId:data.bankId,compEmpId:data.compEmpId,empId:data.empId}})
       },
       //人员基本信息
       checkAllInfo(index){
