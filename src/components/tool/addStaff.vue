@@ -3,7 +3,7 @@
     <el-dialog
       title="增加人员"
       :visible.sync="isShowAddStaff"
-      width="57%"
+      width="62%"
       center
       class="diy-el_dialog"
       :close-on-click-modal="closeModel"
