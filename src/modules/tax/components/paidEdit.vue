@@ -7,7 +7,7 @@
           class="addForm"
           :model="newBodyFormData"
         >
-          <el-form-item label="扣缴义务人名称" prop="taxSubName">
+          <el-form-item label="公司名称" prop="taxSubName">
             <el-input v-model="newBodyFormData.taxSubName"></el-input>
           </el-form-item>
           <el-form-item label="纳税人识别号" prop="taxPayerNo">
@@ -42,7 +42,7 @@ export default {
         taxSubName: [
           {
             required: true,
-            message: "请输入扣缴义务人名称",
+            message: "请输入公司名称",
             trigger: "blur"
           }
         ],

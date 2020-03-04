@@ -8,7 +8,7 @@
       class="diy-el_dialog"
       :close-on-click-modal="closeModel"
     >
-      <div><i class="el-icon-warning" style="color:#e6a23c;font-size:26px"></i>扣缴义务人未授权成功，请前往授权！</div>
+      <div><i class="el-icon-warning" style="color:#e6a23c;font-size:26px"></i>公司未授权成功，请前往授权！</div>
       <router-link to="/initialize/paid" style="line-height: 70px">去授权</router-link>
       <el-button type="primary" plain size="mini" style="margin-left:200px" @click="handleCloseModel">我知道了</el-button>
     </el-dialog>

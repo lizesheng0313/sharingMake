@@ -39,7 +39,7 @@
       <div class="screening">
         <div class="clearfix">
           <div class="select_tax-payer left">
-            扣缴义务人：
+            公司名称：
             <el-dropdown trigger="click">
               <el-button type="text">
                 <em class="current-tab-sub_name">{{currentTaxSubName}}</em>
@@ -162,7 +162,7 @@
         class
         :model="buttonForm"
       >
-        <el-form-item label="扣缴义务人：">
+        <el-form-item label="公司名称：">
           <span class="company-name">{{currentTaxSubName}}</span>
         </el-form-item>
         <el-form-item label="输入密码：" prop="password">
