@@ -37,7 +37,7 @@ export function apiSyncSalaryEmp(id) {
 //薪资核算-核对人员-导出
 export function apiCheckMemberExport(params) {
   return fetchFile({
-    url: '/api/xsalary/checkMember/export',
+    url: '/api/xsalary/salary/checkMember/export',
     method: 'get',
     params:params
   })

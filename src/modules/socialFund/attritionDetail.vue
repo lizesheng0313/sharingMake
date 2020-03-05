@@ -146,7 +146,7 @@
                 </div>
               </div>
               <div class="table-fun">
-                <el-button type="primary" @click="showInfo">预扣缴信息</el-button>
+                <el-button type="primary" @click="showInfo">预览缴费信息</el-button>
               </div>
               <div v-if="showTable">
                 <el-table :data="insuredPayDetailVoList" border>
