@@ -8,7 +8,7 @@
     >
         <div class="drawer-title">变更公司 <i class="el-icon-close" @click="isShowCompany = false"></i></div>
         <el-form
-          label-width="100px"
+          label-width="140px"
           ref="changeCompanyForm"
           :model="changeCompanyForm"
           class="change-form"
@@ -23,6 +23,11 @@
           <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'blur'}">
             <el-select v-model="changeCompanyForm.empType" placeholder="请选择用工性质">
               <el-option v-for="(item,index) in enumEmpTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="任职受雇从业类型" prop="workerType" :rules="{required: true, message: '请选择任职受雇从业类型', trigger: 'change'}">
+            <el-select v-model="changeCompanyForm.workerType" placeholder="请选择任职受雇从业类型" >
+              <el-option v-for="(item,index) in workerTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="部门" prop="deptName">
@@ -70,6 +75,7 @@ export default {
         empId:"",
         taxSubId: "",
         empType:"",
+        workerType:"",
         deptName:"",//部门
         positionName:"",
         empDay:"",//入职日期
@@ -80,6 +86,7 @@ export default {
       enumEmpTypeOption:constData.enumEmpTypeOption,
       workCityOption:[],
       regularEmpYnOptions:constData.regularEmpYnOption,
+      workerTypeOption:constData.workerType,
       closeModel:false,
       checked:true,
       companyItem:{}

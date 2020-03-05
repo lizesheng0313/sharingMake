@@ -98,10 +98,22 @@
               <el-table-column prop="compInsuredName" label="参保方案" width="140">
                 <template slot-scope="scope">{{ scope.row.compInsuredName }}</template>
               </el-table-column>
+              <el-table-column prop="socialInsuranceStartMonth" label="社保基数" width="140">
+                <template slot-scope="scope">{{ scope.row.socialInsuranceBaseNumber }}</template>
+              </el-table-column>
+              <el-table-column prop="socialInsuranceStartMonth" label="公积金基数" width="140">
+                <template slot-scope="scope">{{ scope.row.accumulationFundBaseNumber }}</template>
+              </el-table-column>
               <el-table-column prop="socialInsuranceStartMonth" label="社保起缴月份" width="140">
                 <template slot-scope="scope">{{ scope.row.socialInsuranceStartMonth }}</template>
               </el-table-column>
-<!--              <el-table-column prop="mobile" label="公积金起缴月份" width="140"></el-table-column>-->
+              <el-table-column prop="accumulationFundStartMonth" label="公积金起缴月份" width="140"></el-table-column>
+              <el-table-column label="社保停缴月份" width="140">
+                <template slot-scope="scope">{{ scope.row.socialInsuranceEndMonth }}</template>
+              </el-table-column>
+              <el-table-column prop="socialInsuranceStartMonth" label="公积金停缴月份" width="140">
+                <template slot-scope="scope">{{ scope.row.accumulationFundEndMonth }}</template>
+              </el-table-column>
               <el-table-column label="操作" fixed="right" width="160px">
                 <template slot-scope="scope">
                   <span class="funStyle" @click="goDetail(scope.row)">详情</span>
