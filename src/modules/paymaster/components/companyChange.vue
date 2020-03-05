@@ -75,7 +75,6 @@ export default {
         empId:"",
         taxSubId: "",
         empType:"",
-        workerType:"",
         deptName:"",//部门
         positionName:"",
         empDay:"",//入职日期
@@ -85,7 +84,7 @@ export default {
       },
       enumEmpTypeOption:constData.enumEmpTypeOption,
       workCityOption:[],
-      regularEmpYnOptions:constData.regularEmpYnOption,
+      regularEmpYnOptions:[],
       workerTypeOption:constData.workerType,
       closeModel:false,
       checked:true,
@@ -102,7 +101,7 @@ export default {
 
   },
   created(){
-
+   this.regularEmpYnOptions = constData.regularEmpYnOption.filter(item=>item.value)
   },
   mounted() {
 
