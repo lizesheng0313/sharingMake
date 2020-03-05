@@ -65,7 +65,7 @@
         <el-table-column prop="empName" label="姓名"></el-table-column>
         <el-table-column prop="idNo" label="证件号码"></el-table-column>
         <el-table-column prop="empNo" label="员工工号"></el-table-column>
-        <el-table-column prop="empName" label="公司名称"></el-table-column>
+        <el-table-column prop="taxSubName" label="公司名称"></el-table-column>
       </el-table>
       <div style="text-align:center;margin-top: 10px">
         <el-button type="primary" @click="downLoadData">下载数据</el-button>
