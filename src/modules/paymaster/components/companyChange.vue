@@ -112,11 +112,9 @@ export default {
     showCompany(data){
       this.isShowCompany = true;
       this.companyItem = data
+      for(let key in this.changeCompanyForm){this.changeCompanyForm[key] = ""}
       this.changeCompanyForm.compEmpId = this.companyItem.compEmpId;
       this.changeCompanyForm.empId = this.companyItem.empId;
-      // for(let key in this.changeCompanyForm){
-      //   this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
-      // }
     },
     //更改
     handleNewBody() {
