@@ -17,7 +17,7 @@
           <el-form-item label="身份证号">{{ companyItem.idNo }}</el-form-item>
           <el-form-item label="公司名称" prop="taxSubId" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
             <el-select v-model="changeCompanyForm.taxSubId" placeholder="请选择公司名称">
-              <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              <el-option v-for="(item,index) in taxSubjectList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'blur'}">
@@ -86,9 +86,10 @@ export default {
       workCityOption:[],
       regularEmpYnOptions:[],
       workerTypeOption:constData.workerType,
+      taxSubjectList:[],
       closeModel:false,
       checked:true,
-      companyItem:{}
+      companyItem:{},
     };
   },
   computed:{
@@ -102,6 +103,7 @@ export default {
   },
   created(){
    this.regularEmpYnOptions = constData.regularEmpYnOption.filter(item=>item.value)
+    this.taxSubjectList = this.taxSubjectInfoList.filter(item=>item.taxSubId)
   },
   mounted() {
 
@@ -110,9 +112,9 @@ export default {
     showCompany(data){
       this.isShowCompany = true;
       this.companyItem = data
-      for(let key in this.changeCompanyForm){
-        this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
-      }
+      // for(let key in this.changeCompanyForm){
+      //   this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
+      // }
     },
     //更改
     handleNewBody() {
