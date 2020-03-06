@@ -4,24 +4,30 @@
       :visible.sync="isShowCompany"
       :with-header="false"
       ref="companyChange"
-      size="34%"
+      size="40%"
     >
-        <span class="drawer-title">变更公司</span>
+        <div class="drawer-title">变更公司 <i class="el-icon-close" @click="isShowCompany = false"></i></div>
         <el-form
-          label-width="100px"
+          label-width="140px"
           ref="changeCompanyForm"
           :model="changeCompanyForm"
+          class="change-form"
         >
           <el-form-item label="姓名">{{ companyItem.empName }}</el-form-item>
           <el-form-item label="身份证号">{{ companyItem.idNo }}</el-form-item>
           <el-form-item label="公司名称" prop="taxSubId" :rules="{required: true, message: '请选择公司名称', trigger: 'blur'}">
             <el-select v-model="changeCompanyForm.taxSubId" placeholder="请选择公司名称">
-              <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+              <el-option v-for="(item,index) in taxSubjectList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="用工性质" prop="empType" :rules="{required: true, message: '请选择用工性质', trigger: 'blur'}">
             <el-select v-model="changeCompanyForm.empType" placeholder="请选择用工性质">
               <el-option v-for="(item,index) in enumEmpTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="任职受雇从业类型" prop="workerType" :rules="{required: true, message: '请选择任职受雇从业类型', trigger: 'change'}">
+            <el-select v-model="changeCompanyForm.workerType" placeholder="请选择任职受雇从业类型" >
+              <el-option v-for="(item,index) in workerTypeOption" :label="item.label" :value="item.value" :key="index"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="部门" prop="deptName">
@@ -78,10 +84,12 @@ export default {
       },
       enumEmpTypeOption:constData.enumEmpTypeOption,
       workCityOption:[],
-      regularEmpYnOptions:constData.regularEmpYnOption,
+      regularEmpYnOptions:[],
+      workerTypeOption:constData.workerType,
+      taxSubjectList:[],
       closeModel:false,
       checked:true,
-      companyItem:{}
+      companyItem:{},
     };
   },
   computed:{
@@ -94,7 +102,8 @@ export default {
 
   },
   created(){
-
+   this.regularEmpYnOptions = constData.regularEmpYnOption.filter(item=>item.value)
+    this.taxSubjectList = this.taxSubjectInfoList.filter(item=>item.taxSubId)
   },
   mounted() {
 
@@ -103,10 +112,9 @@ export default {
     showCompany(data){
       this.isShowCompany = true;
       this.companyItem = data
-      console.log(this.companyItem)
-      for(let key in this.changeCompanyForm){
-        this.companyItem[key]?this.changeCompanyForm[key] = this.companyItem[key]:""
-      }
+      for(let key in this.changeCompanyForm){this.changeCompanyForm[key] = ""}
+      this.changeCompanyForm.compEmpId = this.companyItem.compEmpId;
+      this.changeCompanyForm.empId = this.companyItem.empId;
     },
     //更改
     handleNewBody() {
@@ -139,14 +147,30 @@ export default {
   /*margin-right: 20px;*/
   .con-footer{
     position: absolute;
-    bottom:10px;
-    left:40%;
+    bottom:0px;
+    left: 5%;
+    text-align: center;
+    background: #fff;
+    width: 90%;
+    padding: 10px 0px;
+
   }
   .el-date-editor.el-input,.el-select {
     width: 100%;
   }
   .el-input--prefix .el-input__inner {
     padding: 14px 30px;
+  }
+  .change-form{
+    width: 80%;
+    margin:0 auto;
+    padding-bottom: 50px;
+  }
+  .el-icon-close{
+    font-size: 18px;
+    float: right;
+    margin-top: 20px;
+    cursor: pointer;
   }
 }
 </style>

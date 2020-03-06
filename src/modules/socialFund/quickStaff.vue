@@ -59,11 +59,6 @@
               border
             >
               <el-table-column type="selection" width="55" fixed></el-table-column>
-              <el-table-column
-                type="index"
-                label="编号"
-                width="50">
-              </el-table-column>
               <el-table-column prop="empName" label="姓名" width="140">
                 <template slot-scope="scope">
                   <span>{{ scope.row.empName }}</span>

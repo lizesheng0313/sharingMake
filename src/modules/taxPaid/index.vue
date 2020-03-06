@@ -29,7 +29,7 @@
           border
         >
           <el-table-column  label="序号" type="index"></el-table-column>
-          <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
+          <el-table-column prop="taxSubName" label="公司名称" width="200px">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName && scope.row.taxSubName.length>10">
                 <span class="hiden-con">{{ scope.row.taxSubName }}</span>

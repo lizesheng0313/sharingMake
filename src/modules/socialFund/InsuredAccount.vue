@@ -44,8 +44,8 @@
                   <span class="table-name" @click="goAccountDetail(scope.row)">{{ scope.row.currentMonth }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="taxSubName" label="公司名称" width="140"></el-table-column>
-              <el-table-column prop="insuredPersonCount" label="参保人数" width="180"></el-table-column>
+              <el-table-column prop="taxSubName" label="公司名称" min-width="160"></el-table-column>
+              <el-table-column prop="insuredPersonCount" label="参保人数" width="90"></el-table-column>
               <el-table-column prop="currentMonthAdd" label="本月增员人数" width="100"></el-table-column>
               <el-table-column prop="currentMonthSub" label="本月减员人数" width="100"></el-table-column>
               <el-table-column prop="personSocialSumAmount" label="个人社保合计" width="140"></el-table-column>
@@ -86,7 +86,7 @@
           <el-dialog
             :visible.sync="isShowCreateAccount"
             title="生成月度台账"
-            width="52%"
+            width="47%"
             center
             class="screen-dialog"
             :close-on-click-modal="closeModel"
@@ -99,10 +99,10 @@
                   </el-form-item>
                   <el-form-item label="公司范围" label-width="20%" prop="taxSubList" :rules="{required: true, message: '请选择公司范围', trigger: 'blur'}">
                     <el-select v-model="createForm.taxSubList" multiple placeholder="请选择公司范围">
-                      <el-option v-for="(item,index) in taxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
+                      <el-option v-for="(item,index) in createTaxSubjectInfoList" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
-                  <div style="color: #333;font-size: 13px;margin-left: 20px;margin-top: -10px">可以同时生成多家公司的数据</div>
+                  <div style="color: #333;font-size: 13px;margin-left: 90px;margin-top: -10px">可以同时生成多家公司的数据</div>
                   <span slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="handleCreate">确定</el-button>
                     <el-button @click="isShowCreateAccount = false">取消</el-button>
@@ -128,7 +128,7 @@
                   </el-form-item>
                   <span slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="handleImport">下一步</el-button>
-                    <el-button @click="isShowCreateAccount = false">取消</el-button>
+                    <el-button @click="isShowImportAccount= false">取消</el-button>
                   </span>
                 </div>
               </el-form>
@@ -193,6 +193,7 @@
           uuid: "",
           importType:"BY_EMP_NO"
         },
+        createTaxSubjectInfoList:[],
     };
     },
     components:{
@@ -206,6 +207,7 @@
     },
     created(){
       this.getList()
+      this.createTaxSubjectInfoList = this.taxSubjectInfoList.filter(item=>item.taxSubId)
     },
     mounted() {
       const that = this;
@@ -226,6 +228,7 @@
             this.loading = false
             if (res.success) {
               this.list = res.data.data;
+              this.total = res.data.count;
               this.loading = false;
             }
           });
@@ -267,6 +270,7 @@
             })
             .then(res => {
               if(res.success){
+                this.$message.success('操作成功')
                 this.getList()
               }
             })
@@ -282,6 +286,7 @@
               .then(res => {
                   if(res.success){
                     this.getList()
+                    this.$message.success('操作成功')
                     this.isShowCreateAccount = false
                   }
               })

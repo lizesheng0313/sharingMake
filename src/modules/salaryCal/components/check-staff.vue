@@ -11,10 +11,10 @@
       ></el-input>
       <el-button class="search" size="small" @click="searchUser" type="primary">搜索</el-button>
       <div class="right">
-        <el-button type="primary" @click="handleAddStaff" :disabled="setWarning" v-if="privilegeVoList.includes('salary.compute.salaryCheck.addSalaryEmp')">添加人员</el-button>
+        <el-button type="primary" size="large" @click="handleAddStaff" :disabled="setWarning" v-if="privilegeVoList.includes('salary.compute.salaryCheck.addSalaryEmp')">添加人员</el-button>
 <!--        <el-button type="primary" @click="showIncrease" class="add-import" v-if="privilegeVoList.includes('salary.compute.salaryCheck.empAdd')">增减员导入</el-button>-->
         <el-dropdown trigger="click" @command="handleDropdown">
-          <el-button type="default">
+          <el-button size="large">
             更多
             <i class="iconsanjiao iconfont"></i>
           </el-button>
@@ -83,7 +83,7 @@
             <span>{{scope.row.empType|filterEmpType}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="扣缴义务人" width="180px" :show-overflow-tooltip="true">
+        <el-table-column label="公司名称" width="180px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{scope.row.taxSubject}}</span>
           </template>
@@ -474,7 +474,12 @@
         }
       }
       if(val === 'export'){
-        window.location.href = "/api/salary/checkMember/export?checkId="+this.userForm.checkId+"&"+"key="+this.userForm.key
+        this.$store.dispatch('salaryCalStore/actionCheckMemberExport',{
+          "checkId":this.userForm.checkId,
+          "key":this.userForm.key,
+        }).then(res=>{
+
+        })
       }
       if(val === 'sync'){
         if(this.setWarning){

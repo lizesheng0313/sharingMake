@@ -39,7 +39,7 @@
               border
             >
               <el-table-column label="序号" type="index"></el-table-column>
-              <el-table-column prop="taxSubName" label="扣缴义务人名称" width="200px" align="left">
+              <el-table-column prop="taxSubName" label="公司名称" width="200px" align="left">
                 <template slot-scope="scope">
                   <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>12">
                     <span class="hiden-con">{{ scope.row.taxSubName }}</span>
@@ -77,7 +77,7 @@
         </div>
       </div>
     </div>
-    <right-pop :pop-show="popShow" :has-footer="false" popTitle="扣缴义务人" :popWidth="600">
+    <right-pop :pop-show="popShow" :has-footer="false" popTitle="公司名称" :popWidth="600">
       <div slot="pop-content">
         <paidEdit @hanleClose="hanleClose" :selectItem="selectItem"></paidEdit>
       </div>
@@ -114,7 +114,7 @@ export default {
         taxSubName: [
           {
             required: true,
-            message: "请输入扣缴义务人名称",
+            message: "请输入公司名称",
             trigger: "blur"
           }
         ],
@@ -207,7 +207,7 @@ export default {
     },
     handleDelete(id) {
       this.$confirm(
-        "您确定删除扣缴义务人，如果是，请点击'确定',如果否,请点击'取消'",
+        "您确定删除该公司，如果是，请点击'确定',如果否,请点击'取消'",
         "删除确认",
         {
           confirmButtonText: "确定",

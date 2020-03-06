@@ -49,7 +49,7 @@
                     :height="screenHeight"
                     border
           >
-            <el-table-column label="姓名" width="104px" :show-overflow-tooltip="true">
+            <el-table-column label="姓名">
               <template slot-scope="scope">
                 <span>{{scope.row.empName}}</span>
               </template>
@@ -69,12 +69,17 @@
                 <span>{{scope.row.deptName}}</span>
               </template>
             </el-table-column>
-            <el-table-column  label="员工类型">
+            <el-table-column label="公司名称" :show-overflow-tooltip="true" min-width="160px">
+              <template slot-scope="scope">
+                <span>{{scope.row.taxSubName}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column  label="员工类型" width="120">
               <template slot-scope="scope">
                 <span>{{scope.row.empType|filterEmpType}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="状态" width="160x" :show-overflow-tooltip="true">
+            <el-table-column label="状态" width="120x" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <span>{{scope.row.empStatus | filterEmployStatus}}</span>
               </template>
@@ -94,7 +99,7 @@
                 <span>{{ scope.row.compareLastMonthOperation | compareLastMonthOperation }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" fixed="right" width="240px">
+            <el-table-column label="操作" fixed="right" width="140px">
               <template slot-scope="scope">
                 <el-button size="mini" type="text" @click="handleDelete(scope.row)"
                            :disabled="setWarning"

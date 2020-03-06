@@ -35,7 +35,7 @@
             </div>
           </div>
           <div class="selectCon">
-            扣缴义务人：
+            公司名称：
             <el-select v-model="ruleForm.taxSubId" placeholder="请选择" @change="selectSubject">
               <el-option
                 v-for="item in taxSubjectInfolist"
@@ -67,7 +67,7 @@
           <el-table-column prop="empName" label="姓名" width="80"></el-table-column>
           <el-table-column prop="empNo" label="工号" width="100"></el-table-column>
           <el-table-column prop="idNo" label="证件号码" width="170"></el-table-column>
-          <el-table-column prop="taxSubName" label="扣缴义务人" width="200px">
+          <el-table-column prop="taxSubName" label="公司名称" width="200px">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
                 <span class="hiden-con">{{ scope.row.taxSubName }}</span>

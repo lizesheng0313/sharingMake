@@ -7,8 +7,8 @@
           class="addForm"
           :model="newBodyFormData"
         >
-          <div class="secTitle">扣缴义务人基本信息</div>
-          <el-form-item label="扣缴义务人名称" prop="taxSubName">
+          <div class="secTitle">公司基本信息</div>
+          <el-form-item label="公司名称" prop="taxSubName">
             <el-input v-model="newBodyFormData.taxSubName"></el-input>
           </el-form-item>
           <el-form-item label="纳税人识别号" prop="taxPayerNo">
@@ -21,13 +21,13 @@
             <el-input v-model="newBodyFormData.remark"></el-input>
           </el-form-item>
           <div class="tip">在自然人税收管理系统扣缴客户端中个税申报操作人员姓名</div>
-          <div class="secTitle">扣缴义务人信息验证</div>
+          <div class="secTitle">公司信息验证</div>
           <el-form-item label="申报密码" prop="pwd">
             <el-input v-model="newBodyFormData.pwd" type="password"></el-input>
           </el-form-item>
           <div class="tip">自然人税收管理系统扣缴客户端的申报密码</div>
           <div class="checkStyle">
-            <el-checkbox v-model="checked">授权"薪税通"实现扣缴义务人中人员的算税、报税、缴税</el-checkbox>
+            <el-checkbox v-model="checked">授权"薪税通"实现公司中人员的算税、报税、缴税</el-checkbox>
           </div>
         </el-form>
         <span slot="footer" class="con-footer">
@@ -69,7 +69,7 @@ export default {
         taxSubName: [
           {
             required: true,
-            message: "请输入扣缴义务人名称",
+            message: "请输入公司名称",
             trigger: "blur"
           }
         ],

@@ -196,8 +196,8 @@
     >
       <el-form :model="salaryForm.queryFilterParam" ref="screenForm" label-width="100px" class="demo-ruleForm">
         <div class="shortCon">
-          <el-form-item label="扣缴义务人" label-width="38%">
-            <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择扣缴义务人" v-loading="taxSubIdLoading">
+          <el-form-item label="公司名称" label-width="38%">
+            <el-select v-model="salaryForm.queryFilterParam.taxSubId" placeholder="请选择公司名称" v-loading="taxSubIdLoading">
               <el-option v-for="(item,index) in screenTaxOption" :label="item.taxSubName" :value="item.taxSubId" :key="index"></el-option>
             </el-select>
           </el-form-item>
@@ -321,7 +321,7 @@
       <el-table :data="failList" height="400px">
         <el-table-column prop="empName" label="姓名"></el-table-column>
         <el-table-column prop="idNo" label="证件号码" width="200px"></el-table-column>
-        <el-table-column prop="taxSubName" label="扣缴义务人"></el-table-column>
+        <el-table-column prop="taxSubName" label="公司名称"></el-table-column>
         <el-table-column prop="empName" label="计算状态">
           <template slot-scope="scope">
             <span>{{scope.row.checkStatus | reportType}}</span>

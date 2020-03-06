@@ -34,6 +34,16 @@ export function apiSyncSalaryEmp(id) {
   })
 }
 
+//薪资核算-核对人员-导出
+export function apiCheckMemberExport(params) {
+  return fetchFile({
+    url: '/api/xsalary/salary/checkMember/export',
+    method: 'get',
+    params:params
+  })
+}
+
+
 //可添加发薪人员列表
 export function apiSalaryAddEmpList(form) {
   return fetch({

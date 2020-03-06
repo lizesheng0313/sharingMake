@@ -70,7 +70,7 @@
 <!--                <span>{{ scope.row.empDay.split(' ')[0] }}</span>-->
 <!--              </template>-->
 <!--            </el-table-column>-->
-            <el-table-column prop="taxSubName" label="扣缴义务人名称" min-width="200">
+            <el-table-column prop="taxSubName" label="公司名称" min-width="200">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" :content="scope.row.taxSubName" placement="top-start" v-if="scope.row.taxSubName.length>10">
                   <span class="hiden-con">{{ scope.row.taxSubName }}</span>
