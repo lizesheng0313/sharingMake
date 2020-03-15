@@ -5,7 +5,7 @@ import { routerConfig } from './routerConfig'
 //router
 import homePage from 'modules/homePage/router'
 
-
+import mine from 'modules/mine/index'
 
 Vue.use(Router)
 
@@ -20,6 +20,10 @@ let router = new Router({
     {
       path: '/',
       redirect: '/home'
+    },
+    {
+      path:'/mine',
+      component:mine
     },
     ...homePage,
   ]
