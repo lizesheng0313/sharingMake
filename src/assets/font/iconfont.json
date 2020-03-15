@@ -1,128 +1,79 @@
 {
-  "id": "1271173",
-  "name": "薪酬系统-salary-front",
+  "id": "1455616",
+  "name": "后台管理",
   "font_family": "iconfont",
   "css_prefix_text": "icon",
   "description": "",
   "glyphs": [
     {
-      "icon_id": "2578228",
-      "name": "社保公积金",
-      "font_class": "shebaogongjijin",
-      "unicode": "e603",
-      "unicode_decimal": 58883
+      "icon_id": "12686568",
+      "name": "任务",
+      "font_class": "icon_renwu",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
     },
     {
-      "icon_id": "12088622",
-      "name": "薪资核算",
-      "font_class": "xinzihesuan",
-      "unicode": "e61f",
-      "unicode_decimal": 58911
+      "icon_id": "838044",
+      "name": "秒杀",
+      "font_class": "miaosha",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
     },
     {
-      "icon_id": "12088623",
-      "name": "税款缴纳",
-      "font_class": "shuikuanjiaona",
-      "unicode": "e620",
-      "unicode_decimal": 58912
+      "icon_id": "1314475",
+      "name": "我的",
+      "font_class": "daohanglan-05",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
     },
     {
-      "icon_id": "12088624",
-      "name": "初始化设置",
-      "font_class": "chushihuashezhi",
-      "unicode": "e621",
-      "unicode_decimal": 58913
+      "icon_id": "3759633",
+      "name": "红包",
+      "font_class": "hongbao",
+      "unicode": "e69a",
+      "unicode_decimal": 59034
     },
     {
-      "icon_id": "12088625",
-      "name": "个税申报",
-      "font_class": "geshuishenbao",
-      "unicode": "e622",
-      "unicode_decimal": 58914
+      "icon_id": "3759637",
+      "name": "签到",
+      "font_class": "qiandao",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
     },
     {
-      "icon_id": "584245",
+      "icon_id": "5344974",
+      "name": "任务",
+      "font_class": "renwu",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "6204091",
+      "name": "关  闭",
+      "font_class": "guanbi",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "6943168",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "5110401",
+      "name": "右",
+      "font_class": "you",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "2407260",
       "name": "搜索",
-      "font_class": "iconfonticonfontsousuo1",
-      "unicode": "e630",
-      "unicode_decimal": 58928
-    },
-    {
-      "icon_id": "508942",
-      "name": "企业信息采集",
-      "font_class": "qiyexinxicaiji",
-      "unicode": "e62a",
-      "unicode_decimal": 58922
-    },
-    {
-      "icon_id": "4933236",
-      "name": "刷新",
-      "font_class": "shuaxin",
-      "unicode": "e6fd",
-      "unicode_decimal": 59133
-    },
-    {
-      "icon_id": "650805",
-      "name": "问号",
-      "font_class": "wenhao",
-      "unicode": "e64e",
-      "unicode_decimal": 58958
-    },
-    {
-      "icon_id": "1089767",
-      "name": "三角",
-      "font_class": "sanjiao",
-      "unicode": "e65a",
-      "unicode_decimal": 58970
-    },
-    {
-      "icon_id": "4360998",
-      "name": "新增",
-      "font_class": "xinzeng",
-      "unicode": "e600",
-      "unicode_decimal": 58880
-    },
-    {
-      "icon_id": "1915201",
-      "name": "工资单",
-      "font_class": "icon-test",
-      "unicode": "e602",
-      "unicode_decimal": 58882
-    },
-    {
-      "icon_id": "3892256",
-      "name": "首页",
-      "font_class": "shouye",
-      "unicode": "e61b",
-      "unicode_decimal": 58907
-    },
-    {
-      "icon_id": "4237384",
-      "name": "工资发放",
-      "font_class": "gongzifafang",
-      "unicode": "e62f",
-      "unicode_decimal": 58927
-    },
-    {
-      "icon_id": "5055297",
-      "name": "计算薪资",
-      "font_class": "jisuanxinzi",
-      "unicode": "e62e",
-      "unicode_decimal": 58926
-    },
-    {
-      "icon_id": "8574234",
-      "name": "申报",
-      "font_class": "shenbao",
-      "unicode": "e6ef",
-      "unicode_decimal": 59119
-    },
-    {
-      "icon_id": "1766263",
-      "name": "操作-退出",
-      "font_class": "tuichu",
-      "unicode": "e673",
-      "unicode_decimal": 58995
+      "font_class": "tubiao-",
+      "unicode": "e654",
+      "unicode_decimal": 58964
     }
   ]
 }

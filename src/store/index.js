@@ -4,16 +4,8 @@ import createPersistedState from 'vuex-persistedstate'
 
 //各模块store
 
-import { homePageStore } from '../modules/homePage/store'
-import { salaryCalStore } from '../modules/salaryCal/store'
-import { taxPageStore } from '../modules/tax/store'
-import { cumulativePageStore } from '../modules/initialize/store'
-import { taxPaidStore } from '../modules/taxPaid/store'
-import { payManageStore } from '@/modules/payManage/store'
-import { accountPageStore } from "@/modules/account/store"
-import { withdrawalPageStore } from "@/modules/withdrawal/store"
-import { payMasterStore } from "@/modules/paymaster/store"
-import { socialFundStore } from "@/modules/socialFund/store"
+// import { homePageStore } from '../modules/homePage/store'
+
 Vue.use(Vuex)
 
 import mutations from './mutations'
@@ -21,24 +13,9 @@ import actions from './action'
 
 export default new Vuex.Store({
   modules: {
-    homePageStore,
-    salaryCalStore,
-    taxPageStore,
-    cumulativePageStore,
-    taxPaidStore,
-    withdrawalPageStore,
-    payManageStore,
-    accountPageStore,
-    payMasterStore,
-    socialFundStore
   },
   state: {
     token: '',
-    isShowApp: true,
-    privilegeVoList:[],
-    taxSubjectInfoList:[],
-    countryList:[],
-    bankList:[],
   },
   mutations,
   actions,

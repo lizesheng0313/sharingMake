@@ -4,16 +4,6 @@ import { routerConfig } from './routerConfig'
 
 //router
 import homePage from 'modules/homePage/router'
-import salaryCal from 'modules/salaryCal/router'
-import tax from 'modules/tax/router'
-import taxPaid from 'modules/taxPaid/router'
-import initialize from 'modules/initialize/router'
-import accountPageRouter from 'modules/account/router'
-import payManageRouter from 'modules/payManage/router'
-import withdrawal from 'modules/withdrawal/router'
-import resultRouter from 'modules/result/router'
-import socialFund from 'modules/socialFund/router'
-import paymaster from 'modules/paymaster/router'
 
 
 
@@ -32,16 +22,6 @@ let router = new Router({
       redirect: '/home'
     },
     ...homePage,
-    ...salaryCal,
-    ...tax,
-    ...taxPaid,
-    ...accountPageRouter,
-    ...payManageRouter,
-    ...withdrawal,
-    ...resultRouter,
-    ...socialFund,
-    ...paymaster,
-    ...initialize,
   ]
 })
 routerConfig(router)
