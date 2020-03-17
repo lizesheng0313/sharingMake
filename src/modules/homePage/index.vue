@@ -17,7 +17,12 @@
       <van-step>交易完成</van-step>
     </van-steps>
     <div class="task_list">
-      <div class="task_list_item" v-for="(item,index) in taskList" :key="index">
+      <div
+        class="task_list_item"
+        v-for="(item,index) in taskList"
+        :key="index"
+        @click="handleToTask"
+      >
         <div class="task_list_item_box">
           <span class="task_type">{{item.type}}</span>
           <p class="task_title">{{item.title}}</p>
@@ -62,13 +67,14 @@ export default {
           form: "文章互动任务",
           price: "150",
           num: 2
-        },{
+        },
+        {
           type: "已错失",
           title: "31379-小红书笔记互动-因为以前很小女孩，所我要用这个",
           form: "文章互动任务",
           price: "150",
           num: 2
-        },
+        }
       ],
       swiperOption: {
         autoplay: true,
@@ -82,7 +88,13 @@ export default {
       token: state => state.token
     })
   },
-  created() {}
+  methods: {
+    handleToTask() {
+      this.$router.push({
+        path: "/task"
+      });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -162,7 +174,7 @@ export default {
     text-align: center;
     height: 50px;
     line-height: 50px;
-    z-index:2;
+    z-index: 2;
     position: fixed;
     top: 0;
     right: 0;

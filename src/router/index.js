@@ -6,6 +6,7 @@ import { routerConfig } from './routerConfig'
 import homePage from 'modules/homePage/router'
 
 import mine from 'modules/mine/index'
+import task from 'modules/task/index'
 
 Vue.use(Router)
 
@@ -22,8 +23,12 @@ let router = new Router({
       redirect: '/home'
     },
     {
-      path:'/mine',
-      component:mine
+      path: '/mine',
+      component: mine
+    },
+    {
+      path: "/task",
+      component: task
     },
     ...homePage,
   ]
