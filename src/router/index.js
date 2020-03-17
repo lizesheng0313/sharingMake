@@ -7,7 +7,8 @@ import homePage from 'modules/homePage/router'
 
 import mine from 'modules/mine/index'
 import task from 'modules/task/index'
-
+import taskDeetails from 'modules/task/details'
+import taskUpload from 'modules/task/uploadImage'
 Vue.use(Router)
 
 let router = new Router({
@@ -29,6 +30,14 @@ let router = new Router({
     {
       path: "/task",
       component: task
+    },
+    {
+      path: "/task-details",
+      component: taskDeetails
+    },
+    {
+      path: "/task-upload",
+      component: taskUpload
     },
     ...homePage,
   ]

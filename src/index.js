@@ -1,11 +1,14 @@
 import 'assets/scss/base.scss'
 import 'assets/font/iconfont.css'
 
+import Vue from 'vue';
 
 import fastclick from 'fastclick';
-fastclick.attach(document.body)
+fastclick.attach(document.body);
 
-import Vue from 'vue';
+import VueClipboard from "vue-clipboard2"
+Vue.use(VueClipboard)
+
 import Vant from 'vant';
 import 'vant/lib/index.css';
 

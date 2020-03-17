@@ -235,6 +235,12 @@ select.fullWidth {
   flex-direction: column;
 }
 
+.flex_all_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .flex_dir_center {
   display: flex;
   justify-content: center;

@@ -35,7 +35,7 @@
       </div>
       <span>10人参与</span>
     </div>
-    <div class="participate_btn">参与活动</div>
+    <div class="participate_btn" @click="handleToActive">参与活动</div>
   </div>
 </template>
 <script>
@@ -54,6 +54,13 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    handleToActive() {
+      this.$router.push({
+        path: "/task-details"
+      });
+    }
   }
 };
 </script>
