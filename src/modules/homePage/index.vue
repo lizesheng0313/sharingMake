@@ -1,7 +1,7 @@
 <template>
   <div class="homePage">
     <div class="h1">
-      <span class="sign">专属客户</span>
+      <span class="sign">专属客服</span>
       <p>分享赚</p>
       <span class="app">APP</span>
     </div>
