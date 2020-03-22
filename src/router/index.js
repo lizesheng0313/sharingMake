@@ -9,10 +9,12 @@ import mine from 'modules/mine/index'
 import task from 'modules/task/index'
 import taskDeetails from 'modules/task/details'
 import taskUpload from 'modules/task/uploadImage'
+import chat from 'modules/chat/index'
+import app from 'modules/app/index'
+import ad from "modules/ad/index"
 Vue.use(Router)
 
 let router = new Router({
-  // base:'/pSalary',
   mode: 'history',
   saveScrollPosition: true,
   scrollBehavior: () => ({
@@ -38,6 +40,18 @@ let router = new Router({
     {
       path: "/task-upload",
       component: taskUpload
+    },
+    {
+      path: "/chat",
+      component: chat
+    },
+    {
+      path: '/app',
+      component: app
+    },
+    {
+      path: '/ad',
+      component: ad
     },
     ...homePage,
   ]

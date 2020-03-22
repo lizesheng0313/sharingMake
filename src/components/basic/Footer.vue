@@ -4,16 +4,29 @@
       <span class="iconfont" :class="item.icon"></span>
       <span>{{item.title}}</span>
     </router-link>
+    <router-link :to="'/ad'" tag="div" v-if="indexObj.guanggaourl">
+      <span class="iconfont iconrenwu"></span>
+      <span>广告</span>
+    </router-link>
+    <router-link tag="div" to="/mine">
+      <span class="iconfont icondaohanglan-05"></span>
+      <span>我的</span>
+    </router-link>
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
+  computed: {
+    ...mapState({
+      indexObj: "indexObj"
+    })
+  },
   data() {
     return {
       navList: [
         { title: "任务", icon: "iconicon_renwu", url: "/home" },
-        { title: "易聊", icon: "iconmiaosha", url: "/seconds_kill" },
-        { title: "我的", icon: "icondaohanglan-05", url: "/mine" }
+        { title: "易聊", icon: "iconmiaosha", url: "/chat" }
       ]
     };
   }

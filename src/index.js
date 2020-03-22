@@ -1,6 +1,6 @@
 import 'assets/scss/base.scss'
 import 'assets/font/iconfont.css'
-
+import 'assets/scss/el-cover.scss'
 import Vue from 'vue';
 
 import fastclick from 'fastclick';

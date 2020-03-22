@@ -1,39 +1,37 @@
 <template>
   <div class="task">
-    <top-header title="活动标题"></top-header>
+    <top-header title="任务详情"></top-header>
     <div class="task_list">
-      <div class="task_list_item" v-for="(item,index) in taskList" :key="index">
-        <div class="task_list_item_box">
-          <p class="task_title">{{item.title}}</p>
-          <p class="task_time">{{item.time}}</p>
+      <div class="task_list_item">
+        <div
+          class="task_list_item_box"
+          :style="{backgroundImage:`url(${detailsObj.task_image_url})`}"
+        >
+          <div class="task_cover">
+            <p class="task_title">{{detailsObj.task_tips}}</p>
+          </div>
         </div>
       </div>
     </div>
     <div class="task_describe">
-      <p class="title">活动描述</p>
+      <p class="title">任务描述</p>
       <div class="content">
-        <p>1、点击去完成活动按钮，打开活动素材页面</p>
-        <p>2、复制笔记标题、复制笔记内容、保存笔记 图片，注意首图不要用错；</p>
-        <p>3、在小红书APP发布此笔记</p>
-        <p>4、回到此页面，上传你的小红书个人主页截图 ，填写你发布的笔记链接；</p>
-        <p>5、截图审核通过，即可获得1元奖励。</p>
+        <p v-html="detailsObj.task_description"></p>
       </div>
     </div>
     <div class="task_describe task_earnings">
-      <p class="title">活动收益</p>
       <div class="earnings_box">
         <div class="earnings flex_dir_center">
-          <p>可赚金币</p>
-          <span>10000</span>
+          <p>可赚金额</p>
+          <span>{{detailsObj.task_money}}元</span>
         </div>
       </div>
     </div>
     <div class="participate flex-space_center">
-      <div>
-        <img src alt />
-        <img src alt />
+      <div class="head_img_list">
+        <img :src="item" alt v-for="(item,index) in headImgList" :key="index" />
       </div>
-      <span>10人参与</span>
+      <span>{{detailsObj.task_number_people}}人参与</span>
     </div>
     <div class="participate_btn" @click="handleToActive">参与活动</div>
   </div>
@@ -45,20 +43,29 @@ export default {
   components: {
     topHeader
   },
+  mounted() {
+    this.detailsObj = JSON.parse(this.$route.query.details);
+    let arr = [];
+    let num = 0;
+    for (let i = 0; i < 9; i++) {
+      num = Math.floor(Math.random() * 24) + 1;
+      arr.push(require("@/assets/images/headimg/" + num + ".jpg"));
+    }
+    this.headImgList = new Set(arr);
+  },
   data() {
     return {
-      taskList: [
-        {
-          title: "31379-小红书笔记互动-因为以前很小女孩，所我要用这个",
-          time: "2018-02-02 ~ 2019-01-02"
-        }
-      ]
+      detailsObj: {},
+      headImgList: []
     };
   },
   methods: {
     handleToActive() {
       this.$router.push({
-        path: "/task-details"
+        path: "/task-details",
+        query: {
+          detailsObj: JSON.stringify(this.detailsObj)
+        }
       });
     }
   }
@@ -68,6 +75,7 @@ export default {
 @import "../../assets/scss/helpers.scss";
 .task {
   padding-bottom: 80px;
+
   .participate_btn {
     margin: 10px 20px 0 10px;
     @include btn_submit;
@@ -86,12 +94,34 @@ export default {
       height: 30px;
     }
   }
+  .head_img_list {
+    display: flex;
+    align-items: center;
+    img {
+      width: 25px;
+      height: 25px;
+      margin-left: 3px;
+      border-radius: 100px;
+    }
+  }
   .task_list {
     &_item {
       &_box {
-        height: 150px;
+        height: 130px;
         border-radius: 10px;
-        background: rgba(0, 0, 0, 0.7);
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: left center;
+        position: relative;
+        .task_cover {
+          border-radius: 10px;
+          background: rgba(0, 0, 0, 0.8);
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          top: 0;
+        }
         .task_title {
           text-align: center;
           padding: 35px 30px 0 30px;
@@ -128,7 +158,7 @@ export default {
       display: flex;
       justify-content: center;
       margin-top: 30px;
-      padding-bottom: 50px;
+      padding: 50px 0;
     }
     .earnings {
       width: 200px;

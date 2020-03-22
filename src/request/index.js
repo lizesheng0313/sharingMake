@@ -13,6 +13,7 @@ const instance = axios.create({
   headers: defaultHeader,
   withCredentials: true,
 })
+
 // axios.defaults.baseURL = 'http://172.19.60.38:18290';
 //请求拦截
 instance.interceptors.request.use(function (config) {
@@ -29,17 +30,15 @@ instance.interceptors.response.use(function (config) {
   return config
 }, function (error) {
   if (error && error.response) {
+    // 23234
   }
   return Promise.reject(error)
 })
-
 export function fetch(options) {
   return new Promise((resolve, reject) => {
     instance(options).then(response => {
+      Toast.clear();
       let data = response.data;
-      if (data.code != "0000") {
-        Toast(data.message);
-      }
       resolve(data)
     })
       .catch(error => {
@@ -48,5 +47,4 @@ export function fetch(options) {
       })
   })
 }
-
 export default fetch

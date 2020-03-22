@@ -1,2 +1,9 @@
 @import "./helpers.scss";
+.van-notice-bar{
+  background-color:#fff!important;
+  color:#000!important;
+}
+.van-step--finish .van-step__circle, .van-step--finish .van-step__line {
+  background-color: rgb(51, 136, 255)!important;
+}
 

@@ -1,1 +1,1 @@
-export const SHOWAPP = 'SHOWAPP'
+export const INDEXOBJ = 'INDEXOBJ'

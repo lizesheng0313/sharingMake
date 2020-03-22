@@ -1,62 +1,61 @@
 <template>
   <div class="task">
-    <top-header title="领取创作活动素材"></top-header>
+    <top-header title="领取分享素材"></top-header>
     <div class="task_active">
       <div class="flex-space_center">
-        <span>笔记标题</span>
+        <span>分享内容</span>
         <p
           class="btn_copy"
-          type="primary"
-          v-clipboard:copy="ruleForm.title"
-          v-clipboard:success="onCopy"
-          v-clipboard:error="onError"
-        >复制标题</p>
-      </div>
-      <input type="text" disabled v-model="ruleForm.title" />
-    </div>
-    <div class="task_active">
-      <div class="flex-space_center">
-        <span>笔记内容</span>
-        <p
-          class="btn_copy"
-          v-clipboard:copy="ruleForm.content"
+          v-clipboard:copy="detailsObj.task_jop"
           v-clipboard:success="onCopy"
           v-clipboard:error="onError"
         >复制内容</p>
       </div>
-      <textarea v-model="ruleForm.content"></textarea>
+      <textarea v-model="detailsObj.task_jop"></textarea>
     </div>
     <div class="task_active">
       <div class="flex-space_center">
-        <span>笔记其它图</span>
-        <p class="btn_copy">点击图片保存</p>
+        <span>分享图片</span>
+        <p class="btn_copy">点击下面图片保存至相册</p>
       </div>
-      <img src alt />
-      <img src alt />
+      <img
+        :src="detailsObj.task_image_url"
+        @click="handlePrevview"
+        style="margin:10px auto 0 auto;display:block"
+        alt
+      />
     </div>
-    <div class="participate_btn" @click="handleUpload">上传截图</div>
+    <div class="participate_btn" @click="handleUpload">我已发布 上传截图</div>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import topHeader from "@/components/basic/Header";
+import { ImagePreview } from "vant";
 import { Toast } from "vant";
 export default {
   components: {
     topHeader
   },
+
   data() {
     return {
-      ruleForm: {
-        title: "且让我们的手更好",
-        content:
-          "且让我们的手更好且让我们的手更好且让我们的手更好且让我们的手更好且让我们的手更好且让我们的手更好且让我们的手更好且让我们的手更好且让我们的手更好且让我们的手更好且让我们的手更好且让我们的手更好"
-      }
+      show: false,
+      detailsObj: {}
     };
   },
+  created() {
+    this.detailsObj = JSON.parse(this.$route.query.detailsObj);
+  },
   methods: {
+    handlePrevview() {
+      ImagePreview([this.detailsObj.task_image_url]);
+    },
     handleUpload() {
-      this.$router.push({ path: "/task-upload" });
+      this.$router.push({
+        path: "/task-upload",
+        query: { detailsObj: JSON.stringify(this.detailsObj) }
+      });
     },
     onCopy() {
       Toast.success("成功文案");
@@ -76,7 +75,8 @@ export default {
     margin-top: 10px;
     font-size: 14px;
     .btn_copy {
-      width: 100px;
+      min-width: 100px;
+      padding: 0 10px;
       height: 30px;
       color: #fff;
       border-radius: 8px;
