@@ -5,7 +5,6 @@
       <div class="task_list_item">
         <div
           class="task_list_item_box"
-          :style="{backgroundImage:`url(${detailsObj.task_image_url})`}"
         >
           <div class="task_cover">
             <p class="task_title">{{detailsObj.task_tips}}</p>
@@ -158,7 +157,7 @@ export default {
       display: flex;
       justify-content: center;
       margin-top: 30px;
-      padding: 50px 0;
+      padding: 30px 0;
     }
     .earnings {
       width: 200px;

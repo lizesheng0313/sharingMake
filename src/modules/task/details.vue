@@ -18,12 +18,7 @@
         <span>分享图片</span>
         <p class="btn_copy">点击下面图片保存至相册</p>
       </div>
-      <img
-        :src="detailsObj.task_image_url"
-        @click="handlePrevview"
-        style="margin:10px auto 0 auto;display:block"
-        alt
-      />
+      <img :src="detailsObj.task_image_url" @click="handlePrevview" class="footer_img" alt />
     </div>
     <div class="participate_btn" @click="handleUpload">我已发布 上传截图</div>
   </div>
@@ -58,7 +53,7 @@ export default {
       });
     },
     onCopy() {
-      Toast.success("成功文案");
+      Toast.success("成功复制");
     },
     onError() {
       Toast.fail("复制失败，请重新复制");
@@ -70,6 +65,11 @@ export default {
 @import "../../assets/scss/helpers.scss";
 .task {
   padding-bottom: 80px;
+  .footer_img {
+    margin: 10px auto 0 auto;
+    display: block;
+    max-width:100%;
+  }
   .task_active {
     padding: 0 10px;
     margin-top: 10px;

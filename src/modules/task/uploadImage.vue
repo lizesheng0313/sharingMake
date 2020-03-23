@@ -2,7 +2,7 @@
   <div class="task-upload">
     <top-header title="上传截图"></top-header>
     <div>
-      <p class="tips flex_all_center">{{detailsObj.shili_title}}</p>
+      <p class="tips flex_all_center" v-html="detailsObj.shili_title"></p>
       <div class="flex-space_center upload_box">
         <div :style="{backgroundImage:`url(${detailsObj.shili_img[0]})`}" class="upload_image zsy">
           <div class="cover"></div>

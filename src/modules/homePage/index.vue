@@ -117,6 +117,10 @@ export default {
   .swiper {
     height: 150px;
     border-radius: 5px;
+    img{
+      height:100%;
+      width:100%;
+    }
   }
   .steps {
     border-radius: 5px;
