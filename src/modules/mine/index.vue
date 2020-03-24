@@ -16,11 +16,16 @@
             <p>可提现金币</p>
           </div>
           <span class="iconfont iconyou"></span>
-        </div> -->
+        </div>-->
       </div>
     </div>
-    <!-- <div class="my-task">
-      <div class="flex-space_center title">
+    <div class="my-task">
+      <van-steps direction="vertical" :active="activeNum"  active-color="#38f">
+        <van-step v-for="(item,index) in step" :key="index">
+          <h3>{{item}}</h3>
+        </van-step>
+      </van-steps>
+      <!-- <div class="flex-space_center title">
         <strong>我的任务</strong>
         <span class="flex-start_center">
           查看全部
@@ -38,8 +43,8 @@
           <span class="iconfont" :class="item.icon"></span>
           <span>{{item.title}}</span>
         </router-link>
-      </div>
-    </div> -->
+      </div>-->
+    </div>
     <tarbar></tarbar>
   </div>
 </template>
@@ -50,6 +55,8 @@ export default {
   components: { tarbar },
   data() {
     return {
+      step: [],
+      activeNum: 0
       // taskList: [
       //   { title: "待传图", icon: "iconshangchuantupian", num: 1, url: "" },
       //   { title: "图被拒绝", icon: "iconnavicon-dhjsd", num: 1, url: "" },
@@ -58,7 +65,17 @@ export default {
       // ]
     };
   },
-  created() {}
+  activated() {
+    this.fetchStep();
+  },
+  methods: {
+    fetchStep() {
+      this.$store.dispatch("actionSteps").then(res => {
+        this.step = res.data.liucheng;
+        this.activeNum = res.data.liucheng_now;
+      });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -92,22 +109,22 @@ export default {
       font-size: 20px;
     }
   }
-  // .my-task {
-  //   padding: 10px 0;
-  //   margin-top: 20px;
-  //   background: #fff;
-  //   border-radius: 12px;
-  //   .title {
-  //     padding-left: 15px;
-  //     padding-right: 5px;
-  //   }
-  //   .task_list {
-  //     margin-top: 20px;
-  //     .iconfont {
-  //       font-size: 25px;
-  //     }
-  //   }
-  // }
+  .my-task {
+    padding: 10px 0;
+    margin-top: 20px;
+    background: #fff;
+    // border-radius: 12px;
+    // .title {
+    //   padding-left: 15px;
+    //   padding-right: 5px;
+    // }
+    // .task_list {
+    //   margin-top: 20px;
+    //   .iconfont {
+    //     font-size: 25px;
+    //   }
+    // }
+  }
 }
 </style>
 

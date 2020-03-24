@@ -40,3 +40,11 @@ export function apiTaskstatus(data) {
   })
 }
 
+export function apiSteps(data) {
+  return $fetch({
+    method: "post",
+    url: "/index/Steps",
+    data
+  })
+}
+
