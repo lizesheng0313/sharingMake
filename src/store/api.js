@@ -11,7 +11,25 @@ export function apiIndex(data) {
 export function apiUploader(data) {
   return $fetch({
     method: "post",
-    url: "index/Uploader",
+    url: "/index/Uploader",
     data
   })
 }
+
+export function apiUploaderImage(data) {
+  return $fetch({
+    method: "post",
+    url: "/index/imagehistory",
+    data
+  })
+}
+
+export function apiNotify(data) {
+  return $fetch({
+    method: "post",
+    url: "/index/notify",
+    data
+  })
+}
+
+

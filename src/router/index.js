@@ -42,16 +42,13 @@ let router = new Router({
       component: taskUpload
     },
     {
-      path: "/chat",
-      component: chat
+      path: "/chat"
     },
     {
-      path: '/app',
-      component: app
+      path: '/app'
     },
     {
-      path: '/ad',
-      component: ad
+      path: '/ad'
     },
     ...homePage,
   ]

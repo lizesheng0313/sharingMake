@@ -4,7 +4,7 @@
       <span class="iconfont" :class="item.icon"></span>
       <span>{{item.title}}</span>
     </router-link>
-    <router-link :to="'/ad'" tag="div" v-if="indexObj.guanggaourl">
+    <router-link to='/ad' tag="div" v-if="indexObj.guanggaourl">
       <span class="iconfont iconrenwu"></span>
       <span>广告</span>
     </router-link>

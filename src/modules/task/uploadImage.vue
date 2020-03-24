@@ -8,7 +8,7 @@
           <div class="cover"></div>
         </div>
         <div class="upload_image cover1">
-          <van-uploader v-model="fileList1" :max-count="1" :after-read="afterRead">
+          <van-uploader v-model="fileList1" :max-count="1" :after-read="afterRead1">
             <div class="diy_upload">
               <span>点击上传文件</span>
             </div>
@@ -20,7 +20,7 @@
           <div class="cover"></div>
         </div>
         <div class="upload_image cover1">
-          <van-uploader v-model="fileList2" :max-count="1" :after-read="afterRead">
+          <van-uploader v-model="fileList2" :max-count="1" :after-read="afterRead2">
             <div class="diy_upload">
               <span>点击上传文件</span>
             </div>
@@ -32,7 +32,7 @@
           <div class="cover"></div>
         </div>
         <div class="upload_image cover1">
-          <van-uploader v-model="fileList3" :max-count="1" :after-read="afterRead">
+          <van-uploader v-model="fileList3" :max-count="1" :after-read="afterRead3">
             <div class="diy_upload">
               <span>点击上传文件</span>
             </div>
@@ -56,18 +56,43 @@ export default {
       fileList1: [],
       fileList2: [],
       fileList3: [],
-      detailsObj: {}
+      detailsObj: {},
+      queryObj: {
+        task_id: "",
+        image_id_1: "",
+        image_id_2: "",
+        image_id_3: ""
+      }
     };
   },
   created() {
     this.detailsObj = JSON.parse(this.$route.query.detailsObj);
   },
   methods: {
-    afterRead(e) {
-      this.$store.dispatch("actionUploader",e)
+    async afterRead1(e) {
+      this.queryObj.image_id_1 = await this.fetUpload(e);
+    },
+    async afterRead2(e) {
+      this.queryObj.image_id_2 = await this.fetUpload(e);
+    },
+    async afterRead3(e) {
+      this.queryObj.image_id_3 = await this.fetUpload(e);
+    },
+    fetUpload(e) {
+      return this.$store.dispatch("actionUploader", e).then(res => {
+        return res.data.image_id;
+      });
     },
     handleUpload() {
-      this.$router.push({ path: "/task-upload" });
+      this.queryObj.task_id = this.detailsObj.task_id;
+      this.$store.dispatch("actionUploaderImage", this.queryObj).then(res => {
+        if (res.success) {
+          Toast.success("上传成功");
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 1500);
+        }
+      });
     }
   }
 };

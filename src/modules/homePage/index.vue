@@ -61,6 +61,8 @@ export default {
   components: { tarbar, swiper, swiperSlide },
   data() {
     return {
+      message: "",
+      timer: null,
       indexObj: {},
       swiperOption: {
         autoplay: true,
@@ -76,8 +78,24 @@ export default {
   },
   mounted() {
     this.fetchIndex();
+    clearInterval(this.timer);
+    this.fetchNotice();
   },
   methods: {
+    fetchNotice() {
+      this.$store.dispatch("actionNotify").then(res => {
+        if (res.islogin) {
+          Notify({
+            type: "primary",
+            message: res.data.indextext,
+            duration: 3000
+          });
+          this.timer = setTimeout(() => {
+            this.fetchNotice();
+          }, 30000);
+        }
+      });
+    },
     fetchIndex() {
       Toast.loading({
         message: "加载中",
@@ -117,9 +135,9 @@ export default {
   .swiper {
     height: 150px;
     border-radius: 5px;
-    img{
-      height:100%;
-      width:100%;
+    img {
+      height: 100%;
+      width: 100%;
     }
   }
   .steps {

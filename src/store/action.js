@@ -1,4 +1,4 @@
-import { apiIndex, apiUploader } from "./api"
+import { apiIndex, apiUploader, apiUploaderImage, apiNotify } from "./api"
 import * as ACT from "./actionTypes"
 export default {
   actionIndex({ commit }, data) {
@@ -10,4 +10,10 @@ export default {
   actionUploader({ commit }, data) {
     return apiUploader(data)
   },
+  actionUploaderImage({ commit }, data) {
+    return apiUploaderImage(data)
+  },
+  actionNotify({ commit }, data) {
+    return apiNotify(data)
+  }
 }
