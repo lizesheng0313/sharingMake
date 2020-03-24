@@ -92,7 +92,7 @@ export default {
           });
           this.timer = setTimeout(() => {
             this.fetchNotice();
-          }, 30000);
+          }, 60000);
         }
       });
     },

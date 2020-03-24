@@ -32,4 +32,11 @@ export function apiNotify(data) {
   })
 }
 
+export function apiTaskstatus(data) {
+  return $fetch({
+    method: "post",
+    url: "/index/Taskstatus",
+    data
+  })
+}
 

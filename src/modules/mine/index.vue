@@ -4,22 +4,22 @@
       <p class="iconxiaoxi iconfont"></p>
       <div class="flex-space_center mine_header">
         <div class="flex-start_center">
-          <img src alt class="head_img" />
+          <img src="../../assets/images/headimg.jpg" alt class="head_img" />
           <div>
             <span>18210223332</span>
             <p>邀请码：XBD7232</p>
           </div>
         </div>
-        <div class="flex-start_center">
+        <!-- <div class="flex-start_center">
           <div class="flex_dir_end">
             <span>0</span>
             <p>可提现金币</p>
           </div>
           <span class="iconfont iconyou"></span>
-        </div>
+        </div> -->
       </div>
     </div>
-    <div class="my-task">
+    <!-- <div class="my-task">
       <div class="flex-space_center title">
         <strong>我的任务</strong>
         <span class="flex-start_center">
@@ -39,7 +39,7 @@
           <span>{{item.title}}</span>
         </router-link>
       </div>
-    </div>
+    </div> -->
     <tarbar></tarbar>
   </div>
 </template>
@@ -50,12 +50,12 @@ export default {
   components: { tarbar },
   data() {
     return {
-      taskList: [
-        { title: "待传图", icon: "iconshangchuantupian", num: 1, url: "" },
-        { title: "图被拒绝", icon: "iconnavicon-dhjsd", num: 1, url: "" },
-        { title: "审核中", icon: "iconshenhe", num: 1, url: "" },
-        { title: "已完成", icon: "iconyiwancheng", num: 1, url: "" }
-      ]
+      // taskList: [
+      //   { title: "待传图", icon: "iconshangchuantupian", num: 1, url: "" },
+      //   { title: "图被拒绝", icon: "iconnavicon-dhjsd", num: 1, url: "" },
+      //   { title: "审核中", icon: "iconshenhe", num: 1, url: "" },
+      //   { title: "已完成", icon: "iconyiwancheng", num: 1, url: "" }
+      // ]
     };
   },
   created() {}
@@ -66,7 +66,7 @@ export default {
 .mine {
   margin-bottom: 70px;
   .back_top {
-    background: #494a4c;
+    background: url("../../assets/images/mine_back.png") no-repeat center center;
     position: relative;
     color: #fff;
     align-items: center;
@@ -85,7 +85,6 @@ export default {
       height: 50px;
       margin-right: 10px;
       border-radius: 100px;
-      border: 1px solid #000;
       display: inline-block;
     }
     .iconyou {
@@ -93,22 +92,22 @@ export default {
       font-size: 20px;
     }
   }
-  .my-task {
-    padding: 10px 0;
-    margin-top: 20px;
-    background: #fff;
-    border-radius: 12px;
-    .title {
-      padding-left: 15px;
-      padding-right: 5px;
-    }
-    .task_list {
-      margin-top: 20px;
-      .iconfont {
-        font-size: 25px;
-      }
-    }
-  }
+  // .my-task {
+  //   padding: 10px 0;
+  //   margin-top: 20px;
+  //   background: #fff;
+  //   border-radius: 12px;
+  //   .title {
+  //     padding-left: 15px;
+  //     padding-right: 5px;
+  //   }
+  //   .task_list {
+  //     margin-top: 20px;
+  //     .iconfont {
+  //       font-size: 25px;
+  //     }
+  //   }
+  // }
 }
 </style>
 

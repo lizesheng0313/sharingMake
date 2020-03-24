@@ -1,6 +1,8 @@
 <template>
   <div>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
     <ad v-show="$route.path == '/ad'"></ad>
     <chat v-show="$route.path == '/chat'"></chat>
     <app v-show="$route.path =='/app'"></app>
@@ -15,6 +17,9 @@ export default {
     ad,
     chat,
     app
+  },
+  mounted() {
+    console.log(this.$route)
   },
   data() {
     return {};

@@ -20,14 +20,17 @@
       </div>
       <img :src="detailsObj.task_image_url" @click="handlePrevview" class="footer_img" alt />
     </div>
-    <div class="participate_btn" @click="handleUpload">我已发布 上传截图</div>
+    <div
+      class="participate_btn"
+      @click="handleUpload"
+      v-if="statusObj.task_status !== 3 && statusObj.task_status !== 4"
+    >我已发布 上传截图</div>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import topHeader from "@/components/basic/Header";
-import { ImagePreview } from "vant";
-import { Toast } from "vant";
+import { Toast, Dialog, ImagePreview } from "vant";
 export default {
   components: {
     topHeader
@@ -36,13 +39,30 @@ export default {
   data() {
     return {
       show: false,
-      detailsObj: {}
+      detailsObj: {},
+      statusObj: {}
     };
   },
   created() {
     this.detailsObj = JSON.parse(this.$route.query.detailsObj);
   },
+  activated() {
+    this.fetchStatus();
+  },
   methods: {
+    fetchStatus() {
+      this.$store.dispatch("actionTaskstatus").then(res => {
+        this.statusObj = res.data;
+        if (this.statusObj.message) {
+          Dialog.confirm({
+            title: "提示",
+            message: this.statusObj.message
+          }).then(() => {
+            this.$router.push("/chat");
+          });
+        }
+      });
+    },
     handlePrevview() {
       ImagePreview([this.detailsObj.task_image_url]);
     },
@@ -68,7 +88,7 @@ export default {
   .footer_img {
     margin: 10px auto 0 auto;
     display: block;
-    max-width:100%;
+    max-width: 100%;
   }
   .task_active {
     padding: 0 10px;

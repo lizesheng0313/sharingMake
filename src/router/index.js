@@ -7,11 +7,8 @@ import homePage from 'modules/homePage/router'
 
 import mine from 'modules/mine/index'
 import task from 'modules/task/index'
-import taskDeetails from 'modules/task/details'
+import taskDetails from 'modules/task/details'
 import taskUpload from 'modules/task/uploadImage'
-import chat from 'modules/chat/index'
-import app from 'modules/app/index'
-import ad from "modules/ad/index"
 Vue.use(Router)
 
 let router = new Router({
@@ -35,7 +32,8 @@ let router = new Router({
     },
     {
       path: "/task-details",
-      component: taskDeetails
+      component: taskDetails,
+      name: "taskDetails"
     },
     {
       path: "/task-upload",
