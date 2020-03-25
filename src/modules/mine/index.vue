@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="my-task">
-      <van-steps direction="vertical" :active="activeNum"  active-color="#38f">
+      <van-steps direction="vertical" :active="activeNum" active-color="#38f">
         <van-step v-for="(item,index) in step" :key="index">
           <h3>{{item}}</h3>
         </van-step>
@@ -65,7 +65,7 @@ export default {
       // ]
     };
   },
-  activated() {
+  mounted() {
     this.fetchStep();
   },
   methods: {

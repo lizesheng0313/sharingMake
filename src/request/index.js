@@ -14,12 +14,14 @@ const instance = axios.create({
 })
 
 // axios.defaults.baseURL = 'http://172.19.60.38:18290';
+
+
 //请求拦截
 instance.interceptors.request.use(function (config) {
   //每次发送请求之前检测vuex存有token,那么都要放在请求头发送给服务器
-  if (store.state.token) {
-    config.headers.Authorization = store.state.token
-  }
+  // if (store.state.token) {
+  //   config.headers.Authorization = store.state.token
+  // }
   return config
 }, function (error) {
   return Promise.reject(error)
@@ -38,7 +40,7 @@ export function fetch(options) {
     instance(options).then(response => {
       Toast.clear();
       let data = response.data;
-      if (!data.islogin) {
+      if (data.islogin === 0) {
         router.replace({
           path: "/register"
         })
