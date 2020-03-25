@@ -1,6 +1,7 @@
 <template>
   <div class="register">
     <div class="header">
+      <span v-if="isLogin" @click="handleToHome">首页</span>
       <span class="iconfont iconyou" v-if="!isLogin" @click="handleToLogin"></span>
       <p>{{title}}</p>
       <i v-if="rightTitle" class="right_title" @click="handleToRegister">{{rightTitle}}</i>
@@ -21,7 +22,7 @@
       </div>
       <div class="flex-space_center">
         <van-checkbox v-model="checked" shape="square" class="remember_password">记住密码</van-checkbox>
-        <p class="forget_pas">忘记密码</p>
+        <p class="forget_pas" @click="handleToChat">忘记密码</p>
       </div>
       <div class="login-button" @click="handleFetchLogin">登录</div>
     </div>
@@ -80,8 +81,18 @@ export default {
   mounted() {
     this.ruleForm.tel = localStorage.getItem("fx_tel");
     this.ruleForm.password = localStorage.getItem("fx_pas");
+    if (this.$route.query.yqm) {
+      this.ruleForm.yqm = this.$route.query.yqm;
+      this.handleToRegister();
+    }
   },
   methods: {
+    handleToChat() {
+      this.$router.push("/chat");
+    },
+    handleToHome() {
+      this.$router.push("/home");
+    },
     handleFetchLogin() {
       this.$store.dispatch("actionLogin").then(res => {
         if (res.success) {
@@ -112,7 +123,9 @@ export default {
       this.title = "登录";
     },
     handleToRegister() {
-      this.ruleForm = {};
+      this.ruleForm.tel = "";
+      this.ruleForm.password = "";
+      this.ruleForm.yzm = "";
       this.isLogin = false;
       this.rightTitle = "";
       this.title = "注册";
@@ -271,7 +284,11 @@ button {
     span {
       position: absolute;
       left: 15px;
+      transform: translateY(-50%);
       top: 50%;
+      font-size: 14px;
+    }
+    .iconfont {
       transform: translateY(-50%) rotate(180deg);
     }
     .right_title {

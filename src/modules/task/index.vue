@@ -155,12 +155,12 @@ export default {
       display: flex;
       justify-content: center;
       margin-top: 30px;
-      padding: 30px 0;
+      padding: 10px 0;
     }
     .earnings {
       width: 200px;
       outline-offset: -8px;
-      height: 80px;
+      height: 70px;
       border: 1px solid $mainColor;
       outline: 1px dotted $mainColor;
       p {

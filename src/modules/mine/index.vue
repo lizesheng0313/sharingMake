@@ -6,8 +6,8 @@
         <div class="flex-start_center">
           <img src="../../assets/images/headimg.jpg" alt class="head_img" />
           <div>
-            <span>18210223332</span>
-            <p>邀请码：XBD7232</p>
+            <span>{{indexObj.userinfo.tel}}</span>
+            <p>邀请码：{{indexObj.userinfo.yqm}}</p>
           </div>
         </div>
         <!-- <div class="flex-start_center">
@@ -64,6 +64,11 @@ export default {
       //   { title: "已完成", icon: "iconyiwancheng", num: 1, url: "" }
       // ]
     };
+  },
+  computed: {
+    ...mapState({
+      indexObj: "indexObj"
+    })
   },
   mounted() {
     this.fetchStep();
