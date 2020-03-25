@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { Toast } from "vant";
-
 import store from '../store'
-
+import router from "../router"
 const defaultHeader = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
@@ -39,6 +38,11 @@ export function fetch(options) {
     instance(options).then(response => {
       Toast.clear();
       let data = response.data;
+      if (!data.islogin) {
+        router.replace({
+          path: "/register"
+        })
+      }
       resolve(data)
     })
       .catch(error => {

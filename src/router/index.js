@@ -9,6 +9,8 @@ import mine from 'modules/mine/index'
 import task from 'modules/task/index'
 import taskDetails from 'modules/task/details'
 import taskUpload from 'modules/task/uploadImage'
+import register from "modules/register/index"
+
 Vue.use(Router)
 
 let router = new Router({
@@ -27,13 +29,16 @@ let router = new Router({
       component: mine
     },
     {
+      path: '/register',
+      component: register
+    },
+    {
       path: "/task",
       component: task
     },
     {
       path: "/task-details",
-      component: taskDetails,
-      name: "taskDetails"
+      component: taskDetails
     },
     {
       path: "/task-upload",

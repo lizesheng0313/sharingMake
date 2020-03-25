@@ -1,4 +1,4 @@
-import { apiIndex, apiUploader, apiUploaderImage, apiNotify, apiTaskstatus, apiSteps } from "./api"
+import { apiIndex, apiUploader, apiUploaderImage, apiNotify, apiTaskstatus, apiSteps, apiGetCode, apiRegister, apiLogin } from "./api"
 import * as ACT from "./actionTypes"
 export default {
   actionIndex({ commit }, data) {
@@ -21,5 +21,14 @@ export default {
   },
   actionSteps({ commit }, data) {
     return apiSteps(data)
-  }
+  },
+  actionGetCode({ commit }, data) {
+    return apiGetCode(data)
+  },
+  actionRegister({ commit }, data) {
+    return apiRegister(data)
+  },
+  actionLogin({ commit }, data) {
+    return apiLogin(data)
+  },
 }

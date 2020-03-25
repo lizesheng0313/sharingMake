@@ -1,19 +1,17 @@
 <template>
   <div class="task">
     <top-header title="任务详情"></top-header>
-    <div class="task_list">
+    <!-- <div class="task_list">
       <div class="task_list_item">
-        <div
-          class="task_list_item_box"
-        >
+        <div class="task_list_item_box">
           <div class="task_cover">
             <p class="task_title">{{detailsObj.task_tips}}</p>
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="task_describe">
-      <p class="title">任务描述</p>
+      <!-- <p class="title">任务描述</p> -->
       <div class="content">
         <p v-html="detailsObj.task_description"></p>
       </div>

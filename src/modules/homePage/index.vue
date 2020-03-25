@@ -59,6 +59,7 @@ import { swiper, swiperSlide } from "vue-awesome-swiper";
 import { Toast, NoticeBar, Notify } from "vant";
 export default {
   components: { tarbar, swiper, swiperSlide },
+  name: "homePage",
   data() {
     return {
       message: "",

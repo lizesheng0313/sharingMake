@@ -45,23 +45,23 @@ export default {
   },
   created() {
     this.detailsObj = JSON.parse(this.$route.query.detailsObj);
-  },
-  activated() {
     this.fetchStatus();
   },
   methods: {
     fetchStatus() {
-      this.$store.dispatch("actionTaskstatus").then(res => {
-        this.statusObj = res.data;
-        if (this.statusObj.message) {
-          Dialog.confirm({
-            title: "提示",
-            message: this.statusObj.message
-          }).then(() => {
-            this.$router.push("/chat");
-          });
-        }
-      });
+      this.$store
+        .dispatch("actionTaskstatus", { task_id: this.detailsObj.task_id })
+        .then(res => {
+          this.statusObj = res.data;
+          if (this.statusObj.message) {
+            Dialog.confirm({
+              title: "提示",
+              message: this.statusObj.message
+            }).then(() => {
+              this.$router.push("/chat");
+            });
+          }
+        });
     },
     handlePrevview() {
       ImagePreview([this.detailsObj.task_image_url]);

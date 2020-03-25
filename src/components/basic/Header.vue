@@ -25,7 +25,7 @@ export default {
   text-align: center;
   position: relative;
   line-height: 40px;
-  font-size:18px;
+  font-size: 18px;
   span {
     position: absolute;
     left: 15px;

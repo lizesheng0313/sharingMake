@@ -48,3 +48,26 @@ export function apiSteps(data) {
   })
 }
 
+export function apiGetCode(data) {
+  return $fetch({
+    method: "post",
+    url: "/index/Yzm",
+    data
+  })
+}
+
+export function apiRegister(data) {
+  return $fetch({
+    method: "post",
+    url: "/index/Register",
+    data
+  })
+}
+
+export function apiLogin(data) {
+  return $fetch({
+    method: "post",
+    url: "/index/login",
+    data
+  })
+}
